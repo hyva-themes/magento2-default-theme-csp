@@ -4,7 +4,7 @@
 <script>
     'use strict';
     function loadLorySliders(dispatch) {
-        if (lory) {
+        if (typeof lory !== "undefined") {
             Array.prototype.slice.call(document.querySelectorAll('.js_slider')).forEach(function (element, index) {
                 function handleSlide(e) {
                     // console.log(element.querySelectorAll('.js_slide')[0].childNodes);

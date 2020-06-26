@@ -1,4 +1,4 @@
-<footer class="text-gray-700 body-font bg-background-lighter">
+<footer class="text-gray-700 body-font bg-background-lighter pb-16">
     <div class="container px-5 py-8 mx-auto">
         <div class="flex flex-wrap md:text-left text-center order-first">
             <?= $block->getChildHtml() ?>
@@ -17,25 +17,3 @@
     </div>
 </footer>
 
-<style>
-
-    .prev, .next {
-        position: absolute;
-        top: 50%;
-        margin-top: -25px;
-        display: block;
-        cursor: pointer;
-    }
-
-    .next {
-        right: 0;
-    }
-
-    .prev {
-        left: 0;
-    }
-
-    .next svg, .prev svg {
-        width: 25px;
-    }
-</style>

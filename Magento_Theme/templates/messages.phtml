@@ -1,0 +1,38 @@
+<?php
+?>
+<script>
+    // JSON.parse(decodeURIComponent("%5B%7B%22type%22%3A%22error%22%2C%22text%22%3A%22Invalid+Form+Key.+Please+refresh+the+page.%22%7D%5D").replace(/\+/g, ' '))
+    function initMessages() {
+        return {
+            messages: window.mageMessages || [],
+            removeMessage: function (messageIndex) {
+                return this.messages.splice(messageIndex,1);
+            }
+        }
+    }
+</script>
+<section id="messages"
+         x-data="initMessages()"
+         @messages-loaded.window="messages = event.detail.messages"
+>
+    <template x-if="messages && messages.length">
+    <div class="w-full fixed bottom-0" style="z-index:100;">
+        <div role="alert" class="messages container mx-auto py-3">
+            <template x-for="(message, index) in messages" :key="index">
+
+                <div :class="message.type + ' message flex items-center justify-between w-full p-2 bg-gray-600 shadow rounded text-white'"
+                     :ui-id="'message-' + message.type"
+                >
+                    <div x-html="message.text"></div>
+                    <label class="close cursor-pointer" title="close" for="footertoast"
+                        @click="removeMessage(index)">
+                        <svg class="fill-current text-white" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                        </svg>
+                    </label>
+                </div>
+            </template>
+        </div>
+    </div>
+    </template>
+</section>
