@@ -12,7 +12,7 @@ html {
     @apply antialiased;
 }
 body {
-    @apply bg-white text-gray-600 /*text-open-sans*/ leading-normal text-base tracking-normal;
+    @apply bg-gray-100 text-gray-600 /*text-open-sans*/ leading-normal text-base tracking-normal;
 }
 .page-header {
     @apply sticky top-0 z-10;

@@ -4,6 +4,7 @@
 
 @import url(components/theming.css);
 @import url(components/product-page.css);
+@import url(components/messages.css);
 
 /* purgecss end ignore */
 

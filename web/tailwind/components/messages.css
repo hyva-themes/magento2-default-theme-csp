@@ -1,0 +1,12 @@
+section#messages .message.error {
+    @apply bg-red-500;
+}
+
+section#messages .message.success {
+    @apply bg-green-500;
+}
+
+section#messages .message.warning,
+section#messages .message.notice{
+    @apply bg-yellow-500;
+}

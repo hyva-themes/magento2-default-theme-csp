@@ -9,7 +9,11 @@
     <body>
         <referenceContainer name="footer-content">
             <block class="Magento\Newsletter\Block\Subscribe" name="form.subscribe" as="subscribe" after="-"
-                   template="Magento_Newsletter::subscribe.phtml" ifconfig="newsletter/general/active"/>
+                   template="Magento_Newsletter::subscribe.phtml" ifconfig="newsletter/general/active">
+                <arguments>
+                    <argument name="form_key_view_model" xsi:type="object">Wigman\Tailwind\ViewModel\FormKey</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

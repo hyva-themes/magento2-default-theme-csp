@@ -5,54 +5,18 @@
  */
 
 /** @var \Magento\Newsletter\Block\Subscribe $block */
-
-/*
-?>
-<div class="block newsletter">
-    <div class="title"><strong><?= $block->escapeHtml(__('Newsletter')) ?></strong></div>
-    <div class="content">
-        <form class="form subscribe"
-            novalidate
-            action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>"
-            method="post"
-            data-mage-init='{"validation": {"errorClass": "mage-error"}}'
-            id="newsletter-validate-detail">
-            <div class="field newsletter">
-                <div class="control">
-                    <label for="newsletter">
-                        <span class="label">
-                            <?= $block->escapeHtml(__('Sign Up for Our Newsletter:')) ?>
-                        </span>
-                        <input name="email" type="email" id="newsletter"
-                               placeholder="<?= $block->escapeHtmlAttr(__('Enter your email address')) ?>"
-                               data-mage-init='{"mage/trim-input":{}}'
-                               data-validate="{required:true, 'validate-email':true}"
-                        />
-                    </label>
-                </div>
-            </div>
-            <div class="actions">
-                <button class="action subscribe primary"
-                        title="<?= $block->escapeHtmlAttr(__('Subscribe')) ?>"
-                        type="submit"
-                        aria-label="Subscribe">
-                    <span><?= $block->escapeHtml(__('Subscribe')) ?></span>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-*/
+/** @var FormKey $formKeyViewModel */
+$formKeyViewModel = $block->getFormKeyViewModel();
 ?>
 <div class="lg:w-1/4 md:w-1/2 w-full px-4">
     <form class="form subscribe"
-          novalidate
           action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>"
           method="post"
           id="newsletter-validate-detail">
         <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3"><?= $block->escapeHtml(__('Newsletter')) ?></h2>
         <div class="flex xl:flex-no-wrap md:flex-no-wrap lg:flex-wrap flex-wrap justify-center md:justify-start">
-            <input class="input input-light" placeholder="<?= $block->escapeHtmlAttr(__('Enter your email address')) ?>" type="text">
+            <input name="email" type="email" required id="newsletter" class="input input-light" placeholder="<?= $block->escapeHtmlAttr(__('Enter your email address')) ?>" type="text">
+            <input type="hidden" name="form_key" value="<?= $formKeyViewModel->getFormKey() ?>" />
             <button class="lg:mt-2 xl:mt-0 flex-shrink-0 inline-flex text-white btn btn-primary"><?= $block->escapeHtmlAttr(__('Subscribe')) ?></button>
         </div>
         <p class="text-gray-500 text-sm mt-2 md:text-left text-center">No Spam, promised!
