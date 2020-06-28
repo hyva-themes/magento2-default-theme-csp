@@ -638,9 +638,6 @@ html {
 }
 
 body {
-  --bg-opacity: 1;
-  background-color: #f7fafc;
-  background-color: rgba(247, 250, 252, var(--bg-opacity));
   --text-opacity: 1;
   color: #718096;
   color: rgba(113, 128, 150, var(--text-opacity));

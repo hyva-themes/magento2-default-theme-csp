@@ -4,7 +4,7 @@ declare(strict_types=1);
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
 <nav id="header"
-     class="w-full z-30 py-1 bg-white shadow border"
+     class="w-full z-30 bg-gray-100 shadow"
      x-data="{ menuOpen: false, searchOpen: false }"
      @keydown.window.escape="searchOpen = false; menuOpen = false"
 >
@@ -66,7 +66,7 @@ declare(strict_types=1);
         </div>
     </div>
     <!--Search-->
-    <div class="relative w-full hidden bg-white shadow-xl" id="search-content"
+    <div class="absolute w-full hidden bg-white border" id="search-content"
          :class="{ 'block': searchOpen, 'hidden': !searchOpen }"
          @click.away="searchOpen = false"
          x-show="true">

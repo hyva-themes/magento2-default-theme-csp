@@ -7,7 +7,7 @@ use Magento\Framework\View\Element\Template;
 /** @var $helper \Magento\Search\Helper\Data */
 $helper = $this->helper(\Magento\Search\Helper\Data::class);
 ?>
-<div class="container mx-auto py-4 text-black">
+<div class="container mx-auto py-2 text-black">
     <form class="form minisearch" id="search_mini_form" action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
         <label class="hidden" for="search" data-role="minisearch-label">
             <span><?= $block->escapeHtml(__('Search')) ?></span>
@@ -19,7 +19,7 @@ $helper = $this->helper(\Magento\Search\Helper\Data::class);
                placeholder="<?= $block->escapeHtmlAttr(__('Search entire store here...')) ?>"
                maxlength="<?= $block->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
                autofocus="autofocus"
-               class="w-full text-grey-800 transition focus:outline-none focus:border-transparent p-2 appearance-none leading-normal text-xl lg:text-2xl"
+               class="w-full text-grey-800 transition focus:outline-none focus:border-transparent p-2 appearance-none leading-normal text-lg lg:text-xl"
         />
     </form>
 </div>

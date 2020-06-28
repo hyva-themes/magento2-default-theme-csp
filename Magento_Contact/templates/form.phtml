@@ -19,61 +19,51 @@ $formKeyViewModel = $block->getFormKeyViewModel();
           >
         <fieldset class="">
             <div class="flex flex-col text-center w-full mb-12">
-                <h2 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900"><span><?= $block->escapeHtml(__('Write Us')) ?></span></h2>
+                <h2 class="sm:text-xl text-lg font-semibold title-font mb-4 text-gray-700"><span><?= $block->escapeHtml(__('Write Us')) ?></span></h2>
                 <p class="w-full mx-auto leading-relaxed text-base"><?= $block->escapeHtml(__('Jot us a note and we’ll get back to you as quickly as possible.')) ?></p>
             </div>
             <div class="flex flex-wrap -m-2">
-                <div class="field name required p-2 w-1/2">
-                    <label class="label" for="name"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
-                    <div class="control">
-                        <input name="name" id="name" required title="<?= $block->escapeHtmlAttr(__('Name')) ?>"
-                               value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('name') ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserName()) ?>"
-                               class="input input-light w-full"
-                               type="text"
-                               placeholder="<?= $block->escapeHtml(__('Name')) ?>"
-                        />
-                    </div>
+                <div class="field name required p-2 w-1/2 text-left">
+                    <label class="label text-gray-700" for="name"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
+                    <input name="name" id="name" required title="<?= $block->escapeHtmlAttr(__('Name')) ?>"
+                           value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('name') ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserName()) ?>"
+                           class="mt-2 input input-light w-full"
+                           type="text"
+                           placeholder="<?= $block->escapeHtml(__('Name')) ?>"
+                    />
                 </div>
-                <div class="field email required p-2 w-1/2">
-                    <label class="label" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
-                    <div class="control">
-                        <input name="email" id="email" required title="<?= $block->escapeHtmlAttr(__('Email')) ?>" value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('email') ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserEmail()) ?>"
-                               class="input input-light w-full"
-                               placeholder="<?= $block->escapeHtmlAttr(__('Email')) ?>"
-                               type="email"/>
-                    </div>
+                <div class="field email required p-2 w-1/2 text-left">
+                    <label class="label text-gray-700" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
+                    <input name="email" id="email" required title="<?= $block->escapeHtmlAttr(__('Email')) ?>" value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('email') ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserEmail()) ?>"
+                           class="mt-2 input input-light w-full"
+                           placeholder="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                           type="email"/>
                 </div>
-                <div class="field telephone p-2 w-1/2">
-                    <label class="label" for="telephone"><span><?= $block->escapeHtml(__('Phone Number')) ?></span></label>
-                    <div class="control">
-                        <input name="telephone" id="telephone"
-                               title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
-                               value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('telephone')) ?>"
-                               class="input input-light w-full"
-                               placeholder="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
-                               type="text" />
-                    </div>
+                <div class="field telephone p-2 w-1/2 text-left">
+                    <label class="label text-gray-700" for="telephone"><span><?= $block->escapeHtml(__('Phone Number')) ?></span></label>
+                    <input name="telephone" id="telephone"
+                           title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
+                           value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('telephone')) ?>"
+                           class="mt-2 input input-light w-full"
+                           placeholder="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
+                           type="text" />
                 </div>
-                <div class="field comment required p-2 w-full">
-                    <label class="label" for="comment"><span><?= $block->escapeHtml(__('What’s on your mind?')) ?></span></label>
-                    <div class="control">
-                        <textarea name="comment" id="comment" required
-                                  title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>"
-                                  class="input input-light w-full h-48" cols="5" rows="3"><?=
-                            $block->escapeHtml($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('comment'))
-                            ?></textarea>
-                    </div>
+                <div class="field comment required p-2 w-full text-left">
+                    <label class="label text-gray-700" for="comment"><span><?= $block->escapeHtml(__('What’s on your mind?')) ?></span></label>
+                    <textarea name="comment" id="comment" required
+                              title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>"
+                              class="mt-2 input input-light w-full h-48" cols="5" rows="3"><?=
+                        $block->escapeHtml($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('comment'))
+                        ?></textarea>
                 </div>
                 <?= $block->getChildHtml('form.additional.info') ?>
             </div>
         </fieldset>
         <div class="p-2 w-full">
-            <div class="primary">
                 <input type="hidden" name="form_key" value="<?= $formKeyViewModel->getFormKey() ?>" />
                 <button type="submit" title="<?= $block->escapeHtmlAttr(__('Submit')) ?>" class="btn btn-primary">
                     <span><?= $block->escapeHtml(__('Submit')) ?></span>
                 </button>
-            </div>
         </div>
     </form>
     <div class="lg:w-1/2 md:w-1/3">

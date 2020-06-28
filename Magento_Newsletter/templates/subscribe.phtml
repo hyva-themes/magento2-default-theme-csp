@@ -13,7 +13,7 @@ $formKeyViewModel = $block->getFormKeyViewModel();
           action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>"
           method="post"
           id="newsletter-validate-detail">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3"><?= $block->escapeHtml(__('Newsletter')) ?></h2>
+        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase"><?= $block->escapeHtml(__('Newsletter')) ?></h2>
         <div class="flex xl:flex-no-wrap md:flex-no-wrap lg:flex-wrap flex-wrap justify-center md:justify-start">
             <input name="email" type="email" required id="newsletter" class="input input-light" placeholder="<?= $block->escapeHtmlAttr(__('Enter your email address')) ?>" type="text">
             <input type="hidden" name="form_key" value="<?= $formKeyViewModel->getFormKey() ?>" />
