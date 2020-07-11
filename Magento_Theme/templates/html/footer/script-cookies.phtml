@@ -3,35 +3,83 @@
 ?>
 <script>
     'use strict';
-    function getCookie(name) {
-        var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-        return v ? v[2] : null;
-    }
-    function setCookie(name, value, days) {
-        var d = new Date;
-        d.setTime(d.getTime() + 24*60*60*1000*days);
-        document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
-    }
-    function deleteCookie(name) { setCookie(name, '', -1); }
-
-    window.onload = function () {
-        try {
-            var messages = getCookie('mage-messages');
-            messages = messages ? JSON.parse(decodeURIComponent(messages).replace(/\+/g, ' ')) : [];
-
-            window.mageMessages = messages;
-        } catch (error) {
-            console.warn('Error parsing Cookie Messages:', error);
-            return;
+    {
+        function dispatchMessages(messages) {
+            var messagesEvent = new CustomEvent("messages-loaded", {
+                detail: {
+                    messages: messages
+                }
+            });
+            window.dispatchEvent(messagesEvent);
         }
 
-        var messagesEvent = new CustomEvent("messages-loaded", {
-            detail: {
-                messages: messages
-            }
-        });
-        window.dispatchEvent(messagesEvent);
+        function initFormKey() {
+            var inputSelector = 'input[name="form_key"]';
+            var allowedCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var length = 16;
 
-        deleteCookie('mage-messages');
+            function generateRandomString() {
+                var formKey = '';
+                var charactersLength = allowedCharacters.length;
+                for (var i = 0; i < length; i++) {
+                    formKey += allowedCharacters[Math.round(Math.random() * (charactersLength - 1))]
+                }
+                return formKey;
+            }
+
+            var formKey = getCookie('form_key');
+
+            if (!formKey) {
+                formKey = generateRandomString();
+                setCookie('form_key', formKey, 0);
+            }
+            Array.from(document.querySelectorAll(inputSelector)).map(function (input) {
+                input.value = formKey
+            });
+
+        }
+
+        function initMessages() {
+            try {
+                var messages = getCookie('mage-messages');
+                messages = messages ? JSON.parse(decodeURIComponent(messages).replace(/\+/g, ' ')) : [];
+                window.mageMessages = messages;
+            } catch (error) {
+                console.warn('Error parsing Cookie Messages:', error);
+                return;
+            }
+
+            dispatchMessages(messages);
+
+
+            deleteCookie('mage-messages');
+        }
+
+        function getCookie(name) {
+            var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? v[2] : null;
+        }
+
+        function setCookie(name, value, days) {
+            var expires = '';
+
+            if (days) {
+                var d = new Date;
+                d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * days);
+                expires = ";expires=" + d.toGMTString();
+            }
+            document.cookie = name + "=" + encodeURIComponent(value) +
+                ";path=/" +
+                expires;
+        }
+
+        function deleteCookie(name) {
+            setCookie(name, '', -1);
+        }
+
+        window.addEventListener('load', function () {
+            initFormKey();
+            initMessages();
+        })
     }
 </script>
