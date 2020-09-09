@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-use Magento\Framework\App\Action\Action;
+use Magento\Framework\Escaper;
 
 ?>
 <?php
@@ -14,13 +14,14 @@ use Magento\Framework\App\Action\Action;
  *
  * @var $block \Magento\Catalog\Block\Product\ListProduct
  */
+
+/** @var $escaper Escaper */
 ?>
 <?php
-$_productCollection = $block->getLoadedProductCollection();
-$_helper = $this->helper(Magento\Catalog\Helper\Output::class);
+$productCollection = $block->getLoadedProductCollection();
 ?>
-<?php if (!$_productCollection->count()) :?>
-    <div class="message info empty"><div><?= $block->escapeHtml(__('We can\'t find products matching the selection.')) ?></div></div>
+<?php if (!$productCollection->count()) :?>
+    <div class="message info empty"><div><?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?></div></div>
 <?php else :?>
 <section class="py-8">
     <?= $block->getToolbarHtml() ?>
@@ -44,116 +45,20 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
     ?>
     <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
         <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12">
-            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
-            <?php foreach ($_productCollection as $_product) :?>
-            <div class="item product product-item w-full md:w-1/2 xl:w-1/3 p-6 flex flex-col">
-                    <?php
-                    $productImage = $block->getImage($_product, $imageDisplayArea);
-                    ?>
-                    <?php // Product Image ?>
-                    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
-                       class="product photo product-item-photo"
-                       tabindex="-1">
-                        <img class="hover:grow hover:shadow-lg"
-                             src="<?= $productImage->getImageUrl() ?>"
-                             width="<?= $productImage->getWidth() ?>"
-                             height="<?= $productImage->getHeight() ?>"
-                        />
-                    </a>
-                <?php
-                $_productNameStripped = $block->stripTags($_product->getName(), null, true);
-                ?>
-                <div class="pt-3 flex items-center justify-center text-primary">
-                    <a class="product-item-link"
-                                   href="<?= $block->escapeUrl($_product->getProductUrl()) ?>">
-                            <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
-                        </a>
-
-                </div>
-                <p class="pt-1 text-gray-900"><?= /* @noEscape */ $block->getProductPrice($_product) ?></p>
-                <div class="pt-3 flex justify-center">
-                    <button
-                        class="flex ml-auto btn btn-primary">
-                        <svg class="h-6 w-6 border-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
-                        </svg>
-                        <?= /* @noEscape */ __('Add to cart') ?>
-                    </button>
-                    <button
-                        class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4 mr-auto">
-                        <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5"
-                             viewBox="0 0 24 24">
-                            <path
-                                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
-                        </svg>
-                    </button>
-                </div>
-<!--
-                    <div class="product details product-item-details">
-
-                        <strong class="product name product-item-name">
-                            <a class="product-item-link"
-                               href="<?= $block->escapeUrl($_product->getProductUrl()) ?>">
-                                <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
-                            </a>
-                        </strong>
-                        <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
-                        <?= /* @noEscape */ $block->getProductPrice($_product) ?>
-                        <?php if ($_product->isAvailable()) :?>
-                            <?= $block->getProductDetailsHtml($_product) ?>
-                        <?php endif; ?>
-
-                        <div class="product-item-inner">
-                            <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $block->escapeHtmlAttr($position) : '' ?>>
-                                <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $block->escapeHtmlAttr($position) : '' ?>>
-                                    <?php if ($_product->isSaleable()) :?>
-                                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
-                                        <form data-role="tocart-form"
-                                              data-product-sku="<?= $block->escapeHtmlAttr($_product->getSku()) ?>"
-                                              action="<?= $block->escapeUrl($postParams['action']) ?>"
-                                              method="post">
-                                            <input type="hidden"
-                                                   name="product"
-                                                   value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
-                                            <input type="hidden" name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>"
-                                                   value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
-                                            <?= $block->getBlockHtml('formkey') ?>
-                                            <button type="submit"
-                                                    title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
-                                                    class="action tocart primary">
-                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
-                                            </button>
-                                        </form>
-                                    <?php else :?>
-                                        <?php if ($_product->isAvailable()) :?>
-                                            <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
-                                        <?php else :?>
-                                            <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                </div>
-                                <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $block->escapeHtmlAttr($position) : '' ?>>
-                                    <?php if ($addToBlock = $block->getChildBlock('addto')) :?>
-                                        <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
-                                    <?php endif; ?>
-                                </div>
-                            </div>
-                            <?php if ($showDescription) :?>
-                                <div class="product description product-item-description">
-                                    <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
-                                    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
-                                       title="<?= /* @noEscape */ $_productNameStripped ?>"
-                                       class="action more"><?= $block->escapeHtml(__('Learn More')) ?></a>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-
-                    </div>-->
-                </div>
+            <?php /** @var $product \Magento\Catalog\Model\Product */ ?>
+            <?php foreach ($productCollection as $product) :?>
+                <?= $block->getLayout()->getBlock('product_list_item')
+                    ->setData('product', $product)
+                    ->setData('view_mode', $viewMode)
+                    ->setData('image_display_area', $imageDisplayArea)
+                    ->setData('show_description', $showDescription)
+                    ->setData('position', $pos)
+                    ->setData('pos', $pos)
+                    ->setData('template_type', $templateType)
+                    ->toHtml(); ?>
             <?php endforeach; ?>
         </div>
     </div>
-
     <?= $block->getToolbarHtml() ?>
 </section>
 <?php endif; ?>
