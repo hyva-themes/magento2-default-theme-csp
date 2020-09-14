@@ -1,18 +1,24 @@
 <?php
+/**
+ * Copyright © Wigman Interactive. All rights reserved.
+ * This product is licensed per Magento production install
+ */
+declare(strict_types=1);
+
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
 <script>
     'use strict';
+    function dispatchMessages(messages, hideAfter) {
+        var messagesEvent = new CustomEvent("messages-loaded", {
+            detail: {
+                messages: messages,
+                hideAfter: hideAfter
+            }
+        });
+        window.dispatchEvent(messagesEvent);
+    }
     {
-        function dispatchMessages(messages) {
-            var messagesEvent = new CustomEvent("messages-loaded", {
-                detail: {
-                    messages: messages
-                }
-            });
-            window.dispatchEvent(messagesEvent);
-        }
-
         function initFormKey() {
             var inputSelector = 'input[name="form_key"]';
             var allowedCharacters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

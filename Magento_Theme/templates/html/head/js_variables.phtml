@@ -1,0 +1,11 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+?>
+<script>
+    var BASE_URL = '<?= /* @noEscape */ $block->getUrl('/') ?>';
+    var THEME_PATH = '<?= /* @noEscape */ $block->getViewFileUrl('/') ?>';
+</script>

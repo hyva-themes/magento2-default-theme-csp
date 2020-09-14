@@ -1,5 +1,14 @@
 <?php
-/** @var \Magento\Framework\View\Element\Template $block */
+/**
+ * Copyright © Wigman Interactive. All rights reserved.
+ * This product is licensed per Magento production install
+ */
+declare(strict_types=1);
+
+/** @var Template $block */
+
+use Magento\Framework\View\Element\Template;
+
 ?>
 <script>
     'use strict';
@@ -29,7 +38,7 @@
             return browserStorage;
         }
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             var browserStorage = getBrowserStorage();
             if (!browserStorage) {
                 typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
@@ -45,13 +54,13 @@
                 var storageVersion = browserStorage.getItem(private_content_version_key);
 
                 var privateContentExpires = browserStorage.getItem(private_content_expire_key);
-                if (privateContentExpires && new Date(privateContentExpires) < new Date()){
+                if (privateContentExpires && new Date(privateContentExpires) < new Date()) {
                     browserStorage.removeItem(private_content_key);
                 }
 
                 if (cookieVersion && !storageVersion || cookieVersion !== storageVersion) {
                     fetchPrivateContent([]);
-                    browserStorage.setItem(private_content_version_key,cookieVersion);
+                    browserStorage.setItem(private_content_version_key, cookieVersion);
                 } else if (cookieVersion && storageVersion && cookieVersion === storageVersion) {
                     var privateContent = JSON.parse(browserStorage.getItem(private_content_key));
                     if (privateContent && privateContentExpires) {
@@ -69,22 +78,26 @@
         function dispatchPrivateContent(data) {
             var privateContentEvent = new CustomEvent("private-content-loaded", {
                 detail: {
-                    data
+                    data: data
                 }
             });
             window.dispatchEvent(privateContentEvent);
         }
 
         function fetchPrivateContent(sections) {
-            fetch('<?= $block->getBaseUrl() ?>/customer/section/load/?sections=' + encodeURIComponent(
+            fetch('<?= $block->escapeUrl(
+                $block->getBaseUrl()
+            ) ?>/customer/section/load/?sections=' + encodeURIComponent(
                 sections.join(',')
             ), {
                 method: 'GET',
                 headers: {'Content-Type': 'application/json'},
             })
-                .then(response => response.json())
+                .then(function (response) {
+                    return response.json()
+                })
                 .then(
-                    data => {
+                    function (data) {
                         if (data) {
                             try {
                                 var browserStorage = getBrowserStorage();
