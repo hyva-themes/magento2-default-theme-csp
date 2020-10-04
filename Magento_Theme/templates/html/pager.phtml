@@ -31,8 +31,8 @@
         </p>
         <?php endif ?>
 
+    <div class="pages order-2 col-span-4 justify-center flex">
         <?php if ($block->getLastPageNum()>1) : ?>
-        <div class="pages order-2 col-span-4 justify-center flex">
             <strong class="sr-only label pages-label" id="paging-label"><?= $block->escapeHtml(__('Page')) ?></strong>
             <ul class="items pages-items relative z-0 inline-flex shadow-sm" aria-labelledby="paging-label">
             <?php if (!$block->isFirstPage()) : ?>
@@ -129,8 +129,9 @@
                 </li>
             <?php endif;?>
             </ul>
-        </div>
+
         <?php endif; ?>
+    </div>
 
     <?php if ($block->isShowPerPage()) : ?>
         <div class="limiter">

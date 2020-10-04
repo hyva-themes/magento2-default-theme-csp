@@ -11,7 +11,7 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
 
 /** @var $block Toolbar */
 ?>
-<div class="field limiter flex items-center order-2 col-span-2">
+<div class="field limiter flex items-center order-3 sm:order-2 md:order-3 lg:order-2 col-span-2 justify-end">
     <label class="text-sm mr-2 label" for="limiter">
         <span><?= $block->escapeHtml(__('Show')) ?></span>
     </label>
@@ -28,5 +28,5 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
             <?php endforeach; ?>
         </select>
     </div>
-    <span class="limiter-text text-sm ml-2"><?= $block->escapeHtml(__('per page')) ?></span>
+    <span class="limiter-text text-sm ml-2 sr-only"><?= $block->escapeHtml(__('per page')) ?></span>
 </div>

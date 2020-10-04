@@ -23,10 +23,15 @@ use Magento\LayeredNavigation\Block\Navigation;
  */
 ?>
 <?php if ($block->canShowBlock()) : ?>
-    <div class="block border border-container p-4 md:border-0 md:py-0 md:px-0 my-6" x-data="initLayeredNavigation()" x-init="checkIsMobileResolution()">
+    <div class="block border border-container bg-container-darker p-4 md:border-0 md:bg-transparent md:py-0 md:px-0 my-6"
+         x-data="initLayeredNavigation()"
+         x-init="checkIsMobileResolution()"
+         @resize.window.debounce="checkIsMobileResolution()"
+    >
         <div class="block-title h-10 flex items-center justify-between" @click="blockOpen = !blockOpen">
-            <span class="text-primary text-md md:text-3xl"><?= $escaper->escapeHtml(__('Shop By')) ?></span>
-            <span class="py-1 px-1 rounded border border-container" x-show="isMobile">
+            <span class="text-primary text-md md:text-3xl font-medium uppercase"><?= $escaper->escapeHtml(__('Shop By')) ?></span>
+            <span class="py-1 px-1 bg-container-lighter rounded border border-container-darker hidden"
+                  :class="{ 'block' : isMobile, 'hidden': !isMobile }">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                      xmlns="http://www.w3.org/2000/svg"
                      class="transition-transform transform duration-300 ease-in-out"
@@ -36,15 +41,16 @@ use Magento\LayeredNavigation\Block\Navigation;
                 </svg>
             </span>
         </div>
-        <div class="block-content filter-content pt-3 md:pt-6" x-show="isMobile && blockOpen || !isMobile">
+        <div class="block-content filter-content pt-3" x-show="isMobile && blockOpen || !isMobile">
             <?= $block->getChildHtml('state') ?>
             <?php foreach ($block->getFilters() as $filter): ?>
                 <?php if ($filter->getItemsCount()): ?>
-                    <div class="filter-option md:border md:border-container py-4 md:px-8 my-4" x-data="{ open: true }">
+                    <div class="filter-option card my-4" x-data="{ open: false }">
                         <div
-                            class="filter-options-title flex justify-between items-center cursor-pointer hover:text-secondary-darker"
+                            class="filter-options-title flex justify-between items-center cursor-pointer hover:text-secondary-darker border-container"
+                            :class="{ 'border-b pb-4': open }"
                             @click="open = !open">
-                            <span class="title text-md md:text-lg">
+                            <span class="title text-md md:text-lg font-semibold">
                                 <?= $escaper->escapeHtml(__($filter->getName())) ?>
                                 </span>
                             <span class="py-1 px-1 rounded border border-container">

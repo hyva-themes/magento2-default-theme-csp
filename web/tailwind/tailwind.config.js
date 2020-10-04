@@ -43,6 +43,7 @@ module.exports = {
             },
         },
         backgroundColor: {
+            transparent: colors.transparent,
             black: colors.black,
             white: colors.white,
             red: colors.red,
@@ -66,6 +67,7 @@ module.exports = {
             }
         },
         borderColor: {
+            transparent: colors.transparent,
             black: colors.black,
             white: colors.white,
             red: colors.red,

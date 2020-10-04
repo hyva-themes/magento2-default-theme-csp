@@ -11,7 +11,7 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
 
 /**  @var $block Toolbar */
 ?>
-<div class="toolbar-sorter sorter flex items-center order-1 col-span-2 col-span-6 justify-end">
+<div class="toolbar-sorter sorter flex items-center order-1 col-span-3 sm:col-span-6 md:col-span-3 lg:col-span-6 justify-end">
     <label class="sr-only sorter-label" for="sorter"><?= $block->escapeHtml(__('Sort By')) ?></label>
     <select id="sorter" data-role="sorter" class="form-select sorter-options mr-2"
             @change="changeUrl('product_list_order',event.currentTarget.options[event.currentTarget.selectedIndex].value,'position')">
