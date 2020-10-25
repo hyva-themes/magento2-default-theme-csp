@@ -18,7 +18,7 @@ use Magento\Framework\Escaper;
 <?php if ($crumbs && is_array($crumbs)): ?>
 <nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
     <div class="container">
-        <ul class="items list-reset p-4 rounded flex text-grey text-sm">
+        <ul class="items list-reset py-4 rounded flex text-grey text-sm">
             <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
                 <li class="item px-2 <?= $escaper->escapeHtmlAttr($crumbName) ?>">
                 <?php if ($crumbInfo['link']) : ?>
