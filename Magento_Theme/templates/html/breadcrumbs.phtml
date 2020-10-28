@@ -16,28 +16,29 @@ use Magento\Framework\Escaper;
 /** @var array $crumbs */
 ?>
 <?php if ($crumbs && is_array($crumbs)): ?>
-<div class="breadcrumbs bg-container-lighter shadow-sm">
+<nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
     <div class="container">
-        <ul class="items list-reset p-4 rounded flex text-grey text-sm">
+        <ul class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
             <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
-                <li class="item px-2 <?= $escaper->escapeHtmlAttr($crumbName) ?>">
+                <li class="item flex <?= $escaper->escapeHtmlAttr($crumbName) ?>">
+                <?php if (!$crumbInfo['first']) : ?>
+                    <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
+                <?php endif; ?>
                 <?php if ($crumbInfo['link']) : ?>
                     <a href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
-                       class="no-underline text-primary"
-                       title="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>">
-                        <?= $escaper->escapeHtml($crumbInfo['label']) ?>
-                    </a>
+                       class="no-underline"
+                       title="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>"
+                    ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
                 <?php elseif ($crumbInfo['last']) : ?>
-                    <span class="text-ciHighlight"><?= $escaper->escapeHtml($crumbInfo['label']) ?></span>
+                    <span class="text-ciHighlight text-primary-lighter"
+                          aria-current="page"
+                    ><?= $escaper->escapeHtml($crumbInfo['label']) ?></span>
                 <?php else : ?>
                     <?= $escaper->escapeHtml($crumbInfo['label']) ?>
                 <?php endif; ?>
                 </li>
-                <?php if (!$crumbInfo['last']) : ?>
-                    <li>|</li>
-                <?php endif; ?>
             <?php endforeach; ?>
         </ul>
     </div>
-</div>
+</nav>
 <?php endif; ?>
