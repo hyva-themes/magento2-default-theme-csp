@@ -21,7 +21,7 @@ use Magento\Framework\Escaper;
     >
         <?= $block->getChildHtml('loading') ?>
         <?= $block->getChildHtml('items') ?>
-        <div class="grid-cols-2" x-show="!isLoading && !cartEmpty">
+        <div class="grid grid-cols-2" x-show="!isLoading && !cartEmpty">
             <div>
                 <?= $block->getChildHtml('coupon') ?>
             </div>
