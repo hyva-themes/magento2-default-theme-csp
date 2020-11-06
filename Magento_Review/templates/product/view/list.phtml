@@ -22,7 +22,9 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
         </div>
         <div class="card w-full px-6 py-3">
             <?php foreach ($items as $review): ?>
-                <div itemscope itemprop="review" itemtype="http://schema.org/Review">
+                <div itemscope itemprop="review" itemtype="http://schema.org/Review"
+                     class="border-b pb-4 my-4 border-container last:border-0 last:mb-0"
+                >
                     <?php if (count($review->getRatingVotes())): ?>
                     <?php foreach ($review->getRatingVotes() as $vote): ?>
                     <?php
@@ -88,6 +90,9 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                     </div>
                 </div>
             <?php endforeach; ?>
+        </div>
+        <div class="toolbar review-toolbar mt-4">
+            <?= $block->getChildHtml('toolbar') ?>
         </div>
     </div>
 <?php endif; ?>

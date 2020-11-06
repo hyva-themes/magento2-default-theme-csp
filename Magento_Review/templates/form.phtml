@@ -240,7 +240,9 @@ use Magento\Review\Block\Form;
                                         d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                             </span>
-                            <?= $escaper->escapeHtml(__('You submitted your review for moderation.')) ?>
+                            <template x-for="errorMessage in errorMessages">
+                                <span x-html="errorMessage"></span>
+                            </template>
                         </p>
                     </div>
                 </div>
@@ -259,6 +261,7 @@ use Magento\Review\Block\Form;
                             this.errorMessages = [messages]
                         },
                         placeReview: function (itemId, qty) {
+                            var $this = this;
                             var nickname = document.getElementById('nickname_field').value;
                             var summary = document.getElementById('summary_field').value;
                             var review = document.getElementById('review_field').value;
@@ -313,15 +316,17 @@ use Magento\Review\Block\Form;
                                     },
                                     body: JSON.stringify({query: createProductReviewQuery})
                                 })
-                                    .then(response => response.json())
+                                    .then(function(response){ return response.json() })
                                     .then(
-                                        data => {
-                                            this.isLoading = false;
+                                        function(data) {
+                                            $this.isLoading = false;
                                             if (data.errors) {
-                                                this.setErrorMessages(data.errors);
-
+                                                $this.setErrorMessages(['<?= $escaper->escapeJs(
+                                                    __('Submitting your review failed, please try again.')
+                                                ) ?>']);
+                                                $this.displayErrorMessage = true;
                                             } else {
-                                                this.displaySuccessMessage = true;
+                                                $this.displaySuccessMessage = true;
                                             }
                                         }
                                     );
