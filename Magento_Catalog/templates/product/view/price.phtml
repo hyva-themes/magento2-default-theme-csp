@@ -19,7 +19,7 @@ $product = $block->getProduct();
     function initPrice<?= (int) $product->getId() ?>(){
         return {
             prices: false,
-            formatPrice(price) {
+            formatPrice: function formatPrice(price) {
                 return price.toLocaleString(false, {
                     style: 'currency',
                     currency: 'EUR'

@@ -23,9 +23,6 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                 allowedAttributeOptions: [],
                 selectedValues: [],
                 findSimpleIndex: function findSimpleIndex () {
-/*                  if ( Object.keys(this.selectedValues).length !== Object.keys(this.optionConfig.attributes).length) {
-                      return;
-                  }*/
                   var productIndexes = this.optionConfig.index;
                   var $this = this;
                   this.productIndex = Object.keys(productIndexes).find(function(productIndex) {
@@ -54,20 +51,22 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                     var productIndexes = this.optionConfig.index;
                     var availableIndexes = Object.keys(productIndexes);
 
+                    var newAllowedAttributeOptions = [];
+
                     allAttributesSorted.forEach(function (attribute) {
                         if (previousOption && $this.selectedValues[previousOption]) {
                             availableIndexes = availableIndexes.filter(function(availableIndex) {
                                 return productIndexes[availableIndex][previousOption] === $this.selectedValues[previousOption]
                             })
                         }
-                        $this.allowedAttributeOptions[attribute.id] = allAttributes[attribute.id].options.filter(function (option) {
+                        newAllowedAttributeOptions[attribute.id] = allAttributes[attribute.id].options.filter(function (option) {
                             return !!option.products.find(function (product) {
                                 return availableIndexes.includes(product);
                             })
                         });
                         previousOption = attribute.id;
                     });
-
+                    this.allowedAttributeOptions = newAllowedAttributeOptions;
                 },
                 getAllowedAttributeOptions: function getAllowedAttributeOptions(attributeId) {
                     return this.allowedAttributeOptions[attributeId] || []
@@ -104,9 +103,30 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                 }
             }
         }
+
     </script>
     <div x-data="initConfigurableOptions()"
-         x-init="findAllowedAttributeOptions()"
+         x-init="$watch('allowedAttributeOptions', function(allowedOptions) {
+            var select = document.querySelectorAll('select[name^=super_attribute]');
+                select.forEach(function (element) {
+                    var previousSelectedIndex = element.value;
+                    element.innerHTML = '<option value> <?= $escaper->escapeHtml(__('Choose an Option...')) ?></option>';
+                    var id = element.dataset.id;
+                    var options = allowedOptions[id] || [];
+
+                    options.forEach(function (item) {
+                        console.log(item);
+                        var option = document.createElement('option');
+                        option.textContent = item.label;
+                        option.value = item.id;
+                        element.appendChild(option);
+                        if (item.id === previousSelectedIndex) {
+                            element.value = item.id;
+                        }
+                    });
+                })
+
+         }); findAllowedAttributeOptions();"
     >
         <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
             <?= __('Select options:') ?>
@@ -125,6 +145,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                 <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
                         data-selector="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
                         data-validate="{required:true}"
+                        data-id="<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
                         id="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
                         class="form-select super-attribute-select"
                         x-on:change="changeOption(<?= (int) $attribute->getAttributeId() ?>, event.target.value)"
@@ -132,11 +153,6 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                     <option value="">
                         <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
                     </option>
-                    <template x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attribute->getAttributeId() ?>)"
-                              :key="item.id"
-                    >
-                        <option :value="item.id" x-html="item.label"></option>
-                    </template>
                 </select>
             </div>
         </div>
