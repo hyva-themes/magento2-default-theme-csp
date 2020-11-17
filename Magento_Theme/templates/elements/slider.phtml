@@ -28,7 +28,16 @@ $title = $block->getTitle();
 $type = $block->getType() ?: "";
 
 $linkedProduct = (in_array($type, ['related', 'crosssell', 'upsell']));
-$productSkus = $linkedProduct ? $block->getProduct()->getSku() : $block->getProductSkus();
+
+if ($linkedProduct) {
+    if ($product = $block->getProduct()) {
+        $productSkus = $block->getProduct()->getSku();
+    } else {
+        $productSkus = '';
+    }
+} else {
+    $productSkus = $block->getProductSkus();
+}
 
 $productSkuFilter = $productSkus ? sprintf("sku: { in: [\"%s\"] },", join("\",\"", explode(',',$productSkus))) : "";
 $categoryFilter = $categoryIds ? sprintf("category_id: { in: [\"%s\"] }", join("\",\"", explode(',',$categoryIds))) : "";
@@ -109,6 +118,7 @@ $graphqlQuery = $query ?: "
                                 data.data &&
                                 data.data.products &&
                                 data.data.products.items &&
+                                data.data.products.items[0] &&
                                 data.data.products.items[0]['<?= $block->escapeHtml($type) ?>_products']
                             ) || [];
                             <?php else: ?>

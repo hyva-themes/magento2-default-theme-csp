@@ -64,6 +64,14 @@
                     </container>
                 </block>
             </block>
+
+            <block name="crosssell" class="Magento\Catalog\Block\Product\View"
+                   template="Magento_Theme::elements/slider.phtml">
+                <arguments>
+                    <argument name="type" xsi:type="string">crosssell</argument>
+                    <argument name="title" xsi:type="string" translate="true">You might also like:</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>
