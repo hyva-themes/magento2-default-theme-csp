@@ -147,7 +147,7 @@
             </label>
             <select id="limiter" class="form-select mr-2" onchange="location.href = this.value">
                 <?php foreach ($block->getAvailableLimit() as $_key => $_limit) : ?>
-                    <option value="<?= $escaper->escapeHtmlAttr($block->getLimitUrl($_key)) ?>"
+                    <option value="<?= $escaper->escapeUrl($block->getLimitUrl($_key)) ?>"
                         <?php if ($block->isLimitCurrent($_key)) : ?>
                             selected="selected"<?php endif ?>>
                         <?= $escaper->escapeHtml($_limit) ?>
