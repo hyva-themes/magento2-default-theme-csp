@@ -1,0 +1,57 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+/**
+ * @var \Magento\Customer\Block\Account\AuthorizationLink $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+if ($block->isLoggedIn()):
+    $dataPostParam = $block->getPostParams(); ?>
+
+<script>
+    function initAuthorizationLink() {
+        return {
+            'postParam': <?= /* @noEscape */ $dataPostParam ?>,
+            'onSubmit': function onSubmit() {
+                var form = document.createElement("form");
+                var uenc = document.createElement("input");
+                var form_key = document.createElement("input");
+
+                form.method = "POST";
+                form.action = this.postParam.action;
+
+                uenc.value = this.postParam.data.uenc;
+                uenc.name="uenc";
+                form.appendChild(uenc);
+
+                form_key.value = document.querySelector('input[name=form_key]').value;
+                form_key.name="form_key";
+                form.appendChild(form_key);
+
+                document.body.appendChild(form);
+
+                form.submit();
+            }
+        }
+    }
+</script>
+<li class="nav item" x-data="initAuthorizationLink()">
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>
+        @click.prevent="onSubmit"
+    >
+        <?= $escaper->escapeHtml($block->getLabel()) ?>
+    </a>
+</li>
+<?php else: ?>
+    <li class="nav item">
+        <a <?= /* @noEscape */ $block->getLinkAttributes() ?>>
+            <?= $escaper->escapeHtml($block->getLabel()) ?>
+        </a>
+    </li>
+<?php endif; ?>

@@ -1,0 +1,22 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+/** @var $block \Magento\Framework\View\Element\Html\Links */
+?>
+<div class="block account-nav">
+    <div class="title">
+        <strong><?= $block->escapeHtml(__('My Account')) ?></strong>
+    </div>
+    <div class="content">
+        <nav class="account-nav">
+            <ul class="nav items">
+                <?= $block->getChildHtml() ?>
+            </ul>
+        </nav>
+    </div>
+</div>
