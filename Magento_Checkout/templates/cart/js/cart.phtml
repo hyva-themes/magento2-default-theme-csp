@@ -27,10 +27,6 @@ $viewModelCart = $block->getData('viewModelCart');
             isLoading: true,
             isTouchDevice: false,
             showCouponForm: false,
-            getCartId: function getCartId() {
-                this.cartId = getConfigFromLocalStorage(activeSource.cartId);
-                return this.cartId;
-            },
             getSignInToken: function getSignInToken() {
                 return getConfigFromLocalStorage(activeSource.token);
             },
@@ -53,7 +49,7 @@ $viewModelCart = $block->getData('viewModelCart');
                         },
                         credentials: 'include',
                         body: JSON.stringify({
-                            query: ($this.getSignInToken() && $this.getCustomerCartQuery()) || this.getCartQuery(this.getCartId())
+                            query: ($this.getSignInToken() && $this.getCustomerCartQuery()) || this.getCartQuery(this.cartId)
                         })
                     }
                 ).then(function (response) {
@@ -70,12 +66,14 @@ $viewModelCart = $block->getData('viewModelCart');
                 });
             },
             getCartByLocalStorage() {
-                if (this.getCartId()) {
-                    this.getCart();
+                if (!this.cartId) {
+                    this.cartId = getConfigFromLocalStorage(activeSource.cartId);
                 }
+                this.cartId && this.getCart();
             },
-            getCartByCustomerSectionData() {
-                if (this.getCartId()) {
+            getCartByCustomerSectionData(data) {
+                if (data && data.cart && data.cart.cartId) {
+                    this.cartId = data.cart.cartId;
                     this.getCart();
                 } else {
                     this.cartEmpty = true;
@@ -162,7 +160,7 @@ $viewModelCart = $block->getData('viewModelCart');
                         headers: {
                             'Content-Type': 'application/json;charset=utf-8'
                         },
-                        body: JSON.stringify({query: cartItemUpdateQuery.replace('%cartId', this.getCartId)})
+                        body: JSON.stringify({query: cartItemUpdateQuery.replace('%cartId', this.cartId)})
                     }
                 ).then(function (response) {
                         return response.json()
