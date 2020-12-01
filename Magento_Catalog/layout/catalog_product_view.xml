@@ -97,7 +97,7 @@
                                as="product_info_form"
                                template="Magento_Catalog::product/view/product-form.phtml"
                         >
-                            <block class="Magento\Catalog\Block\Product\View\Options" as="product.options" template="Magento_Catalog::product/view/options/options.phtml">
+                            <block class="Magento\Catalog\Block\Product\View\Options" name="product.info.options" as="product_options" template="Magento_Catalog::product/view/options/options.phtml">
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\DefaultType" name="product.info.options.default" as="default" template="Magento_Catalog::product/view/options/type/default.phtml"/>
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\Text" name="product.info.options.text" as="text" template="Magento_Catalog::product/view/options/type/text.phtml"/>
                                 <block class="Magento\Catalog\Block\Product\View\Options\Type\File" name="product.info.options.file" as="file" template="Magento_Catalog::product/view/options/type/file.phtml"/>
