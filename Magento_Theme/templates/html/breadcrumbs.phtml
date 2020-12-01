@@ -30,7 +30,7 @@ use Magento\Framework\Escaper;
                        title="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>"
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
                 <?php elseif ($crumbInfo['last']) : ?>
-                    <span class="text-ciHighlight text-primary-lighter"
+                    <span class="text-primary-lighter"
                           aria-current="page"
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></span>
                 <?php else : ?>
