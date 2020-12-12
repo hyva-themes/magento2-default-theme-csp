@@ -82,11 +82,17 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                         x-show.transition.opacity.duration.400ms="active===index"
                     />
                 </template>
-                <div class="inset-0 hidden video w-full h-full object-fit object-center absolute gallery-image-nonmobile"
+                <div class="inset-0 hidden w-full h-full object-fit object-center absolute nonmobile bg-white"
                      :class="{ 'hidden': activeVideoType !== 'youtube' }"
-                     x-show.transition.opacity.duration.400ms="images[active].type === 'video'"
+                     x-show.transition.opacity.duration.400ms="images[active].type === 'video' && activeVideoType === 'youtube'"
                 >
                     <div id="youtube-player" class="w-full h-full object-fit object-center"></div>
+                </div>
+                <div class="inset-0 hidden w-full h-full object-fit object-center absolute bg-white"
+                     :class="{ 'hidden': activeVideoType !== 'vimeo' }"
+                     x-show.transition.opacity.duration.400ms="images[active].type === 'video' && activeVideoType === 'vimeo'"
+                >
+                    <div id="vimeo-player" class="w-full h-full object-fit object-center"></div>
                 </div>
             </div>
         </div>
@@ -114,6 +120,10 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
             "active": 0,
             "videoData": {},
             "activeVideoType": false,
+            "autoplayVideo": false,
+            "loopVideo": true,
+            "relatedVideos": false,
+            "vimeoPlayer": null,
             "fullscreen": false,
             "initialImages": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
             "images": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
@@ -125,6 +135,9 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                 this.active = index;
                 if (window.youtubePlayer) {
                     window.youtubePlayer.stopVideo();
+                }
+                if (this.vimeoPlayer) {
+                    this.vimeoPlayer.contentWindow.postMessage(JSON.stringify({"method": "pause"}), "*");
                 }
                 if(this.images[index].type === 'video') {
                     this.activateVideo();
@@ -145,7 +158,7 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                     }
 
                 } else if (videoData.type === "vimeo") {
-
+                    this.initVimeoVideo(videoData);
                 }
             },
             getVideoData(){
@@ -182,7 +195,8 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                     id: id, type: type, useYoutubeNoCookie: useYoutubeNocookie
                 } : false;
             },
-            initYoutubeAPI: function (videoData) {
+            initYoutubeAPI(videoData) {
+                var params = {};
                 var loadYoutubeAPI = document.createElement('script');
                 loadYoutubeAPI.src = "https://www.youtube.com/player_api";
                 var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -192,16 +206,58 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                     'https://www.youtube-nocookie.com' :
                     'https://www.youtube.com';
 
-
+                if (this.autoplayVideo) {
+                    params.autoplay = this.autoplayVideo;
+                }
+                if (!this.relatedVideos) {
+                    params.rel = 0;
+                }
                 var fireYoutubeAPI = document.createElement('script');
                 fireYoutubeAPI.innerHTML = `function onYouTubeIframeAPIReady() {
                     window.youtubePlayer = new YT.Player('youtube-player', {
                         host: '${host}',
-                        videoId: '${videoData.id}'
+                        videoId: '${videoData.id}',
+                        playerVars: ${JSON.stringify(params)},
                     });
                 }`;
                 firstScriptTag.parentNode.insertBefore(fireYoutubeAPI, firstScriptTag);
+            },
+            initVimeoVideo(videoData) {
+                let
+                    additionalParams = '',
+                    src;
 
+                const timestamp = new Date().getTime();
+                const vimeoContainer = document.getElementById("vimeo-player");
+                const videoId = videoData.id;
+
+                if (!vimeoContainer || !videoId) return;
+
+                if (this.autoplayVideo) {
+                    additionalParams += '&autoplay=1';
+                }
+
+                if (this.loopVideo) {
+                    additionalParams += '&loop=1';
+                }
+                src = 'https://player.vimeo.com/video/' +
+                    videoId + '?api=1&player_id=vimeo' +
+                    videoId +
+                    timestamp +
+                    additionalParams;
+                vimeoContainer.innerHTML =
+                    `<iframe id="${'vimeo' + videoId + timestamp}"
+                        src="${src}"
+                        width="640" height="360"
+                        webkitallowfullscreen
+                        mozallowfullscreen
+                        allowfullscreen
+                        referrerPolicy="origin"
+                        allow="autoplay"
+                        class="w-full h-full object-fit object-center"
+                     />`;
+
+                this.vimeoPlayer = vimeoContainer.childNodes[0];
             },
             eventListeners: {
                 ['@keydown.window.escape'](){
