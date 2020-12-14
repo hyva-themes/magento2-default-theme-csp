@@ -29,6 +29,7 @@
                         <argument name="viewModelCart"
                                   xsi:type="object">Hyva\Theme\ViewModel\Cart\GraphQlQueries
                         </argument>
+                        <argument name="viewModelStore" xsi:type="object">Hyva\Theme\ViewModel\Store</argument>
                     </arguments>
                     <block name="js_localstorage_config" template="Hyva_Theme::js/localStorageConfig.phtml">
                         <arguments>
@@ -70,6 +71,7 @@
                 <arguments>
                     <argument name="type" xsi:type="string">crosssell</argument>
                     <argument name="title" xsi:type="string" translate="true">You might also like:</argument>
+                    <argument name="viewModelStore" xsi:type="object">Hyva\Theme\ViewModel\Store</argument>
                 </arguments>
             </block>
         </referenceContainer>

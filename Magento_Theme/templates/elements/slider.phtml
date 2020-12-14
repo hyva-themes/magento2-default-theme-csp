@@ -10,6 +10,9 @@ declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
 
+/** @var $viewModelStore \Hyva\Theme\ViewModel\Store */
+$viewModelStore = $block->getData('viewModelStore');
+
 /** @var Template $block */
 $uniqueId = '_' . uniqid();
 $query = $block->getGraphqlQuery();
@@ -106,7 +109,10 @@ $graphqlQuery = $query ?: "
                     this.query
                 ), {
                     method: 'GET',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
+                    },
                 })
                     .then(function (response) {
                         return response.json()

@@ -14,6 +14,8 @@ use Hyva\Theme\ViewModel\Cart\GraphQlQueries;
 /** @var $escaper Escaper */
 /** @var $viewModelCart GraphQlQueries */
 $viewModelCart = $block->getData('viewModelCart');
+/** @var $viewModelStore \Hyva\Theme\ViewModel\Store */
+$viewModelStore = $block->getData('viewModelStore');
 ?>
 <script>
 
@@ -45,7 +47,8 @@ $viewModelCart = $block->getData('viewModelCart');
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
                         },
                         credentials: 'include',
                         body: JSON.stringify({
@@ -120,7 +123,8 @@ $viewModelCart = $block->getData('viewModelCart');
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
                         },
                         body: JSON.stringify({query: couponQuery})
                     }
@@ -159,7 +163,8 @@ $viewModelCart = $block->getData('viewModelCart');
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
                         },
                         body: JSON.stringify({query: cartItemUpdateQuery.replace('%cartId', this.cartId)})
                     }
@@ -188,7 +193,8 @@ $viewModelCart = $block->getData('viewModelCart');
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                         method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json;charset=utf-8'
+                            'Content-Type': 'application/json;charset=utf-8',
+                            'Store': '<?= /* @noEscape */ $viewModelStore->getStoreCode() ?>'
                         },
                         body: JSON.stringify({query: cartItemRemoveQuery})
                     }
