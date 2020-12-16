@@ -61,10 +61,10 @@ $formId = 'review_form';
                                                     <?php $options = $rating->getOptions(); ?>
                                                     <?php $iterator = 1;
                                                     foreach ($options as $_option): ?>
-                                                        <div class="cursor-pointer relative cursor-pointer"
-                                                             @click="clickedRatingId === <?= (int)$iterator ?> || 0">
+                                                        <div class="relative"
+                                                             @click="clickedRatingId = <?= (int)$iterator ?> || 0">
                                                             <input
-                                                                class="absolute opacity-0 bottom-0 left-0"
+                                                                class="absolute opacity-0 bottom-0 left-0 cursor-pointer"
                                                                 type="radio"
                                                                 <?php if ($iterator === 1): ?>required<?php endif; ?>
                                                                 name="ratings[<?= $escaper
@@ -78,7 +78,7 @@ $formId = 'review_form';
                                                                 value="<?= $escaper
                                                                     ->escapeHtmlAttr($_option->getId()) ?>"/>
                                                             <label
-                                                                class="rating-<?= (int)$iterator ?> m-0"
+                                                                class="rating-<?= (int)$iterator ?> m-0 cursor-pointer"
                                                                 for="<?= $escaper
                                                                      ->escapeHtmlAttr(
                                                                          $rating->getRatingCode() .

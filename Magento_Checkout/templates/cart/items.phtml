@@ -132,7 +132,9 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                             <?php endif; ?>
                             <span
                                 class="block text-left md:text-right lg:text-center lg:whitespace-no-wrap">
-                                <span x-html="formatPrice(item.prices.price.value)"></span>
+                                <span class="block text-left md:text-right lg:text-center lg:whitespace-no-wrap p-2"
+                                      x-html="formatPrice(item.prices.price.value)">
+                                </span>
                                 <?php if ($displayPriceTaxBoth): ?>
                                     <span class="text-sm">
                                         (<?= $displayPriceTaxBoth ? $escaper->escapeHtml(__('excl. VAT')) : '' ?>)
