@@ -9,7 +9,9 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Framework\Escaper;
 
+/** @var Escaper $escaper */
 /** @var $block Toolbar */
 
 // phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
@@ -18,11 +20,9 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
 $uniqueId = '_' . uniqid();
 ?>
 <script>
-    function initToolbar<?= $uniqueId ?>() {
+    function initToolbar<?= /** @noEscape */  $uniqueId ?>() {
         return {
-            options: {
-                url: '<?= $block->getPagerUrl() ?>'
-            },
+            options: <?= /* @noEscape */ $block->getWidgetOptionsJson() ?>.productListToolbarForm || {},
             changeUrl: function (paramName, paramValue, defaultValue) {
                 var decode = window.decodeURIComponent,
                     urlPaths = this.options.url.split('?'),
@@ -65,7 +65,7 @@ $uniqueId = '_' . uniqid();
                     document.body.appendChild(form);
                     form.submit();
                 } else {
-                    if (paramValue === defaultValue) { //eslint-disable-line eqeqeq
+                    if (paramValue === defaultValue.toString()) {
                         delete paramData[paramName];
                     }
                     paramData = Object.keys(paramData).map(function(k) {
@@ -78,10 +78,11 @@ $uniqueId = '_' . uniqid();
         }
     }
 </script>
-<?php if ($block->getCollection()->getSize()) :?>
-    <div x-data="initToolbar<?= $uniqueId ?>()"
-         class="toolbar toolbar-products h-28 grid grid-cols-4 sm:grid-cols-8 md:grid-cols-4 lg:grid-cols-8  grid-flow-row gap-2 items-center">
-        <?php if ($block->isExpanded()) :?>
+<?php if ($block->getCollection()->getSize()):?>
+    <div x-data="initToolbar<?= /** @noEscape */ $uniqueId ?>()"
+         class="toolbar toolbar-products h-28 grid grid-cols-4 sm:grid-cols-8 md:grid-cols-4
+            lg:grid-cols-8  grid-flow-row gap-2 items-center">
+        <?php if ($block->isExpanded()):?>
             <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
         <?php endif; ?>
 
@@ -91,7 +92,7 @@ $uniqueId = '_' . uniqid();
 
         <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml')) ?>
 
-        <?php if ($block->isExpanded()) :?>
+        <?php if ($block->isExpanded()): ?>
             <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/sorter.phtml')) ?>
         <?php endif; ?>
     </div>

@@ -18,10 +18,14 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
     </label>
     <div class="control">
         <select id="limiter" data-role="limiter" class="form-select limiter-options"
-                @change="changeUrl('product_list_limit',event.currentTarget.options[event.currentTarget.selectedIndex].value,9)">
-            <?php foreach ($block->getAvailableLimit() as $_key => $_limit) :?>
+                @change="changeUrl(
+                    'product_list_limit',
+                    event.currentTarget.options[event.currentTarget.selectedIndex].value,
+                    options.limitDefault
+                )">
+            <?php foreach ($block->getAvailableLimit() as $_key => $_limit):?>
                 <option value="<?= $block->escapeHtmlAttr($_key) ?>"
-                    <?php if ($block->isLimitCurrent($_key)) :?>
+                    <?php if ($block->isLimitCurrent($_key)):?>
                         selected="selected"
                     <?php endif ?>>
                     <?= $block->escapeHtml($_limit) ?>
@@ -29,5 +33,7 @@ use Magento\Catalog\Block\Product\ProductList\Toolbar;
             <?php endforeach; ?>
         </select>
     </div>
-    <span class="limiter-text text-sm ml-2 sr-only"><?= $block->escapeHtml(__('per page')) ?></span>
+    <span class="limiter-text text-sm ml-2 sr-only">
+        <?= $block->escapeHtml(__('per page')) ?>
+    </span>
 </div>
