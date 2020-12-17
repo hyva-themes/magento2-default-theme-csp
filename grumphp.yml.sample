@@ -1,8 +1,10 @@
 grumphp:
   hide_circumvention_tip: true
   process_timeout: 120
-  git_hook_variables:
-      EXEC_GRUMPHP_COMMAND: 'docker exec -w "/var/www/html/src/vendor/hyva-themes/magento2-default-theme" $(docker container ps -q --filter="name=phpcli") php'
+# Enable git_hook_variables and EXEC_GRUMPHP_COMMAND to run GRUMPHP in docker
+# Make sure to set the right path and docker container
+#  git_hook_variables:
+#      EXEC_GRUMPHP_COMMAND: 'docker exec -w "/var/www/html/src/vendor/hyva-themes/magento2-default-theme" $(docker container ps -q --filter="name=phpcli") php'
   tasks:
     composer:
       no_check_all: true
