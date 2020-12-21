@@ -20,7 +20,7 @@
                     $block->getFormattedAddress($order->getBillingAddress()) ?></address>
             </div>
         </div>
-        <?php if (!$order->getIsVirtual()) : ?>
+        <?php if (!$order->getIsVirtual()): ?>
             <div class="w-full py-4">
                 <p class="font-semibold mb-2"><?= $escaper->escapeHtml(__('Shipping Address')) ?></p>
                 <div class="box-content">
@@ -31,9 +31,9 @@
             <div class="w-full py-4">
                 <p class="font-semibold mb-2"><?= $escaper->escapeHtml(__('Shipping Method')) ?></p>
                 <div class="box-content">
-                    <?php if ($order->getShippingDescription()) : ?>
+                    <?php if ($order->getShippingDescription()): ?>
                         <?= $escaper->escapeHtml($order->getShippingDescription()) ?>
-                    <?php else : ?>
+                    <?php else: ?>
                         <?= $escaper->escapeHtml(__('No shipping information available')) ?>
                     <?php endif; ?>
                 </div>

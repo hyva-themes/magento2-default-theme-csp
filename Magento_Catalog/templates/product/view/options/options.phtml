@@ -9,8 +9,10 @@
 use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Catalog\Block\Product\View\Options;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\Escaper;
 
-/* @var $block Options */
+/** @var $escaper Escaper */
+/** @var $block Options */
 /** @var Option $option */
 
 /** @var ProductPage $productViewModel */
@@ -19,7 +21,7 @@ $productViewModel = $block->getProductViewModel();
 $options = $block->decorateArray($block->getOptions());
 
 ?>
-<?php if (count($options)) :?>
+<?php if (count($options)): ?>
     <script>
         function initOptions() {
             return {
@@ -32,7 +34,7 @@ $options = $block->decorateArray($block->getOptions());
                         document.documentElement.lang,
                         {
                             style: 'currency',
-                            currency: '<?= $productViewModel->getCurrencyData()['code']; ?>',
+                            currency: '<?= /** @noEscape */ $productViewModel->getCurrencyData()['code']; ?>',
                             signDisplay: showSign ? "always" : "auto"
                         }
                     );
@@ -61,7 +63,8 @@ $options = $block->decorateArray($block->getOptions());
                 calculateOptionPrices() {
                     for (const [customOptionId, customOption] of Object.entries(this.optionConfig)) {
                         if (customOption.prices) {
-                            this.customOptionPrices[customOptionId] = this.calculateOptionPrice(customOption,customOptionId);
+                            this.customOptionPrices[customOptionId] =
+                                this.calculateOptionPrice(customOption,customOptionId);
                         } else {
                             for (const [childCustomOptionId, childCustomOption] of Object.entries(customOption)) {
                                 this.customOptionPrices[customOptionId + '_' + childCustomOptionId] =
@@ -134,7 +137,7 @@ $options = $block->decorateArray($block->getOptions());
         }
     </script>
     <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
-        <?= __('Customizable Options:') ?>
+        <?= $escaper->escapeHtml(__('Customizable Options:')) ?>
     </h2>
     <div x-data="initOptions()"
          x-init="
@@ -143,7 +146,7 @@ $options = $block->decorateArray($block->getOptions());
          "
          x-spread="eventListeners"
          class="mb-6">
-    <?php foreach ($options as $option) :?>
+    <?php foreach ($options as $option):?>
         <?= $block->getOptionHtml($option) ?>
     <?php endforeach; ?>
     </div>

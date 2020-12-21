@@ -19,7 +19,7 @@ declare(strict_types=1);
 } ?>
 <?php $_categories = $block->getCurrentChildCategories() ;?>
 <?php $_count = is_array($_categories) ? count($_categories) : $_categories->count(); ?>
-<?php if ($_count) :?>
+<?php if ($_count):?>
     <div class="card border border-container p-4 mx-6 md:mx-0 mb-8">
         <div class="title">
             <strong><?= $block->escapeHtml(__('Shop By')) ?></strong>
@@ -31,11 +31,11 @@ declare(strict_types=1);
                 <dd>
                     <ol class="items">
                         <?php /** @var \Magento\Catalog\Model\Category $_category */ ?>
-                        <?php foreach ($_categories as $_category) :?>
-                            <?php if ($_category->getIsActive()) :?>
+                        <?php foreach ($_categories as $_category):?>
+                            <?php if ($_category->getIsActive()):?>
                                 <li class="item">
                                     <a href="<?= $block->escapeUrl($block->getCategoryUrl($_category)) ?>"
-                                        <?php if ($block->isCategoryActive($_category)) :?>
+                                        <?php if ($block->isCategoryActive($_category)):?>
                                             class="current"
                                         <?php endif; ?>
                                     ><?= $block->escapeHtml($_category->getName()) ?></a>

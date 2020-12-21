@@ -23,6 +23,9 @@ $product = $block->getProduct();
 /** @var ProductPage $productViewModel */
 $productViewModel = $block->getProductViewModel();
 
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+
 // todo: refactor to use a priceViewModel
 /** @var PriceHelper $priceHelper */
 $priceHelper = $this->helper(PriceHelper::class);
@@ -34,7 +37,7 @@ $priceHelper = $this->helper(PriceHelper::class);
             initialFinalPrice: <?= (float)$product->getFinalPrice()?>,
             calculatedFinalPrice: false,
             calculatedFinalPriceWithCustomOptions: false,
-            initialTierPrices: <?= json_encode($product->getTierPrice()) ?>,
+            initialTierPrices: <?= /** @noEscape */ json_encode($product->getTierPrice()) ?>,
             customOptionPrices: [],
             activeCustomOptions: [],
             qty: 1,
@@ -68,7 +71,7 @@ $priceHelper = $this->helper(PriceHelper::class);
                     document.documentElement.lang,
                     {
                         style: 'currency',
-                        currency: '<?= $productViewModel->getCurrencyData()['code']; ?>',
+                        currency: '<?= $escaper->escapeHtml($productViewModel->getCurrencyData()['code']) ?>',
                         signDisplay: showSign ? "always" : "auto"
                     }
                 );
@@ -101,7 +104,9 @@ $priceHelper = $this->helper(PriceHelper::class);
                 } else {
                     finalPrice = Object.values(this.initialTierPrices).reduce((finalValue, tierPrice) => {
                         if (this.qty >= tierPrice.price_qty) {
-                            return parseFloat(tierPrice.website_price) < finalValue ? parseFloat(tierPrice.website_price) : finalValue;
+                            return parseFloat(tierPrice.website_price) < finalValue ?
+                                parseFloat(tierPrice.website_price) :
+                                finalValue;
                         }
                         return finalValue;
                     }, finalPrice);
@@ -120,13 +125,14 @@ $priceHelper = $this->helper(PriceHelper::class);
                 let finalPrice = this.calculatedFinalPrice ||
                     this.initialFinalPrice;
 
-                this.calculatedFinalPriceWithCustomOptions = this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
-                    const customOptionPrice = this.customOptionPrices[activeCustomOptionId];
-                    if(customOptionPrice) {
-                        return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
-                    }
-                    return finalPrice;
-                }, finalPrice);
+                this.calculatedFinalPriceWithCustomOptions =
+                    this.activeCustomOptions.reduce((priceAccumulator, activeCustomOptionId) => {
+                        const customOptionPrice = this.customOptionPrices[activeCustomOptionId];
+                        if(customOptionPrice) {
+                            return Number.parseFloat(priceAccumulator) + Number.parseFloat(customOptionPrice);
+                        }
+                        return finalPrice;
+                    }, finalPrice);
 
             },
             getFormattedFinalPrice() {
@@ -157,20 +163,20 @@ $priceHelper = $this->helper(PriceHelper::class);
         }
     }
 </script>
-<div x-data="initPrice<?= (int) $product->getId() ?>()"
+<div x-data="initPrice<?= (int)$product->getId() ?>()"
      x-spread="eventListeners"
      class="price-box price-final_price"
 >
     <template x-if="!activeProductsPriceData">
         <div class="price-container">
-            <?php
-                $regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
-            if(
-                $product->getFinalPrice() < $regularPrice
-            ): ?>
+            <?php $regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue(); ?>
+            <?php if ($product->getFinalPrice() < $regularPrice): ?>
                 <div class="old-price mr-2 inline-block">
-                    <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
-                        <span class="price" ><?= $productViewModel->currency($regularPrice) ?></span>
+                    <span id="product-price-<?= (int)$product->getId() ?>"
+                          class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
+                        <span class="price" >
+                            <?= /** @noEscape */ $productViewModel->currency($regularPrice) ?>
+                        </span>
                     </span>
                 </div>
             <?php endif; ?>
@@ -181,17 +187,24 @@ $priceHelper = $this->helper(PriceHelper::class);
                             $escaper->escapeHtml(__('As low as')) . ':' :
                             '' ?>
                     </span>
-                <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper title-font font-medium text-2xl text-gray-900">
-                    <span class="price" x-html="getFormattedFinalPrice()"><?= $product->getFormattedPrice() ?></span>
+                <span id="product-price-<?= (int) $product->getId() ?>"
+                      class="price-wrapper title-font font-medium text-2xl text-gray-900">
+                    <span class="price" x-html="getFormattedFinalPrice()">
+                        <?= /** @noEscape */ $product->getFormattedPrice() ?>
+                    </span>
                 </span>
-                <meta itemprop="price" content="<?= $product->getFinalPrice() ?>">
+                <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($product->getFinalPrice()) ?>">
                 <meta itemprop="priceCurrency" content="EUR">
             </div>
         </div>
     </template>
-    <template x-if="activeProductsPriceData && activeProductsPriceData.oldPrice && activeProductsPriceData.finalPrice.amount < activeProductsPriceData.oldPrice.amount">
+    <template x-if="activeProductsPriceData &&
+        activeProductsPriceData.oldPrice &&
+        activeProductsPriceData.finalPrice.amount < activeProductsPriceData.oldPrice.amount
+    ">
         <div class="old-price inline-block mr-2">
-            <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
+            <span id="product-price-<?= (int)$product->getId() ?>"
+                  class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
                 <span class="price" x-html="formatPrice(activeProductsPriceData.oldPrice.amount)"></span>
             </span>
         </div>
@@ -201,7 +214,8 @@ $priceHelper = $this->helper(PriceHelper::class);
             <?php if ($product->canConfigure() && is_int($product->getPrice())): ?>
                 <span class="price-label block invisible">&nbsp;</span>
             <?php endif; ?>
-            <span id="product-price-<?= (int) $product->getId() ?>" class="price-wrapper title-font font-medium text-2xl text-gray-900">
+            <span id="product-price-<?= (int)$product->getId() ?>"
+                  class="price-wrapper title-font font-medium text-2xl text-gray-900">
                 <span class="price" x-html="getFormattedFinalPrice()"></span>
             </span>
         </div>

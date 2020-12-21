@@ -13,7 +13,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Catalog\Block\Product\View\Options\Type\File;
 
 /** @var $block File */
-/** @var $ecaper Escaper */
+/** @var $escaper Escaper */
 /** @var SecureHtmlRenderer $secureRenderer */
 ?>
 <?php $option = $block->getOption(); ?>
@@ -25,9 +25,10 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
 <?php $fileNamed = $fileName . '_name'; ?>
 
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
-    <label class="label text-gray-500 text-left w-1/2" for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text">
+    <label class="label text-gray-500 text-left w-1/2"
+           for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text">
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
-        <?php if($option->getIsRequire()): ?>
+        <?php if ($option->getIsRequire()): ?>
             <span class="sup text-sm">*</span>
         <?php endif; ?>
         <span x-html="getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($option->getId()) ?>) || ''">
@@ -58,10 +59,14 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
                class="product-custom-option form-file"
             <?= $fileExists ? 'disabled="disabled"' : '' ?>
             <?= $option->getIsRequire() ? 'required' : '' ?>
-               data-price-amount="<?= $option->getPrice() ?>"
-               data-price-type="<?=$option->getPriceType() ?>"
+               data-price-amount="<?= $escaper->escapeHtmlAttr($option->getPrice()) ?>"
+               data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
                x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
-               x-on:change="updateCustomOptionValue($dispatch, '<?= $escaper->escapeHtmlAttr($option->getId()) ?>', $event.target)"
+               x-on:change="updateCustomOptionValue(
+                    $dispatch,
+                    '<?= $escaper->escapeHtmlAttr($option->getId()) ?>',
+                    $event.target
+                )"
 
         />
         <input type="hidden" name="<?= /* @noEscape */ $fieldNameAction ?>"

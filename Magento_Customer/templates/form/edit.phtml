@@ -87,8 +87,8 @@ use Magento\Framework\Escaper;
         <template x-if="showPasswordFields">
             <div class="field">
                 <label class="label" for="password"><span><?= $escaper->escapeHtml(
-                            __('New Password')
-                        ) ?></span></label>
+                    __('New Password')
+                ) ?></span></label>
                 <div class="control">
                     <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
                     <input type="password" class="form-input" name="password" id="password" required
@@ -96,12 +96,12 @@ use Magento\Framework\Escaper;
                            minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>" autocomplete="off"/>
                 </div>
                 <p class="text-sm text-secondary mt-3"><?= $escaper->escapeHtml(
-                        __(
-                            'Minimum of different classes of characters in password is %1.'
+                    __(
+                        'Minimum of different classes of characters in password is %1.'
                             . ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
-                            $block->getRequiredCharacterClassesNumber()
-                        )
-                    ) ?></p>
+                        $block->getRequiredCharacterClassesNumber()
+                    )
+                ) ?></p>
             </div>
         </template>
         <template x-if="showPasswordFields">
@@ -145,10 +145,11 @@ use Magento\Framework\Escaper;
                     'false'
                 ) ?>,
             checkPasswordsMatch: function () {
-                if (document.getElementById('password').value === document.getElementById('password-confirmation').value) {
-                    this.passwordsMatching = true;
-                    return true;
-                }
+                if (document.getElementById('password').value ===
+                    document.getElementById('password-confirmation').value) {
+                        this.passwordsMatching = true;
+                        return true;
+                    }
                 this.passwordsMatching = false;
                 return false;
             }

@@ -10,7 +10,7 @@ use Magento\Framework\View\Element\Template;
 
 /** @var $block Template */
 ?>
-<?php if ($block->getData('render_in_script_tag')) : ?>
+<?php if ($block->getData('render_in_script_tag')): ?>
     <script>
         <?php endif; ?>
 
@@ -64,6 +64,6 @@ use Magento\Framework\View\Element\Template;
                     object
                 );
         };
-        <?php if ($block->getData('render_in_script_tag')) : ?>
+        <?php if ($block->getData('render_in_script_tag')): ?>
     </script>
 <?php endif; ?>

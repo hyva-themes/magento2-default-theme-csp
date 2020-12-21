@@ -44,12 +44,14 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
         <div class="absolute top-0 right-0 pt-4 pr-4">
             <button @click="fullscreen = false"
                     type="button"
-                    class="hidden text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"
+                    class="hidden text-gray-400 hover:text-gray-500 focus:outline-none focus:text-gray-500
+                        transition ease-in-out duration-150"
                     :class="{ 'hidden': !fullscreen, 'block': fullscreen }"
                     aria-label="Close"
             >
                 <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
         </div>
@@ -84,13 +86,15 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                 </template>
                 <div class="inset-0 hidden w-full h-full object-fit object-center absolute nonmobile bg-white"
                      :class="{ 'hidden': activeVideoType !== 'youtube' }"
-                     x-show.transition.opacity.duration.400ms="images[active].type === 'video' && activeVideoType === 'youtube'"
+                     x-show.transition.opacity.duration.400ms="images[active].type === 'video' &&
+                      activeVideoType === 'youtube'"
                 >
                     <div id="youtube-player" class="w-full h-full object-fit object-center"></div>
                 </div>
                 <div class="inset-0 hidden w-full h-full object-fit object-center absolute bg-white"
                      :class="{ 'hidden': activeVideoType !== 'vimeo' }"
-                     x-show.transition.opacity.duration.400ms="images[active].type === 'video' && activeVideoType === 'vimeo'"
+                     x-show.transition.opacity.duration.400ms="images[active].type === 'video' &&
+                      activeVideoType === 'vimeo'"
                 >
                     <div id="vimeo-player" class="w-full h-full object-fit object-center"></div>
                 </div>
@@ -182,8 +186,8 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                     id = videoUrl.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
                     type = 'youtube';
 
+                    <?php // phpcs:ignore Generic.Files.LineLength.TooLong ?>
                     youtubeRegex = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
-
                     id = videoUrl.match(youtubeRegex)[1];
 
                     if (videoUrl.match(/youtube-nocookie.com/)) {

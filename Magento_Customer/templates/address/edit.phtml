@@ -76,7 +76,7 @@ $viewModel = $block->getViewModel();
                            required
                            value="<?= $escaper->escapeHtmlAttr($block->getStreetLine(1)) ?>"
                            title="<?= /* @noEscape */
-                           $_street ?>"
+                            $_street ?>"
                            id="street_1"
                            class="form-input <?= $escaper->escapeHtmlAttr($_streetValidationClass) ?>"/>
                     <div class="nested">
@@ -91,7 +91,7 @@ $viewModel = $block->getViewModel();
                                            value="<?= $escaper->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
                                            title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i + 1)) ?>"
                                            id="street_<?= /* @noEscape */
-                                           $_i + 1 ?>"
+                                            $_i + 1 ?>"
                                            class="form-input
                                         <?= $escaper->escapeHtmlAttr($_streetValidationClassNotRequired) ?>">
                                 </div>
@@ -112,7 +112,7 @@ $viewModel = $block->getViewModel();
                                name="vat_id"
                                value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getVatId()) ?>"
                                title="<?= /* @noEscape */
-                               $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
+                                $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
                                class="form-input <?= $escaper->escapeHtmlAttr($_vatidValidationClass) ?>"
                                id="vat_id">
                     </div>
@@ -128,7 +128,7 @@ $viewModel = $block->getViewModel();
                            name="postcode"
                            value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getPostcode()) ?>"
                            title="<?= /* @noEscape */
-                           $block->getAttributeData()->getFrontendLabel('postcode') ?>"
+                            $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                            id="zip"
                            required
                            class="form-input validate-zip-international
@@ -143,7 +143,7 @@ $viewModel = $block->getViewModel();
                            name="region"
                            value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
                            title="<?= /* @noEscape */
-                           $_region ?>"
+                            $_region ?>"
                            class="form-input validate-not-number-first
                         <?= $escaper->escapeHtmlAttr($_regionValidationClass) ?>"
                         <?= !$_displayAll ? ' disabled="disabled"' : '' ?>/>
@@ -178,12 +178,12 @@ $viewModel = $block->getViewModel();
         </div>
 
         <?php if ($block->isDefaultBilling()): ?>
-        <?php /*
+            <?php /*
             <div class="message info">
                 <span><?= $escaper->escapeHtml(__("It's a default billing address.")) ?></span>
             </div> */ ?>
         <?php elseif ($block->canSetAsDefaultBilling()): ?>
-<?php /*
+            <?php /*
             <div class="field choice set billing">
                 <input type="checkbox" id="primary_billing" name="default_billing" value="1" class="checkbox">
                 <label class="label" for="primary_billing">
@@ -195,12 +195,12 @@ $viewModel = $block->getViewModel();
         <?php endif; ?>
 
         <?php if ($block->isDefaultShipping()): ?>
-        <?php /*
+            <?php /*
             <div class="message info">
                 <span><?= $escaper->escapeHtml(__("It's a default shipping address.")) ?></span>
             </div>*/ ?>
         <?php elseif ($block->canSetAsDefaultShipping()): ?>
-        <?php /*
+            <?php /*
             <div class="field choice set shipping">
                 <input type="checkbox" id="primary_shipping" name="default_shipping" value="1" class="checkbox">
                 <label class="label" for="primary_shipping">

@@ -16,7 +16,7 @@ use Hyva\Theme\ViewModel\StoreConfig;
 $storeConfig = $block->getData('viewModelStoreConfig');
 $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
 ?>
-<?php if ($siteKey) : ?>
+<?php if ($siteKey): ?>
     <script src="https://www.google.com/recaptcha/api.js?render=<?= $escaper->escapeJs($siteKey) ?>" defer
             async></script>
 <?php endif; ?>

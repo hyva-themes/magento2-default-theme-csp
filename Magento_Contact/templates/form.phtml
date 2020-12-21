@@ -9,12 +9,18 @@
 declare(strict_types=1);
 
 use Magento\Contact\Block\ContactForm;
+use Magento\Contact\Helper\Data as ContactHelper;
 use Magento\Framework\Escaper;
 
 /** @var ContactForm $block */
 /** @var Escaper $escaper */
 
+// phpcs:disable Magento2.Templates.ThisInTemplate
+
 $formId = 'contact';
+/** @var ContactHelper $contactHelper */
+$contactHelper = $this->helper(ContactHelper::class);
+
 ?>
 <div class="container flex-columns-wrapper justify-between py-8">
     <form class="form contact card lg:w-1/2 md:w-2/3 mr-4"
@@ -27,21 +33,21 @@ $formId = 'contact';
         <fieldset class="">
             <div class="flex flex-col text-center w-full mb-12">
                 <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900"><span><?= $block->escapeHtml(
-                            __('Write Us')
-                        ) ?></span></h2>
+                    __('Write Us')
+                ) ?></span></h2>
                 <p class="w-full mx-auto leading-relaxed text-base"><?= $block->escapeHtml(
-                        __('Jot us a note and we’ll get back to you as quickly as possible.')
-                    ) ?></p>
+                    __('Jot us a note and we’ll get back to you as quickly as possible.')
+                ) ?></p>
             </div>
             <div class="flex flex-wrap -m-2">
                 <div class="field name required p-2 w-1/2 text-left">
                     <label class="label text-gray-700" for="name"><span><?= $block->escapeHtml(
-                                __('Name')
-                            ) ?></span></label>
+                        __('Name')
+                    ) ?></span></label>
                     <input name="name" id="name" required title="<?= $block->escapeHtmlAttr(__('Name')) ?>"
                            value="<?= $block->escapeHtmlAttr(
-                               $this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('name')
-                                   ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserName()
+                               $contactHelper->getPostValue('name')
+                                   ?: $contactHelper->getUserName()
                            ) ?>"
                            class="mt-2 input input-light w-full"
                            type="text"
@@ -50,12 +56,12 @@ $formId = 'contact';
                 </div>
                 <div class="field email required p-2 w-1/2 text-left">
                     <label class="label text-gray-700" for="email"><span><?= $block->escapeHtml(
-                                __('Email')
-                            ) ?></span></label>
+                        __('Email')
+                    ) ?></span></label>
                     <input name="email" id="email" required title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
                            value="<?= $block->escapeHtmlAttr(
-                               $this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('email')
-                                   ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserEmail()
+                               $contactHelper->getPostValue('email')
+                                   ?: $contactHelper->getUserEmail()
                            ) ?>"
                            class="mt-2 input input-light w-full"
                            placeholder="<?= $block->escapeHtmlAttr(__('Email')) ?>"
@@ -63,12 +69,12 @@ $formId = 'contact';
                 </div>
                 <div class="field telephone p-2 w-1/2 text-left">
                     <label class="label text-gray-700" for="telephone"><span><?= $block->escapeHtml(
-                                __('Phone Number')
-                            ) ?></span></label>
+                        __('Phone Number')
+                    ) ?></span></label>
                     <input name="telephone" id="telephone"
                            title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
                            value="<?= $block->escapeHtmlAttr(
-                               $this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('telephone')
+                               $contactHelper->getPostValue('telephone')
                            ) ?>"
                            class="mt-2 input input-light w-full"
                            placeholder="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
@@ -76,13 +82,13 @@ $formId = 'contact';
                 </div>
                 <div class="field comment required p-2 w-full text-left">
                     <label class="label text-gray-700" for="comment"><span><?= $block->escapeHtml(
-                                __('What’s on your mind?')
-                            ) ?></span></label>
+                        __('What’s on your mind?')
+                    ) ?></span></label>
                     <textarea name="comment" id="comment" required
                               title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>"
                               class="mt-2 input input-light w-full h-48" cols="5" rows="3"><?= $block->escapeHtml(
-                            $this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('comment')
-                        ) ?></textarea>
+                                  $contactHelper->getPostValue('comment')
+                              ) ?></textarea>
                 </div>
                 <?= $block->getChildHtml('form.additional.info') ?>
             </div>
@@ -115,7 +121,7 @@ $formId = 'contact';
     </script>
     <div class="card lg:w-1/2 md:w-1/3">
         <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900"><span><?= $block->escapeHtml(
-                    __('Contact Details')
-                ) ?></span></h2>
+            __('Contact Details')
+        ) ?></span></h2>
         <p>Contact info</p></div>
 </div>

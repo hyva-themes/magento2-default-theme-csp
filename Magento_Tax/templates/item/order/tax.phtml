@@ -20,8 +20,8 @@ $_fullInfo = $this->helper(\Magento\Tax\Helper\Data::class)->getCalculatedTaxes(
 global $taxIter;
 $taxIter++;
 ?>
-<?php if ($_fullInfo && $block->displayFullSummary()) : ?>
-    <?php foreach ($_fullInfo as $info) : ?>
+<?php if ($_fullInfo && $block->displayFullSummary()): ?>
+    <?php foreach ($_fullInfo as $info): ?>
         <?php
         $percent = $info['percent'];
         $amount = $info['tax_amount'];
@@ -30,7 +30,7 @@ $taxIter++;
         ?>
         <div>
             <?= $escaper->escapeHtml($title) ?>
-            <?php if ($percent !== null) : ?>
+            <?php if ($percent !== null): ?>
                 (<?= (float)$percent ?>%)
             <?php endif; ?>
         </div>
@@ -39,7 +39,7 @@ $taxIter++;
             $_order->formatPrice($amount) ?>
         </div>
     <?php endforeach; ?>
-<?php else : ?>
+<?php else: ?>
     <div>
         <?= $escaper->escapeHtml(__('Tax')) ?>
     </div>

@@ -19,21 +19,21 @@ use Magento\Framework\Escaper;
 <nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
     <div class="container">
         <ul class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
-            <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
+            <?php foreach ($crumbs as $crumbName => $crumbInfo): ?>
                 <li class="item flex <?= $escaper->escapeHtmlAttr($crumbName) ?>">
-                <?php if (!$crumbInfo['first']) : ?>
+                <?php if (!$crumbInfo['first']): ?>
                     <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
                 <?php endif; ?>
-                <?php if ($crumbInfo['link']) : ?>
+                <?php if ($crumbInfo['link']): ?>
                     <a href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
                        class="no-underline"
                        title="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>"
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
-                <?php elseif ($crumbInfo['last']) : ?>
+                <?php elseif ($crumbInfo['last']): ?>
                     <span class="text-primary-lighter"
                           aria-current="page"
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></span>
-                <?php else : ?>
+                <?php else: ?>
                     <?= $escaper->escapeHtml($crumbInfo['label']) ?>
                 <?php endif; ?>
                 </li>

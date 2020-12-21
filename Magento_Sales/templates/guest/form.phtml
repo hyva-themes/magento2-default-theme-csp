@@ -21,8 +21,8 @@
                 <div class="md:grid grid-cols-2 gap-4">
                     <div class="field">
                         <label class="label" for="oar-order-id"><span><?= $block->escapeHtml(
-                                    __('Order ID')
-                                ) ?></span></label>
+                            __('Order ID')
+                        ) ?></span></label>
                         <div class="control">
                             <input type="text" class="form-input w-full" id="oar-order-id" name="oar_order_id"
                                    required/>
@@ -52,18 +52,22 @@
                     </div>
                     <div class="field" x-show="authenticateBy !== 'zip'">
                         <label class="label" for="oar_email"><span><?= $block->escapeHtml(
-                                    __('Email')
-                                ) ?></span></label>
+                            __('Email')
+                        ) ?></span></label>
                         <div class="control">
-                            <input type="email" class="form-input w-full" id="oar_email" name="oar_email" :required="authenticateBy !== 'zip'"/>
+                            <input type="email" class="form-input w-full"
+                                   id="oar_email" name="oar_email" :required="authenticateBy !== 'zip'"
+                            />
                         </div>
                     </div>
                     <div class="field" x-show="authenticateBy === 'zip'">
                         <label class="label" for="oar_zip"><span><?= $block->escapeHtml(
-                                    __('Billing ZIP Code')
-                                ) ?></span></label>
+                            __('Billing ZIP Code')
+                        ) ?></span></label>
                         <div class="control">
-                            <input type="text" class="form-input w-full" id="oar_zip" name="oar_zip" :required="authenticateBy === 'zip'"/>
+                            <input type="text" class="form-input w-full"
+                                   id="oar_zip" name="oar_zip" :required="authenticateBy === 'zip'"
+                            />
                         </div>
                     </div>
                 </div>

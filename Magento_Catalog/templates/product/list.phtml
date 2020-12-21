@@ -16,9 +16,13 @@ use Magento\Framework\Escaper;
 
 $productCollection = $block->getLoadedProductCollection();
 ?>
-<?php if (!$productCollection->count()) :?>
-    <div class="message info empty"><div><?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?></div></div>
-<?php else :?>
+<?php if (!$productCollection->count()):?>
+    <div class="message info empty">
+        <div>
+            <?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?>
+        </div>
+    </div>
+<?php else:?>
 <section class="py-8">
     <?= $block->getToolbarHtml() ?>
     <?= $block->getAdditionalHtml() ?>
@@ -42,7 +46,7 @@ $productCollection = $block->getLoadedProductCollection();
     <div class="products wrapper mode-<?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
         <div class="mx-auto flex flex-wrap pt-4 pb-12 -mr-2">
             <?php /** @var $product \Magento\Catalog\Model\Product */ ?>
-            <?php foreach ($productCollection as $product) :?>
+            <?php foreach ($productCollection as $product):?>
                 <?= $block->getLayout()->getBlock('product_list_item')
                     ->setData('product', $product)
                     ->setData('view_mode', $viewMode)
