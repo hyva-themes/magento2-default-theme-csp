@@ -16,7 +16,9 @@
                    template="Magento_ProductAlert::product/stock.phtml"
             >
                 <arguments>
-                    <argument name="product_alert_view_model" xsi:type="object">Hyva\Theme\ViewModel\Product\Alert</argument>
+                    <argument name="product_alert_view_model" xsi:type="object">
+                        Hyva\Theme\ViewModel\ProductAlert
+                    </argument>
                 </arguments>
             </block>
             <block name="productalert.price"
@@ -25,7 +27,9 @@
                    template="Magento_ProductAlert::product/price.phtml"
             >
                 <arguments>
-                    <argument name="product_alert_view_model" xsi:type="object">Hyva\Theme\ViewModel\Product\Alert</argument>
+                    <argument name="product_alert_view_model" xsi:type="object">
+                        Hyva\Theme\ViewModel\ProductAlert
+                    </argument>
                 </arguments>
             </block>
         </referenceContainer>
