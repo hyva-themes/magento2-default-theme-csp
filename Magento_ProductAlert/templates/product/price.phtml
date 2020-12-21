@@ -6,24 +6,32 @@
  * See https://hyva.io/license
  */
 
-use Hyva\Theme\ViewModel\Product\ProductAlert as ProductAlertViewModel;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CurrentProduct;
+use Hyva\Theme\ViewModel\ProductAlert;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var $escaper Escaper */
 /** @var $block Template */
+/** @var $viewModels ViewModelRegistry */
 
-/** @var ProductAlertViewModel $productAlertViewModel */
-$productAlertViewModel = $block->getData('product_alert_view_model');
+/** @var ProductAlert $productAlertViewModel */
+$productAlertViewModel = $viewModels->require(ProductAlert::class);
+/** @var CurrentProduct $currentProduct */
+$currentProduct = $viewModels->require(CurrentProduct::class);
+/** @var Product $product */
+$product = $currentProduct->exists() ? $currentProduct->get() : false;
 
-if (!$productAlertViewModel->showPriceAlert()) {
+if (!$product || !$productAlertViewModel->showPriceAlert($product)) {
     return;
 }
 
 $signupLabel = __("Notify me when the price drops");
 ?>
 <div class="product alert price my-4 text-right">
-    <a href="<?= $escaper->escapeUrl($productAlertViewModel->getSaveUrl('price')) ?>"
+    <a href="<?= $escaper->escapeUrl($productAlertViewModel->getSaveUrl($product, 'price')) ?>"
        title="<?= $escaper->escapeHtml($signupLabel) ?>" class="action alert">
         <span class="text-orange-400">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none"

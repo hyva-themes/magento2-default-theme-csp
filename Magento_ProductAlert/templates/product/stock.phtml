@@ -6,24 +6,32 @@
  * See https://hyva.io/license
  */
 
-use Hyva\Theme\ViewModel\Product\ProductAlert as ProductAlertViewModel;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CurrentProduct;
+use Hyva\Theme\ViewModel\ProductAlert;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var $escaper Escaper */
 /** @var $block Template */
+/** @var $viewModels ViewModelRegistry */
 
-/** @var ProductAlertViewModel $productAlertViewModel */
-$productAlertViewModel = $block->getData('product_alert_view_model');
+/** @var ProductAlert $productAlertViewModel */
+$productAlertViewModel = $viewModels->require(ProductAlert::class);
+/** @var CurrentProduct $currentProduct */
+$currentProduct = $viewModels->require(CurrentProduct::class);
+/** @var Product $product */
+$product = $currentProduct->exists() ? $currentProduct->get() : false;
 
-if (!$productAlertViewModel->showStockAlert()) {
+if (!$product || !$productAlertViewModel->showStockAlert($product)) {
     return;
 }
 
 $signupLabel = __("Notify me when this product is in stock");
 ?>
 <div class="product alert stock my-4 text-right">
-    <a href="<?= $escaper->escapeUrl($productAlertViewModel->getSaveUrl('stock')) ?>"
+    <a href="<?= $escaper->escapeUrl($productAlertViewModel->getSaveUrl($currentProduct->get(), 'stock')) ?>"
        title="<?= $escaper->escapeHtml($signupLabel) ?>" class="action alert">
         <span class="text-orange-400">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
