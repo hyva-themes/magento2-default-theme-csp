@@ -22,9 +22,9 @@ $productAlertViewModel = $viewModels->require(ProductAlert::class);
 /** @var CurrentProduct $currentProduct */
 $currentProduct = $viewModels->require(CurrentProduct::class);
 /** @var Product $product */
-$product = $currentProduct->exists() ? $currentProduct->get() : false;
+$product = $currentProduct->get();
 
-if (!$product || !$productAlertViewModel->showPriceAlert($product)) {
+if (!$currentProduct->exists() || !$productAlertViewModel->showPriceAlert($product)) {
     return;
 }
 
