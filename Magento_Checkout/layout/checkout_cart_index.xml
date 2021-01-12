@@ -24,9 +24,6 @@
             <block name="cart_dynamic" template="Magento_Checkout::cart.phtml" cacheable="false">
                 <block name="cart_main_js" template="Magento_Checkout::cart/js/cart.phtml">
                     <arguments>
-                        <argument name="viewModelCart"
-                                  xsi:type="object">Hyva\Theme\ViewModel\Cart\GraphQlQueries
-                        </argument>
                         <argument name="viewModelStore" xsi:type="object">Hyva\Theme\ViewModel\Store</argument>
                     </arguments>
                     <block name="js_localstorage_config" template="Hyva_Theme::js/localStorageConfig.phtml">
