@@ -1,0 +1,99 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+/** @var Notices $block */
+/** @var Escaper $escaper */
+/** @var Cookie $cookieHelper */
+
+use Magento\Cookie\Block\Html\Notices;
+use Magento\Framework\Escaper;
+use Magento\Cookie\Helper\Cookie;
+
+?>
+<?php
+
+$cookieHelper = $block->getData('cookieHelper');
+if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
+
+<script>
+    function initCookieBanner() {
+        return {
+            showCookieBanner: false,
+            cookieName: '<?= /* @noEscape */ \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
+            cookieValue: '<?= /* @noEscape */ $cookieHelper->getAcceptedSaveCookiesWebsiteIds() ?>',
+            cookieLifetime: '<?= /* @noEscape */ $cookieHelper->getCookieRestrictionLifetime() ?>',
+            noCookiesUrl: '<?= $escaper->escapeJs($block->getUrl('cookie/index/noCookies')) ?>',
+
+            checkAcceptCookies: function () {
+                this.showCookieBanner = (hyva.getCookie(this.cookieName) === null);
+            },
+            setAcceptCookies: function() {
+                let cookieExpires = this.cookieLifetime /  60 / 60 / 24;
+                hyva.setCookie(this.cookieName, JSON.stringify(this.cookieValue), cookieExpires);
+                if (!hyva.getCookie(this.cookieName)) {
+                    window.location.href = this.noCookiesUrl;
+                }
+            }
+        }
+    }
+</script>
+
+<section id="notice-cookie-block"
+         x-data="initCookieBanner();"
+         @private-content-loaded.window="checkAcceptCookies()"
+>
+    <template x-if="showCookieBanner">
+        <div role="dialog"
+             x-show="showCookieBanner"
+             aria-modal="true"
+             class="container fixed py-0 right-0 z-30 flex max-w-full bg-gray-200">
+            <div class="w-screen"
+                 x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+                 x-transition:enter-start="translate-x-full"
+                 x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+                 x-transition:leave-start="translate-x-0"
+                 x-transition:leave-end="translate-x-full"
+            >
+                <div
+                    x-transition:enter="ease-in-out duration-500"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="ease-in-out duration-500"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex">
+                    <button @click="showCookieBanner = false;" aria-label="Close panel"
+                            class="transition duration-150 ease-in-out hover:text-black">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                  stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="p-2">
+                    <p>
+                        <strong><?= $escaper->escapeHtml(__('We use cookies to make your experience better.')) ?></strong>
+                        <span><?= $escaper->escapeHtml(__(
+                                'To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.'
+                            )) ?>
+                    </span>
+                        <?= $escaper->escapeHtml(__('<a href="%1">Learn more</a>.', $block->getPrivacyPolicyLink()), ['a']) ?>
+                    </p>
+                    <div class="actions">
+                        <button @click="setAcceptCookies(); showCookieBanner = false" id="btn-cookie-allow" class="action allow primary">
+                            <span><?= $escaper->escapeHtml(__('Allow Cookies')) ?></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</section>
+<?php endif; ?>
