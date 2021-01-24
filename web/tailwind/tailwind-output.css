@@ -2348,8 +2348,8 @@ body {
   border-radius: 0.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
   --text-opacity: 1;
   color: #fff;
   color: rgba(255, 255, 255, var(--text-opacity));
@@ -2826,6 +2826,10 @@ body {
   flex-direction: column;
 }
 
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+
 .flex-wrap {
   flex-wrap: wrap;
 }
@@ -3032,6 +3036,10 @@ body {
   line-height: 1.625;
 }
 
+.list-disc {
+  list-style-type: disc;
+}
+
 .m-0 {
   margin: 0;
 }
@@ -3123,6 +3131,10 @@ body {
 
 .mr-1 {
   margin-right: 0.25rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
 }
 
 .ml-1 {
@@ -3483,6 +3495,10 @@ body {
   padding-bottom: 1rem;
 }
 
+.pl-5 {
+  padding-left: 1.25rem;
+}
+
 .pt-6 {
   padding-top: 1.5rem;
 }
@@ -3499,8 +3515,20 @@ body {
   padding-bottom: 3rem;
 }
 
+.pt-16 {
+  padding-top: 4rem;
+}
+
 .pb-16 {
   padding-bottom: 4rem;
+}
+
+.pt-px {
+  padding-top: 1px;
+}
+
+.pb-px {
+  padding-bottom: 1px;
 }
 
 .static {
@@ -4227,8 +4255,8 @@ body {
   border-radius: 0.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
   --text-opacity: 1;
   color: #fff;
   color: rgba(255, 255, 255, var(--text-opacity));
