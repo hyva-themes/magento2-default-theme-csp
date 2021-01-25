@@ -6,6 +6,7 @@
  * See https://hyva.io/license
  */
 
+use Magento\Framework\Escaper;
 use Magento\Newsletter\Block\Subscribe;
 use Magento\Framework\Escaper;
 
@@ -19,11 +20,16 @@ use Magento\Framework\Escaper;
           x-data="initNewsletterForm()"
           @submit.prevent="submitForm()"
           id="newsletter-validate-detail">
-        <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase">
+        <div class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase">
             <?= $escaper->escapeHtml(__('Newsletter')) ?>
-        </h2>
+        </div>
         <div class="flex xl:flex-no-wrap md:flex-no-wrap lg:flex-wrap flex-wrap justify-center md:justify-start">
-            <input name="email" type="email" required id="newsletter" class="input input-light"
+            <input name="email"
+                   type="email"
+                   aria-label="<?= $escaper->escapeHtml(__('Email Address')) ?>"
+                   required
+                   id="newsletter-subscribe"
+                   class="input input-light"
                    placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>" type="text"
             />
             <?= $block->getBlockHtml('formkey') ?>

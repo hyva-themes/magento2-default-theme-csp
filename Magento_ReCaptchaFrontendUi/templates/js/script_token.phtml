@@ -25,25 +25,45 @@ $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/pu
             this.errors = 1;
 
             var $this = this;
-            grecaptcha.ready(function () {
-                grecaptcha.execute(
-                        '<?= $escaper->escapeJs($siteKey) ?>',
-                        { action: 'submit' }
+            const recaptchaUrl = "https://www.google.com/recaptcha/api.js?render=<?= $escaper
+                ->escapeHtmlAttr($siteKey) ?>";
+
+            const executeGreCaptcha = () => {
+                grecaptcha.ready(function () {
+                    grecaptcha.execute(
+                        '<?= $escaper->escapeHtml($siteKey) ?>',
+                        {action: 'submit'}
                     ).then(function (token) {
-                    var $recaptchaResponseInput = $form.querySelector('input[name="g-recaptcha-response"]');
-                    if ($recaptchaResponseInput != null) {
-                        $recaptchaResponseInput.value = token;
-                        $this.errors = 0;
-                        $this.hasCaptchaToken = 1;
-                        $this.submitForm();
-                    }
-                    else {
-                        $this.errors = 1;
-                        $this.setErrorMessages(['Your form does not have the required fields for recaptcha to work.']);
-                        $this.displayErrorMessage = true;
-                    }
-                });
-            });
+                        var $recaptchaResponseInput = $form.querySelector('input[name="g-recaptcha-response"]');
+                        if ($recaptchaResponseInput != null) {
+                            $recaptchaResponseInput.value = token;
+                            $this.errors = 0;
+                            $this.hasCaptchaToken = 1;
+                            $this.submitForm();
+                        } else {
+                            $this.errors = 1;
+                            if ($this.setErrorMessages) {
+                                $this.setErrorMessages(['<?= $escaper
+                                    ->escapeHtml(__(
+                                        'Your form does not have the required fields for recaptcha to work.'
+                                    ))?>'])
+                                $this.displayErrorMessage = true;
+                            }
+                        }
+                    });
+                })
+            }
+
+            if (typeof window.grecaptcha !== 'undefined') {
+                executeGreCaptcha();
+            } else {
+                let script = document.createElement('script');
+                script.setAttribute('type', 'text/javascript');
+                script.setAttribute('src', recaptchaUrl);
+                document.head.appendChild(script);
+
+                script.addEventListener("load", executeGreCaptcha, false);
+            }
         }
         <?php if ($block->getData('render_script_tag')): ?>
     </script>
