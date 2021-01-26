@@ -1,0 +1,94 @@
+<?php
+
+use Magento\GoogleAnalytics\Block\Ga;
+use Magento\GoogleAnalytics\Helper\Data;
+/** @var $block Ga */
+?>
+<?php $accountId = $block->getConfig(Data::XML_PATH_ACCOUNT) ?>
+
+<script>
+    'use strict';
+
+    function GoogleAnalytics () {
+        let self = this;
+        this.config = {
+            isCookieRestrictionModeEnabled: <?= (int)$block->isCookieRestrictionModeEnabled() ?>,
+            currentWebsite: <?= (int)$block->getCurrentWebsiteId() ?>,
+            cookieName: "<?= /* @noEscape */ \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
+            ordersTrackingData: <?= /* @noEscape */ json_encode($block->getOrdersTrackingData()) ?>,
+            pageTrackingData: <?= /* @noEscape */ json_encode($block->getPageTrackingData($accountId)) ?>,
+        }
+
+        this.initGoogleAnalytics =  function () {
+
+            let allowServices = false,
+                allowedCookies,
+                allowedWebsites;
+
+            if (self.config.isCookieRestrictionModeEnabled) {
+                allowedCookies = hyva.getCookie(self.config.cookieName);
+
+                if (allowedCookies !== null) {
+                    allowedWebsites = JSON.parse(allowedCookies);
+
+                    if (allowedWebsites[self.config.currentWebsite] === 1) {
+                        allowServices = true;
+                    }
+                }
+            } else {
+                allowServices = true;
+            }
+
+            if (allowServices) {
+                (function (i, s, o, g, r, a, m) {
+                    i.GoogleAnalyticsObject = r;
+                    i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                // Process page info
+                ga('create', self.config.pageTrackingData.accountId, 'auto');
+
+                if (self.config.pageTrackingData.isAnonymizedIpActive) {
+                    ga('set', 'anonymizeIp', true);
+                }
+
+                // Process orders data
+                if (self.config.ordersTrackingData.hasOwnProperty('currency')) {
+                    ga('require', 'ec', 'ec.js');
+
+                    ga('set', 'currencyCode', self.config.ordersTrackingData.currency);
+
+                    // Collect product data for GA
+                    if (self.config.ordersTrackingData.products) {
+                        self.config.ordersTrackingData.products.forEach(function (value) {
+                            ga('ec:addProduct', value);
+                        });
+                    }
+
+                    // Collect orders data for GA
+                    if (self.config.ordersTrackingData.orders) {
+                        self.config.ordersTrackingData.orders.forEach(function (value) {
+                            ga('ec:setAction', 'purchase', value);
+                        });
+                    }
+
+                    ga('send', 'pageview');
+                } else {
+                    // Process Data if not orders
+                    ga('send', 'pageview' + self.config.pageTrackingData.optPageUrl);
+                }
+            }
+        };
+    }
+
+    var googleAnalytics = new GoogleAnalytics();
+    window.addEventListener("load", googleAnalytics.initGoogleAnalytics);
+
+</script>
