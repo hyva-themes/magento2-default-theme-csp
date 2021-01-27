@@ -47,7 +47,6 @@ if (!$product) {
     enctype="multipart/form-data"
     <?php endif; ?>
 >
-    <?= /** @noEscape */
     <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
     <input type="hidden" name="product" value="<?= (int)$product->getId() ?>"/>
 <?php else: ?>
