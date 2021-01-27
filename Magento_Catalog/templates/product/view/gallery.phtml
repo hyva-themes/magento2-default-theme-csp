@@ -11,7 +11,7 @@ declare(strict_types=1);
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Catalog\Helper\Image;
 
-/**  @var $block Gallery */
+/** @var Gallery $block */
 
 $images = $block->getGalleryImages()->getItems();
 $mainImage = current(array_filter($images, function ($img) use ($block) {
