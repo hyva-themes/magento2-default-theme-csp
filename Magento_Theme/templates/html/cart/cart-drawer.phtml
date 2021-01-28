@@ -75,6 +75,7 @@ use Magento\Framework\View\Element\Template;
          @keydown.window.escape="open=false"
 >
     <template x-if="cart && cart.summary_count">
+        <div class="backdrop" x-show="open"></div>
         <div role="dialog"
              aria-labelledby="cart-drawer-title"
              aria-modal="true"
