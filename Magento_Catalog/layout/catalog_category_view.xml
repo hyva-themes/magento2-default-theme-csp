@@ -43,6 +43,9 @@
                     <block name="category.products.list.compare_init"
                            as="compare_init"
                            template="Magento_Catalog::product/compare/init.phtml"/>
+                    <block name="category.products.list.wishlist_init"
+                           as="wishlist_init"
+                           template="Magento_Wishlist::init.phtml"/>
                     <action method="setToolbarBlockName">
                         <argument name="name" xsi:type="string">product_list_toolbar</argument>
                     </action>
