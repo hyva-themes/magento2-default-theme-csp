@@ -48,13 +48,9 @@ $formId = 'review_form';
                                     <div id="product-review-table">
                                         <?php foreach ($block->getRatings() as $rating): ?>
                                             <div class="ml-1">
-                                                <label class="hidden"
-                                                       id="<?= $escaper
-                                                           ->escapeHtml($rating->getRatingCode()) ?>_rating_label"
-                                                >
-                                                <span>
-                                                    <?= $escaper->escapeHtml($rating->getRatingCode()) ?>
-                                                </span>
+                                                <label class="sr-only"
+                                                    id="<?= $escaper->escapeHtml($rating->getRatingCode()) ?>_rating_label">
+                                                    <span><?= $escaper->escapeHtml($rating->getRatingCode()) ?></span>
                                                 </label>
                                                 <div class="flex flex-row flex-grow-0"
                                                      x-data="{ clickedRatingId: 0 }">
@@ -134,10 +130,8 @@ $formId = 'review_form';
                     <?php endif ?>
                     <div>
                         <div>
-                            <label for="nickname_field" class="hidden">
-                                <span>
-                                    <?= $escaper->escapeHtml(__('Nickname')) ?>
-                                </span>
+                            <label for="nickname_field" class="sr-only">
+                                <span><?= $escaper->escapeHtml(__('Nickname')) ?></span>
                             </label>
                             <div>
                                 <input class="form-input mt-3 block w-full text-sm"
@@ -148,10 +142,8 @@ $formId = 'review_form';
                             </div>
                         </div>
                         <div>
-                            <label for="summary_field" class="hidden">
-                            <span>
-                                <?= $escaper->escapeHtml(__('Summary')) ?>
-                            </span>
+                            <label for="summary_field" class="sr-only">
+                                <span><?= $escaper->escapeHtml(__('Summary')) ?></span>
                             </label>
                             <div>
                                 <input class="form-input mt-3 block w-full text-sm"
@@ -163,10 +155,8 @@ $formId = 'review_form';
                             </div>
                         </div>
                         <div>
-                            <label for="review_field" class="hidden">
-                            <span>
-                                <?= $escaper->escapeHtml(__('Review')) ?>
-                            </span>
+                            <label for="review_field" class="sr-only">
+                                <span><?= $escaper->escapeHtml(__('Review')) ?></span>
                             </label>
                             <div>
                             <textarea class="form-input mt-3 block w-full text-sm"
