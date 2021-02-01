@@ -45,7 +45,7 @@ $productCollection = $block->getLoadedProductCollection();
     ?>
     <div class="products wrapper mode-<?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
         <div class="mx-auto flex flex-wrap pt-4 pb-12 -mr-2">
-            <?php /** @var $product \Magento\Catalog\Model\Product */ ?>
+            <?php /** @var \Magento\Catalog\Model\Product $product */ ?>
             <?php foreach ($productCollection as $product):?>
                 <?= $block->getLayout()->getBlock('product_list_item')
                     ->setData('product', $product)
