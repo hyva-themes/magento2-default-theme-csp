@@ -279,6 +279,16 @@ function initWishlist() {
                                             case 'small_image': ?>
                                                 <?= $block->getImage($product, 'product_small_image')->toHtml(); ?>
                                                 <?php break;
+                                            case 'short_description':
+                                            case 'description': ?>
+                                                    <?php
+                                                    $attributeData = $attributesViewModel->getAttributeData(
+                                                        $attribute,
+                                                        $product
+                                                    )
+                                                    ?>
+                                                    <?= /* @noEscape */ $attributeData['value'] ?>
+                                                <?php break;
                                             default :?>
                                                     <?php
                                                     $attributeData = $attributesViewModel->getAttributeData(
