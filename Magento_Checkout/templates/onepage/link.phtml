@@ -17,7 +17,7 @@ use Magento\Framework\Escaper;
         {url: '<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getCheckoutUrl())) ?>'});"
         href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getCheckoutUrl())) ?>"
         title="<?= $escaper->escapeHtmlAttr(__('Proceed to Checkout')) ?>"
-        class="btn-primary rounded text-lg font-medium py-4 px-10 checkout mr-2
+        class="btn btn-primary rounded text-lg font-medium py-4 px-10 checkout mr-2
             <?= ($block->isDisabled()) ? ' disabled' : '' ?>"
         <?php if ($block->isDisabled()): ?>
             disabled="disabled"

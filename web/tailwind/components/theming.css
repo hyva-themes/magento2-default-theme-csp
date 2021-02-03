@@ -50,21 +50,21 @@ body {
     &:hover {
         @apply bg-gray-600;
     }
+}
 
-    &-primary {
-        @apply bg-primary border-2 border-primary-darker text-white shadow-md;
+.btn-primary {
+    @apply bg-primary border-2 border-primary-darker text-white shadow-md;
 
-        &:hover {
-            @apply bg-primary-lighter border-primary text-white shadow-lg;
-        }
+    &:hover {
+        @apply bg-primary-lighter border-primary text-white shadow-lg;
     }
+}
 
-    &-secondary {
-        @apply bg-white border-2 border-primary-lighter text-black shadow-md;
+.btn-secondary {
+    @apply bg-white border-2 border-primary-lighter text-black shadow-md;
 
-        &:hover {
-            @apply bg-white border-primary-darker shadow-lg;
-        }
+    &:hover {
+        @apply bg-white border-primary-darker shadow-lg;
     }
 }
 
