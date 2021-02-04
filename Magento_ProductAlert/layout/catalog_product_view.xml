@@ -12,12 +12,10 @@
         <referenceContainer name="alert.urls">
             <block name="productalert.stock"
                    as="productalert_stock"
-                   ifconfig="catalog/productalert/allow_stock"
                    template="Magento_ProductAlert::product/stock.phtml"
             />
             <block name="productalert.price"
                    as="productalert_price"
-                   ifconfig="catalog/productalert/allow_price"
                    template="Magento_ProductAlert::product/price.phtml"
             />
         </referenceContainer>

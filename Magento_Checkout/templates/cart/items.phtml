@@ -6,15 +6,18 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\Cart\ItemOutput;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
 /** @var ItemOutput $viewModelItemOutput */
 
-$viewModelItemOutput = $block->getData('viewModelItemOutput');
+$viewModelItemOutput = $viewModels->require(ItemOutput::class);
 
 $displayPriceTaxBoth = $viewModelItemOutput->isItemPriceDisplayBoth();
 $displayPriceInclTax = $viewModelItemOutput->isItemPriceInclTax();
@@ -101,9 +104,11 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                             <div class="text-sm col-span-3 inline-block">
                                                 <span x-text="selected_option.label"></span>
                                                 <template x-if="selected_option.price.value">
-                                                    <span class="text-red-700">
+                                                    <span class="text-gray-700">
                                                         + <span
-                                                            x-text="formatPrice(selected_option.price.value)"></span>
+                                                            x-text="(selected_option.price.type === 'PERCENT' ?
+                                                                selected_option.price.value + '%' :
+                                                                formatPrice(selected_option.price.value))"></span>
                                                     </span>
                                                 </template>
                                             </div>

@@ -32,7 +32,7 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
             <span class="sup text-sm">*</span>
         <?php endif; ?>
         <span x-html="getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($option->getId()) ?>) || ''">
-            <?= $escaper->escapeHtml($block->getFormattedPrice()) ?>
+            <?= /* @noEscape */ $block->getFormattedPrice() ?>
         </span>
     </label>
 
