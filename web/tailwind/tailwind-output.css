@@ -1265,6 +1265,15 @@ body {
   padding-right: 1.5rem;
 }
 
+@media (min-width: 768px) {
+  .md\:container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
 .flex-columns-wrapper {
   display: flex;
   flex-direction: column;
@@ -1315,7 +1324,7 @@ body {
 }
 
 .product-image-container img {
-    width: 100%
+    width: 100%;
   }
 
 .swatch-attribute .swatch-attribute-options {
@@ -1613,6 +1622,11 @@ body {
 .bg-red-500 {
   --tw-bg-opacity: 1;
   background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+}
+
+.bg-yellow-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgba(245, 158, 11, var(--tw-bg-opacity));
 }
 
 .bg-green-500 {
@@ -2003,6 +2017,10 @@ body {
   height: 2rem;
 }
 
+.h-9 {
+  height: 2.25rem;
+}
+
 .h-10 {
   height: 2.5rem;
 }
@@ -2351,6 +2369,14 @@ body {
   min-height: 100vh;
 }
 
+.min-w-40 {
+  min-width: 10rem;
+}
+
+.min-w-48 {
+  min-width: 12rem;
+}
+
 .object-contain {
   -o-object-fit: contain;
      object-fit: contain;
@@ -2406,6 +2432,10 @@ body {
 
 .overflow-hidden {
   overflow: hidden;
+}
+
+.overflow-x-auto {
+  overflow-x: auto;
 }
 
 .overflow-y-auto {
@@ -2699,6 +2729,10 @@ body {
   stroke: currentColor;
 }
 
+.table-auto {
+  table-layout: auto;
+}
+
 .text-left {
   text-align: left;
 }
@@ -2806,6 +2840,11 @@ body {
   color: rgba(107, 114, 128, var(--tw-text-opacity));
 }
 
+.hover\:text-yellow-500:hover {
+  --tw-text-opacity: 1;
+  color: rgba(245, 158, 11, var(--tw-text-opacity));
+}
+
 .hover\:text-red-600:hover {
   --tw-text-opacity: 1;
   color: rgba(220, 38, 38, var(--tw-text-opacity));
@@ -2871,6 +2910,10 @@ body {
           user-select: none;
 }
 
+.align-top {
+  vertical-align: top;
+}
+
 .align-middle {
   vertical-align: middle;
 }
@@ -2905,6 +2948,10 @@ body {
 
 .w-8 {
   width: 2rem;
+}
+
+.w-9 {
+  width: 2.25rem;
 }
 
 .w-10 {
@@ -3686,6 +3733,34 @@ form select {
 }
 
 @media (min-width: 768px) {
+  .md\:container {
+    width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .md\:container {
+      max-width: 640px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .md\:container {
+      max-width: 768px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .md\:container {
+      max-width: 1024px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .md\:container {
+      max-width: 1280px;
+    }
+  }
+
   .md\:bg-transparent {
     background-color: transparent;
   }
