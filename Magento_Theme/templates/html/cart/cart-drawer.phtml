@@ -80,7 +80,17 @@ use Magento\Framework\View\Element\Template;
              aria-modal="true"
              @click.away="open = false"
              class="fixed inset-y-0 right-0 z-30 flex max-w-full">
-            <div class="relative w-screen max-w-md"
+            <div class="backdrop"
+                 x-show="open"
+                 x-transition:enter="ease-in-out duration-500"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in-out duration-500"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 @click="open = false"
+                 aria-label="Close panel"></div>
+            <div class="relative w-screen max-w-md shadow-2xl"
                  x-show="open"
                  x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
                  x-transition:enter-start="translate-x-full"

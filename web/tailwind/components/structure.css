@@ -9,7 +9,6 @@ body {
     @apply mx-auto px-6;
 }
 
-
 .flex-columns-wrapper {
     @apply flex flex-col;
 
@@ -52,6 +51,6 @@ body {
     width: 100% !important;
 
     img {
-        width: 100%
+        width: 100%;
     }
 }

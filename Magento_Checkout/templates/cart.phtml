@@ -18,7 +18,7 @@ use Magento\Framework\Escaper;
              :class="{ 'min-h-50 sm:min-h-75 lg:min-h-50': cartEmpty }"
              x-data="initCart()"
              x-init="getCartByLocalStorage(); isTouchEnabled();"
-             @private-content-loaded.window="cartEmpty && getCartByCustomerSectionData($event.detail.data)"
+             @private-content-loaded.window="getCartByCustomerSectionData($event.detail.data)"
     >
         <?= $block->getChildHtml('loading') ?>
         <?= $block->getChildHtml('items') ?>
