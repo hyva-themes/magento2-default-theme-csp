@@ -41,7 +41,7 @@ use Magento\Framework\Escaper;
     <?= $block->getAdditionalInfoHtml() ?>
 
     <div class="my-4">
-        <a class="btn btn-primary" href="<?= $escaper->escapeUrl($block->getContinueUrl()) ?>">
+        <a class="btn btn-primary inline-flex" href="<?= $escaper->escapeUrl($block->getContinueUrl()) ?>">
             <span><?= $escaper->escapeHtml(__('Continue Shopping')) ?></span>
         </a>
     </div>
