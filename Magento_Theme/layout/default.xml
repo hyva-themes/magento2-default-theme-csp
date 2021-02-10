@@ -13,7 +13,11 @@
             <block class="Magento\Framework\View\Element\FormKey" name="formkey" />
         </referenceContainer>
         <referenceContainer name="page.messages">
-            <block name="messages" template="Magento_Theme::messages.phtml"/>
+            <block class="Magento\Framework\View\Element\Messages"
+                   name="messages"
+                   as="messages"
+                   template="Magento_Theme::messages.phtml"
+            />
         </referenceContainer>
         <referenceContainer name="header.container">
             <block name="header-content" template="Magento_Theme::html/header.phtml">
