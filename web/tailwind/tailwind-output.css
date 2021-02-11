@@ -2401,8 +2401,8 @@ body {
   max-width: 100%;
 }
 
-.max-w-screen-xl {
-  max-width: 1280px;
+.max-w-screen-2xl {
+  max-width: 1536px;
 }
 
 .min-h-0 {
@@ -2713,10 +2713,6 @@ body {
 
 .left-0 {
   left: 0px;
-}
-
-.-left-6 {
-  left: -1.5rem;
 }
 
 * {
@@ -3613,6 +3609,10 @@ form select {
     display: block;
   }
 
+  .sm\:flex {
+    display: flex;
+  }
+
   .sm\:grid {
     display: grid;
   }
@@ -3711,6 +3711,14 @@ form select {
 
   .sm\:pb-0 {
     padding-bottom: 0px;
+  }
+
+  .sm\:text-right {
+    text-align: right;
+  }
+
+  .sm\:w-20 {
+    width: 5rem;
   }
 
   .sm\:w-48 {
