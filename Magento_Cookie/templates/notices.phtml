@@ -34,7 +34,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
             },
             setAcceptCookies: function() {
                 let cookieExpires = this.cookieLifetime /  60 / 60 / 24;
-                hyva.setCookie(this.cookieName, JSON.stringify(this.cookieValue), cookieExpires);
+                hyva.setCookie(this.cookieName, this.cookieValue, cookieExpires);
                 if (!hyva.getCookie(this.cookieName)) {
                     window.location.href = this.noCookiesUrl;
                 }
