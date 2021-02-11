@@ -8,11 +8,17 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Escaper $escaper */
 /** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <script defer>
     function initHeader () {
@@ -45,53 +51,82 @@ use Magento\Framework\View\Element\Template;
      @private-content-loaded.window="getData(event.detail.data)"
 >
     <div class="container flex flex-wrap items-center justify-between w-full px-6 py-3 mx-auto mt-0">
-
+        <!--Logo-->
         <?= $block->getChildHtml('logo'); ?>
 
+        <!--Main Navigation-->
         <?= $block->getChildHtml('topmenu') ?>
 
         <div class="flex items-center order-3">
-
-            <a id="compare-link" class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black hidden"
+            <!--Compare Icon-->
+            <a id="compare-link"
+               class="relative invisible inline-block mx-1 no-underline sm:ml-3 hover:text-black"
+               :class="{ 'invisible': !(itemCount > 0) }"
                href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
                title="<?= $escaper->escapeHtml('Compare Products') ?>"
                x-data="initCompareHeader()"
                @private-content-loaded.window="receiveCompareData($event.detail.data)"
-               :class="{ 'hidden': !(itemCount > 0) }">
-               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8 md:h-6 md:w-6 hover:text-black">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
-                </svg>
-               <span class="label sr-only"><?= $escaper->escapeHtml('Compare Products') ?></span>
-               <span class="absolute top-0 right-0 h-5 px-2 py-1 -mt-5 -mr-4 text-xs font-semibold leading-none text-center text-white uppercase transform -translate-x-1 translate-y-1/2 rounded-full bg-yellow-500">
+            >
+                <?= $heroicons->scaleHtml(
+                    "w-8 h-8 md:h-6 md:w-6 hover:text-black",
+                    25,
+                    25
+                ) ?>
+
+                <span class="sr-only label">
+                   <?= $escaper->escapeHtml('Compare Products') ?>
+                </span>
+
+                <span class="absolute top-0 right-0 h-5 px-2 py-1 -mt-5 -mr-4 text-xs font-semibold
+                    leading-none text-center text-white uppercase transform -translate-x-1
+                    translate-y-1/2 bg-yellow-500 rounded-full"
+                >
                     <span x-text="itemCount"></span>
-                    <span x-show="itemCount === 1" class="sr-only"><?= $escaper->escapeHtml(__('item')) ?></span>
-                    <span x-show="itemCount > 1" class="sr-only"><?= $escaper->escapeHtml(__('items')) ?></span>
-               </span>
+                    <span x-show="itemCount === 1" class="sr-only">
+                        <?= $escaper->escapeHtml(__('item')) ?>
+                    </span>
+                    <span x-show="itemCount > 1" class="sr-only">
+                        <?= $escaper->escapeHtml(__('items')) ?>
+                    </span>
+                </span>
             </a>
 
-            <a id="menu-search-icon" class="inline-block ml-1 no-underline sm:ml-3 hover:text-black" href="#"
-               @click.prevent="searchOpen = !searchOpen; $nextTick(function () { $refs.searchInput.select(); });">
-                <span class="label sr-only"><?= $escaper->escapeHtml(__('Search')) ?></span>
-                <svg class="w-8 h-8 md:h-6 md:w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
-                    </path>
-                </svg>
+            <!--Search Icon-->
+            <a id="menu-search-icon"
+               class="inline-block ml-1 no-underline sm:ml-3 hover:text-black"
+               href="#"
+               @click.prevent="searchOpen = !searchOpen; $nextTick(function () { $refs.searchInput.select(); });"
+            >
+                <span class="sr-only label">
+                    <?= $escaper->escapeHtml(__('Search')) ?>
+                </span>
+
+                <?= $heroicons->searchHtml(
+                    "w-8 h-8 md:h-6 md:w-6 hover:text-black",
+                    25,
+                    25
+                ) ?>
             </a>
 
+            <!--Customer Icon & Dropdown-->
             <?= $block->getChildHtml('customer') ?>
 
+            <!--Cart Icon-->
             <a id="menu-cart-icon"
                @click.prevent.stop="$dispatch('toggle-cart',{});"
                class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black"
-               href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/index')) ?>">
-                <span class="label sr-only"><?= $escaper->escapeHtml(__('Cart')) ?></span>
-                <svg class="w-8 h-8 fill-current md:h-6 md:w-6 hover:text-black"
-                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                    <path d="M21,7H7.462L5.91,3.586C5.748,3.229,5.392,3,5,3H2v2h2.356L9.09,15.414C9.252,15.771,9.608,16,10,16h8 c0.4,0,0.762-0.238,0.919-0.606l3-7c0.133-0.309,0.101-0.663-0.084-0.944C21.649,7.169,21.336,7,21,7z M17.341,14h-6.697L8.371,9 h11.112L17.341,14z"></path>
-                    <circle cx="10.5" cy="18.5" r="1.5"></circle>
-                    <circle cx="17.5" cy="18.5" r="1.5"></circle>
-                </svg>
+               href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/index')) ?>"
+            >
+                <span class="sr-only label">
+                    <?= $escaper->escapeHtml(__('Cart')) ?>
+                </span>
+
+                <?= $heroicons->shoppingCartHtml(
+                    "w-8 h-8 md:h-6 md:w-6 hover:text-black",
+                    25,
+                    25
+                ) ?>
+
                 <span x-text="cart.summary_count"
                       class="absolute top-0 right-0 hidden h-5 px-2 py-1 -mt-5 -mr-4 text-xs font-semibold
                         leading-none text-center text-white uppercase transform -translate-x-1
@@ -105,15 +140,18 @@ use Magento\Framework\View\Element\Template;
         </div>
     </div>
     <!--Search-->
-    <div class="absolute hidden w-full bg-container-lighter border-t border-container-lighter shadow-sm z-10" id="search-content"
+    <div class="absolute z-10 hidden w-full border-t shadow-sm bg-container-lighter border-container-lighter"
+         id="search-content"
          :class="{ 'block': searchOpen, 'hidden': !searchOpen }"
          @click.away="searchOpen = false"
-         x-show="true">
+         x-show="true"
+    >
         <?= $block->getChildHtml('header-search'); ?>
-
     </div>
+
     <!--Cart Drawer-->
     <?= $block->getChildHtml('cart-drawer'); ?>
+
     <!--Authentication Pop-Up-->
     <?= $block->getChildHtml('authentication-popup'); ?>
 </nav>
