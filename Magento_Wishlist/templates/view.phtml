@@ -68,7 +68,7 @@ $wishlistHelper = $this->helper(WishlistHelper::class);
 
                     postParams.data.qty = qty || postParams.data.qty;
 
-                    this.postForm(postParams);
+                    hyva.postForm(postParams);
 
                 },
                 addAllItemsToCart() {
@@ -79,36 +79,7 @@ $wishlistHelper = $this->helper(WishlistHelper::class);
                         urlParams.action += separator + qty.name + '=' + encodeURIComponent(qty.value);
                         separator = '&';
                     });
-                    this.postForm(urlParams);
-                },
-                postForm(postParams) {
-                    const form = document.createElement("form");
-
-                    let data = postParams.data;
-
-                    if (!data.uenc) {
-                        data.uenc = btoa(window.location.href);
-                    }
-                    form.method = "POST";
-                    form.action = postParams.action;
-
-                    Object.keys(postParams.data).map(key => {
-                        const field = document.createElement("input");
-                        field.type = 'hidden'
-                        field.value = postParams.data[key];
-                        field.name = key;
-                        form.appendChild(field);
-                    });
-
-                    const form_key = document.createElement("input");
-                    form_key.type = 'hidden';
-                    form_key.value = document.querySelector('input[name=form_key]').value;
-                    form_key.name="form_key";
-                    form.appendChild(form_key);
-
-                    document.body.appendChild(form);
-
-                    form.submit();
+                    hyva.postForm(urlParams);
                 }
             }
         }

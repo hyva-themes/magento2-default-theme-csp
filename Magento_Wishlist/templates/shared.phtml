@@ -15,42 +15,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
 ?>
 <div class="container">
     <?php if ($block->hasWishlistItems()): ?>
-        <script>
-            function initSharedWishList() {
-                return {
-                    postForm(postParams) {
-                        const form = document.createElement("form");
-
-                        let data = postParams.data;
-
-                        if (!data.uenc) {
-                            data.uenc = btoa(window.location.href);
-                        }
-                        form.method = "POST";
-                        form.action = postParams.action;
-
-                        Object.keys(postParams.data).map(key => {
-                            const field = document.createElement("input");
-                            field.type = 'hidden'
-                            field.value = postParams.data[key];
-                            field.name = key;
-                            form.appendChild(field);
-                        });
-
-                        const form_key = document.createElement("input");
-                        form_key.type = 'hidden';
-                        form_key.value = document.querySelector('input[name=form_key]').value;
-                        form_key.name="form_key";
-                        form.appendChild(form_key);
-
-                        document.body.appendChild(form);
-
-                        form.submit();
-                    }
-                }
-            }
-        </script>
-        <form x-data="initSharedWishList()"
+        <form x-data=""
               class="form shared wishlist card mb-4"
               action="<?= $escaper->escapeUrl($block->getUrl('wishlist/index/update')) ?>"
               method="post">
@@ -112,7 +77,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                                 <?php if ($isVisibleProduct): ?>
                                     <button type="button"
                                             title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
-                                            @click.prevent='postForm(<?= /* @noEscape */
+                                            @click.prevent='hyva.postForm(<?= /* @noEscape */
                                                 $block->getSharedItemAddToCartUrl($item) ?>)'
                                             class="inline-flex btn btn-primary"
                                     >
@@ -121,7 +86,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                                 <?php endif ?>
                             <?php endif; ?>
                             <a href="#"
-                               @click.prevent='postForm(<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>)'
+                               @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>)'
                                id="wishlist-shared-item-<?= /* @noEscape */ $item->getId() ?>"
                                class="action towishlist underline"
                             >
@@ -136,7 +101,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                     <div class="primary">
                         <button type="button"
                                 title="<?= $escaper->escapeHtmlAttr(__('Add All to Cart')) ?>"
-                                @click.prevent='postForm(<?= $escaper
+                                @click.prevent='hyva.postForm(<?= $escaper
                                     ->escapeUrl($block->getSharedAddAllToCartUrl()) ?>)'
                                 class="action tocart primary">
                             <span><?= $escaper->escapeHtml(__('Add All to Cart')) ?></span>

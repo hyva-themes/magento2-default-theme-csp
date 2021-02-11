@@ -7,6 +7,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\Cart\ItemOutput;
@@ -16,8 +17,10 @@ use Hyva\Theme\ViewModel\Cart\ItemOutput;
 /** @var ViewModelRegistry $viewModels */
 
 /** @var ItemOutput $viewModelItemOutput */
-
 $viewModelItemOutput = $viewModels->require(ItemOutput::class);
+
+/** @var Wishlist $wishlistViewModel */
+$wishlistViewModel = $viewModels->require(Wishlist::class);
 
 $displayPriceTaxBoth = $viewModelItemOutput->isItemPriceDisplayBoth();
 $displayPriceInclTax = $viewModelItemOutput->isItemPriceInclTax();
@@ -121,6 +124,16 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                item.id + '/product_id/' + item.product.id">
                                 <?= $escaper->escapeHtml(__('Edit')) ?>
                             </a>
+                            <?php if ($wishlistViewModel->isAllowInCart()): ?>
+                            <a class="mt-2 ml-2 underline text-sm inline-block text-primary-dark"
+                               href="#"
+                               @click.prevent='hyva.postForm({
+                                    "action": "<?= $escaper->escapeJs($block->getUrl('wishlist/index/fromcart')) ?>",
+                                    "data": { "item": item.id }
+                               } )'>
+                                <?= $escaper->escapeHtml(__('Move to Wishlist')) ?>
+                            </a>
+                            <?php endif; ?>
                         </p>
                     </div>
                 </div>
