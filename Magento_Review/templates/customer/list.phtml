@@ -36,7 +36,7 @@ $ratingSteps = 5;
             <template x-if="pageInfo.total_pages > 1">
                 <div class="flex items-center toolbar-pager">
                     <p class="flex w-4/12 text-sm leading-5 text-gray-700 toolbar-amount"
-                       id="toolbar-amount"><?= $escaper->escapeHtml('Items') ?>&nbsp;<span
+                       id="toolbar-amount"><?= $escaper->escapeHtml(__('Items')) ?>&nbsp;<span
                             x-text="currentPage > 1 && (currentPage - 1)* pageSize + 1 || 1"
                         ></span>&nbsp;-&nbsp;<span
                             x-text="currentPage > 1 && (currentPage) * pageSize || pageSize"></span>
