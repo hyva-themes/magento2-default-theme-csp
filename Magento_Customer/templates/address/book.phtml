@@ -9,14 +9,16 @@
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Customer\Block\Address\Book $block */
 ?>
-<div class="block block-addresses-default">
-    <div class="block-title"><strong><?= $escaper->escapeHtml(__('Default Addresses')) ?></strong></div>
-    <div class="grid-cols-2 block-content md:grid gap-x-4 gap-y-0">
+<div class="block block-addresses-default my-6">
+    <div class="block-title block-title text-2xl mb-6">
+            <?= $escaper->escapeHtml(__('Default Addresses')) ?>
+    </div>
+    <div class="grid-cols-2 block-content md:grid gap-x-4 gap-y-0 my-6">
         <?php if ($customerDefaultBillingAddress = $block->getDefaultBilling()): ?>
-            <div class="box box-address-billing">
-                <strong class="box-title">
+            <div class="box box-address-billing card">
+                <div class="text-gray-900 text-lg title-font font-medium mb-3">
                     <span><?= $escaper->escapeHtml(__('Default Billing Address')) ?></span>
-                </strong>
+                </div>
                 <div class="box-content">
                     <address>
                         <?= $block->getAddressHtml($block->getAddressById($customerDefaultBillingAddress)) ?>
@@ -38,12 +40,12 @@
                 </div>
             </div>
         <?php else: ?>
-            <div class="box box-billing-address">
-                <strong class="box-title">
+            <div class="box box-billing-address card">
+                <div class="text-gray-900 text-lg title-font font-medium mb-3">
                     <span>
                         <?= $escaper->escapeHtml(__('Default Billing Address')) ?>
                     </span>
-                </strong>
+                </div>
                 <div class="box-content">
                     <p><?= $escaper->escapeHtml(__('You have no default billing address in your address book.')) ?></p>
                 </div>
@@ -51,10 +53,10 @@
         <?php endif ?>
 
         <?php if ($customerDefaultBillingAddress = $block->getDefaultShipping()): ?>
-            <div class="box box-address-shipping">
-                <strong class="box-title">
+            <div class="box box-address-shipping card">
+                <div class="text-gray-900 text-lg title-font font-medium mb-3">
                     <span><?= $escaper->escapeHtml(__('Default Shipping Address')) ?></span>
-                </strong>
+                </div>
                 <div class="box-content">
                     <address>
                         <?= $block->getAddressHtml($block->getAddressById($customerDefaultBillingAddress)) ?>
@@ -74,12 +76,12 @@
                 </div>
             </div>
         <?php else: ?>
-            <div class="box box-shipping-address">
-                <strong class="box-title">
+            <div class="box box-shipping-address card">
+                <div class="text-gray-900 text-lg title-font font-medium mb-3">
                     <span>
                         <?= $escaper->escapeHtml(__('Default Shipping Address')) ?>
                     </span>
-                </strong>
+                </div>
                 <div class="box-content">
                     <p>
                         <?= $escaper->escapeHtml(__('You have no default shipping address in your address book.')) ?>
