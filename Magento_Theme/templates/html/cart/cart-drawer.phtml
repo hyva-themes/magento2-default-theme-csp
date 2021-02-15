@@ -182,7 +182,7 @@ use Magento\Framework\View\Element\Template;
                     <div class="relative grid gap-6 px-4 py-6 bg-white sm:gap-8 sm:px-6">
                         <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
                             hover:bg-gray-100">
-                            <p>Subtotal: <span x-html="cart.subtotal"></span></p>
+                            <p><?= $escaper->escapeHtml(__('Subtotal')) ?>: <span x-html="cart.subtotal"></span></p>
                         </div>
                         <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out
                             rounded-lg hover:bg-gray-100">
@@ -190,12 +190,12 @@ use Magento\Framework\View\Element\Template;
                                 {url: '<?= $escaper->escapeUrl($block->getUrl('checkout/index')) ?>'});"
                                 href="<?= $escaper->escapeUrl($block->getUrl('checkout/index')) ?>"
                                 class="inline-flex btn btn-primary">
-                                Checkout
+                                <?= $escaper->escapeHtml(__('Checkout')) ?>
                             </a>
-                            <span>or</span>
+                            <span><?= $escaper->escapeHtml(__('or')) ?></span>
                             <a href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>"
                                class="underline">
-                                Go to Cart
+                                <?= $escaper->escapeHtml(__('View and Edit Cart')) ?>
                             </a>
                         </div>
                     </div>
