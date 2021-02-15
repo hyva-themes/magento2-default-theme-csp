@@ -21,6 +21,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 #### [0.1.0] - 202-12-09
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.0.0...master
-[1.0.0]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/v0.2.0...v0.2.0
-[0.2.0]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/v0.2.0...v0.2.0
+[1.0.0]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/0.2.0...1.0.0
+[0.2.0]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/0.1.0...0.2.0
 [0.1.0]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/tags/0.1.0
