@@ -9,7 +9,12 @@ use Magento\Customer\ViewModel\Address;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-/** @var Edit $block *//** @var Address $viewModel *//** @var Escaper $escaper *//** @var SecureHtmlRenderer $secureRenderer */$viewModel = $block->getViewModel();
+/** @var Edit $block */
+/** @var Address $viewModel */
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+
+$viewModel = $block->getViewModel();
 ?>
 <?php $company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
 <?php $telephone = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Telephone::class) ?>
@@ -25,6 +30,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
     <?= $escaper->escapeHtml(__('Customer Address')) ?>
 </div>
 <form class="form-address-edit"
+      x-data="initCustomerAddressEdit()"
+      @private-content-loaded.window="onPrivateContentLoaded(event.detail.data)"
       action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>"
       method="post"
       id="form-validate"
@@ -74,6 +81,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                            value="<?= $escaper->escapeHtmlAttr($block->getStreetLine(1)) ?>"
                            title="<?= /* @noEscape */ $street ?>"
                            id="street_1"
+                           class="form-input"
                     />
                     <div class="nested">
                         <?php for ($i = 1, $n = $viewModel->addressGetStreetLines(); $i < $n; $i++): ?>
@@ -122,15 +130,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                            value="<?= $escaper->escapeHtmlAttr($block->getAddress()->getPostcode()) ?>"
                            title="<?= /* @noEscape */$block->getAttributeData()->getFrontendLabel('postcode') ?>"
                            id="zip"
-                           required
+                           :required="isZipRequired"
                            class="form-input validate-zip-international">
-                    <input type="hidden"
-                           id="region"
-                           name="region"
-                           value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
-                           title="<?= /* @noEscape */$region ?>"
-                           class="form-input validate-not-number-first"
-                        <?= !$displayAll ? ' disabled="disabled"' : '' ?>/>
                 </div>
             </div>
 
@@ -156,10 +157,69 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                     </span>
                 </label>
                 <div class="control">
-                    <?= $block->getCountryHtmlSelect() ?>
+                    <?php $countries = $block
+                        ->getCountryCollection()
+                        ->setForegroundCountries($block->getTopDestinations())
+                        ->toOptionArray();
+                    ?>
+                    <select name="country_id"
+                            id="country"
+                            title="Country"
+                            required="required"
+                            class="form-select"
+                            x-ref="country_id"
+                            @change="changeCountry($event.target)"
+                    >
+                        <?php foreach ($countries as $country): ?>
+                            <option name="<?= /** @noEscape */ $country['label'] ?>"
+                                    value="<?= /** @noEscape */ $country['value'] ?>"
+                                    data-is-zip-required="<?= (isset($country['is_zipcode_optional'])) ? '0' : '1' ?>"
+                                    data-is-region-required="<?= (isset($country['is_region_required'])) ? '1' : '0' ?>"
+                                    <?= ($block->getCountryId() ===  $country['value']) ? 'selected="selected"' : '' ?>
+                            >
+                                <?= /** @noEscape */ $country['label'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field region w-full">
+                <label class="label" for="region_id">
+                    <span><?= /* @noEscape */ $region ?></span>
+                </label>
+                <div class="control">
+                    <template x-if="isRegionRequired">
+                    <select id="region_id" name="region_id"
+                            title="<?= /* @noEscape */ $region ?>"
+                            class="form-select validate-select region_id"
+                            required="required"
+                            x-ref="region_id"
+                        <?= /* @noEscape */ !$displayAll ? ' disabled="disabled"' : '' ?>>
+                        <option value=""><?= $escaper->escapeHtml(__($selectRegion)) ?></option>
+                        <template x-for="regionId in Object.keys(availableRegions)">
+                            <option :value="regionId"
+                                    :name="availableRegions[regionId].name"
+                                    x-text="availableRegions[regionId].name">
+                            </option>
+                        </template>
+                    </select>
+                    </template>
+                    <template x-if="!isRegionRequired">
+                    <input type="text"
+                           id="region"
+                           name="region"
+                           x-ref="region"
+                           value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
+                           title="<?= /* @noEscape */ $region ?>"
+                           class="form-input"
+                           required="required"
+                        <?= !$displayAll ? ' disabled="disabled"' : '' ?>/>
+                    </template>
                 </div>
             </div>
         </div>
+
 
         <?php if ($block->isDefaultBilling()): ?>
             <div class="message info">
@@ -207,3 +267,63 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
         </div>
     </div>
 </form>
+
+<script>
+function initCustomerAddressEdit() {
+    return {
+        directoryData: {},
+        availableRegions: {},
+        isZipRequired: true,
+        isRegionRequired: true,
+        onPrivateContentLoaded(data) {
+            this.directoryData = data['directory-data'] || {};
+
+            <?php if ($block->getCountryId()): ?>
+                this.changeCountry(this.$refs['country_id']);
+            <?php endif; ?>
+
+            this.setInitialRegionSelectValue();
+            this.setRegionInputValue('<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>');
+
+        },
+        setInitialRegionSelectValue(value) {
+            this.$nextTick(() => {
+                const regionSelectorElement = this.$refs['region_id'];
+                if (regionSelectorElement) {
+
+                    const regionOptionByValue = regionSelectorElement
+                        .querySelector("[name='<?= /** @noEscape */ $block->getRegion() ?>']");
+
+                    if (regionOptionByValue) {
+                        this.$refs['region_id'].value = regionOptionByValue.value;
+                    }
+                }
+            })
+        },
+        setRegionInputValue(value) {
+            this.$nextTick(() => {
+                const regionInputElement = this.$refs['region'];
+                if (regionInputElement) {
+                    regionInputElement.value = value;
+                }
+            })
+        },
+        changeCountry(countrySelectElement) {
+            const selectedOption = countrySelectElement.options[countrySelectElement.selectedIndex];
+            const countryCode = countrySelectElement.value;
+            const countryData = this.directoryData[countryCode] || false;
+
+            this.setRegionInputValue('');
+
+            if (!countryData) {
+                return;
+            }
+
+            this.isZipRequired = selectedOption.dataset.isZipRequired === "1";
+            this.isRegionRequired = selectedOption.dataset.isRegionRequired === "1";
+
+            this.availableRegions = countryData.regions || {};
+        }
+    }
+}
+</script>
