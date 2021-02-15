@@ -20,7 +20,7 @@ use Magento\Framework\View\Element\Template;
             <div class="text-center md:text-left"><span @click="showCouponForm = !showCouponForm"
                        class="cursor-pointer text-primary-lighter select-none whitespace-nowrap">
                     <span class="underline"><?= $escaper->escapeHtml(
-                        __('Do you have a coupon code?')
+                        __('Apply Coupon Code')
                     ) ?></span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-4 h-4 inline-block ml-2"
                          viewBox="0 0 24 24" stroke="currentColor">
@@ -49,16 +49,16 @@ use Magento\Framework\View\Element\Template;
                                    value=""
                                    :placeholder="cartData.applied_coupons ?
                                     cartData.applied_coupons[0]['code'] :
-                                    '<?= $escaper->escapeHtmlAttr(__('Discount Code')) ?>'"
+                                    '<?= $escaper->escapeHtmlAttr(__('Coupon Code')) ?>'"
                                    :disabled="cartData.applied_coupons"
                             />
                                 <button class="btn btn-primary md:text-sm lg:text-base" type="submit"
-                                        value="<?= $escaper->escapeHtmlAttr(__('Apply Discount')) ?>">
+                                        value="<?= $escaper->escapeHtmlAttr(__('Apply Coupon Code')) ?>">
                                     <span x-show="!cartData.applied_coupons">
-                                        <?= $escaper->escapeHtml(__('Apply Discount')) ?>
+                                        <?= $escaper->escapeHtml(__('Apply Coupon Code')) ?>
                                     </span>
                                     <span x-show="cartData.applied_coupons">
-                                        <?= $escaper->escapeHtml(__('Remove Discount')) ?>
+                                        <?= $escaper->escapeHtml(__('Remove Coupon Code')) ?>
                                     </span>
                                 </button>
                         </div>
