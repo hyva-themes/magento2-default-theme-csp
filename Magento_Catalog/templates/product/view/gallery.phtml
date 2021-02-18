@@ -10,7 +10,9 @@ declare(strict_types=1);
 
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Catalog\Helper\Image;
+use Magento\Framework\Escaper;
 
+/** @var Escaper $escaper */
 /** @var Gallery $block */
 
 $images = $block->getGalleryImages()->getItems();
@@ -118,8 +120,8 @@ $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height',
                        :class="{'border-primary': active === index}"
                     >
                         <img :src="image.thumb"
-                             :alt="image.caption"
-                             :title="image.caption"
+                             :alt="image.caption.length > 0 ? image.caption : '<?= $escaper->escapeHtmlAttr(__('No Image')) ?>'"
+                             :title="image.caption.length > 0 ? image.caption : '<?= $escaper->escapeHtmlAttr(__('No Image')) ?>'"
                              width="<?= /* @noEscape */ $smallWidth ?>"
                              height="<?= /* @noEscape */ $smallHeight ?>"
                         />
