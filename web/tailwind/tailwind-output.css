@@ -4066,12 +4066,12 @@ form select {
     margin-left: 0px;
   }
 
-  .lg\:ml-1 {
-    margin-left: 0.25rem;
-  }
-
   .lg\:mt-2 {
     margin-top: 0.5rem;
+  }
+
+  .lg\:ml-2 {
+    margin-left: 0.5rem;
   }
 
   .lg\:mt-3 {
