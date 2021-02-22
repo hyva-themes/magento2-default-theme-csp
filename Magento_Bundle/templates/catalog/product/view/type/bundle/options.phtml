@@ -42,12 +42,13 @@ $productViewModel = $viewModels->require(ProductPage::class);
                         return false;
                     },
                     calculateTotalPrice() {
+                        const $refs = this.$refs;
                         let selectedProductsPerOption = [];
 
                         for (const [optionId, option] of Object.entries(this.optionConfig.options)) {
                             const optionCode = 'option-' + optionId;
-                            const optionRef = this.$refs[optionCode];
-                            const qtyRef = this.$refs[optionCode+'-qty'];
+                            const optionRef = $refs[optionCode];
+                            const qtyRef = $refs[optionCode+'-qty'];
 
                             let selectedOption = selectedProductsPerOption[optionId] || [];
 
@@ -63,12 +64,12 @@ $productViewModel = $viewModels->require(ProductPage::class);
                             } else {
                                 for (const [selectionId, selection] of Object.entries(option.selections)) {
                                     const selectionCode = optionCode + '-' + selectionId;
-                                    const selectionRef = this.$refs[selectionCode];
+                                    const selectionRef = $refs[selectionCode];
                                     if(
                                         selectionRef &&
                                         (
-                                            this.$refs[selectionCode].checked ||
-                                            this.$refs[selectionCode].selected
+                                            selectionRef.checked ||
+                                            selectionRef.selected
                                         )
                                     ) {
                                         selectedOption.push({
