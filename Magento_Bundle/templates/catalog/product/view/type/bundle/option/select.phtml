@@ -104,8 +104,7 @@ $activeSelectOptions = [];
                         .options[<?= (int)$optionId ?>]
                         .selections[activeSelectOption[0]];
 
-                    return selectionConfig.qty;
-
+                    return selectionConfig ? selectionConfig.qty : "0";
                 },
                 getQtyDisabled(optionConfig, activeSelectOptions) {
                     const activeSelectOption = activeSelectOptions[<?= (int)$optionId ?>];
@@ -116,7 +115,7 @@ $activeSelectOptions = [];
                         .options[<?= (int)$optionId ?>]
                         .selections[activeSelectOption[0]];
 
-                    return selectionConfig.customQty === "0";
+                    return !selectionConfig || selectionConfig.customQty === "0";
 
                 },
                 setQtyValue(optionConfig, activeSelectOptions, value) {

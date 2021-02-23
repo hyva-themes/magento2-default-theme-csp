@@ -130,7 +130,10 @@ $productViewModel = $viewModels->require(ProductPage::class);
                                     }
 
                                 },
-                                { 'oldPrice': 0, 'finalPrice': 0 }
+                                {
+                                    'oldPrice': <?= $escaper->escapeJs($product->getPrice()); ?>,
+                                    'finalPrice': <?= $escaper->escapeJs($product->getFinalPrice()); ?>
+                                }
                             );
 
                         this.selectedOptions = Object.keys(selectedProductsPerOption).map((optionId) => {
