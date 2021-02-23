@@ -267,6 +267,9 @@ $graphqlQuery = $query ?: "
                 }
             },
             formatPrice(value, currency, showSign) {
+                if (value === null) {
+                    return '';
+                }
                 var formatter = new Intl.NumberFormat(
                     document.documentElement.lang,
                     {
