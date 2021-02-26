@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Currency;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\Store;
@@ -31,6 +32,10 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var Currency $currencyViewModel */
+$currencyViewModel = $viewModels->require(Currency::class);
+$currencySymbol = $currencyViewModel->getCurrentCurrencySymbol();
 
 /** @var Escaper $escaper */
 /** @var Template $block */
@@ -115,10 +120,6 @@ $graphqlQuery = $query ?: "
     items {
         $items
     }
-  },
-  currency {
-    base_currency_symbol
-    base_currency_code
   }
 }";
 ?>
@@ -282,7 +283,7 @@ $graphqlQuery = $query ?: "
                     formatter.formatToParts(value).map(({type, value}) => {
                         switch (type) {
                             case 'currency':
-                                return this.currency.base_currency_symbol || value;
+                                return <?= $currencySymbol ? /** @noEscape */ "'$currencySymbol'" : 'value' ?>;
                             case 'minusSign':
                                 return '- ';
                             case 'plusSign':
