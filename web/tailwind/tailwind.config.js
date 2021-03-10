@@ -81,6 +81,8 @@ module.exports = {
                 }
             },
             minWidth: {
+                8: spacing["8"],
+                20: spacing["20"],
                 40: spacing["40"],
                 48: spacing["48"],
             },
