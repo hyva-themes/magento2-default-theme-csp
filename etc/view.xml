@@ -85,8 +85,8 @@
             </image>
             <image id="product_swatch_image_large" type="image"/>
             <image id="product_swatch_image_medium" type="image">
-                <width>240</width>
-                <height>300</height>
+                <width>360</width>
+                <height>360</height>
             </image>
             <image id="product_swatch_image_small" type="thumbnail">
                 <width>88</width>
