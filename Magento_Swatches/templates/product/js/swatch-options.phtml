@@ -23,20 +23,34 @@ use Magento\Framework\View\Element\Template;
 
                 return swatchConfig;
             },
-            isTextSwatch(attributeId) {
-                return this.getAttributeSwatchData(attributeId).details['swatch_input_type'] === 'text';
+            getSwatchType(typeNumber) {
+                switch (typeNumber) {
+                    case "1":
+                        return "color"
+                    case "2":
+                        return "image"
+                    case "0":
+                    default:
+                        return "text"
+                }
+            },
+            isTextSwatch(attributeId, itemId) {
+                const config = this.getSwatchConfig(attributeId, itemId);
+                const typeId = config.type.toString();
+                const type = this.getSwatchType(typeId);
+
+                return type === 'text';
             },
             getSwatchBackgroundStyle(attributeId, itemId) {
-                const config = this.swatchConfig[attributeId][itemId];
+                const config = this.getSwatchConfig(attributeId, itemId);
+                const typeId = config.type.toString();
+                const type = this.getSwatchType(typeId);
 
-                if (this.isTextSwatch(attributeId)) {
-                    return '';
-                } else {
-                    if (config.type.toString() === "1") {
+                if (type === "color") {
                         return 'background-color:' + config.value;
-                    } else if (config.type.toString() === "2") {
+                } else if (type === "image") {
                         return "background: #ffffff url('" + config.value + "') no-repeat center";
-                    }
+                } else {
                     return '';
                 }
             },
@@ -47,16 +61,15 @@ use Magento\Framework\View\Element\Template;
             tooltipPositionElement: false,
             getTooltipImageStyle(attributeId, itemId) {
                 const config = this.getSwatchConfig(attributeId, itemId);
+                const typeId = config.type.toString();
+                const type = this.getSwatchType(typeId);
 
-                if (this.isTextSwatch(attributeId)) {
-                    return '';
+                if (type === "color") {
+                    return 'background-color:' + config.value + '; width: 110px; height: 90px;';
+                } else if (type === "image") {
+                    return "background: #ffffff url('" + config.thumb +
+                        "') center center no-repeat; width: 110px; height: 90px;";
                 } else {
-                    if (config.type.toString() === "1") {
-                        return 'background-color:' + config.value + '; width: 110px; height: 90px;';
-                    } else if (config.type.toString() === "2") {
-                        return "background: #ffffff url('" + config.thumb +
-                            "') center center no-repeat; width: 110px; height: 90px;";
-                    }
                     return '';
                 }
             },

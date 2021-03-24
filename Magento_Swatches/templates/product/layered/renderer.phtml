@@ -27,16 +27,23 @@ $swatchData = $block->getSwatchData();
 <script>
     function initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>() {
         return {
-
+            getSwatchType(typeNumber) {
+                switch (typeNumber) {
+                    case "1":
+                        return "color"
+                    case "2":
+                        return "image"
+                    case "0":
+                    default:
+                        return "text"
+                }
+            },
             getSwatchBackgroundStyle(type, value, image) {
-                if (type === "0") {
-                    return '';
+                if (this.getSwatchType(type) === "color") {
+                    return 'background-color:' + value;
+                } else if (this.getSwatchType(type) === "image") {
+                    return "background: #ffffff url('" + image + "') no-repeat center";
                 } else {
-                    if (type === "1") {
-                        return 'background-color:' + value;
-                    } else if (type === "2") {
-                        return "background: #ffffff url('" + image + "') no-repeat center";
-                    }
                     return '';
                 }
             },
@@ -45,15 +52,12 @@ $swatchData = $block->getSwatchData();
             getTooltipImageStyle() {
                 const type = this.activeTooltipItem.type;
 
-                if (type === "0") {
-                    return '';
+                if (this.getSwatchType(type) === "color") {
+                    return 'background-color:' + this.activeTooltipItem.value + '; width: 110px; height: 90px;';
+                } else if (this.getSwatchType(type) === "image") {
+                    return "background: #ffffff url('" + this.activeTooltipItem.thumb +
+                        "') center center no-repeat; width: 110px; height: 90px;";
                 } else {
-                    if (type === "1") {
-                        return 'background-color:' + this.activeTooltipItem.value + '; width: 110px; height: 90px;';
-                    } else if (type === "2") {
-                        return "background: #ffffff url('" + this.activeTooltipItem.thumb +
-                            "') center center no-repeat; width: 110px; height: 90px;";
-                    }
                     return '';
                 }
             },

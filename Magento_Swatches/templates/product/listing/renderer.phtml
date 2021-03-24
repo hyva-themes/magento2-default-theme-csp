@@ -40,17 +40,6 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                     this.updatePrices();
                     !skipUpdateGallery && this.updateGallery();
                 },
-                updatePrices: function updatePrices () {
-                    var value = this.productIndex ?
-                        this.optionConfig.optionPrices[this.productIndex] :
-                        this.optionConfig.prices;
-                    window.dispatchEvent(
-                        new CustomEvent(
-                            "update-prices-<?= (int)$product->getId() ?>",
-                            { detail: value }
-                        )
-                    );
-                },
                 updateGallery: function updateGallery () {
                     if (!this.productIndex) {
                         return;
@@ -204,7 +193,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                                 >
                                 <div x-html="item.label"
                                      class="whitespace-nowrap"
-                                     :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>) }"
+                                     :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>, item.id) }"
                                 ></div>
                             </label>
                         </div>
@@ -222,7 +211,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
             <div class="shadow-lg">
                 <div class="absolute top-0 left-0 z-10 min-w-20 p-2 -mt-6 text-sm leading-tight text-black transform
                 -translate-x-1/2 -translate-y-full bg-white rounded-lg shadow-lg text-center">
-                    <template x-if="!isTextSwatch(activeTooltipItem.attribute)">
+                    <template x-if="!isTextSwatch(activeTooltipItem.attribute, activeTooltipItem.item)">
                         <div class="inline-block border border-container shadow-sm"
                              :style="getTooltipImageStyle(activeTooltipItem.attribute, activeTooltipItem.item)"
                         ></div>
