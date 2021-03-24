@@ -143,6 +143,13 @@
                            template="Magento_Catalog::product/view/description.phtml">
                     </block>
 
+                    <block
+                        class="Magento\Catalog\Block\Product\View\Attributes"
+                        name="product.attributes"
+                        as="additional"
+                        template="Magento_Catalog::product/view/attributes.phtml"
+                    />
+
                     <block name="upsell" class="Magento\Catalog\Block\Product\View"
                            template="Magento_Theme::elements/slider.phtml">
                         <arguments>

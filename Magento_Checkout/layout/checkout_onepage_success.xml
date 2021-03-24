@@ -22,6 +22,7 @@
             <block class="Magento\Checkout\Block\Onepage\Success" name="checkout.success" template="Magento_Checkout::success.phtml" cacheable="false">
                 <container name="order.success.additional.info" label="Order Success Additional Info"/>
             </block>
+            <block class="Magento\Checkout\Block\Registration" name="checkout.registration" template="Magento_Checkout::registration.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>
