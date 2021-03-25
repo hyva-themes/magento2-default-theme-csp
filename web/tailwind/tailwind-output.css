@@ -1178,43 +1178,43 @@ section#messages a {
     text-decoration: underline
   }
 
-.price-container {
-  display: block
-}
-
-.price-container .price {
-    font-weight: 600;
-    font-size: 1.125rem;
-    line-height: 1.75rem;
+.product-item .price-container {
+    display: block
   }
 
-.price-container .price-label {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+.product-item .price-container .price {
+      font-weight: 600;
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+
+.product-item .price-container .price-label {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+.product-item .special-price .price-container .price-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 
-.special-price .price-container .price-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-.old-price .price-container {
-  --tw-text-opacity: 1;
-  color: rgba(107, 114, 128, var(--tw-text-opacity));
-}
-
-.old-price .price-container .price {
-    font-weight: 400;
-    font-size: 1rem;
-    line-height: 1.5rem;
+.product-item .old-price .price-container {
+    --tw-text-opacity: 1;
+    color: rgba(107, 114, 128, var(--tw-text-opacity));
   }
+
+.product-item .old-price .price-container .price {
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.5rem;
+    }
 
 .page-product-bundle .price-final_price .price-from .price-container, .page-product-bundle .price-final_price .price-to .price-container {
         display: block;
