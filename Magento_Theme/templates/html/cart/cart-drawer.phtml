@@ -19,17 +19,17 @@ use Magento\Framework\View\Element\Template;
         return {
             open: false,
             cart: {},
-            getData: function (data) {
+            getData(data) {
                 if (data.cart) {
                     this.cart = data.cart
                     this.setCartItems();
                 }
             },
             cartItems: {},
-            setCartItems: function getCartItems () {
+            setCartItems() {
                 this.cartItems = this.cart && this.cart.items.sort(function(a,b) { return a.item_id - b.item_id }) || {}
             },
-            deleteItemFromCart: function deleteItemFromCart (itemId) {
+            deleteItemFromCart(itemId) {
                 var formKey = document.querySelector('input[name=form_key]').value;
                 fetch(BASE_URL+"checkout/sidebar/removeItem/", {
                     "headers": {

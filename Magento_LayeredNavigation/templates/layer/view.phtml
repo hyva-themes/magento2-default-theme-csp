@@ -81,7 +81,7 @@ use Magento\LayeredNavigation\Block\Navigation;
             return {
                 isMobile: false,
                 blockOpen: false,
-                checkIsMobileResolution: function () {
+                checkIsMobileResolution() {
                     this.isMobile = window.outerWidth < 768
                 }
             }

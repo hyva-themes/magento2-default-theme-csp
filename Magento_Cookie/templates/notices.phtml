@@ -29,10 +29,10 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
             cookieLifetime: '<?= /* @noEscape */ $cookieHelper->getCookieRestrictionLifetime() ?>',
             noCookiesUrl: '<?= $escaper->escapeJs($block->getUrl('cookie/index/noCookies')) ?>',
 
-            checkAcceptCookies: function () {
+            checkAcceptCookies() {
                 this.showCookieBanner = (hyva.getCookie(this.cookieName) === null);
             },
-            setAcceptCookies: function() {
+            setAcceptCookies() {
                 let cookieExpires = this.cookieLifetime /  60 / 60 / 24;
                 hyva.setCookie(this.cookieName, this.cookieValue, cookieExpires);
                 if (!hyva.getCookie(this.cookieName)) {

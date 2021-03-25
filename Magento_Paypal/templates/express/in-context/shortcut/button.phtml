@@ -56,8 +56,7 @@ $uniqueId = '_' . uniqid();
                          * @param {Object} data
                          * @param {Object} actions
                          */
-                        onInit: function (data, actions) {
-
+                        onInit(data, actions) {
                             this.actions = actions || this.actions;
                         },
 
@@ -65,7 +64,7 @@ $uniqueId = '_' . uniqid();
                          * Triggers beforePayment action on PayPal buttons
                          * @returns {Object} jQuery promise
                          */
-                        createOrder: function () {
+                        createOrder() {
                             var params = "quote_id="+clientConfig.quoteId +
                                 "&customer_id=" + ( clientConfig.customerId ?
                                     clientConfig.customerId :
@@ -94,7 +93,7 @@ $uniqueId = '_' . uniqid();
                          * @param {Object} data
                          * @param {Object} actions
                          */
-                        onApprove: function (data, actions) {
+                        onApprove(data, actions) {
                             var params = "paymentToken=" + (data.orderID || '') +
                                 "&payerId=" + (data.payerID || '') +
                                 "&quoteId=" + (clientConfig.quoteId || '') +
@@ -128,7 +127,7 @@ $uniqueId = '_' . uniqid();
                         /**
                          * Execute logic on Paypal button click
                          */
-                        onClick: function () {
+                        onClick() {
 
                             paypal.actions = this.actions;
                             //clientConfig.rendererComponent.validate();
@@ -140,7 +139,7 @@ $uniqueId = '_' . uniqid();
                          * @param {Object} data
                          * @param {Object} actions
                          */
-                        onCancel: function (data, actions) {
+                        onCancel(data, actions) {
                             //clientConfig.rendererComponent.onCancel(data, actions);
 
                         },
@@ -150,7 +149,7 @@ $uniqueId = '_' . uniqid();
                          *
                          * @param {Error} err
                          */
-                        onError: function (err) {
+                        onError(err) {
                             //clientConfig.rendererComponent.onError(err);
 
                         }

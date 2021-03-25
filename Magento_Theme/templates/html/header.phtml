@@ -39,7 +39,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
         return {
             compareProducts: null,
             itemCount: 0,
-            receiveCompareData: function (data) {
+            receiveCompareData(data) {
                 if (data['compare-products']) {
                     this.compareProducts = data['compare-products'];
                     this.itemCount = this.compareProducts.count;

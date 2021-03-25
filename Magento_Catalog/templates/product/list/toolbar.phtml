@@ -23,7 +23,7 @@ $uniqueId = '_' . uniqid();
     function initToolbar<?= /** @noEscape */  $uniqueId ?>() {
         return {
             options: <?= /* @noEscape */ $block->getWidgetOptionsJson() ?>.productListToolbarForm || {},
-            changeUrl: function (paramName, paramValue, defaultValue) {
+            changeUrl(paramName, paramValue, defaultValue) {
                 var decode = window.decodeURIComponent,
                     urlPaths = this.options.url.split('?'),
                     baseUrl = urlPaths[0],

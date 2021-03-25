@@ -77,11 +77,11 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 hasCaptchaToken: 0,
                 displayErrorMessage: false,
                 errorMessages: [],
-                setErrorMessages: function setErrorMessages(messages) {
+                setErrorMessages(messages) {
                     this.errorMessages = [messages]
                     this.displayErrorMessage = this.errorMessages.length
                 },
-                submitForm: function () {
+                submitForm() {
                     var $form = document.querySelector('#newsletter-validate-detail');
                     <?= $block->getChildHtml('recaptcha_validation_newsletter'); ?>
 

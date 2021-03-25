@@ -32,15 +32,15 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
             isLoading: true,
             isTouchDevice: false,
             showCouponForm: false,
-            getSignInToken: function getSignInToken() {
+            getSignInToken() {
                 return getConfigFromLocalStorage(activeSource.token);
             },
-            getCartQuery: function getCartQuery(cartId) {
+            getCartQuery(cartId) {
                 return <?= /** @noEscape */ json_encode(
                     '{cart (cart_id: "%cartId") {' . /* @noEscape */ $viewModelCart->getCartGraphQlQuery() . '}}'
                 ); ?>.replace('%cartId', cartId)
             },
-            getCustomerCartQuery: function getCustomerCartQuery() {
+            getCustomerCartQuery() {
                 return <?= /** @noEscape */ json_encode(
                     '{customerCart {' . /* @noEscape */ $viewModelCart->getCartGraphQlQuery() . '}}'
                 ); ?>
@@ -95,7 +95,7 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                     currency: this.cartData.prices.subtotal_excluding_tax.currency
                 })
             },
-            isTouchEnabled: function () {
+            isTouchEnabled() {
                 this.isTouchDevice = ('ontouchstart' in window) ||
                     (navigator.maxTouchPoints > 0) ||
                     (navigator.msMaxTouchPoints > 0);
@@ -108,7 +108,7 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                     this.cartEmpty = true;
                 }
             },
-            dispatchCouponMutationRequest: function () {
+            dispatchCouponMutationRequest() {
                 if (!this.cartData.applied_coupons && document.getElementById('coupon_code').value === '') {
                     dispatchMessages([{
                         type: 'error',
@@ -167,7 +167,7 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                 }
                 dispatchMessages(messages)
             },
-            mutateItemQty: function (itemId, qty) {
+            mutateItemQty(itemId, qty) {
                 var $this = this;
                 $this.isLoading = true;
 
@@ -202,7 +202,7 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                     $this.reloadCustomerData();
                 });
             },
-            mutateItemRemove: function (itemId) {
+            mutateItemRemove(itemId) {
                 var $this = this;
                 $this.isLoading = true;
                 var cartItemRemoveQuery = `mutation {<?= /** @noEscape */ $viewModelCart->getCartItemRemoveQuery() ?>}`;
@@ -239,7 +239,7 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                     $this.reloadCustomerData();
                 });
             },
-            reloadCustomerData: function () {
+            reloadCustomerData() {
                 var reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
                 window.dispatchEvent(reloadCustomerDataEvent);
             }

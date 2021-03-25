@@ -155,7 +155,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 : $escaper->escapeJs(
                     'false'
                 ) ?>,
-            checkPasswordsMatch: function () {
+            checkPasswordsMatch() {
                 if (!this.showPasswordFields) {
                     return true;
                 }
@@ -167,11 +167,11 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 this.passwordsMatching = false;
                 return false;
             },
-            setErrorMessages: function setErrorMessages(messages) {
+            setErrorMessages(messages) {
                 this.errorMessages = [messages]
                 this.displayErrorMessage = this.errorMessages.length
             },
-            submitForm: function () {
+            submitForm() {
                 if (!this.checkPasswordsMatch()){
                     return;
                 }

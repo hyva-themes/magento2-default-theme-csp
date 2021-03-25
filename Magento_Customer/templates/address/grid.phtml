@@ -99,7 +99,7 @@
         <script>
             function initAddresses() {
                 return {
-                    deleteAddressById: function (id) {
+                    deleteAddressById(id) {
                         if (window.confirm(
                             '<?= $escaper->escapeJs(__('Are you sure you want to delete this address?')) ?>'
                         )) {

@@ -39,7 +39,7 @@ $wishlistViewModel = $viewModels->require(Wishlist::class);
 <script>
 function initPrint() {
     return {
-        print: function() {
+        print() {
             window.print();
         }
     };
@@ -47,7 +47,7 @@ function initPrint() {
 
 function initCompare() {
     return {
-        removeFromCompare: function(productId, productName) {
+        removeFromCompare(productId, productName) {
             const formKey = document.querySelector('input[name=form_key]').value;
             const postUrl = BASE_URL + 'catalog/product_compare/remove/';
             const confirmMessage = "<?= $escaper->escapeHtml(
@@ -106,7 +106,7 @@ function initCompare() {
 
 function initWishlist() {
     return {
-        addToWishlist: function addToWishlist(productId){
+        addToWishlist(productId){
             var formKey = document.querySelector('input[name=form_key]').value;
             var postUrl = BASE_URL+"wishlist/index/add/";
             fetch(postUrl, {

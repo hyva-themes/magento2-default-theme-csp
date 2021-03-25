@@ -151,7 +151,7 @@ $productName = $block->getProduct()->getName();
                 'gallery_switch_strategy',
                 'Magento_ConfigurableProduct'
             ) === 'append' ? 'true' : 'false' ?>,
-            receiveImages: function receiveImages(images) {
+            receiveImages(images) {
                 if (this.appendOnReceiveImages) {
                     this.images = [].concat(this.initialImages, images);
                     this.setActive(images.length ? this.initialImages.length : 0);

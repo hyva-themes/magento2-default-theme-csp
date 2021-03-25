@@ -34,14 +34,14 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                 swatchOptionsComponent,
                 {
                     mediaCallback: "<?= $escaper->escapeJs($escaper->escapeUrl($block->getMediaCallback())) ?>",
-                    changeOption: function changeOption(optionId, value, skipUpdateGallery) {
+                    changeOption(optionId, value, skipUpdateGallery) {
                         this.selectedValues[optionId] = value;
                         this.findSimpleIndex();
                         this.findAllowedAttributeOptions();
                         this.updatePrices();
                         !skipUpdateGallery && this.updateGallery();
                     },
-                    updateGallery: function updateGallery() {
+                    updateGallery() {
                         if (!this.productIndex) {
                             return;
                         }

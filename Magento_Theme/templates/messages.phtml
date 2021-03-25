@@ -14,17 +14,17 @@ declare(strict_types=1);
         "use strict";
         return {
             messages: window.mageMessages || [],
-            isEmpty: function () {
+            isEmpty() {
                 return this.messages.reduce(
                     function (isEmpty, message) {
                         return isEmpty && message === undefined
                     }, true
                 )
             },
-            removeMessage: function (messageIndex) {
+            removeMessage(messageIndex) {
                 this.messages[messageIndex] = undefined;
             },
-            addMessages: function (messages, hideAfter) {
+            addMessages(messages, hideAfter) {
                 var $this = this;
                 messages.map(function(message) {
                     $this.messages = $this.messages.concat(message);
@@ -33,12 +33,12 @@ declare(strict_types=1);
                     }
                 });
             },
-            getData: function (data) {
+            getData(data) {
                 if (data.messages && data.messages.messages && data.messages.messages.length) {
                     this.addMessages(data.messages.messages);
                 }
             },
-            setHideTimeOut: function (messageIndex, hideAfter) {
+            setHideTimeOut(messageIndex, hideAfter) {
                 var $this = this;
                 setTimeout(
                     function(messageIndex) {

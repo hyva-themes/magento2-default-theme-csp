@@ -202,16 +202,16 @@ $ratingSteps = 5;
             pageInfo: {},
             isLoading: true,
             reviews: {},
-            setCurrentPage: function (page) {
+            setCurrentPage(page) {
                 this.currentPage = page;
                 this.getReviewsList();
             },
-            getCustomerReviewsQuery: function () {
+            getCustomerReviewsQuery() {
                 return <?= /** @noEscape */ json_encode(
                     '{customer {' . $viewModelCustomerReviews->getCustomerReviewsGraphQlQuery() . '}}'
                 ); ?>.replace('%currentPage%', this.currentPage).replace('%pageSize%', this.pageSize)
             },
-            getReviewsList: function () {
+            getReviewsList() {
                 var $this = this;
                 $this.isLoading = true;
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {

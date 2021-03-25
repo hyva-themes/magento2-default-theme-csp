@@ -328,7 +328,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 passwordsMatching: true,
                 errors: 0,
                 hasCaptchaToken: 0,
-                checkPasswordsMatch: function () {
+                checkPasswordsMatch() {
                     if (document.getElementById('password').value ===
                         document.getElementById('password-confirmation').value) {
                             this.passwordsMatching = true;
@@ -337,7 +337,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                     this.passwordsMatching = false;
                     return false;
                 },
-                submitForm: function() {
+                submitForm() {
                     if(this.checkPasswordsMatch()) {
                         var $form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
                         <?= $block->getChildHtml('recaptcha_validation'); ?>

@@ -136,7 +136,7 @@ $graphqlQuery = $query ?: "
             products: [],
             currency: [],
             loading: true,
-            minHeight: function minHeight() {
+            minHeight() {
                 return 'min-height: ' + ((this.loading && '491px') || 0);
             },
             query: <?= /** @noEscape */ json_encode($graphqlQuery) ?>,
@@ -227,7 +227,7 @@ $graphqlQuery = $query ?: "
                     );
                 });
             },
-            addToCompare: function (productId) {
+            addToCompare(productId) {
                 const formKey = document.querySelector('input[name=form_key]').value;
                 const postUrl = BASE_URL + 'catalog/product_compare/add/';
 
@@ -252,12 +252,12 @@ $graphqlQuery = $query ?: "
                     );
                 });
             },
-            getSlider: function getSlider() {
+            getSlider() {
                 return this.$el.querySelector('.js_slides');
             },
             pageSize: 1,
             pageFillers: 0,
-            calcPageSize: function calcPageSize() {
+            calcPageSize() {
                 var slider = this.getSlider();
                 if (slider) {
                     this.pageSize = Math.round(slider.clientWidth / slider.querySelector('.js_slide').clientWidth);
@@ -266,7 +266,7 @@ $graphqlQuery = $query ?: "
                     ) - this.products.length;
                 }
             },
-            calcActive: function calcActive(event) {
+            calcActive(event) {
                 var slider = this.getSlider();
                 if (slider) {
                     this.active = Math.ceil(
@@ -275,34 +275,7 @@ $graphqlQuery = $query ?: "
                         ) / this.pageSize
                     ) * this.pageSize;
                 }
-            },
-            formatPrice(value, currency, showSign) {
-                if (value === null) {
-                    return '';
-                }
-                var formatter = new Intl.NumberFormat(
-                    document.documentElement.lang,
-                    {
-                        style: 'currency',
-                        currency: currency || this.currency.base_currency_code,
-                        signDisplay: showSign ? "always" : "auto"
-                    }
-                );
-                return (typeof Intl.NumberFormat.prototype.formatToParts) ?
-                    formatter.formatToParts(value).map(({type, value}) => {
-                        switch (type) {
-                            case 'currency':
-                                return <?= $currencySymbol ? /** @noEscape */ "'$currencySymbol'" : 'value' ?>;
-                            case 'minusSign':
-                                return '- ';
-                            case 'plusSign':
-                                return '+ ';
-                            default :
-                                return value;
-                        }
-                    }).reduce((string, part) => string + part) :
-                    formatter.format(value);
-            },
+            }
         }
     }
 
@@ -356,10 +329,7 @@ $graphqlQuery = $query ?: "
                                     </a>
                                 </p>
                                 <p class="pt-1 text-lg text-center text-gray-900"
-                                   x-text="formatPrice(
-                                    product.price_range.minimum_price.final_price.value,
-                                    product.price_range.minimum_price.final_price.currency
-                                   )"></p>
+                                   x-text="hyva.formatPrice(product.price_range.minimum_price.final_price.value)"></p>
                                 <p class="flex flex-wrap gap-2 inline p-3">
                                     <a class="justify-center w-auto mr-auto btn btn-primary"
                                        :href="'<?= $escaper->escapeUrl($block->getBaseUrl()) ?>' +

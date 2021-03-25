@@ -43,7 +43,7 @@ if ($block->getIsInCatalogProduct()) {
         return {
             isInCatalogProduct: <?= $isInCatalogProduct ? 'true' : 'false' ?>,
             returnUrlId: 'return_url',
-            submitForm: function submitForm() {
+            submitForm() {
                 if(this.isInCatalogProduct) {
                     this.submitFromCatalog();
                 }
@@ -51,7 +51,7 @@ if ($block->getIsInCatalogProduct()) {
                     this.submitFromCart();
                 }
             },
-            submitFromCatalog: function submitForm() {
+            submitFromCatalog() {
                 const formParentId = 'product_addtocart_form';
                 const returnUrlValue = "<?= $escaper->escapeUrl($block->getCheckoutUrl()) ?>";
                 if(!document.getElementById(this.returnUrlId)){
@@ -68,7 +68,7 @@ if ($block->getIsInCatalogProduct()) {
                 }
                 document.getElementById(formParentId).submit();
             },
-            submitFromCart: function submitForm() {
+            submitFromCart() {
                 const returnUrlValue = "<?= $escaper->escapeUrl($block->getCheckoutUrl()) ?>";
                 window.location = returnUrlValue;
             }

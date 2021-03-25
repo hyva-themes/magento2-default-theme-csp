@@ -151,7 +151,7 @@ $uniqueId = '_' . uniqid();
             <script>
                 function initWishlist() {
                     return {
-                        addToWishlist: function addToWishlist(productId){
+                        addToWishlist(productId) {
                             var formKey = document.querySelector('input[name=form_key]').value;
                             var postUrl = BASE_URL+"wishlist/index/add/";
                             fetch(postUrl, {
@@ -211,7 +211,7 @@ $uniqueId = '_' . uniqid();
             <script>
             function initCompare() {
                 return {
-                    addToCompare: function (productId) {
+                    addToCompare(productId) {
                         const formKey = document.querySelector('input[name=form_key]').value;
                         const postUrl = BASE_URL + 'catalog/product_compare/add/';
 
