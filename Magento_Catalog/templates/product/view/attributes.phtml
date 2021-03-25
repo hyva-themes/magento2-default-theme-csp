@@ -37,7 +37,7 @@ $product = $block->getProduct();
             <table class="additional-attributes w-full">
                 <?php foreach ($attributes as $attribute): ?>
                     <tr class="border-b border-gray-300 last:border-b-0">
-                        <th class="col label w-1/2 py-2 text-left text-gray-700"
+                        <th class="col label w-1/2 py-2 text-left text-gray-700 font-normal"
                             scope="row"><?= $escaper->escapeHtml($attribute['label']) ?></th>
                         <td class="col data w-1/2 py-2 pl-2 text-left text-gray-900"
                             data-th="<?= $escaper->escapeHtmlAttr($attribute['label']) ?>"
