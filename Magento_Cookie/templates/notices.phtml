@@ -37,6 +37,8 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
                 hyva.setCookie(this.cookieName, this.cookieValue, cookieExpires);
                 if (!hyva.getCookie(this.cookieName)) {
                     window.location.href = this.noCookiesUrl;
+                } else {
+                    window.dispatchEvent(new CustomEvent('user-allowed-save-cookie'));
                 }
             }
         }
