@@ -3,6 +3,14 @@ The most recent version of this license can be found at https://hyva.io/license
 # Hyvä Themes Software User License
 By purchasing a product from Hyvä Themes (“licensor”) you as a buyer (“licensee”) agree to the following terms and conditions for the use of this product.
 
+##In Layman's terms
+	
+In short, you need a license for **each** publicly accessible Magento 2 shop using our product.
+	
+You **may** purchase it on behalf of your client and charge your client and implement it with any customizations required for your website.
+	
+You **may not** redistribute any part of the product, in any other form, either commercially or free of charge.
+
 ## Terms used in this license
 **Product**: Purchased software, scripts, documentations etc. produced or provided by Hyvä Themes B.V from Nuth, The Netherlands.
 
@@ -11,15 +19,15 @@ By purchasing a product from Hyvä Themes (“licensor”) you as a buyer (“li
 **End Product**: A (customized) implementation of the product, usually a public facing website customized with your design/content. Typically this means a single Magento installation, distributed over one or multiple web servers.
 
 ## License Agreement
-1. A license grants you, the licensee, an ongoing, non-exclusive, worldwide license to make use of The Product. Additionally, you may be charged a yearly recurring fee for updates to the product, which you may opt out of this at any time. The licensee retains right to unlimited usage of the product at the last available version at the time of opt-out.
+1. A license grants you, the licensee, an ongoing, non-exclusive, worldwide license to make use of The Product.
 
 2. By purchasing the software, the licensee acknowledges this agreement and agrees to the content of these conditions. He commits himself to use the software solely in accordance with this agreement.
 
-3. The agreement comes into effect when the licensee orders the product, when he downloads it from the licensor’s website, code repositories such as Github, or when he receives the product per e-mail.
+3. The agreement comes into effect when the licensee orders the product, when he downloads it from the licensor’s website, code repositories such as Github/Gitlab, or when he receives the product per e-mail.
 
 4. The licensor is the copyright owner of the sold product. The software and parts of it are protected by copyright. Any activity, that breaches the conditions of this convention or the copyright, will be prosecuted in accordance with applicable law.
 
-5. Any contributions to The Product, made by any third party, become part of The Product. The contributing third party waives any intellectual property when making a contribution. Any exceptions should be agreed on before contributions are offered by the third party. However, contributions are transparent will be visible to the public.
+5. Any contributions to The Product, made by any third party, become part of The Product. The contributing third party waives any intellectual property when making a contribution. Any exceptions should be agreed on before contributions are offered by the third party.
 
 6. This agreement provides the licensee the right to use a copy of the software solely in a (one) End Product or for private use if all other conditions of this convention are met. For each additional Magento installation a separate license must be purchased.
 
@@ -55,6 +63,8 @@ By purchasing a product from Hyvä Themes (“licensor”) you as a buyer (“li
 
 ___
 
-Last change 03-12-2020.
+Last change 16-02-2021.
 
 All rights reserved by Hyvä Themes B.V., Horenweg 3, 6361GC, Nuth, The Netherlands
+
+You may download these conditions from https://hyva.io/media/wysiwyg/2021-02-16-hyva-license-agreement.pdf
