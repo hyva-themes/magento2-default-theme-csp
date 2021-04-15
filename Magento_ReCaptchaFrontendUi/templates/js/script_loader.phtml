@@ -37,13 +37,10 @@ $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/pu
             script.setAttribute('type', 'text/javascript');
             script.setAttribute('src', recaptchaUrl);
             document.head.appendChild(script);
-
-            document.body.removeEventListener("input", loadRecaptchaScript);
-            document.body.removeEventListener("focus", loadRecaptchaScript);
         }
 
-        document.body.addEventListener("input", loadRecaptchaScript);
-        document.body.addEventListener("focus", loadRecaptchaScript);
+        document.body.addEventListener("input", loadRecaptchaScript, { once: true });
+        document.body.addEventListener("focus", loadRecaptchaScript, { once: true });
 
     }());
 
