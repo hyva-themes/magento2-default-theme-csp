@@ -151,7 +151,8 @@ $swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
         <?php foreach ($attributes as $attribute): ?>
             <?php $attributeId = $attribute->getAttributeId(); ?>
             <?php $productAttribute = $attribute->getProductAttribute(); ?>
-            <?php if (!$swatchRendererViewModel->isSwatchAttribute($productAttribute)) {
+
+            <?php if (!$productAttribute->getUsedInProductListing() || !$swatchRendererViewModel->isSwatchAttribute($productAttribute)) {
                 continue;
             } ?>
         <div class="swatch-attribute border-t last:border-b border-container
