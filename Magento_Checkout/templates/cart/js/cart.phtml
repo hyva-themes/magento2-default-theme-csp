@@ -155,6 +155,7 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                         document.getElementById('coupon_code').value = '';
                     }
                     $this.isLoading = false;
+                    $this.reloadCustomerData();
                 });
             },
             clearErrorMessages() {
