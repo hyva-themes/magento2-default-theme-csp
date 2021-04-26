@@ -22,13 +22,7 @@
         </referenceContainer>
         <referenceContainer name="content">
             <block name="cart_dynamic" template="Magento_Checkout::cart.phtml" cacheable="false">
-                <block name="cart_main_js" template="Magento_Checkout::cart/js/cart.phtml">
-                    <block name="js_localstorage_config" template="Hyva_Theme::js/localStorageConfig.phtml">
-                        <arguments>
-                            <argument name="render_in_script_tag" xsi:type="boolean">false</argument>
-                        </arguments>
-                    </block>
-                </block>
+                <block name="cart_main_js" template="Magento_Checkout::cart/js/cart.phtml"/>
                 <block name="loading" template="Hyva_Theme::ui/loading.phtml"/>
                 <block name="items" template="Magento_Checkout::cart/items.phtml"/>
                 <block name="coupon" class="Magento\Checkout\Block\Cart\Coupon"
