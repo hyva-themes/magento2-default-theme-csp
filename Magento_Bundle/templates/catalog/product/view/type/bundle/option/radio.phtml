@@ -70,6 +70,7 @@ $activeSelectOptions = [];
                         disabled="disabled"
                    <?php endif; ?>
                    value="<?= (int)$selectionId ?>"
+                   data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
                    x-on:change="
                         activeSelectOptions['<?= (int)$optionId ?>'] = $event.target.value;
                         $nextTick(() => {calculateTotalPrice()});

@@ -45,7 +45,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
                         let selectedProductsPerOption = [];
 
                         for (const [optionId, option] of Object.entries(this.optionConfig.options)) {
-                            const optionElement = document.querySelector(`option[data-option-id="${optionId}"]`);
+                            const optionElement = document.querySelector(`[data-option-id="${optionId}"]`);
                             const qtyElement = document.getElementById('bundle-option-'+optionId+'-qty-input');
 
                             let selectedOption = selectedProductsPerOption[optionId] || [];
@@ -62,7 +62,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
                             } else {
                                 for (const [selectionId, selection] of Object.entries(option.selections)) {
                                     const selectionElement = document.querySelector(
-                                        `option[data-option-id="${optionId}-${selectionId}"]`
+                                        `[data-option-id="${optionId}-${selectionId}"]`
                                     );
                                     if(
                                         selectionElement &&
