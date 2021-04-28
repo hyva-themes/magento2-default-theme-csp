@@ -42,7 +42,7 @@ list($defaultQty, $canChangeQty) = $block->getDefaultValues();
             name="bundle_option[<?= (int)$optionId ?>][]"
             form="product_addtocart_form"
             class="bundle-option-<?= (int)$optionId ?>
-                form-multiselect"
+                form-multiselect max-w-full"
             <?php if ($option->getRequired()): ?>
                 required="required"
             <?php endif; ?>
