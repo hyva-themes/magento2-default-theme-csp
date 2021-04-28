@@ -21,20 +21,15 @@ $viewModelCart = $viewModels->require(GraphQlQueries::class);
 $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
 ?>
 <script>
-
-    <?= $block->getChildHtml('js_localstorage_config') ?>
-
     function initCart() {
         return {
-            cartId: getConfigFromLocalStorage(activeSource.cartId),
+            cartId: null,
+            customerToken: null,
             cartData: [],
             cartEmpty: true,
             isLoading: true,
             isTouchDevice: false,
             showCouponForm: false,
-            getSignInToken() {
-                return getConfigFromLocalStorage(activeSource.token);
-            },
             getCartQuery(cartId) {
                 return <?= /** @noEscape */ json_encode(
                     '{cart (cart_id: "%cartId") {' . /* @noEscape */ $viewModelCart->getCartGraphQlQuery() . '}}'
@@ -46,7 +41,7 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                 ); ?>
             },
             getCart() {
-                var $this = this;
+                this.isLoading = true;
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
                         method: 'POST',
                         headers: {
@@ -56,44 +51,44 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                         credentials: 'include',
                         body: JSON.stringify({
                             query: (
-                                $this.getSignInToken() &&
-                                $this.getCustomerCartQuery()) ||
+                                this.customerToken &&
+                                this.getCustomerCartQuery()) ||
                                 this.getCartQuery(this.cartId)
                         })
                     }
-                ).then(function (response) {
+                ).then((response) => {
                         return response.json()
                     }
-                ).then(function (data) {
+                ).then((data) => {
                     if (data && data.errors) {
-                        $this.initErrorMessages(data.errors);
+                        this.initErrorMessages(data.errors);
                     } else {
-                        $this.cartData = (data && data.data && (data.data.customerCart || data.data.cart)) || [];
-                        $this.updateCartDataDependencies();
+                        this.cartData = (data && data.data && (data.data.customerCart || data.data.cart)) || [];
+                        this.updateCartDataDependencies();
                     }
-                    $this.isLoading = false;
+                }).catch(error => {
+                    console.error(error);
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: "<?= $escaper->escapeJs(__("Something went wrong. Please try again.")) ?>"
+                        }], 10000
+                    );
+                }).finally(() => {
+                    this.isLoading = false;
                 });
-            },
-            getCartByLocalStorage() {
-                if (!this.cartId) {
-                    this.cartId = getConfigFromLocalStorage(activeSource.cartId);
-                }
-                this.cartId && this.getCart();
             },
             getCartByCustomerSectionData(data) {
                 if (data && data.cart && data.cart.cartId) {
                     this.cartId = data.cart.cartId;
-                    this.getCart();
+                    this.customerToken = data.customer.signin_token
+                    if (data.cart.summary_count !== this.cartData.total_quantity) {
+                        this.getCart();
+                    }
                 } else {
                     this.cartEmpty = true;
                     this.isLoading = false;
                 }
-            },
-            formatPrice(price) {
-                return price.toLocaleString(false, {
-                    style: 'currency',
-                    currency: this.cartData.prices.subtotal_excluding_tax.currency
-                })
             },
             isTouchEnabled() {
                 this.isTouchDevice = ('ontouchstart' in window) ||
@@ -102,11 +97,11 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
             },
             updateCartDataDependencies() {
                 this.showCouponForm = this.cartData.applied_coupons;
-                if (this.cartData && this.cartData.items && Object.keys(this.cartData.items).length) {
-                    this.cartEmpty = false;
-                } else {
-                    this.cartEmpty = true;
-                }
+                this.cartEmpty = !(
+                    this.cartData &&
+                    this.cartData.items &&
+                    Object.keys(this.cartData.items).length
+                );
             },
             dispatchCouponMutationRequest() {
                 if (!this.cartData.applied_coupons && document.getElementById('coupon_code').value === '') {
@@ -120,7 +115,6 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
             },
             mutateCouponCode() {
                 this.isLoading = true;
-                var $this = this;
 
                 var couponCode = document.getElementById('coupon_code').value;
                 var couponQuery = couponCode ? `mutation {<?= /** @noEscape */ $viewModelCart->getCouponAddQuery(
@@ -134,16 +128,16 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                         },
                         body: JSON.stringify({query: couponQuery})
                     }
-                ).then(function (response) {
+                ).then((response) => {
                         return response.json()
                     }
-                ).then(function (data) {
-                    $this.clearErrorMessages();
+                ).then((data) => {
+                    this.clearErrorMessages();
                     if (data && data.errors) {
-                        $this.initErrorMessages(data.errors);
-                        $this.getCart();
+                        this.initErrorMessages(data.errors);
+                        this.getCart();
                     } else {
-                        $this.cartData = (
+                        this.cartData = (
                             data &&
                             data.data &&
                             (
@@ -151,14 +145,24 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                                 (data.data.applyCouponToCart && (data.data.applyCouponToCart.cart))
                             )
                         ) || [];
-                        $this.updateCartDataDependencies();
+                        this.updateCartDataDependencies();
                         document.getElementById('coupon_code').value = '';
                     }
-                    $this.isLoading = false;
+                    this.reloadCustomerData();
+                }).catch(error => {
+                    console.error(error);
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: "<?= $escaper->escapeJs(__("Something went wrong. Please try again.")) ?>"
+                        }], 10000
+                    );
+                }).finally(() => {
+                    this.isLoading = false;
                 });
             },
             clearErrorMessages() {
-                dispatchMessages([]);
+                window.dispatchEvent(new CustomEvent('clear-messages'));
             },
             initErrorMessages(errors) {
                 var messages = [];
@@ -168,8 +172,7 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                 dispatchMessages(messages)
             },
             mutateItemQty(itemId, qty) {
-                var $this = this;
-                $this.isLoading = true;
+                this.isLoading = true;
 
                 var cartItemUpdateQuery = `mutation {<?= /** @noEscape */ $viewModelCart->getCartItemUpdateQuery() ?>}`;
 
@@ -181,30 +184,38 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                         },
                         body: JSON.stringify({query: cartItemUpdateQuery.replace('%cartId', this.cartId)})
                     }
-                ).then(function (response) {
+                ).then((response) => {
                         return response.json()
                     }
-                ).then(function (data) {
-                    $this.clearErrorMessages();
+                ).then((data) => {
+                    this.clearErrorMessages();
                     if (data.errors) {
-                        $this.initErrorMessages(data.errors);
-                        $this.getCart();
+                        this.initErrorMessages(data.errors);
+                        this.getCart();
 
                     } else {
-                        $this.cartData = (
+                        this.cartData = (
                             data &&
                             data.data &&
                             (data.data.updateCartItems && (data.data.updateCartItems.cart))
                         ) || [];
-                        $this.updateCartDataDependencies();
+                        this.updateCartDataDependencies();
                     }
-                    $this.isLoading = false;
-                    $this.reloadCustomerData();
+                    this.reloadCustomerData();
+                }).catch(error => {
+                    console.error(error);
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: "<?= $escaper->escapeJs(__("Something went wrong. Please try again.")) ?>"
+                        }], 10000
+                    );
+                }).finally(() => {
+                    this.isLoading = false;
                 });
             },
             mutateItemRemove(itemId) {
-                var $this = this;
-                $this.isLoading = true;
+                this.isLoading = true;
                 var cartItemRemoveQuery = `mutation {<?= /** @noEscape */ $viewModelCart->getCartItemRemoveQuery() ?>}`;
 
                 fetch('<?= $escaper->escapeUrl($block->getBaseUrl()) ?>graphql', {
@@ -215,17 +226,17 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                         },
                         body: JSON.stringify({query: cartItemRemoveQuery})
                     }
-                ).then(function (response) {
+                ).then((response) => {
                         return response.json()
                     }
-                ).then(function (data) {
-                    $this.clearErrorMessages();
+                ).then((data) => {
+                    this.clearErrorMessages();
                     if (data.errors) {
-                        $this.initErrorMessages(data.errors);
-                        $this.getCart();
+                        this.initErrorMessages(data.errors);
+                        this.getCart();
 
                     } else {
-                        $this.cartData = (
+                        this.cartData = (
                             data &&
                             data.data &&
                             (
@@ -233,10 +244,19 @@ $viewModelStore = $viewModels->require(\Hyva\Theme\ViewModel\Store::class);
                                 (data.data.removeItemFromCart.cart)
                             )
                         ) || [];
-                        $this.updateCartDataDependencies();
+                        this.updateCartDataDependencies();
                     }
-                    $this.isLoading = false;
-                    $this.reloadCustomerData();
+                    this.reloadCustomerData();
+                }).catch(error => {
+                    console.error(error);
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: "<?= $escaper->escapeJs(__("Something went wrong. Please try again.")) ?>"
+                        }], 10000
+                    );
+                }).finally(() => {
+                    this.isLoading = false;
                 });
             },
             reloadCustomerData() {

@@ -1,0 +1,102 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Product\View\Options\Type\Select\Checkable;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * @var Checkable $block
+ * @var Escaper $escaper
+ * @var SecureHtmlRenderer $secureRenderer
+ */
+$option = $block->getOption();
+if ($option): ?>
+    <?php
+    $configValue = $block->getPreconfiguredValue($option);
+    if (!is_array($configValue)) {
+            $configValue = (array)$configValue;
+    }
+    $optionType = $option->getType();
+    $optionId = $option->getId();
+    $require = $option->getIsRequire() ? ' required' : '';
+    $arraySign = $optionType === Option::OPTION_TYPE_MULTIPLE ? '[]' : '';
+    $count = 1;
+    ?>
+
+<div class="options-list nested" id="options-<?= $escaper->escapeHtmlAttr($option->getId()) ?>-list">
+    <select
+        name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]<?= /* @noEscape */ $arraySign ?>"
+        id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
+        class="<?= $optionType === Option::OPTION_TYPE_MULTIPLE
+                       ? 'form-multiselect'
+                       : 'form-select' ?>
+                       product-custom-option"
+        <?php if ($optionType === Option::OPTION_TYPE_MULTIPLE): ?>
+            multiple="multiple"
+        <?php endif; ?>
+        <?php if ($option->getIsRequire()): ?>
+            required
+            data-required
+            oninvalid="this.setCustomValidity(this.dataset.validationMessage)"
+            oninput="this.setCustomValidity('')"
+            data-validation-message="<?= $escaper
+                ->escapeHtmlAttr(__("Please select one of the options.")) ?>"
+        <?php endif; ?>
+        x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"
+        x-on:change="updateCustomOptionValue(
+            $dispatch, '<?= $escaper->escapeHtmlAttr($optionId) ?>', $event.currentTarget
+        )"
+    >
+    <?php if ($option->getType() === Option::OPTION_TYPE_DROP_DOWN): ?>
+        <option value=""><?= $escaper->escapeHtml(__('-- Please Select --')) ?></option>
+    <?php endif; ?>
+
+    <?php foreach ($option->getValues() as $value): ?>
+        <?php
+
+        $checked = '';
+        $count++;
+        if ($arraySign) {
+            $checked = is_array($configValue) && in_array($value->getOptionTypeId(), $configValue) ? 'checked' : '';
+        } else {
+            $checked = $configValue == $value->getOptionTypeId() ? 'checked' : '';
+        }
+        $dataSelector = 'options[' . $option->getId() . ']';
+        if ($arraySign) {
+            $dataSelector .= '[' . $value->getOptionTypeId() . ']';
+        }
+
+        $optionId = $option->getId() . '_' . $value->getOptionTypeId();
+        ?>
+
+            <option type="<?= $escaper->escapeHtmlAttr($optionType) ?>"
+
+                   value="<?= $escaper->escapeHtmlAttr($value->getOptionTypeId()) ?>"
+                   <?= $escaper->escapeHtml($checked) ?>
+
+                   data-price-amount="<?= $escaper->escapeHtmlAttr($block->getCurrencyByStore($value)) ?>"
+                   data-price-type="<?= $escaper->escapeHtmlAttr($value->getPriceType()) ?>"
+                   data-option-id="<?= $escaper->escapeHtmlAttr($optionId) ?>"
+                <?php if (in_array($value->getOptionTypeId(), $configValue)): ?>
+                   selected="selected"
+                <?php endif; ?>
+            >
+                <span><?= $escaper->escapeHtml($value->getTitle()) ?></span>
+                <span x-html="getFormattedOptionPrice('<?= $escaper->escapeHtmlAttr($optionId) ?>') || ''">
+                    <?= /* @noEscape */ $block->formatPrice($value) ?>
+                </span>
+            </option>
+        </div>
+    <?php endforeach; ?>
+    </select>
+    </div>
+<?php endif; ?>

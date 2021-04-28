@@ -1,5 +1,15 @@
 <?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
 ?>
-<div class="product-options-bottom container flex flex-col sm:flex-row flex-no-wrap gap-4">
+<div class="product-options-bottom container flex flex-col md:flex-row flex-no-wrap gap-4">
     <?= $block->getChildHtml('', true) ?>
 </div>

@@ -32,7 +32,7 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
                         (<?= $escaper->escapeHtml(__('excl. VAT')) ?>)
                     </div>
                     <div class="w-5/12 md:w-auto text-right md:p-2"
-                         x-text="formatPrice(
+                         x-text="hyva.formatPrice(
                             cartData.prices['<?= /** @noEscape */ $subtotalFieldShowBoth ?>']['value']
                          )">
                     </div>
@@ -48,7 +48,7 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
                     <?php endif; ?>
                 </div>
                 <div class="w-5/12 md:w-auto text-right md:p-2"
-                     x-text="formatPrice(cartData.prices['<?= /** @noEscape */ $subtotalField ?>']['value'])"></div>
+                     x-text="hyva.formatPrice(cartData.prices['<?= /** @noEscape */ $subtotalField ?>']['value'])"></div>
             </div>
         </template>
         <template x-if="cartData.prices['discounts']">
@@ -59,7 +59,7 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
                     <?= $escaper->escapeHtml(__('Discount')) ?>
                 </div>
                 <div class="w-5/12 md:w-auto text-right md:p-2">
-                    -<span x-text="formatPrice(item['amount']['value'])"></span>
+                    -<span x-text="hyva.formatPrice(item['amount']['value'])"></span>
                 </div>
             </div>
             </template>
@@ -75,7 +75,7 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
                             <span x-text="item.label"></span>
                         </div>
                         <div class="w-5/12 md:w-auto text-right md:p-2"
-                             x-text="formatPrice(item.amount.value)">
+                             x-text="hyva.formatPrice(item.amount.value)">
                         </div>
                     </div>
                 </template>
@@ -91,7 +91,7 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
                             <span x-text="item['selected_shipping_method'].method_title"></span>
                         </div>
                         <div class="w-5/12 md:w-auto text-right md:p-2"
-                             x-text="item['selected_shipping_method'].amount && formatPrice(item['selected_shipping_method'].amount.value) || ''">
+                             x-text="item['selected_shipping_method'].amount && hyva.formatPrice(item['selected_shipping_method'].amount.value) || ''">
                         </div>
                     </div>
                 </template>
@@ -103,7 +103,7 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
                     <?= $escaper->escapeHtml(__('Grand Total')) ?>
                 </div>
                 <div class="w-5/12 md:w-auto text-right md:p-2"
-                     x-text="formatPrice(cartData.prices['grand_total']['value'])">
+                     x-text="hyva.formatPrice(cartData.prices['grand_total']['value'])">
                 </div>
             </div>
         </template>

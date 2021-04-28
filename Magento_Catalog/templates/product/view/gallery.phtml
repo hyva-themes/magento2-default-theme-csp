@@ -40,7 +40,7 @@ $productName = $block->getProduct()->getName();
 
 <div id="gallery"
      x-data="initGallery()"
-     x-init="setActive(0)"
+     x-init="initActive()"
      x-spread="eventListeners"
      class="order-1 w-full md:w-5/12 lg:w-1/2 md:h-auto"
     >
@@ -159,6 +159,12 @@ $productName = $block->getProduct()->getName();
                     this.images = images;
                     this.setActive(0);
                 }
+            },
+            initActive() {
+                const active = this.images.findIndex(function(image) {
+                    return image.isMain === true
+                });
+                this.setActive(active);
             },
             setActive(index){
                 this.active = index;

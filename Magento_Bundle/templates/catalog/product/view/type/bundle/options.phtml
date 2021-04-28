@@ -11,6 +11,8 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle;
+use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Escaper;
 
 /** @var Bundle $block */
@@ -24,9 +26,12 @@ $options = $block->decorateArray($block->getOptions($stripSelection));
 /** @var ProductPage $productViewModel */
 $productViewModel = $viewModels->require(ProductPage::class);
 
+$priceInfo = $product->getPriceInfo();
+$regularPrice = $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount()->getValue();
+$finalPrice = $priceInfo->getPrice(BasePrice::PRICE_CODE)->getAmount()->getValue();
 ?>
 <?php if ($product->isSaleable()): ?>
-<div class="card flex w-full sm:w-1/2 lg:w-2/3">
+<div class="card flex w-full md:w-1/2 lg:w-2/3">
     <?php if (count($options)): ?>
         <script>
             function initBundleOptions() {
@@ -45,7 +50,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
                         let selectedProductsPerOption = [];
 
                         for (const [optionId, option] of Object.entries(this.optionConfig.options)) {
-                            const optionElement = document.querySelector(`option[data-option-id="${optionId}"]`);
+                            const optionElement = document.querySelector(`[data-option-id="${optionId}"]`);
                             const qtyElement = document.getElementById('bundle-option-'+optionId+'-qty-input');
 
                             let selectedOption = selectedProductsPerOption[optionId] || [];
@@ -62,7 +67,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
                             } else {
                                 for (const [selectionId, selection] of Object.entries(option.selections)) {
                                     const selectionElement = document.querySelector(
-                                        `option[data-option-id="${optionId}-${selectionId}"]`
+                                        `[data-option-id="${optionId}-${selectionId}"]`
                                     );
                                     if(
                                         selectionElement &&
@@ -131,8 +136,8 @@ $productViewModel = $viewModels->require(ProductPage::class);
 
                                 },
                                 {
-                                    'oldPrice': <?= $escaper->escapeJs($product->getPrice()); ?>,
-                                    'finalPrice': <?= $escaper->escapeJs($product->getFinalPrice()); ?>
+                                    'oldPrice': <?= $escaper->escapeJs($regularPrice); ?>,
+                                    'finalPrice': <?= $escaper->escapeJs($finalPrice); ?>
                                 }
                             );
 
@@ -178,10 +183,12 @@ $productViewModel = $viewModels->require(ProductPage::class);
                     dispatchOptionSelection();
                     $dispatch('set-selected-options', {});
                 })
-             ">
+             "
+             class="w-full"
+        >
 
-            <fieldset class="fieldset fieldset-bundle-options" form="product_addtocart_form">
-                <legend id="customizeTitle" class="legend mb-2">
+            <fieldset class="fieldset fieldset-bundle-options min-w-48 mb-8" form="product_addtocart_form">
+                <legend id="customizeTitle" class="legend">
                     <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
                         <?= $escaper->escapeHtml(__('Customize %1', $product->getName())) ?>
                     </h3>
@@ -204,6 +211,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
                     </div>
                 <?php endforeach; ?>
             </fieldset>
+            <?= $block->getChildHtml('product_info_bundle_options_bottom') ?>
         </div>
     <?php else: ?>
         <p class="empty"><?= $escaper->escapeHtml(__('No options of this product are available.')) ?></p>

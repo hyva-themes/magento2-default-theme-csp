@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\SwatchRenderer;
 use Magento\Framework\Escaper;
 use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
 use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
@@ -17,6 +18,10 @@ $product = $block->getProduct();
 $productId = $product->getId();
 
 $attributes = $block->decorateArray($block->getAllowAttributes());
+
+/** @var SwatchRenderer $swatchRendererViewModel */
+$swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
+
 ?>
 
 <?php if ($product->isSaleable() && count($attributes)): ?>
@@ -146,6 +151,10 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
         <?php foreach ($attributes as $attribute): ?>
             <?php $attributeId = $attribute->getAttributeId(); ?>
             <?php $productAttribute = $attribute->getProductAttribute(); ?>
+
+            <?php if (!$productAttribute->getUsedInProductListing() || !$swatchRendererViewModel->isSwatchAttribute($productAttribute)) {
+                continue;
+            } ?>
         <div class="swatch-attribute border-t last:border-b border-container
             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
         >
@@ -173,7 +182,8 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                                     'border-container-lighter ring ring-primary ring-opacity-50':
                                         (selectedValues[<?= (int)$attributeId ?>] === item.id),
                                     'border-container-darker':
-                                       (selectedValues[<?= (int)$attributeId ?>] !== item.id)
+                                       (selectedValues[<?= (int)$attributeId ?>] !== item.id),
+                                    'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id)
                                 }"
                                 :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
                                 <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
@@ -197,7 +207,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                                             attributeOption => selectedValues[attributeOption]
                                         ).length === 0"
                                 >
-                                <div x-html="item.label"
+                                <div x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
                                      class="whitespace-nowrap"
                                      :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>, item.id) }"
                                 ></div>
@@ -222,7 +232,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                              :style="getTooltipImageStyle(activeTooltipItem.attribute, activeTooltipItem.item)"
                         ></div>
                     </template>
-                    <span class="subtitle text-lg font-semibold"
+                    <span class="subtitle text-lg font-semibold whitespace-nowrap mx-2"
                           x-html="getSwatchConfig(activeTooltipItem.attribute, activeTooltipItem.item).label"
                     ></span>
                 </div>

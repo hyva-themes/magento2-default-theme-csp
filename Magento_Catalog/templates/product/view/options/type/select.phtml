@@ -8,15 +8,21 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CustomOption;
 use Magento\Catalog\Block\Product\View\Options\Type\Select;
 use Magento\Framework\Escaper;
 
 /** @var Select $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 $option = $block->getOption();
+$product = $block->getProduct();
 
-/* TODO: implement custom select elements */
+/** @var CustomOption $customOptionsViewModel */
+$customOptionsViewModel = $viewModels->require(CustomOption::class);
+
 ?>
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-700 text-left w-1/2" for="select_<?= $escaper->escapeHtmlAttr($option->getId()) ?>">
@@ -26,6 +32,6 @@ $option = $block->getOption();
         <?php endif; ?>
     </label>
     <div class="ml-2 text-gray-900 text-left w-1/2">
-        <?= $block->getValuesHtml() ?>
+        <?= $customOptionsViewModel->getOptionHtml($option, $product); ?>
     </div>
 </div>

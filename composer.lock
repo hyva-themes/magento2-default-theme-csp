@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0504cb31516992f3187d5804cb172108",
+    "content-hash": "34f5956330bb511d209f8d2709fc870b",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -737,8 +737,14 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "git@gitlab.hyva.io:hyva-themes/magento2-graphql-tokens.git",
+                "url": "https://github.com/hyva-themes/magento2-graphql-tokens.git",
                 "reference": "3b613a38f5d4e3f489a1d487f3c61b8fcb05df16"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hyva-themes/magento2-graphql-tokens/zipball/3b613a38f5d4e3f489a1d487f3c61b8fcb05df16",
+                "reference": "3b613a38f5d4e3f489a1d487f3c61b8fcb05df16",
+                "shasum": ""
             },
             "require": {
                 "magento/framework": "*",
@@ -1099,6 +1105,7 @@
                     "type": "community_bridge"
                 }
             ],
+            "abandoned": "laminas/laminas-cli",
             "time": "2020-04-15T19:21:25+00:00"
         },
         {

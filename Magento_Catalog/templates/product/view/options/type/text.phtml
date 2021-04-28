@@ -44,6 +44,7 @@ $optionPrice = $isPercentage ? $option->getPrice() : $block->getPrice($option->g
                    <?= $option->getIsRequire() ? 'required' : '' ?>
                    data-price-amount="<?= $escaper->escapeHtmlAttr($optionPrice) ?>"
                    data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
+                   data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                    x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                    x-on:input="updateCustomOptionValue(
                         $dispatch,
@@ -61,6 +62,7 @@ $optionPrice = $isPercentage ? $option->getPrice() : $block->getPrice($option->g
                       cols="25"
                       data-price-amount="<?= $escaper->escapeHtmlAttr($optionPrice) ?>"
                       data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
+                      data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                       x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                       x-on:input="updateCustomOptionValue(
                         $dispatch,

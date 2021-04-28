@@ -44,10 +44,6 @@
             "type": "git",
             "url": "git@gitlab.hyva.io:hyva-themes/magento2-reset-theme.git"
         },
-        "hyva-themes/magento2-graphql-tokens": {
-            "type": "git",
-            "url": "git@gitlab.hyva.io:hyva-themes/magento2-graphql-tokens.git"
-        },
         "hyva-themes/magento2-email-module": {
             "type": "git",
             "url": "git@gitlab.hyva.io:hyva-themes/magento2-email-module.git"

@@ -50,6 +50,7 @@ $optionId = $option->getId();
                        disabled="disabled"
                    <?php endif; ?>
                    value="<?= (int)$selectionId ?>"
+                   data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
                    x-on:change="calculateTotalPrice()"
             />
             <label class="label"

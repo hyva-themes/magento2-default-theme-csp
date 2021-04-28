@@ -31,7 +31,9 @@ use Magento\Framework\Escaper;
         <input type="text"
                name="company"
                id="company"
-               required
+               <?php if ($block->isRequired()): ?>
+                   required
+               <?php endif; ?>
                value="<?= $escaper->escapeHtmlAttr($block->getCompany()) ?>"
                title="<?= $escaper->escapeHtmlAttr(__('Company')) ?>"
                class="form-input <?= $_validationClass ?: '' ?>"

@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.1.1] - 2021-04-08
+### Added
+- none
+### Changed
+- **Resolved issues with Configurables/Swatches:**
+    - Empty swatches now render correctly
+    - Dropdown attributes now render correctly with Swatches enabled. Therefore `Magento_ConfigurableProduct/templates/product/view/options/configurable.phtml` needed to be moved to `Magento_ConfigurableProduct/templates/product/view/type/options/configurable.phtml`
+    - `initConfigurableOptions_{product_id}()` changed to `initConfigurableDropdownOptions_{product_id}()` in order to add `$block->getJsonConfig()` in a `<script>` block instead passing it through the `x-data=` attribute.
+    - PLPs no longer try to render non-swatch attributes
+    
+   Thanks to Antonio Carboni (Magenio) for reporting
+    
+Please refer to [1.1.1] for all diff changes 
+
+### Removed
+- none
+
 ## [1.1.0] - 2021-04-02
 ### Added
 - **Compare products sidebar added**
@@ -261,7 +278,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 #### [0.2.0] - 2021-02-03
 #### [0.1.0] - 202-12-09
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.0...master
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.1...master
+[1.1.1]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.0...1.1.1
 [1.1.0]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.0.0...1.1.0
 [1.0.0]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/0.2.0...1.0.0
 [0.2.0]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/0.1.0...0.2.0

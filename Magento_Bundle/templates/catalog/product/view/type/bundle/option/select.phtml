@@ -38,9 +38,8 @@ $activeSelectOptions = [];
 <?php else: ?>
     <select id="bundle-option-<?= (int)$optionId ?>"
             name="bundle_option[<?= (int)$optionId ?>]"
-            class="form-select mb-4"
+            class="form-select max-w-full mb-4"
             form="product_addtocart_form"
-            data-option-id="<?= (int)$optionId ?>"
             x-on:change="
                 activeSelectOptions['<?= (int)$optionId ?>'] = [$event.target.value];
                 $nextTick(() => {calculateTotalPrice()});
