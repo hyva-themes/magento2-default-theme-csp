@@ -41,11 +41,11 @@ $product = $block->getProduct();
                             scope="row"><?= $escaper->escapeHtml($attribute['label']) ?></th>
                         <td class="col data w-1/2 py-2 pl-2 text-left text-gray-900"
                             data-th="<?= $escaper->escapeHtmlAttr($attribute['label']) ?>"
-                        ><?= $escaper->escapeHtml($catalogOutputHelper->productAttribute(
+                        ><?= /* @noEscape */ $catalogOutputHelper->productAttribute(
                             $product,
                             $attribute['value'],
                             $attribute['code']
-                        )); ?></td>
+                        ); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </table>
