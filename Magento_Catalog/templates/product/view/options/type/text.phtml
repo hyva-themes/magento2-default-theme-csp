@@ -8,16 +8,25 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Block\Product\View\Options\Type\Text;
 use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Framework\Escaper;
 
 /** @var Text $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+$product = $block->getProduct();
+
 /** @var Option $option */
 $option = $block->getOption();
 
+/** @var ProductPrice $productPriceViewModel */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+$optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptionPrice::PRICE_CODE);
 ?>
 
 <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
@@ -41,7 +50,7 @@ $option = $block->getOption();
                    value="<?= $escaper->escapeHtml($block->getDefaultValue()) ?>"
                    maxlength="<?= (int)$option->getMaxCharacters() ?>"
                    <?= $option->getIsRequire() ? 'required' : '' ?>
-                   data-price-amount="<?= $escaper->escapeHtmlAttr($option->getPrice()) ?>"
+                   data-price-amount="<?= $escaper->escapeHtmlAttr($optionPrice) ?>"
                    data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
                    data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                    x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
@@ -59,7 +68,7 @@ $option = $block->getOption();
                       name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
                       rows="5"
                       cols="25"
-                      data-price-amount="<?= $escaper->escapeHtmlAttr($option->getPrice()) ?>"
+                      data-price-amount="<?= $escaper->escapeHtmlAttr($optionPrice) ?>"
                       data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
                       data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                       x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
