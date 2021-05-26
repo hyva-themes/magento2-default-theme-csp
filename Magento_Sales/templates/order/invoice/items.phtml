@@ -38,9 +38,12 @@ $order = $block->getOrder() ?>
         </div>
         <?php $items = $invoice->getAllItems(); ?>
         <?php foreach ($items as $item): ?>
-            <?php if (!$item->getOrderItem()->getParentItem()): ?>
+            <div class="<?= ($item->getOrderItem()->getParentItem()) ?
+                'child-item ml-2 px-4 mb-2 border-l-4 border-container text-sm' :
+                'parent-item mb-2'
+            ?>">
                 <?= $block->getItemHtml($item) ?>
-            <?php endif; ?>
+            </div>
         <?php endforeach; ?>
         <div class="flex justify-end border-t border-container">
             <div class="lg:w-1/3">

@@ -22,7 +22,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
     <?php if ($block->isPagerDisplayed()): ?>
         <?= $block->getPagerHtml() ?>
     <?php endif ?>
-    <div class="hidden lg:grid grid-cols-<?= $escaper->escapeHtmlAttr($cols) ?> text-sm text-secondary ">
+    <div class="hidden lg:grid grid-cols-<?= $escaper->escapeHtmlAttr($cols) ?> text-sm text-secondary mt-2">
         <div class="p-2 col-span-2"><?= $escaper->escapeHtml(__('Product Name')) ?></div>
         <?php if (!$block->getData('is_context_shipment')): ?>
             <div class="p-2"><?= $escaper->escapeHtml(__('Price')) ?></div><?php endif; ?>
@@ -32,15 +32,16 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
     </div>
     <?php $items = $block->getItems(); ?>
     <?php $giftMessage = '' ?>
-    <?php foreach ($items as $item):
-        if ($item->getParentItem()):
-            continue;
-        endif;
-        ?>
+    <?php foreach ($items as $item): ?>
+        <div class="<?= ($item->getParentItem()) ?
+            'child-item ml-2 px-4 mb-2 border-l-4 border-container text-sm' :
+            'parent-item mb-2'
+        ?>">
         <?= $block->getItemHtml($item) ?>
+        </div>
         <?php if ($helper->isMessagesAllowed('order_item', $item) && $item->getGiftMessageId()): ?>
             <?php $giftMessage = $helper->getGiftMessageForEntity($item); ?>
-        <div class="col options">
+        <div class="col options mb-2">
             <a href="#"
                id="order-item-gift-message-link-<?= (int)$item->getId() ?>"
                class="action show"
@@ -84,7 +85,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
         <?= $block->getPagerHtml() ?>
     <?php endif ?>
 </div>
-<div class="flex justify-end border-t border-container">
+<div class="flex justify-end border-t border-container mt-2">
     <div class="lg:w-1/3">
         <div class="grid grid-cols-2 text-right p-2 gap-2">
             <?= $block->getChildHtml('order_totals') ?>
