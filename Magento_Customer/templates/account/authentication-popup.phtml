@@ -37,8 +37,8 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
             displayErrorMessage: false,
             errorMessages: [],
             setErrorMessages: function setErrorMessages(messages) {
-                this.errorMessages = [messages]
-                this.displayErrorMessage = this.errorMessages.length
+                this.errorMessages = [messages];
+                this.displayErrorMessage = this.errorMessages.length;
             },
             submitForm: function () {
                 var $form = document.querySelector('#login-form');

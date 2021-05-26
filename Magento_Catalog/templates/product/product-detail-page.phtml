@@ -26,9 +26,11 @@ $product = $block->getProduct();
     <?= $block->getChildHtml('product_options_wrapper_bottom') ?>
 </section>
 <div class="container grid lg:grid-cols-2 gap-8">
-    <section id="product-description">
-        <?= $block->getChildHtml('description') ?>
-    </section>
+    <?php if($description = $block->getChildHtml('description')): ?>
+        <section id="product-description">
+            <?= $description ?>
+        </section>
+    <?php endif ?>
     <section id="product-additional">
         <?= $block->getChildHtml('additional') ?>
     </section>

@@ -45,19 +45,15 @@ $product = $productViewModel->getProduct();
     <?php } ?>
 
     <div class="flex justify-between my-4">
-
         <?= $block->getChildHtml("product.info.stockstatus") ?>
-
         <?= $block->getChildHtml("alert.urls") ?>
     </div>
 
     <div>
         <?php foreach ($block->getAttributes() as $attributeConfig) {
-            $attribute = $attributesViewModel->getAttributeFromLayoutConfig($attributeConfig);
-            ?>
+            $attribute = $attributesViewModel->getAttributeFromLayoutConfig($attributeConfig); ?>
             <?php if ($value = $attribute['value'] ?? null) { ?>
-                <div
-                    class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b <?= $attribute['value'] ?: "" ?>">
+                <div class="flex border-t border-gray-300 py-2 last:mb-6 last:border-b <?= $attribute['value'] ?: "" ?>">
                     <span class="w-1/2 text-left text-gray-700">
                         <?= $escaper->escapeHtml($attribute['label']) ?>
                     </span>
@@ -76,15 +72,13 @@ $product = $productViewModel->getProduct();
         <?= $block->getChildHtml("product.info.price") ?>
 
         <div class="flex mt-4 ml-auto sm:mt-0">
-        <?php if ($product->isSaleable()): ?>
-            <?= $block->getChildHtml("product.info.quantity") ?>
-            <?= $block->getChildHtml("product.info.addtocart") ?>
-        <?php endif; ?>
+            <?php if ($product->isSaleable()): ?>
+                <?= $block->getChildHtml("product.info.quantity") ?>
+                <?= $block->getChildHtml("product.info.addtocart") ?>
+            <?php endif; ?>
 
-        <?= $block->getChildHtml('product.info.addtowishlist'); ?>
-
-        <?= $block->getChildHtml('product.info.addtocompare'); ?>
-
+            <?= $block->getChildHtml('product.info.addtowishlist'); ?>
+            <?= $block->getChildHtml('product.info.addtocompare'); ?>
         </div>
     </div>
 
@@ -95,9 +89,9 @@ $product = $productViewModel->getProduct();
     <?php endif; ?>
 
     <?php if ($tierPriceBlock = $block->getChildHtml("product.price.tier")): ?>
-    <div class="py-4 my-2 tier-price-container">
-        <?= /** @noEscape */ $tierPriceBlock ?>
-    </div>
+        <div class="py-4 my-2 tier-price-container">
+            <?= /** @noEscape */ $tierPriceBlock ?>
+        </div>
     <?php endif; ?>
 
     <?= $block->getChildHtml("product.info.additional") ?>

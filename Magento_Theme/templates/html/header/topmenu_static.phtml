@@ -45,8 +45,8 @@ use Magento\Catalog\Block\Category\Widget\Link;
                     ->createBlock(Link::class)
                     ->setAnchorText("Women")
                     ->setIdPath("category/20")
-                    ->setTemplate("category/widget/link/link_inline.phtml")->toHtml();
-                ?>
+                    ->setTemplate("category/widget/link/link_inline.phtml")
+                    ->toHtml() ?>
             </li>
             <li class="inline-block no-underline hover:text-black hover:underline py-2 px-4">
                 <?= $this->getLayout()
@@ -54,8 +54,7 @@ use Magento\Catalog\Block\Category\Widget\Link;
                     ->setAnchorText("Men")
                     ->setIdPath("category/11")
                     ->setTemplate("category/widget/link/link_inline.phtml")
-                    ->toHtml();
-                ?>
+                    ->toHtml() ?>
             </li>
         </ul>
     </nav>
