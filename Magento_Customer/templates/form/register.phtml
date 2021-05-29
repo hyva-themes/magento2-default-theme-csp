@@ -92,6 +92,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 <?php if ($_gender->isEnabled()): ?>
                     <?= $_gender->setGender($block->getFormData()->getGender())->toHtml() ?>
                 <?php endif ?>
+                <?= $block->getChildHtml('fieldset_create_info_additional') ?>
             </fieldset>
             <fieldset class="my-8 card">
                 <legend>
