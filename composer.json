@@ -12,6 +12,7 @@
         "hyva-themes/magento2-theme-module": "*",
         "hyva-themes/magento2-email-module": "*",
         "hyva-themes/magento2-graphql-tokens": "*",
+        "hyva-themes/magento2-graphql-view-model": "*",
         "magento/module-customer-graph-ql": "*",
         "magento/module-directory-graph-ql": "*",
         "magento/module-graph-ql": "*",

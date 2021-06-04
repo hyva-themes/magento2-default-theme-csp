@@ -8,6 +8,7 @@
 
 declare(strict_types=1);
 
+use Hyva\GraphqlViewModel\ViewModel\GraphqlViewModel;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Cart\Items;
 use Hyva\Theme\ViewModel\Currency;
@@ -33,6 +34,9 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var GraphqlViewModel $gqlViewModel */
+$gqlViewModel = $viewModels->require(GraphqlViewModel::class);
 
 /** @var Currency $currencyViewModel */
 $currencyViewModel = $viewModels->require(Currency::class);
@@ -112,7 +116,7 @@ $items = $linkedProduct ?
     }" :
     $productAttributes;
 
-$graphqlQuery = $query ?: "
+$graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
 {
   products(
     filter: {
@@ -128,7 +132,7 @@ $graphqlQuery = $query ?: "
         $items
     }
   }
-}";
+}", ['is_linked_product' => $linkedProduct, 'type' => $type]);
 ?>
 <script>
     function initSliderComponent<?= /** @noEscape */$uniqueId ?>() {
