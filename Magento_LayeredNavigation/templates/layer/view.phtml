@@ -30,8 +30,12 @@ use Magento\LayeredNavigation\Block\Navigation;
          @resize.window.debounce="checkIsMobileResolution()"
          @visibilitychange.window.debounce="checkIsMobileResolution()"
     >
-        <div class="block-title h-10 flex items-center justify-between" @click="blockOpen = !blockOpen">
-            <span class="text-primary text-md md:text-3xl font-medium uppercase"><?= $escaper->escapeHtml(__('Shop By')) ?></span>
+        <div class="block-title h-10 flex items-center justify-between"
+             @click="blockOpen = !blockOpen"
+        >
+            <span class="text-primary text-md text-xl md:text-2xl font-semibold uppercase">
+                <?= $escaper->escapeHtml(__('Shop By')) ?>
+            </span>
             <span class="py-1 px-1 bg-container-lighter rounded border border-container-darker hidden"
                   :class="{ 'block' : isMobile, 'hidden': !isMobile }">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

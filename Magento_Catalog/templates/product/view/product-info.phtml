@@ -30,11 +30,11 @@ $product = $productViewModel->getProduct();
 
 ?>
 <div class="order-2 w-full mb-6 md:w-7/12 md:pl-5 lg:pl-10 md:py-6 lg:w-1/2 md:mb-0">
-    <h1 class="mb-3 text-3xl font-medium text-gray-900 title-font">
+    <h1 class="text-xl mt-4 mb-3 md:text-3xl font-semibold md:font-bold text-gray-900 title-font">
         <?= $escaper->escapeHtml($product->getName()) ?>
     </h1>
 
-    <div class="mb-2 cursor-pointer"
+    <div class="my-2 cursor-pointer"
          onclick="document.getElementById('customer-reviews').scrollIntoView({behavior: 'smooth'})">
         <?= $block->getChildHtml('product.info.review') ?>
     </div>
@@ -67,26 +67,32 @@ $product = $productViewModel->getProduct();
 
     <?= $block->getChildHtml('product.info.form') ?>
 
-    <div class="flex flex-col items-end sm:flex-row">
+    <div class="flex flex-row items-end my-4">
 
-        <?= $block->getChildHtml("product.info.price") ?>
+        <div>
+            <?= $block->getChildHtml("product.info.price") ?>
+        </div>
 
         <div class="flex mt-4 ml-auto sm:mt-0">
             <?php if ($product->isSaleable()): ?>
                 <?= $block->getChildHtml("product.info.quantity") ?>
                 <?= $block->getChildHtml("product.info.addtocart") ?>
             <?php endif; ?>
-
-            <?= $block->getChildHtml('product.info.addtowishlist'); ?>
-            <?= $block->getChildHtml('product.info.addtocompare'); ?>
         </div>
+
     </div>
 
     <?php if ($product->isSaleable()): ?>
-        <div class="flex mt-4 ml-auto justify-end">
+        <div class="flex mt-4 justify-end">
             <?= $block->getChildHtml('addtocart.shortcut.buttons') ?>
         </div>
     <?php endif; ?>
+
+    <div class="flex mt-4 justify-end">
+        <?= $block->getChildHtml('product.info.addtowishlist'); ?>
+        <?= $block->getChildHtml('product.info.addtocompare'); ?>
+        <?= $block->getChildHtml('product.info.emailtofriend'); ?>
+    </div>
 
     <?php if ($tierPriceBlock = $block->getChildHtml("product.price.tier")): ?>
         <div class="py-4 my-2 tier-price-container">

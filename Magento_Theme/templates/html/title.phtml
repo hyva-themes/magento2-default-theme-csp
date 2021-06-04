@@ -25,13 +25,12 @@ if (trim((string)$block->getPageHeading())) {
 }
 ?>
 <?php if ($titleHtml): ?>
-<div class="container flex flex-col md:flex-row flex-wrap items-center my-4
-    lg:mt-16 lg:mb-6 <?= /** @noEscape */ $cssClass ?>">
-    <h1 class="text-3xl font-medium text-gray-900 page-title title-font"
+<div class="container flex flex-col md:flex-row flex-wrap mt-6 font-bold
+    lg:mt-8 <?= /** @noEscape */ $cssClass ?>">
+    <h1 class="text-gray-900 page-title title-font"
         <?php if ($block->getId()): ?> id="<?= $escaper->escapeHtmlAttr($block->getId()) ?>" <?php endif; ?>>
         <?= /* @noEscape */ $titleHtml ?>
     </h1>
     <?= $block->getChildHtml() ?>
-    <div class="w-full border-b-2 border-gray-300"></div>
 </div>
 <?php endif; ?>

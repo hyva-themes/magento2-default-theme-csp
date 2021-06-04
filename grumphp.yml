@@ -4,7 +4,7 @@ grumphp:
   git_hook_variables:
       EXEC_GRUMPHP_COMMAND: $PHP_BIN
       ENV:
-          PHP_BIN: 'docker exec $(docker container ps -q --filter="name=phpcli") -w /var/www/html/src/vendor/hyva-themes/magento2-default-theme php'
+          PHP_BIN: 'docker exec -w /var/www/html/src/vendor/hyva-themes/magento2-default-theme $(docker container ps -q --filter="name=phpcli") php'
   tasks:
     composer:
       no_check_all: true

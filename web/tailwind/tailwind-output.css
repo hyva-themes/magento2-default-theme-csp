@@ -2115,6 +2115,10 @@ body {
   font-weight: 600;
 }
 
+.font-bold {
+  font-weight: 700;
+}
+
 .h-3 {
   height: 0.75rem;
 }
@@ -3884,11 +3888,6 @@ form select {
     line-height: 1;
   }
 
-  .sm\:mx-0 {
-    margin-left: 0px;
-    margin-right: 0px;
-  }
-
   .sm\:mt-0 {
     margin-top: 0px;
   }
@@ -4046,6 +4045,10 @@ form select {
     order: 3;
   }
 
+  .md\:font-bold {
+    font-weight: 700;
+  }
+
   .md\:h-6 {
     height: 1.5rem;
   }
@@ -4062,6 +4065,11 @@ form select {
   .md\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
+  }
+
+  .md\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
   .md\:text-3xl {
@@ -4310,12 +4318,8 @@ form select {
     margin-right: 1rem;
   }
 
-  .lg\:mb-6 {
-    margin-bottom: 1.5rem;
-  }
-
-  .lg\:mt-16 {
-    margin-top: 4rem;
+  .lg\:mt-8 {
+    margin-top: 2rem;
   }
 
   .lg\:-mt-12 {

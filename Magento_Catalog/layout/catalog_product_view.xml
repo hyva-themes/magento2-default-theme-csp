@@ -15,7 +15,7 @@
         <attribute name="itemscope" value="itemscope"/>
         <referenceBlock name="page.main.title">
             <arguments>
-                <argument name="css_class" xsi:type="string">product lg:hidden</argument>
+                <argument name="css_class" xsi:type="string">product md:hidden text-3xl font-semibold text-center</argument>
                 <argument name="add_base_attribute" xsi:type="string">itemprop="name"</argument>
             </arguments>
         </referenceBlock>
@@ -98,6 +98,10 @@
                         <block name="product.info.addtowishlist"  template="Magento_Catalog::product/view/addtowishlist.phtml"/>
 
                         <block name="product.info.addtocompare"  template="Magento_Catalog::product/view/addtocompare.phtml"/>
+
+                        <block name="product.info.emailtofriend"
+                               template="Magento_Catalog::product/view/emailtofriend.phtml"
+                        />
 
                         <block name="product.info.stockstatus"  template="Magento_Catalog::product/view/stock-status.phtml"/>
 

@@ -1,0 +1,178 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\ReCaptcha;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\SendFriend\Block\Send;
+
+/**
+ * @var Send $block
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Escaper $escaper
+ * @var ReCaptcha $recaptchaViewModel
+ */
+
+// Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency on
+// Magento's Recaptcha module
+$recaptchaViewModel = $block->getData('viewModelRecaptcha');
+
+$recaptchaInputField = '';
+$recaptchaLegalNotice = '';
+if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('sendfriend')) {
+    $recaptchaInputField = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD]);
+    $recaptchaLegalNotice = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK]);
+}
+?>
+<div class="container">
+    <div class="prose card">
+        <form action="<?= $escaper->escapeUrl($block->getSendUrl()) ?>" method="post" id="product-sendtofriend-form"
+              class="form send friend"
+              x-data="initSendFriendForm()"
+              @submit.prevent="submitForm()"
+        >
+            <?= $block->getBlockHtml('formkey') ?>
+            <fieldset class="fieldset sender" id="sender_options">
+                <legend class="legend"><span><?= $escaper->escapeHtml(__('Sender')) ?></span></legend>
+                <br>
+                <div class="field sender required">
+                    <label for="sender-name" class="label"><span><?= $escaper->escapeHtml(__('Name')) ?></span></label>
+                    <div class="control">
+                        <input name="sender[name]" value="<?= $escaper->escapeHtmlAttr($block->getUserName()) ?>"
+                               title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>"
+                               id="sender-name"
+                               type="text"
+                               class="input-text"
+                               required
+                        />
+                    </div>
+                </div>
+
+                <div class="field email required">
+                    <label for="sender-email" class="label">
+                        <span><?= $escaper->escapeHtml(__('Email')) ?></span>
+                    </label>
+                    <div class="control">
+                        <input name="sender[email]"
+                               value="<?= $escaper->escapeHtmlAttr($block->getEmail()) ?>"
+                               title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                               id="sender-email"
+                               type="email"
+                               class="input-text"
+                               required
+                        />
+                    </div>
+                </div>
+
+                <div class="field text required">
+                    <label for="sender-message" class="label">
+                        <span>
+                            <?= $escaper->escapeHtml(__('Message')) ?>
+                        </span>
+                    </label>
+                    <div class="control">
+                        <textarea name="sender[message]"
+                                  class="input-text mt-2 input input-light w-full h-48"
+                                  id="sender-message"
+                                  required
+                        ><?= $escaper->escapeHtml($block->getMessage()) ?></textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="fieldset recipients">
+                <legend class="legend">
+                    <span>
+                        <?= $escaper->escapeHtml(__('Invitee')) ?>
+                    </span>
+                </legend>
+                <br/>
+                <div id="recipients-options">
+                    <fieldset class="fieldset">
+                        <div class="field name required">
+                            <label for="recipients-name0" class="label">
+                                <span><?= $escaper->escapeHtml(__('Name')) ?></span>
+                            </label>
+                            <div class="control">
+                                <input name="recipients[name][0]" type="text"
+                                       title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>" class="input-text"
+                                       id="recipients-name0"
+                                       required
+                                />
+                            </div>
+                        </div>
+
+                        <div class="field email required">
+                            <label for="recipients-email0" class="label">
+                                <span><?= $escaper->escapeHtml(__('Email')) ?></span>
+                            </label>
+                            <div class="control">
+                                <input name="recipients[email][0]" title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                                       id="recipients-email0"
+                                       type="email"
+                                       class="input-text"
+                                       required
+                                       validate
+                                />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <?= $block->getChildHtml('form_additional_info') ?>
+            </fieldset>
+            <?= $block->getChildHtml('captcha'); ?>
+            <div class="w-full grecaptcha-legal">
+                <?= /** @noEscape */ $recaptchaLegalNotice ?>
+            </div>
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button type="submit"
+                            class="action submit primary"
+                        <?php if (!$block->canSend()): ?>
+                            disabled="disabled"
+                        <?php endif ?>
+                    >
+                        <span>
+                            <?= $escaper->escapeHtml(__('Send Email')) ?>
+                        </span>
+                    </button>
+                </div>
+                <div class="secondary">
+                    <a class="action back" href="#" onclick="history.back(); return false;" role="back"><span>
+                            <?= $escaper->escapeHtml(__('Back')) ?>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <script>
+                function initSendFriendForm() {
+                    return {
+                        errors: 0,
+                        hasCaptchaToken: 0,
+                        displayErrorMessage: false,
+                        errorMessages: [],
+                        setErrorMessages(messages) {
+                            this.errorMessages = [messages]
+                            this.displayErrorMessage = this.errorMessages.length
+                        },
+                        submitForm() {
+                            var $form = document.querySelector('#product-sendtofriend-form');
+                            <?= $block->getChildHtml('recaptcha_validation'); ?>
+
+                            if (this.errors === 0) {
+                                $form.submit();
+                            }
+                        }
+                    }
+                }
+            </script>
+        </form>
+    </div>
+</div>
