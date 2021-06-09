@@ -50,7 +50,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
     </script>
 
     <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
-         x-init="findAllowedAttributeOptions();"
+         x-init="init();"
          @private-content-loaded.window="onGetCartData($event.detail.data)"
          class="mb-6 relative"
     >
