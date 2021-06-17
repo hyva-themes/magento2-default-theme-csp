@@ -1,0 +1,68 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Catalog\Block\Product\AbstractProduct;
+use Magento\Catalog\Helper\Output as CatalogOutputHelper;
+use Magento\Framework\Escaper;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+/** @var AbstractProduct $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+
+/** @var CatalogOutputHelper $catalogOutputHelper */
+$catalogOutputHelper = $this->helper(CatalogOutputHelper::class);
+
+/** @var Magento\Catalog\Model\Product $product */
+$product = $block->getProduct();
+
+if (!$productId = $product->getId()) {
+    return '';
+}
+?>
+
+<div class="item product product-item card card-interactive">
+    <div class="block-title">
+        <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900 pb-2 border-b xl:border-none" role="heading"
+            aria-level="2"><?= $escaper->escapeHtml(__('You are sharing')) ?></h2>
+    </div>
+    <?php
+    $productImage = $block->getImage($product);
+    ?>
+    <div class="flex flex-col flex-grow">
+        <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
+           class="product photo product-item-photo block mx-auto mb-3"
+           tabindex="-1">
+            <img loading="lazy"
+                 alt="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
+                 title="<?= $escaper->escapeHtmlAttr($productImage->getLabel()) ?>"
+                 src="<?= $escaper->escapeUrl($productImage->getUrl()) ?>"
+                 width="<?= $escaper->escapeHtmlAttr($productImage->getWidth()) ?>"
+                 height="<?= $escaper->escapeHtmlAttr($productImage->getHeight()) ?>"
+            />
+        </a>
+    </div>
+    <div class="product-info flex flex-col flex-grow">
+        <div class="mt-2 mb-1 items-center justify-center text-primary text-sm font-semibold text-lg text-center">
+            <a class="product-item-link"
+               href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
+                <?= /* @noEscape */
+                $catalogOutputHelper->productAttribute($product, $product->getName(), 'name') ?>
+            </a>
+        </div>
+    </div>
+    <div class="product-sku text-center"><?= /* @noEscape */$product->getSku() ?></div>
+    <div class="product-description "><?= /* @noEscape */$product->getShortDescription() ?></div>
+
+</div>

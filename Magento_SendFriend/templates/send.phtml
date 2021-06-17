@@ -30,9 +30,12 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
     $recaptchaInputField = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD]);
     $recaptchaLegalNotice = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK]);
 }
+
+$formData = $block->getFormData();
+$recipients = $formData->getRecipientData() ?? '[]';
 ?>
-<div class="container">
-    <div class="prose card">
+<div class="container grid gap-2 grid-cols-1 lg:grid-cols-2">
+    <div class="card">
         <form action="<?= $escaper->escapeUrl($block->getSendUrl()) ?>" method="post" id="product-sendtofriend-form"
               class="form send friend"
               x-data="initSendFriendForm()"
@@ -42,7 +45,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
             <fieldset class="fieldset sender" id="sender_options">
                 <legend class="legend"><span><?= $escaper->escapeHtml(__('Sender')) ?></span></legend>
                 <br>
-                <div class="field sender required">
+                <div class="field sender required inline-block">
                     <label for="sender-name" class="label"><span><?= $escaper->escapeHtml(__('Name')) ?></span></label>
                     <div class="control">
                         <input name="sender[name]" value="<?= $escaper->escapeHtmlAttr($block->getUserName()) ?>"
@@ -55,7 +58,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                     </div>
                 </div>
 
-                <div class="field email required">
+                <div class="field email required inline-block">
                     <label for="sender-email" class="label">
                         <span><?= $escaper->escapeHtml(__('Email')) ?></span>
                     </label>
@@ -87,49 +90,70 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 </div>
             </fieldset>
 
-            <fieldset class="fieldset recipients">
-                <legend class="legend">
-                    <span>
-                        <?= $escaper->escapeHtml(__('Invitee')) ?>
-                    </span>
-                </legend>
-                <br/>
-                <div id="recipients-options">
-                    <fieldset class="fieldset">
-                        <div class="field name required">
-                            <label for="recipients-name0" class="label">
-                                <span><?= $escaper->escapeHtml(__('Name')) ?></span>
-                            </label>
-                            <div class="control">
-                                <input name="recipients[name][0]" type="text"
-                                       title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>" class="input-text"
-                                       id="recipients-name0"
-                                       required
-                                />
-                            </div>
-                        </div>
+            <div x-data="rowHandler()">
+                <input name="recipient_data" x-bind:value="JSON.stringify(fields)"
+                       type="hidden"
+                />
+                <fieldset class="fieldset recipients">
+                    <legend class="legend">
+                    <span x-text="fields.length > 1 ? plural : single">
 
-                        <div class="field email required">
-                            <label for="recipients-email0" class="label">
-                                <span><?= $escaper->escapeHtml(__('Email')) ?></span>
-                            </label>
-                            <div class="control">
-                                <input name="recipients[email][0]" title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
-                                       id="recipients-email0"
-                                       type="email"
-                                       class="input-text"
-                                       required
-                                       validate
-                                />
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <?= $block->getChildHtml('form_additional_info') ?>
-            </fieldset>
+                    </span>
+                    </legend>
+                    <br/>
+                    <div id="recipients-options">
+                        <fieldset class="fieldset">
+                            <template x-for="(field, index) in fields" :key="index">
+                                <div class="row block">
+                                    <div class="field name required inline-block">
+                                        <label x-bind:for="`recipients-name${index}`" class="label">
+                                            <span><?= $escaper->escapeHtml(__('Name')) ?></span>
+                                        </label>
+                                        <div class="control">
+                                            <input type="text"
+                                                   title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>"
+                                                   class="input-text"
+                                                   x-bind:id="`recipients-name${index}`"
+                                                   x-bind:name="`recipients[name][${index}]`"
+                                                   required
+                                                   x-model="field.name"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="field email required inline-block">
+                                        <label x-bind:for="`recipients-email${index}`" class="label">
+                                            <span><?= $escaper->escapeHtml(__('Email')) ?></span>
+                                        </label>
+                                        <div class="control">
+                                            <input title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                                                   x-bind:id="`recipients-email${index}`"
+                                                   x-bind:name="`recipients[email][${index}]`"
+                                                   type="email"
+                                                   class="input-text"
+                                                   required
+                                                   validate
+                                                   x-model="field.email"
+                                            />
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn bg-red-500 btn-small inline-block"
+                                            @click="removeField(index)">&times;
+                                    </button>
+                                </div>
+                            </template>
+                        </fieldset>
+                        <button x-show="fields.length < <?= (int)$block->getMaxRecipients(); ?>" type="button"
+                                class="btn btn-secondary" @click="addNewField()">+ Add Row
+                        </button>
+                    </div>
+
+                    <?= $block->getChildHtml('form_additional_info') ?>
+                </fieldset>
+            </div>
             <?= $block->getChildHtml('captcha'); ?>
             <div class="w-full grecaptcha-legal">
-                <?= /** @noEscape */ $recaptchaLegalNotice ?>
+                <?= /** @noEscape */
+                $recaptchaLegalNotice ?>
             </div>
             <div class="actions-toolbar">
                 <div class="primary">
@@ -152,6 +176,24 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 </div>
             </div>
             <script>
+                function rowHandler() {
+                    return {
+                        fields: <?= $recipients ?>,
+                        plural: '<?= $escaper->escapeHtml(__('Invitees')) ?>',
+                        single: '<?= $escaper->escapeHtml(__('Invitee')) ?>',
+                        addNewField() {
+                            this.fields.push({
+                                name: '',
+                                email: ''
+                            });
+                            console.log(this.fields);
+                        },
+                        removeField(index) {
+                            this.fields.splice(index, 1);
+                        },
+                    }
+                }
+
                 function initSendFriendForm() {
                     return {
                         errors: 0,
@@ -174,5 +216,8 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 }
             </script>
         </form>
+    </div>
+    <div id="send-friend-product">
+        <?= $block->getChildHtml('product_item') ?>
     </div>
 </div>
