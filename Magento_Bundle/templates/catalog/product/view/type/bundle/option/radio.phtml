@@ -48,6 +48,10 @@ $activeSelectOptions = [];
                    class="radio product bundle option"
                    <?= ($default && $default->isSalable())?'':' checked="checked" ' ?>
                    value=""
+                   x-on:change="
+                        activeSelectOptions['<?= (int)$optionId ?>'] = [$event.target.value];
+                        $nextTick(() => {calculateTotalPrice()});
+                   "
             />
             <label class="label text-sm"
                    for="bundle-option-<?= (int)$optionId ?>">
@@ -75,7 +79,7 @@ $activeSelectOptions = [];
                    value="<?= (int)$selectionId ?>"
                    data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
                    x-on:change="
-                        activeSelectOptions['<?= (int)$optionId ?>'] = $event.target.value;
+                        activeSelectOptions['<?= (int)$optionId ?>'] = [$event.target.value];
                         $nextTick(() => {calculateTotalPrice()});
                    "
             />
