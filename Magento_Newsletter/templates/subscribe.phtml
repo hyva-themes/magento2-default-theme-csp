@@ -6,9 +6,9 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Framework\Escaper;
 use Magento\Newsletter\Block\Subscribe;
-use Hyva\Theme\ViewModel\ReCaptcha;
 
 /** @var Subscribe $block */
 /** @var Escaper $escaper */
@@ -46,7 +46,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email address')) ?>">
             <?= $block->getBlockHtml('formkey') ?>
             <button class="inline-flex flex-shrink-0 ml-auto xl:mt-0 btn btn-primary">
-                <?= $escaper->escapeHtmlAttr(__('Subscribe')) ?>
+                <?= $escaper->escapeHtml(__('Subscribe')) ?>
             </button>
             <?= /** @noEscape */ $recaptchaInputField ?>
         </div>

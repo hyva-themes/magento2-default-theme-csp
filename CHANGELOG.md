@@ -190,7 +190,7 @@ _Version 1.1.4 of the Hyva_Theme module is required for this update_
 
 
 
-[1.1.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.1...1.1.2
+[1.1.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.3...1.1.4
 
 
 ## [1.1.3] - 2021-05-07

@@ -18,25 +18,55 @@ use Magento\Framework\Escaper;
 // phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket
 
 $uniqueId = '_' . uniqid();
+$additionalOptions = ['page' => 'p'];
 ?>
 <script>
     function initToolbar<?= /** @noEscape */  $uniqueId ?>() {
         return {
-            options: <?= /* @noEscape */ $block->getWidgetOptionsJson() ?>.productListToolbarForm || {},
-            changeUrl(paramName, paramValue, defaultValue) {
-                var decode = window.decodeURIComponent,
+            options: <?= /* @noEscape */ $block->getWidgetOptionsJson($additionalOptions) ?>.productListToolbarForm || {},
+            getUrlParams: function () {
+                let decode = window.decodeURIComponent,
                     urlPaths = this.options.url.split('?'),
-                    baseUrl = urlPaths[0],
                     urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
-                    paramData = {},
-                    parameters, i, form, params, key, input, formKey;
+                    params = {},
+                    parameters, i;
 
                 for (i = 0; i < urlParams.length; i++) {
                     parameters = urlParams[i].split('=');
-                    paramData[decode(parameters[0])] = parameters[1] !== undefined ?
+                    params[decode(parameters[0])] = parameters[1] !== undefined ?
                         decode(parameters[1].replace(/\+/g, '%20')) :
                         '';
                 }
+
+                return params;
+            },
+            getCurrentLimit: function () {
+                return this.getUrlParams()[this.options.limit] || this.options.limitDefault;
+            },
+            getCurrentPage: function () {
+                return this.getUrlParams()[this.options.page] || 1;
+            },
+            changeUrl(paramName, paramValue, defaultValue) {
+                let urlPaths = this.options.url.split('?'),
+                    baseUrl = urlPaths[0],
+                    paramData = this.getUrlParams(),
+                    currentPage = this.getCurrentPage(),
+                    form, params, key, input, formKey, newPage;
+
+                /**
+                 * calculates the page on which the first item of the current page will
+                 * be with the new limit and sets that number as the new page
+                 */
+                if (currentPage > 1 && paramName === this.options.limit) {
+                    newPage = Math.floor(this.getCurrentLimit() * (currentPage - 1) / paramValue) + 1;
+
+                    if (newPage > 1) {
+                        paramData[this.options.page] = newPage;
+                    } else {
+                        delete paramData[this.options.page];
+                    }
+                }
+
                 paramData[paramName] = paramValue;
 
                 if (this.options.post) {

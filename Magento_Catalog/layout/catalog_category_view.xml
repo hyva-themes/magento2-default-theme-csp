@@ -15,19 +15,15 @@
                 <argument name="css_class" xsi:type="string">justify-start text-4xl mb-4</argument>
             </arguments>
         </referenceBlock>
-        <referenceContainer name="columns.top">
-            <container name="category.view.container" htmlTag="div"
-                       htmlId="category-view-container"
-                       htmlClass="category-view container" after="-">
-                <block class="Magento\Catalog\Block\Category\View" name="category.image" template="Magento_Catalog::category/image.phtml">
-                    <arguments>
-                        <argument name="image" xsi:type="object">Magento\Catalog\ViewModel\Category\Image</argument>
-                        <argument name="output" xsi:type="object">Magento\Catalog\ViewModel\Category\Output</argument>
-                    </arguments>
-                </block>
-                <block class="Magento\Catalog\Block\Category\View" name="category.description" template="Magento_Catalog::category/description.phtml"/>
-                <block class="Magento\Catalog\Block\Category\View" name="category.cms" template="Magento_Catalog::category/cms.phtml"/>
-            </container>
+        <referenceContainer name="category.view.container" htmlId="category-view-container" htmlClass="category-view container">
+            <block class="Magento\Catalog\Block\Category\View" name="category.image" template="Magento_Catalog::category/image.phtml">
+                <arguments>
+                    <argument name="image" xsi:type="object">Magento\Catalog\ViewModel\Category\Image</argument>
+                    <argument name="output" xsi:type="object">Magento\Catalog\ViewModel\Category\Output</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Catalog\Block\Category\View" name="category.description" template="Magento_Catalog::category/description.phtml"/>
+            <block class="Magento\Catalog\Block\Category\View" name="category.cms" template="Magento_Catalog::category/cms.phtml"/>
         </referenceContainer>
 
         <referenceContainer name="content">
