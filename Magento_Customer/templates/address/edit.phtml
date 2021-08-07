@@ -4,7 +4,11 @@
  * Copyright © Hyvä Themes 2020-present. All rights reserved.
  * This product is licensed per Magento install
  * See https://hyva.io/license
- */use Magento\Customer\Block\Address\Edit;
+ */
+
+declare(strict_types=1);
+
+use Magento\Customer\Block\Address\Edit;
 use Magento\Customer\ViewModel\Address;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
@@ -36,7 +40,8 @@ $viewModel = $block->getViewModel();
       method="post"
       id="form-validate"
       enctype="multipart/form-data"
-      data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>">
+      data-hasrequired="<?= $escaper->escapeHtmlAttr(__('* Required Fields')) ?>"
+>
     <fieldset class="fieldset">
         <legend class="legend"><span><?= $escaper->escapeHtml(__('Contact Information')) ?></span></legend>
         <?= $block->getBlockHtml('formkey') ?>
@@ -184,41 +189,47 @@ $viewModel = $block->getViewModel();
                 </div>
             </div>
 
-            <div class="field region w-full">
+            <div class="field region w-full"
+                 x-cloak
+                 x-show="isRegionRequired || showOptionalRegion"
+            >
                 <label class="label" for="region_id">
                     <span><?= /* @noEscape */ $region ?></span>
                 </label>
                 <div class="control">
-                    <template x-if="isRegionRequired">
-                    <select id="region_id" name="region_id"
-                            title="<?= /* @noEscape */ $region ?>"
-                            class="form-select validate-select region_id"
-                            required="required"
-                            x-ref="region_id"
-                        <?= /* @noEscape */ !$displayAll ? ' disabled="disabled"' : '' ?>>
-                        <option value=""><?= $escaper->escapeHtml(__($selectRegion)) ?></option>
-                        <template x-for="regionId in Object.keys(availableRegions)">
-                            <option :value="regionId"
-                                    :name="availableRegions[regionId].name"
-                                    x-text="availableRegions[regionId].name">
-                            </option>
-                        </template>
-                    </select>
+                    <template x-if="hasAvailableRegions() && isRegionRequired">
+                        <select id="region_id" name="region_id"
+                                title="<?= /* @noEscape */ $region ?>"
+                                class="form-select validate-select region_id"
+                                :required="isRegionRequired"
+                                x-ref="region_id"
+                                x-model="selectedRegion"
+                        >
+                            <option value=""><?= $escaper->escapeHtml(__($selectRegion)) ?></option>
+                            <template x-for="regionId in Object.keys(availableRegions)">
+                                <option :value="regionId"
+                                        :name="availableRegions[regionId].name"
+                                        x-text="availableRegions[regionId].name"
+                                        :selected="selectedRegion === regionId"
+                                >
+                                </option>
+                            </template>
+                        </select>
                     </template>
-                    <template x-if="!isRegionRequired">
-                    <input type="text"
-                           id="region"
-                           name="region"
-                           x-ref="region"
-                           value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
-                           title="<?= /* @noEscape */ $region ?>"
-                           class="form-input"
-                        <?= !$displayAll ? ' disabled="disabled"' : '' ?>/>
+                    <template x-if="!hasAvailableRegions()">
+                        <input type="text"
+                               id="region"
+                               name="region"
+                               x-ref="region"
+                               value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
+                               title="<?= /* @noEscape */ $region ?>"
+                               class="form-input"
+                               :required="isRegionRequired"
+                        />
                     </template>
                 </div>
             </div>
         </div>
-
 
         <?php if ($block->isDefaultBilling()): ?>
             <div class="message info">
@@ -272,8 +283,10 @@ function initCustomerAddressEdit() {
     return {
         directoryData: {},
         availableRegions: {},
+        selectedRegion: '<?= $escaper->escapeJs($block->getRegion() ?: 0) ?>',
         isZipRequired: true,
         isRegionRequired: true,
+        showOptionalRegion: <?= $displayAll ? 'true': 'false' ?>,
         onPrivateContentLoaded(data) {
             this.directoryData = data['directory-data'] || {};
 
@@ -322,6 +335,9 @@ function initCustomerAddressEdit() {
             this.isRegionRequired = selectedOption.dataset.isRegionRequired === "1";
 
             this.availableRegions = countryData.regions || {};
+        },
+        hasAvailableRegions() {
+            return Object.keys(this.availableRegions).length > 0;
         }
     }
 }
