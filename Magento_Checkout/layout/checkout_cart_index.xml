@@ -18,8 +18,13 @@
         </referenceBlock>
 
         <referenceContainer name="page.messages">
-            <block class="Magento\Checkout\Block\Cart\ValidationMessages" name="checkout.cart.validationmessages"/>
+            <block
+                class="Magento\Checkout\Block\Cart\ValidationMessages"
+                name="checkout.cart.validationmessages"
+                template="Magento_Checkout::messages.phtml"
+            />
         </referenceContainer>
+
         <referenceContainer name="content">
             <block name="cart_dynamic" template="Magento_Checkout::cart.phtml" cacheable="false">
                 <block name="cart_main_js" template="Magento_Checkout::cart/js/cart.phtml"/>

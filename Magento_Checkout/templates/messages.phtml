@@ -1,0 +1,58 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Checkout\Block\Cart\ValidationMessages;
+use Magento\Framework\Escaper;
+
+/** @var ValidationMessages $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+$messages = [];
+if ($block->getMessageCollection()->getCount()):
+    foreach ($block->getMessageTypes() as $type) {
+        foreach ($block->getMessagesByType($type) as $message) {
+            $messages[] = ['type' => $type, 'text' => $message->getText()];
+        }
+    }
+?>
+<script>
+    <?php
+    /**
+     * The `hyva` JS namespace is being set by Hyva_Theme/src/view/frontend/templates/page/js/hyva.phtml
+     * and should be included through Hyva_Theme/src/view/frontend/layout/default_hyva.xml
+     */
+    ?>
+    if (typeof hyva === 'undefined' || (!hyva.getBrowserStorage || !hyva.getCookie || !hyva.setCookie)) {
+        console.warn("Hyvä helpers are not loaded yet. Make sure they are included before this script");
+    }
+
+    (function( hyva, undefined ) {
+
+        hyva.initCartMessages = () => {
+            try {
+                const messages = <?= /** @noEscape */ json_encode($messages) ?>;
+                window.dispatchMessages && dispatchMessages(messages);
+            } catch (error) {
+                console.warn('Error parsing Cookie Messages:', error);
+            }
+        }
+
+        window.addEventListener('load', function () {
+            hyva.initCartMessages();
+        })
+
+    }( window.hyva = window.hyva || {} ));
+</script>
+
+<?php endif; ?>
