@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Hyvä Themes - https://hyva.io
  * Copyright © Hyvä Themes 2020-present. All rights reserved.
@@ -37,193 +38,235 @@ $regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE, 
 $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $product);
 ?>
 <?php if ($product->isSaleable()): ?>
-<div class="card flex w-full md:w-1/2 lg:w-2/3">
-    <?php if (count($options)): ?>
-        <script>
-            function initBundleOptions() {
-                return {
-                    optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,
-                    regularPriceKey: '<?= /* @noEscape */ $displayTax ? 'oldPrice' : 'baseOldPrice' ?>',
-                    finalPriceKey: '<?= /* @noEscape */ $displayTax ? 'finalPrice' : 'basePrice' ?>',
-                    productFinalPrice: false,
-                    activeSelectOptions: {},
-                    selectedOptions: [],
-                    getMultiOptionQty(option, optionSelection) {
-                        if (option.isMulti) {
-                            return optionSelection.qty;
-                        }
-                        return false;
-                    },
-                    calculateTotalPrice() {
-                        let selectedProductsPerOption = [];
+    <div class="card flex w-full md:w-1/2 lg:w-2/3">
+        <?php if (count($options)): ?>
+            <script>
+                function initBundleOptions() {
+                    return {
+                        optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                        regularPriceKey: '<?= /* @noEscape */ $displayTax ? 'oldPrice' : 'baseOldPrice' ?>',
+                        finalPriceKey: '<?= /* @noEscape */ $displayTax ? 'finalPrice' : 'basePrice' ?>',
+                        productFinalPrice: false,
+                        activeSelectOptions: {},
+                        selectedOptions: [],
+                        getMultiOptionQty(option, optionSelection) {
+                            if (option.isMulti) {
+                                return optionSelection.qty;
+                            }
+                            return false;
+                        },
+                        calculateTotalPrice() {
+                            let selectedProductsPerOption = [];
 
-                        for (const [optionId, option] of Object.entries(this.optionConfig.options)) {
-                            const optionElement = document.querySelector(`[data-option-id="${optionId}"]`);
-                            const qtyElement = document.getElementById('bundle-option-'+optionId+'-qty-input');
+                            for (const [optionId, option] of Object.entries(this.optionConfig.options)) {
+                                const optionElement = document.querySelector(`[data-option-id="${optionId}"]`);
+                                const qtyElement = document.getElementById('bundle-option-' + optionId + '-qty-input');
 
-                            let selectedOption = selectedProductsPerOption[optionId] || [];
+                                let selectedOption = selectedProductsPerOption[optionId] || [];
 
-                            if (optionElement) {
-                                if (optionElement.checked || optionElement.selected) {
-                                    const optionSelection = option.selections[optionElement.dataset.selectionId];
-                                    selectedOption.push({
-                                        data: optionSelection,
-                                        qty: this.getMultiOptionQty(option, optionSelection) ||
-                                            (qtyElement && qtyElement.value) || 1
-                                    });
-                                }
-                            } else {
-                                for (const [selectionId, selection] of Object.entries(option.selections)) {
-                                    const selectionElement = document.querySelector(
-                                        `[data-option-id="${optionId}-${selectionId}"]`
-                                    );
-                                    if(
-                                        selectionElement &&
-                                        (
-                                            selectionElement.checked ||
-                                            selectionElement.selected
-                                        )
-                                    ) {
+                                if (optionElement) {
+                                    if (optionElement.checked || optionElement.selected) {
+                                        const optionSelection = option.selections[optionElement.dataset.selectionId];
                                         selectedOption.push({
-                                            data: selection,
-                                            qty: this.getMultiOptionQty(option, selection) ||
+                                            data: optionSelection,
+                                            qty: this.getMultiOptionQty(option, optionSelection) ||
                                                 (qtyElement && qtyElement.value) || 1
                                         });
                                     }
+                                } else {
+                                    for (const [selectionId, selection] of Object.entries(option.selections)) {
+                                        const selectionElement = document.querySelector(
+                                            `[data-option-id="${optionId}-${selectionId}"]`
+                                        );
+                                        if (
+                                            selectionElement &&
+                                            (
+                                                selectionElement.checked ||
+                                                selectionElement.selected
+                                            )
+                                        ) {
+                                            selectedOption.push({
+                                                data: selection,
+                                                qty: this.getMultiOptionQty(option, selection) ||
+                                                    (qtyElement && qtyElement.value) || 1
+                                            });
+                                        }
+                                    }
                                 }
+
+                                selectedProductsPerOption[optionId] = Object.assign(
+                                    [],
+                                    selectedProductsPerOption[optionId],
+                                    selectedOption
+                                );
                             }
 
-                            selectedProductsPerOption[optionId] = Object.assign(
-                                [],
-                                selectedProductsPerOption[optionId],
-                                selectedOption
-                            );
-                        }
+                            this.productFinalPrice = Object.values(selectedProductsPerOption)
+                                .reduce(
+                                    (totalPrice, option) => {
+                                        let oldPrice = totalPrice.oldPrice;
+                                        let finalPrice = totalPrice.finalPrice;
 
-                        this.productFinalPrice = Object.values(selectedProductsPerOption)
-                            .reduce(
-                                (totalPrice, option) => {
-                                    let oldPrice = totalPrice.oldPrice;
-                                    let finalPrice = totalPrice.finalPrice;
+                                        const totalOptionPrice = Object.values(option).reduce(
+                                            (optionPrice, product) => {
+                                                let oldPrice = optionPrice.oldPrice;
+                                                let finalPrice = optionPrice.finalPrice;
 
-                                    const totalOptionPrice = Object.values(option).reduce(
-                                        (optionPrice, product) => {
-                                            let oldPrice = optionPrice.oldPrice;
-                                            let finalPrice = optionPrice.finalPrice;
+                                                let lowestPrice = product.data.prices;
 
-                                            let lowestPrice = product.data.prices;
+                                                lowestPrice = product.data.tierPrice.reduce((finalValue, tierPrice) => {
+                                                    if (product.qty >= tierPrice.price_qty) {
+                                                        return (
+                                                                tierPrice.prices[this.finalPriceKey].amount <
+                                                                lowestPrice[this.finalPriceKey].amount
+                                                            ) ?
+                                                            tierPrice.prices :
+                                                            finalValue;
+                                                    }
+                                                    return finalValue;
+                                                }, lowestPrice);
 
-                                            lowestPrice = product.data.tierPrice.reduce((finalValue, tierPrice) => {
-                                                if (product.qty >= tierPrice.price_qty) {
-                                                    return (
-                                                        tierPrice.prices[this.finalPriceKey].amount <
-                                                        lowestPrice[this.finalPriceKey].amount
-                                                    ) ?
-                                                    tierPrice.prices :
-                                                    finalValue;
-                                                }
-                                                return finalValue;
-                                            }, lowestPrice);
+                                                // check lowest price for qty
+                                                oldPrice = oldPrice + (
+                                                    lowestPrice.oldPrice.amount * product.qty
+                                                );
+                                                finalPrice = finalPrice + (
+                                                    lowestPrice[this.finalPriceKey].amount * product.qty
+                                                );
 
-                                            // check lowest price for qty
-                                            oldPrice = oldPrice + (
-                                                lowestPrice.oldPrice.amount * product.qty
-                                            );
-                                            finalPrice = finalPrice + (
-                                                lowestPrice[this.finalPriceKey].amount * product.qty
-                                            );
+                                                return {
+                                                    oldPrice,
+                                                    finalPrice
+                                                };
+                                            }, {
+                                                'oldPrice': 0,
+                                                'finalPrice': 0
+                                            }
+                                        );
 
-                                            return { oldPrice, finalPrice };
-                                        }, { 'oldPrice': 0, 'finalPrice': 0 }
-                                    );
+                                        return {
+                                            oldPrice: oldPrice + totalOptionPrice.oldPrice,
+                                            finalPrice: finalPrice + totalOptionPrice.finalPrice
+                                        }
 
-                                    return {
-                                        oldPrice: oldPrice + totalOptionPrice.oldPrice,
-                                        finalPrice: finalPrice + totalOptionPrice.finalPrice
+                                    }, {
+                                        'oldPrice': <?= $escaper->escapeJs($regularPrice); ?>,
+                                        'finalPrice': <?= $escaper->escapeJs($finalPrice); ?>
                                     }
+                                );
 
-                                },
-                                {
-                                    'oldPrice': <?= $escaper->escapeJs($regularPrice); ?>,
-                                    'finalPrice': <?= $escaper->escapeJs($finalPrice); ?>
+                            this.selectedOptions = Object.keys(selectedProductsPerOption).map((optionId) => {
+                                return {
+                                    label: this.optionConfig.options[optionId].title,
+                                    products: Object.values(selectedProductsPerOption[optionId]).map(product => {
+                                        return {
+                                            qty: product.qty,
+                                            name: product.data.name
+                                        }
+                                    })
                                 }
-                            );
+                            });
 
-                        this.selectedOptions = Object.keys(selectedProductsPerOption).map((optionId) => {
-                            return {
-                                label: this.optionConfig.options[optionId].title,
-                                products: Object.values(selectedProductsPerOption[optionId]).map( product => {
-                                    return {
-                                        qty: product.qty,
-                                        name: product.data.name
+                            this.dispatchFinalPrice();
+                            this.dispatchOptionSelection();
+                        },
+                        dispatchFinalPrice() {
+                            window.dispatchEvent(
+                                new CustomEvent(
+                                    "update-bundle-option-prices", {
+                                        detail: this.productFinalPrice
                                     }
-                                })
-                            }
-                        });
+                                )
+                            );
+                        },
+                        dispatchOptionSelection() {
+                            window.dispatchEvent(
+                                new CustomEvent(
+                                    "update-bundle-option-selection", {
+                                        detail: this.selectedOptions
+                                    }
+                                )
+                            );
+                        },
+                        getQtyValue(optionId) {
+                            const selectionConfig = this.getSelectionOptionConfig(optionId);
 
-                        this.dispatchFinalPrice();
-                        this.dispatchOptionSelection();
-                    },
-                    dispatchFinalPrice() {
-                        window.dispatchEvent(
-                            new CustomEvent(
-                                "update-bundle-option-prices",
-                                { detail: this.productFinalPrice }
-                            )
-                        );
-                    },
-                    dispatchOptionSelection() {
-                        window.dispatchEvent(
-                            new CustomEvent(
-                                "update-bundle-option-selection",
-                                { detail: this.selectedOptions }
-                            )
-                        );
+                            return selectionConfig ? selectionConfig.qty : "0";
+                        },
+                        getSelectionOptionConfig(optionId) {
+                            const activeSelectOption = this.activeSelectOptions[optionId];
+                            let activeSelectOptionValue = null;
+
+                            if (!activeSelectOption) {
+                                return false;
+                            }
+
+                            if (typeof activeSelectOption == 'object' && activeSelectOption.length) {
+                                activeSelectOptionValue = activeSelectOption[0];
+                            } else {
+                                activeSelectOptionValue = activeSelectOption;
+                            }
+
+                            return this.optionConfig
+                                .options[optionId]
+                                .selections[activeSelectOptionValue];
+                        },
+                        getQtyDisabled(optionId) {
+                            const selectionConfig = this.getSelectionOptionConfig(optionId);
+
+                            if (!selectionConfig) {
+                                return true;
+                            }
+
+                            return !selectionConfig || selectionConfig.customQty === "0";
+                        },
+                        setQtyValue(optionId, value) {
+                            const selectionConfig = this.getSelectionOptionConfig(optionId);
+                            if(selectionConfig) {
+                                selectionConfig.qty = value;
+                            }
+                        },
                     }
                 }
-            }
             </script>
-        <div x-data="initBundleOptions()"
-             x-init="
-                calculateTotalPrice();
-                $nextTick(() => {
-                    dispatchFinalPrice();
-                    dispatchOptionSelection();
-                    $dispatch('set-selected-options', {});
-                })
-             "
-             class="w-full"
-        >
+            <div x-data="initBundleOptions()"
+                 x-init="
+                    calculateTotalPrice();
+                    $nextTick(() => {
+                        dispatchFinalPrice();
+                        dispatchOptionSelection();
+                        $dispatch('set-selected-options', {});
+                    })"
+                 class="w-full">
 
-            <fieldset class="fieldset fieldset-bundle-options min-w-48 mb-8" form="product_addtocart_form">
-                <legend id="customizeTitle" class="legend">
-                    <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
-                        <?= $escaper->escapeHtml(__('Customize %1', $product->getName())) ?>
-                    </h3>
-                </legend>
-                <?= $block->getChildHtml('product_info_bundle_options_top') ?>
-                <?php foreach ($options as $option): ?>
-                    <?php
-                    if (!$option->getSelections()) {
-                        continue;
-                    } ?>
-                    <div class="my-2 pt-4 pb-2 w-full border-t border-container">
-                        <label class="label text-lg font-semibold">
-                            <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
-                        </label>
-                        <div class="control mt-2">
-                            <div class="nested options-list">
-                                <?= $block->getOptionHtml($option); ?>
+                <fieldset class="fieldset fieldset-bundle-options min-w-48 mb-8" form="product_addtocart_form">
+                    <legend id="customizeTitle" class="legend">
+                        <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
+                            <?= $escaper->escapeHtml(__('Customize %1', $product->getName())) ?>
+                        </h3>
+                    </legend>
+                    <?= $block->getChildHtml('product_info_bundle_options_top') ?>
+                    <?php foreach ($options as $option): ?>
+                        <?php
+                        if (!$option->getSelections()) {
+                            continue;
+                        } ?>
+                        <div class="my-2 pt-4 pb-2 w-full border-t border-container">
+                            <label class="label text-lg font-semibold">
+                                <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
+                            </label>
+                            <div class="control mt-2">
+                                <div class="nested options-list">
+                                    <?= $block->getOptionHtml($option); ?>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            </fieldset>
-            <?= $block->getChildHtml('product_info_bundle_options_bottom') ?>
-        </div>
-    <?php else: ?>
-        <p class="empty"><?= $escaper->escapeHtml(__('No options of this product are available.')) ?></p>
-    <?php endif; ?>
-</div>
-    <?php endif;?>
-
+                    <?php endforeach; ?>
+                </fieldset>
+                <?= $block->getChildHtml('product_info_bundle_options_bottom') ?>
+            </div>
+        <?php else: ?>
+            <p class="empty"><?= $escaper->escapeHtml(__('No options of this product are available.')) ?></p>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
