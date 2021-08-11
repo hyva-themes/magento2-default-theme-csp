@@ -34,10 +34,10 @@ $activeSelectOptions = [];
            checked="checked"
            data-option-id="<?= (int)$optionId ?>"
            data-selection-id="<?= (int)$selections[0]->getSelectionId() ?>"
-           <?php if ((int)$selections[0]->getSelectionId()) {
-                array_push($activeSelectOptions, (int)$selections[0]->getSelectionId());
-            } ?>
     />
+    <?php if ((int)$selections[0]->getSelectionId()) {
+        array_push($activeSelectOptions, (int)$selections[0]->getSelectionId());
+    } ?>
 <?php else: ?>
     <?php if (!$option->getRequired()): ?>
         <div class="field choice">
@@ -99,7 +99,7 @@ $activeSelectOptions = [];
         <span><?= $escaper->escapeHtml(__('Quantity')) ?></span>
     </label>
     <script>
-        
+
     </script>
     <input
         id="bundle-option-<?= (int)$optionId ?>-qty-input"

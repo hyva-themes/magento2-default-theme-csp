@@ -37,9 +37,9 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 $regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE, $product);
 $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $product);
 ?>
-<?php if ($product->isSaleable()) : ?>
+<?php if ($product->isSaleable()): ?>
     <div class="card flex w-full md:w-1/2 lg:w-2/3">
-        <?php if (count($options)) : ?>
+        <?php if (count($options)): ?>
             <script>
                 function initBundleOptions() {
                     return {
@@ -229,14 +229,15 @@ $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $prod
                     }
                 }
             </script>
-            <div x-data="initBundleOptions()" x-init="
-                calculateTotalPrice();
-                $nextTick(() => {
-                    dispatchFinalPrice();
-                    dispatchOptionSelection();
-                    $dispatch('set-selected-options', {});
-                })
-             " class="w-full">
+            <div x-data="initBundleOptions()"
+                 x-init="
+                    calculateTotalPrice();
+                    $nextTick(() => {
+                        dispatchFinalPrice();
+                        dispatchOptionSelection();
+                        $dispatch('set-selected-options', {});
+                    })"
+                 class="w-full">
 
                 <fieldset class="fieldset fieldset-bundle-options min-w-48 mb-8" form="product_addtocart_form">
                     <legend id="customizeTitle" class="legend">
@@ -245,7 +246,7 @@ $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $prod
                         </h3>
                     </legend>
                     <?= $block->getChildHtml('product_info_bundle_options_top') ?>
-                    <?php foreach ($options as $option) : ?>
+                    <?php foreach ($options as $option): ?>
                         <?php
                         if (!$option->getSelections()) {
                             continue;
@@ -264,7 +265,7 @@ $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $prod
                 </fieldset>
                 <?= $block->getChildHtml('product_info_bundle_options_bottom') ?>
             </div>
-        <?php else : ?>
+        <?php else: ?>
             <p class="empty"><?= $escaper->escapeHtml(__('No options of this product are available.')) ?></p>
         <?php endif; ?>
     </div>
