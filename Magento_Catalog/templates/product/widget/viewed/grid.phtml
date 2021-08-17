@@ -47,51 +47,63 @@ $title = 'Recently Viewed Products';
 
 $widgetAttributesToShow = explode(',', $this->getData('show_attributes'));
 $widgetButtonsToShow = explode(',', $this->getData('show_buttons'));
+$currentProductSku = $viewModelProducts->getProduct() ? $viewModelProducts->getProduct()->getSku() : 'false';
 ?>
     <script>
+        function refreshLocalStorageData(){
+            /***
+            * Remove expired products in the local storage
+            ***/
+            if(localStorage.getItem('recently_viewed_skus')){
+                let updatedlocalStorageData = '';
+                let recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
+                
+                recentlyViewedSkusArray.forEach(function myFunction(skuData,key){
+                    // split each product's sku and expiry data
+                    let tempSplitArray  = skuData.split(" ");
+                    let now = new Date();
+                    if(tempSplitArray[1] > now.getTime()){
+                        updatedlocalStorageData +=  ',' + tempSplitArray[0] + ' ' + tempSplitArray[1];
+                    }
+                });
+                updatedlocalStorageData = updatedlocalStorageData.replace(/[,]/, '');
+                localStorage.removeItem('recently_viewed_skus');
+                localStorage.setItem('recently_viewed_skus', updatedlocalStorageData);
+            }
+        }
         function putDataInLocalStorage(data){
 
             let localStorageDataToPut = data['current_product_sku'] + ' ' + data['expiry'];
             if(!localStorage.getItem('recently_viewed_skus')){
                 localStorage.setItem('recently_viewed_skus', localStorageDataToPut);
             }else{
-                /***
-                * Remove expired products in the local storage and avoid adding sku already in the storage
-                ***/
 
-                var updatedlocalStorageData = '';
+                // Remove expired products in the local storage
+                refreshLocalStorageData();
+                // Avoid adding sku already in the storage
                 let recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
                 let skuAlreadyInList = false;
                 
                 recentlyViewedSkusArray.forEach(function myFunction(skuData,key){
                     // split each product's sku and expiry data
                     let tempSplitArray  = skuData.split(" ");
-                    let now = new Date();
                     if(tempSplitArray[0] == data['current_product_sku']){
                         skuAlreadyInList = true;
                     }
-                    if(tempSplitArray[1] > now.getTime()){
-                        updatedlocalStorageData +=  ',' + tempSplitArray[0] + ' ' + tempSplitArray[1];
-                    }
                 });
-                updatedlocalStorageData = updatedlocalStorageData.replace(/[,]/, '');
-
-                localStorage.removeItem('recently_viewed_skus');
 
                 // Avoid adding sku already in the storage
                 if(!skuAlreadyInList){
+                    dar = localStorageDataToPut + ',' + localStorage.getItem('recently_viewed_skus');
                     // if sku not already in list, append current product's data in the list
-                    localStorageDataToPut =  localStorageDataToPut + ',' + updatedlocalStorageData;
-                    localStorage.setItem('recently_viewed_skus', localStorageDataToPut);
-                }else{
-                    localStorage.setItem('recently_viewed_skus', updatedlocalStorageData);
+                    localStorage.setItem('recently_viewed_skus', localStorageDataToPut + ',' + localStorage.getItem('recently_viewed_skus'));
                 }
             }
         }
         function createLocalStorageData(){
             // get current product sku and calculate its expiry from local storage
             let currentProductData = [];
-            currentProductData['current_product_sku'] = '<?php echo $viewModelProducts->getProduct()->getSku(); ?>';
+            currentProductData['current_product_sku'] = '<?php echo $currentProductSku; ?>';
             let now = new Date();
             let lifeTimeOfProducts = <?php echo $viewModelProducts->getRecentlyViewedLifeTime(); ?>;
             lifeTimeOfProducts = lifeTimeOfProducts * 1000;
@@ -100,14 +112,22 @@ $widgetButtonsToShow = explode(',', $this->getData('show_buttons'));
             return currentProductData;
         }
         function initSliderComponent<?= /** @noEscape */$uniqueId ?>() {
-            // Recently Viewed Products' data adding into the local storage
-            putDataInLocalStorage(createLocalStorageData());
+
+            let currentProductSku = '<?php echo $currentProductSku; ?>';
+            if(currentProductSku != 'false'){
+                // Recently Viewed Products' data adding into the local storage
+                putDataInLocalStorage(createLocalStorageData());
+            }else{
+                // Remove expired products in the local storage
+                refreshLocalStorageData();
+            }
+            
 
             return {
                 active: 0,
                 products: [],
                 currency: [],
-                currentProductSku: '<?php echo $viewModelProducts->getProduct()->getSku(); ?>',
+                currentProductSku: '<?php echo $currentProductSku; ?>',
                 noOfProductsToShow: <?php echo $this->getData('page_size'); ?>,
                 loading: true,
                 minHeight() {
@@ -115,21 +135,21 @@ $widgetButtonsToShow = explode(',', $this->getData('show_buttons'));
                 },
                 query: '',
                 getProducts($nextTick) {
-                    /* Fetching Products from local storage */
-                    recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
-                    // In order to show the most recent product first, the array is reversed
-                    recentlyViewedSkusArray = recentlyViewedSkusArray.reverse();
-                    noOfProductsToShow = this.noOfProductsToShow;
-                    currentProductSku = this.currentProductSku;
-                    itemsToFetch = [];
-                    
-                    recentlyViewedSkusArray.forEach(function myFunction(skuData,key){
-                        tempSplitedArray  = skuData.split(" ");
-                        /* avoid showing the current product */
-                        if(tempSplitedArray[0] !== currentProductSku){
-                            itemsToFetch[key] = tempSplitedArray[0];
-                        }
-                    });
+                    let itemsToFetch = [];
+                    if(localStorage.getItem('recently_viewed_skus')){
+                        /* Fetching Products from local storage */
+                        let recentlyViewedSkusArray = localStorage.getItem('recently_viewed_skus').split(",");
+                        let noOfProductsToShow = this.noOfProductsToShow;
+                        let currentProductSku = this.currentProductSku;
+                        
+                        recentlyViewedSkusArray.forEach(function myFunction(skuData,key){
+                            let tempSplitedArray  = skuData.split(" ");
+                            /* avoid showing the current product */
+                            if(tempSplitedArray[0] !== currentProductSku){
+                                itemsToFetch[key] = tempSplitedArray[0];
+                            }
+                        });
+                    }
                     if(!itemsToFetch.length){
                         this.noOfProductsToShow = 0;
                     }
