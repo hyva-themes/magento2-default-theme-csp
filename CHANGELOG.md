@@ -6,7 +6,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.6...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.7...main
+
+## [1.1.7] - 2021-08-25
+
+## Added
+
+- nothing
+
+## Changed
+
+- **Bugfix: Remove trailing space in customer prefix option values**
+
+  See [commit](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/commit/c2c6009daaf6048e2725a0e2f98e5604f202bb76)
+
+  Thanks to Daniel Galla (IMI)!
+
+- **Bugfix: Allow authentication-popup to be resubmitted**
+
+  In the authentication popup (when guest checkout is disabled), once incorrect information is entered and the form is submitted, the submit button is “disabled” and re-submitting with the correct information is not possible.
+
+  See issue [#214](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/214)
+
+## Removed
+
+- nothing
 
 ## [1.1.6] - 2021-08-12
 _Version 1.1.6 of the Hyva_Theme module is required for this update_
