@@ -122,6 +122,7 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                 </template>
                             </div>
                         </template>
+                        <?= $this->getChildHtml('cart.item.options') ?>
                         <template x-if="item.errors">
                             <p class="bg-red-500 py-2 px-4 rounded my-2 text-white">
                                 <?= $heroiconsSolid->exclamationHtml('w-6 h-6 mr-2 inline', 25, 25); ?>

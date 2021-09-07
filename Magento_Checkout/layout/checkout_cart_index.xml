@@ -29,7 +29,9 @@
             <block name="cart_dynamic" template="Magento_Checkout::cart.phtml" cacheable="false">
                 <block name="cart_main_js" template="Magento_Checkout::cart/js/cart.phtml"/>
                 <block name="loading" template="Hyva_Theme::ui/loading.phtml"/>
-                <block name="items" template="Magento_Checkout::cart/items.phtml"/>
+                <block name="items" template="Magento_Checkout::cart/items.phtml">
+                    <container name="additional.cart.item.options" as="cart.item.options"/>
+                </block>
                 <block name="coupon" class="Magento\Checkout\Block\Cart\Coupon"
                        template="Magento_Checkout::cart/coupon/form.phtml"/>
                 <block name="totals" template="Magento_Checkout::cart/totals.phtml"/>
