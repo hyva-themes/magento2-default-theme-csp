@@ -45,15 +45,24 @@
                 </block>
                 <block name="header-search" template="Magento_Theme::html/header/search-form.phtml"/>
                 <block name="cart-drawer" template="Magento_Theme::html/cart/cart-drawer.phtml" ifconfig="checkout/sidebar/display"/>
-<!--
-                <block name="topmenu_static" as="topmenu" template="Magento_Theme::html/header/topmenu_static.phtml"/>
--->
+
                 <block name="topmenu_generic"
                        as="topmenu"
-                       template="Magento_Theme::html/header/topmenu.phtml" ttl="3600">
+                       template="Magento_Theme::html/header/topmenu.phtml"
+                       ttl="3600"
+                >
                     <arguments>
                         <argument name="cache_lifetime" xsi:type="string">3600</argument>
                     </arguments>
+                    <block name="topmenu_mobile"
+                           as="topmenu.mobile"
+                           template="Magento_Theme::html/header/menu/mobile.phtml"
+                    ></block>
+
+                    <block name="topmenu_desktop"
+                           as="topmenu.desktop"
+                           template="Magento_Theme::html/header/menu/desktop.phtml"
+                    ></block>
                 </block>
             </block>
         </referenceContainer>

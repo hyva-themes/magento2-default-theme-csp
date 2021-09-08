@@ -31,8 +31,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
             cart: {},
             getData(data) {
                 if (data.cart) { this.cart = data.cart }
-            },
-            menu: initHeaderNavigation()
+            }
         }
     }
     function initCompareHeader() {
@@ -49,7 +48,7 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
     }
 </script>
 <div id="header"
-     class="z-30 w-full border-b shadow bg-container-lighter border-container-lighter"
+     class="relative z-30 w-full border-b shadow bg-container-lighter border-container-lighter"
      x-data="initHeader()"
      @keydown.window.escape="searchOpen = false;"
      @private-content-loaded.window="getData(event.detail.data)"

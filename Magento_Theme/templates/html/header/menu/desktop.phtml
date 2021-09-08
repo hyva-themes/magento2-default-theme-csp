@@ -1,0 +1,99 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\Navigation;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+// phpcs:disable Generic.Files.LineLength.TooLong
+
+/** @var Navigation $viewModelNavigation */
+$viewModelNavigation = $viewModels->require(Navigation::class);
+
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
+$uniqueId = '_' . uniqid();
+
+// Order is important here: 1. build the menu data, 2. then set the cache tags from the view model identities
+$menuItems = $viewModelNavigation->getNavigation(4);
+$block->setData('cache_tags', $viewModelNavigation->getIdentities());
+
+?>
+<div x-data="initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>()"
+     class="z-20 order-2 sm:order-1 lg:order-2 navigation hidden lg:flex"
+>
+    <!-- desktop -->
+    <div x-ref="nav-desktop"
+         @load.window="setActiveMenu($el)"
+         class="hidden lg:block lg:relative lg:min-h-0 lg:px-8 lg:w-auto lg:pt-0">
+        <nav
+            class="w-full duration-150 ease-in-out transform flex justify-start
+            w-auto relative min-h-0 transition-display"
+        >
+            <?php foreach ($menuItems as $index => $menuItem): ?>
+                <div class="relative mr-2 level-0"
+                     @mouseenter="hoverPanelActiveId = '<?= /* @noEscape */ (string) $index ?>'"
+                     @mouseleave="hoverPanelActiveId = 0"
+                >
+                    <span class="flex items-center block p-3 text-md bg-opacity-95">
+                        <a class="w-full py-3 text-base text-gray-700 hover:underline level-0"
+                           href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                           title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
+                        >
+                            <?= $escaper->escapeHtml($menuItem['name']) ?>
+                        </a>
+                    </span>
+                    <?php if (!empty($menuItem['childData'])): ?>
+                        <div
+                            class="absolute z-10 hidden px-6 py-4 -ml-6 shadow-lg bg-container-lighter bg-opacity-95"
+                            :class="{
+                                'hidden' : hoverPanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
+                                'block' : hoverPanelActiveId === '<?= /* @noEscape */ (string) $index ?>'
+                            }">
+                            <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+                                <a href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
+                                   title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
+                                   class="block w-full px-3 py-1 my-1 whitespace-nowrap first:mt-0 hover:underline"
+                                >
+                                    <span class="text-base text-gray-700">
+                                        <?= $escaper->escapeHtml($subMenuItem['name']) ?>
+                                    </span>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </nav>
+    </div>
+</div>
+<script>
+    'use strict';
+
+    const initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?> = () => {
+        return {
+            hoverPanelActiveId: null,
+            setActiveMenu(menuNode) {
+                Array.from(menuNode.querySelectorAll('a')).filter(link => {
+                    return link.href === window.location.href.split('?')[0];
+                }).map(item => {
+                    item.classList.add('underline');
+                    item.closest('div.level-0') &&
+                    item.closest('div.level-0').querySelector('a.level-0').classList.add('underline');
+                });
+            }
+        }
+    }
+</script>
