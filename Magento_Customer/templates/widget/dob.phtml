@@ -7,7 +7,7 @@
  */
 
 use Magento\Customer\Block\Widget\Dob;
-use Magento\Customer\Helper\Address as AddressHelper;
+use Magento\Customer\ViewModel\Address as AddressViewModel;
 use Magento\Framework\Escaper;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
@@ -20,6 +20,9 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 
 /** @var HeroIconsOutline $heroIcons */
 $heroIcons = $viewModels->require(HeroiconsOutline::class);
+
+/** @var AddressViewModel $addressViewModel */
+$addressViewModel = $viewModels->require(AddressViewModel::class);
 ?>
 <div class="field date <?= $block->isRequired() ? 'required' : '' ?>"
      x-data="DatePicker()"
@@ -31,13 +34,12 @@ $heroIcons = $viewModels->require(HeroiconsOutline::class);
             <?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?>
         </span>
     </label>
-    <div class="control customer-dob relative inline-block">
-            <?php
-            $_validationClass = $escaper->escapeHtmlAttr(
-                $this->helper(AddressHelper::class)
-                     ->getAttributeValidationClass('dob')
-            );
-            ?>
+    <div class="inline-block relative control customer-dob">
+        <?php
+        $validationClass = $escaper->escapeHtmlAttr(
+            $addressViewModel->addressGetAttributeValidationClass('dob')
+        );
+        ?>
 
         <input type="text"
                name="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>"
@@ -51,7 +53,7 @@ $heroIcons = $viewModels->require(HeroiconsOutline::class);
                @keydown="onInputKeydown($event)"
                @paste="$event.preventDefault()"
                autocomplete="off"
-               class="form-input <?= $_validationClass ?: '' ?>"
+               class="form-input <?= $validationClass ?: '' ?>"
         >
 
         <div class="absolute top-0 right-0 px-3 py-2 text-gray-300"
