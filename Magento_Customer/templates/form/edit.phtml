@@ -52,39 +52,54 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
             <?= $_gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
         <?php endif ?>
 
-        <div class="field email required">
-            <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
-            <div class="control">
-                <input type="email" name="email" id="email" autocomplete="email" required
-                       value="<?= $escaper->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>"
-                       title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
-                       class="form-input"/>
-            </div>
+        <div class="field choice">
+            <input type="checkbox" name="change_email" id="change-email" value="1"
+                title="<?= $escaper->escapeHtmlAttr(__('Change Email')) ?>"
+                x-on:change="showEmailField = !showEmailField"
+                class="checkbox"/>
+            <label class="label" for="change-email">
+                <span><?= $escaper->escapeHtml(__('Change Email')) ?></span>
+            </label>
         </div>
 
         <div class="field choice">
             <input type="checkbox" name="change_password" id="change-password" value="1"
-                   title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
-                   x-on:change="showPasswordFields = !showPasswordFields"
-                <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?> class="checkbox"/>
+                title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
+                x-on:change="showPasswordFields = !showPasswordFields"
+                <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?>
+                class="checkbox"/>
             <label class="label" for="change-password">
                 <span><?= $escaper->escapeHtml(__('Change Password')) ?></span>
             </label>
         </div>
 
+        <template x-if="showEmailField">
+            <div class="field email required">
+                <label class="label" for="email"><span><?= $escaper->escapeHtml(__('Email')) ?></span></label>
+                <div class="control">
+                    <input type="email" name="email" id="email" autocomplete="email" required
+                        value="<?= $escaper->escapeHtmlAttr($block->getCustomer()->getEmail()) ?>"
+                        title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                        class="form-input"/>
+                </div>
+            </div>
+        </template>
+
+        <template x-if="showEmailField || showPasswordFields">
+            <div class="field password current required">
+                <label class="label" for="current-password">
+                    <span><?= $escaper->escapeHtml(__('Current Password')) ?></span>
+                </label>
+                <div class="control">
+                    <input type="password" class="form-input" name="current_password" id="current-password"
+                            data-input="current-password"
+                            autocomplete="off"/>
+                </div>
+            </div>
+        </template>
+
         <template x-if="showPasswordFields">
             <div>
-                <div class="field password current required">
-                    <label class="label" for="current-password">
-                        <span><?= $escaper->escapeHtml(__('Current Password')) ?></span>
-                    </label>
-                    <div class="control">
-                        <input type="password" class="form-input" name="current_password" id="current-password"
-                               data-input="current-password"
-                               autocomplete="off"/>
-                    </div>
-                </div>
-
                 <div class="field">
                     <label class="label" for="password"><span><?= $escaper->escapeHtml(
                         __('New Password')
@@ -150,6 +165,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
             displayErrorMessage: false,
             errorMessages: [],
             passwordsMatching: true,
+            showEmailField: false,
             showPasswordFields: <?= $block->getChangePassword()
                 ? $escaper->escapeJs('true')
                 : $escaper->escapeJs(
