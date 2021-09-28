@@ -8,6 +8,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
@@ -15,28 +16,28 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
+// phpcs:disable Generic.Files.LineLength
+
+/** @var HeroiconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
-<div class="estimate-shipping-form">
-    <div class="flex justify-center md:justify-start">
+<div class="flex flex-col pb-2 my-2 border-b-2 border-gray-300 estimate-shipping-form">
+    <div class="flex">
         <span @click="toggleEstimateShipping"
-              class="cursor-pointer text-primary-lighter select-none whitespace-nowrap"
+              class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none text-primary-lighter"
         >
-            <span class="underline" x-show="cartData.is_virtual">
-                <?= $block->escapeHtml(__('Estimate Tax')) ?>
+            <span x-show="cartData.is_virtual">
+                <?= $escaper->escapeHtml(__('Estimate Tax')) ?>
             </span>
-            <span class="underline" x-show="! cartData.is_virtual">
-                <?= $block->escapeHtml(__('Estimate Shipping and Tax')) ?>
+            <span x-show="! cartData.is_virtual">
+                <?= $escaper->escapeHtml(__('Estimate Shipping and Tax')) ?>
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-4 h-4 inline-block ml-2"
-                 viewBox="0 0 24 24" stroke="currentColor">
-                <path x-show="!showEstimateShipping" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="2" d="M19 9l-7 7-7-7"/>
-                <path x-show="showEstimateShipping" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="2" d="M5 15l7-7 7 7"/>
-            </svg>
+            <span :class="{ 'rotate-180' : showEstimateShipping}" class="block transform">
+                <?= $heroicons->chevronDownHtml('w-6 h-6', 25, 25) ?>
+            </span>
         </span>
     </div>
-    <div x-show="showEstimateShipping">
+    <div x-show="showEstimateShipping" class="mt-2">
         <div class="mt-2" x-show="! cartData.is_virtual">
             <?= $escaper->escapeHtml(__('Enter your destination to get a shipping estimate.')) ?>
         </div>
@@ -52,20 +53,22 @@ use Magento\Framework\View\Element\Template;
                 <input id="region" placeholder="<?= $escaper->escapeHtmlAttr(__('Region')) ?>"
                        :value="countries[getEstimationCountry()].name"
                        disabled
-                       class="w-full form-input p-2"/>
+                       class="p-2 w-full form-input"/>
             </template>
             <template x-if="getSortedCountryCodes().length > 1">
-                <label for="country"><?= $escaper->escapeHtml(__('Country')) ?></label>
-                <select id="country"
-                        @change="selectEstimationCountry($event.target.value)"
-                        class="w-full form-input form-select">
-                    <template x-for="countryId in getSortedCountryCodes()" :key="countryId">
-                        <option :value="countryId"
-                                :selected="getEstimationCountry() === countryId"
-                                x-text="countries[countryId].name"
-                        ></option>
-                    </template>
-                </select>
+                <div>
+                    <label for="country"><?= $escaper->escapeHtml(__('Country')) ?></label>
+                    <select id="country"
+                            @change="selectEstimationCountry($event.target.value)"
+                            class="w-full form-input form-select">
+                        <template x-for="countryId in getSortedCountryCodes()" :key="countryId">
+                            <option :value="countryId"
+                                    :selected="getEstimationCountry() === countryId"
+                                    x-text="countries[countryId].name"
+                            ></option>
+                        </template>
+                    </select>
+                </div>
             </template>
             <label for="region" class="pt-2"><?= $escaper->escapeHtml(__('State/Region')) ?></label>
             <template x-if="countries[getEstimationCountry()].regions">
@@ -83,18 +86,19 @@ use Magento\Framework\View\Element\Template;
                 <input id="region" placeholder="<?= $escaper->escapeHtmlAttr(__('Region')) ?>"
                        :value="getEstimationRegionName()"
                        @change="selectEstimationRegionName($event.target.value)"
-                       class="w-full form-input p-2"/>
+                       class="p-2 w-full form-input"/>
             </template>
             <label for="postcode" class="pt-2"><?= $escaper->escapeHtml(__('Postcode')) ?></label>
             <input id="postcode"
                    :value="getEstimationPostcode()"
                    @change="selectEstimationPostcode($event.target.value)"
+                   @input.debounce.1000="selectEstimationPostcode($event.target.value)"
                    placeholder="<?= $escaper->escapeHtmlAttr(__('Postcode')) ?>"
-                   class="w-full form-input p-2"/>
+                   class="p-2 w-full form-input"/>
             <div class="fieldset lg:hidden">
-                <div class="flex flex-col sm:flex-row gap-2 justify-center md:justify-start">
+                <div class="flex flex-col gap-2 justify-center sm:flex-row md:justify-start">
 
-                    <button class="btn btn-primary md:text-sm lg:text-base justify-center mt-4" type="button"
+                    <button class="justify-center mt-4 btn btn-primary md:text-sm lg:text-base" type="button"
                         @click.stop="estimateShippingRequest">
 
                         <span x-show="! cartData.is_virtual">
@@ -113,7 +117,7 @@ use Magento\Framework\View\Element\Template;
                             <div class="font-bold" x-text="carrier"></div>
                             <template x-for="rate in getRatesForCarrier(carrier)" :key="rate">
                                 <label class="flex items-center">
-                                    <input class="mr-1.5" type="radio"
+                                    <input class="mr-2" type="radio"
                                            :value="rate.carrier_code + '_' + rate.method_code"
                                            x-model="selectedShippingRate"
                                            @change="selectShippingRate(rate)"/>
