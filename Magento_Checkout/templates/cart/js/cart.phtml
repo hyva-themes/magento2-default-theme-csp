@@ -9,8 +9,8 @@
 use Hyva\GraphqlViewModel\ViewModel\GraphqlViewModel;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Currency;
+use Hyva\Theme\ViewModel\Directory as DirectoryViewModel;
 use Hyva\Theme\ViewModel\Store as StoreViewModel;
-use Magento\Directory\Helper\Data as Directory;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\Cart\GraphQlQueries;
@@ -27,6 +27,8 @@ $viewModelStore = $viewModels->require(StoreViewModel::class);
 $viewModelGraphQl = $viewModels->require(GraphqlViewModel::class);
 /** @var Currency $currencyViewModel */
 $currencyViewModel = $viewModels->require(Currency::class);
+/** @var DirectoryViewModel $currencyViewModel */
+$directoryViewModel = $viewModels->require(DirectoryViewModel::class);
 ?>
 <script>
     'use strict';
@@ -289,7 +291,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
             currentCurrency: '<?= $escaper->escapeJs($currencyViewModel->getCurrentCurrencyCode()) ?>',
             selectedShippingRate: null, // this property exists to check the correct radio input when clicked
             estimationDefaultAddress: {
-                country: { code: '<?= /** @noEscape */ $this->helper(Directory::class)->getDefaultCountry() ?>' },
+                country: { code: '<?= /** @noEscape */ $directoryViewModel->getDefaultCountry() ?>' },
                 region: { region_id: null, label: '' },
                 postcode: ''
             },

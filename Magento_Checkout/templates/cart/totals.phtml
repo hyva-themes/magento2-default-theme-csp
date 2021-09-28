@@ -24,12 +24,12 @@ $taxLabelAddition = $viewModelTotalsOutput->getTaxLabelAddition();
 ?>
 <template x-if="cartData.prices">
     <div class="pt-0 lg:pt-6 ml-auto w-full xl-w:2/3">
-        <div class="flex pb-3 mb-2 border-b-2 border-gray-300 flex-col">
+        <div class="flex pb-3 my-2 border-b-2 border-gray-300 flex-col">
             <h2 class="w-full text-2xl text-center text-gray-900 title-font font-base md:text-left">
                 <?= $escaper->escapeHtml(__('Summary')) ?>
             </h2>
-            <?= $block->getChildHtml('estimate_shipping') ?>
         </div>
+        <?= $block->getChildHtml('estimate_shipping') ?>
         <?php if ($subtotalFieldShowBoth): ?>
             <template x-if="cartData.prices['subtotal_excluding_tax']">
                 <div class="flex pb-2 my-2 border-b md:grid md:grid-cols-2 md:w-full border-container">
