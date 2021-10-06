@@ -129,6 +129,7 @@ module.exports = {
             //'../../../../../../../app/code/**/src/**/*.jsx',
             // react app src files in vendor (If Hyvä Checkout is installed in vendor)
             //'../../../../../../../vendor/hyva-themes/magento2-hyva-checkout/src/reactapp/src/**/*.jsx',
+            //'../../../../../../../vendor/hyva-themes/magento2-hyva-checkout/src/view/frontend/templates/react-container.phtml',
             // widget block classes from app/code
             //'../../../../../../../app/code/**/Block/Widget/**/*.php'
         ]
