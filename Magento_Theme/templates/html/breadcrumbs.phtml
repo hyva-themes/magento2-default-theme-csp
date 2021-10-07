@@ -18,7 +18,7 @@ use Magento\Framework\Escaper;
 <?php if ($crumbs && is_array($crumbs)): ?>
 <nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
     <div class="container">
-        <ul class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
+        <ol class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
             <?php foreach ($crumbs as $crumbName => $crumbInfo): ?>
                 <li class="item flex <?= $escaper->escapeHtmlAttr($crumbName) ?>">
                 <?php if (!$crumbInfo['first']): ?>
@@ -38,7 +38,7 @@ use Magento\Framework\Escaper;
                 <?php endif; ?>
                 </li>
             <?php endforeach; ?>
-        </ul>
+        </ol>
     </div>
 </nav>
 <?php endif; ?>
