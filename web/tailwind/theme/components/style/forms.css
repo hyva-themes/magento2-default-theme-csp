@@ -1,29 +1,32 @@
-form .field {
-    @apply my-3;
-}
+form,
+fieldset {
+    .field {
+        @apply my-3;
+    }
 
-form label {
-    @apply mb-2 block text-secondary-darker;
-}
+    label {
+        @apply mb-2 block text-secondary-darker;
+    }
 
-form .field.choice {
-    @apply flex items-center
-}
+    .field.choice {
+        @apply flex items-center
+    }
 
-form .field.choice input {
-    @apply mr-4
-}
+    .field.choice input {
+        @apply mr-4
+    }
 
-form .field.choice label {
-    @apply mb-0
-}
+    .field.choice label {
+        @apply mb-0
+    }
 
-form legend {
-    @apply text-primary text-xl mb-3
-}
+    legend {
+        @apply text-primary text-xl mb-3
+    }
 
-form legend + br {
-    @apply hidden
+    legend + br {
+        @apply hidden
+    }
 }
 
 fieldset ~ fieldset {
