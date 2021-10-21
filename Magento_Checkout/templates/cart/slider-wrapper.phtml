@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 ?>
 <div x-data="{show: false}"
-    @cart-data-updated.window="show = $event.detail.cart &&
-                                      $event.detail.cart.items &&
-                                      $event.detail.cart.items.length > 0"
+     x-cloak
+     @cart-data-updated.window="show = $event.detail.cart &&
+                                       $event.detail.cart.items &&
+                                       $event.detail.cart.items.length > 0"
 >
     <template x-if="show"><?= $this->getChildHtml() ?></template>
 </div>
