@@ -73,34 +73,31 @@ $title = $title ?? __('Recently Viewed Products');
             writeRecentlyViewedToStorage(updatedLocalStorageData);
         }
 
-        function addToRecentlyViewed(productData) {
-            removeExpiredProductsInLocalStorage();
-            const recentlyViewedSkusArray = readRecentlyViewedFromStorage();
-
-            // Avoid adding sku already in the storage
-            let skuAlreadyInList = recentlyViewedSkusArray
-                .filter(product => product.sku === productData.sku)
+        function isProductInRecentlyViewed(productData) {
+            return readRecentlyViewedFromStorage()
+                .filter(record => record.sku === productData.sku)
                 .length > 0;
+        }
 
-            if (!skuAlreadyInList) {
-                recentlyViewedSkusArray.push(productData);
+        function addCurrentProductToRecentlyViewed() {
+            const currentProduct = createRecordForCurrentProduct();
+
+            if (currentProduct.sku !== '' && !isProductInRecentlyViewed(currentProduct)) {
+                const recentlyViewedSkusArray = readRecentlyViewedFromStorage();
+                recentlyViewedSkusArray.push(currentProduct);
                 writeRecentlyViewedToStorage(recentlyViewedSkusArray);
             }
         }
 
         function createRecordForCurrentProduct() {
-            // get current product sku and calculate its expiry from local storage
             return {
                 sku: '<?= $escaper->escapeJs($currentProductSku) ?>',
                 expiry: Date.now() + <?= (int) $viewModelProducts->getRecentlyViewedLifeTime() ?> * 1000
             }
         }
 
-        if ('<?= $escaper->escapeJs($currentProductSku) ?>' !== '') {
-            addToRecentlyViewed(createRecordForCurrentProduct());
-        } else {
-            removeExpiredProductsInLocalStorage();
-        }
+        removeExpiredProductsInLocalStorage();
+        addCurrentProductToRecentlyViewed();
 
         return {
             active: 0,
@@ -115,11 +112,11 @@ $title = $title ?? __('Recently Viewed Products');
             query: '',
             getProducts($nextTick) {
                 let itemsToFetch = [];
-                const recentlyViewedSkusArray = readRecentlyViewedFromStorage();
-                if (recentlyViewedSkusArray.length > 0) {
+                const recentlyViewedProductsArray = readRecentlyViewedFromStorage();
+                if (recentlyViewedProductsArray.length > 0) {
 
                     /* Avoid showing the current product */
-                    itemsToFetch = recentlyViewedSkusArray
+                    itemsToFetch = recentlyViewedProductsArray
                         .map(productData => productData.sku)
                         .filter(sku => sku !== this.currentProductSku);
                 }
