@@ -31,7 +31,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
                         <?php if (!$block->getPrintStatus()): ?>
                             <?php $_formatedOptionValue = $block->getFormatedOptionValue($option) ?>
                             <span class="ml-1">
-                                <?= $escaper->escapeHtml($_formatedOptionValue['value'], ['a', 'img']) ?>
+                                <?= $escaper->escapeHtml($_formatedOptionValue['value'], ['a']) ?>
                         </span>
                         <?php else: ?>
                             <span class="ml-1">
