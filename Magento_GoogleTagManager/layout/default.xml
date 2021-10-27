@@ -15,7 +15,7 @@
                    template="Magento_GoogleTagManager::ga.phtml" />
         </referenceContainer>
 -->
-        <referenceContainer name="head.additional">
+        <referenceContainer name="before.body.end">
             <block class="Magento\GoogleTagManager\Block\Ga" name="google_analyticsuniversal" as="google_analyticsuniversal"
                    template="Magento_GoogleTagManager::ga.phtml" />
         </referenceContainer>
