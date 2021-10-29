@@ -109,7 +109,7 @@ $title = $title ?? __('Recently Viewed Products');
 
         const defaultOptions = {
             isSlider: false,
-            useGraphQL: false,
+            useGraphQL: <?= /** @noEscape */ $viewModelProducts->isFetchRecentlyViewedEnabled() ? 'true' : 'false' ?>,
             noOfProductsToShow: <?= (int) $block->getData('page_size') ?>
         };
         const config = Object.assign({}, defaultOptions, options || {});
