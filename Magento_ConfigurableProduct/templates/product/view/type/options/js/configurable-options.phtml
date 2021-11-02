@@ -16,10 +16,12 @@ use Magento\Framework\View\Element\Template;
     function initConfigurableOptions(productId, optionConfig) {
 
         function findPathParam(key) {
-            const arr = window.location.pathname.split('/').slice(4);
-            for (let i = 0; i < arr.length; i += 2) {
-                if (arr[i] === key && arr.length > i) {
-                    return arr[i + 1];
+            // get all path pairs after BASE_URL/front_name/action_path/action
+            const baseUrlParts = (new URL(BASE_URL)).pathname.replace(/\/$/, '').split('/');
+            const pathParts = window.location.pathname.split('/').slice(baseUrlParts.length + 3);
+            for (let i = 0; i < pathParts.length; i += 2) {
+                if (pathParts[i] === key && pathParts.length > i) {
+                    return pathParts[i + 1];
                 }
             }
         }
