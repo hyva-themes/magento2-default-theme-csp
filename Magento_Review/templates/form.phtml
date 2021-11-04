@@ -307,7 +307,8 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                             this.displayErrorMessage = this.errorMessages.length
                         },
                         submitForm: function () {
-                            var $form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
+                            // Do not remove $form. The variable is used in the recaptcha child template.
+                            let $form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
                             this.validate();
 
                             <?= $block->getChildHtml('recaptcha_validation'); ?>
@@ -387,12 +388,17 @@ mutation createProductReviewMutation(
                                 })
                             };
 
+                            const form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
+                            const recaptchaHeader = form && form.elements['g-recaptcha-response']
+                                ? {'X-ReCaptcha': form.elements['g-recaptcha-response'].value}
+                                : {};
+
                             fetch(`${BASE_URL}graphql`, {
                                 method: 'POST',
-                                headers: {
+                                headers: Object.assign({
                                     'Content-Type': 'application/json;charset=utf-8',
                                     'Store': '<?= $escaper->escapeJs($viewModelStore->getStoreCode()) ?>'
-                                },
+                                }, recaptchaHeader),
                                 credentials: 'include',
                                 body: JSON.stringify({query: query, variables: variables})
                             })
