@@ -6,15 +6,27 @@
  * This product is licensed per Magento install
  * See https://hyva.io/license
  */
-use Magento\Review\Block\Product\View\ListView;
+
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Framework\Escaper;
+use Magento\Review\Block\Product\View as ProductReview;
+use Magento\Theme\Block\Html\Pager;
 
-/* @var ListView $block */
-/* @var SecureHtmlRenderer $secureRenderer */
-/* @var Escaper $escaper */
+/** @var ProductReview $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Escaper $escaper */
+/** @var Pager $toolbar */
+/** @var ViewModelRegistry $viewModels */
 
 $reviewCollection = $block->getReviewsCollection();
+
+// Note: Setting the collection on the toolbar block applies pagination, so it has to happen before collection loading.
+if ($toolbar = $block->getChildBlock('review_list.toolbar')) {
+    $toolbar->setCollection($reviewCollection);
+}
+$reviewCollection->load()->addRateVotes();
+
 $items = $reviewCollection->getItems();
 $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 ?>
@@ -104,9 +116,9 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                 </div>
             <?php endforeach; ?>
         </div>
-        <?php if ($toolbar = $block->getChildBlock('review_list.toolbar')): ?>
+        <?php if ($toolbar): ?>
         <div class="toolbar container review-toolbar mt-4">
-            <?= $toolbar->setCollection($reviewCollection)->toHtml() ?>
+            <?= $toolbar->toHtml() ?>
         </div>
         <?php endif; ?>
     </div>
