@@ -1,0 +1,55 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Html\Select;
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Eav\Model\Entity\Attribute $attribute */
+
+if (!$block->hasData('_select_block')) {
+    $block->setData('_select_block', $block->getLayout()->createBlock(Select::class));
+}
+/** @var Select $selectBlock */
+$selectBlock = $block->getData('_select_block');
+
+$extra = '';
+$name  = $attribute->getAttributeCode();
+
+if ($block->getAttributeInputType($attribute) === 'yesno') {
+    $options = [
+        ['value' => '', 'label' => __('All')],
+        ['value' => '1', 'label' => __('Yes')],
+        ['value' => '0', 'label' => __('No')],
+    ];
+
+} else {
+    $options = $attribute->getSource()->getAllOptions(false);
+
+    // 2 - avoid yes/no selects being multiselects
+    if (count($options) > 2) {
+        $extra = 'multiple="multiple" size="4"';
+        $name  .= '[]';
+    } else {
+        array_unshift($options, ['value' => '', 'label' => __('All')]);
+    }
+}
+
+$selectBlock->setName($name)
+            ->setId($attribute->getAttributeCode())
+            ->setTitle($this->getAttributeLabel($attribute))
+            ->setExtraParams($extra)
+            ->setValue($this->getAttributeValue($attribute))
+            ->setOptions($options)
+            ->setClass('form-input w-full md:w-2/3 lg:w-1/2');
+
+?>
+<?= /** @noEscape */
+$selectBlock->toHtml(); ?>

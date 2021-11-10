@@ -1,0 +1,58 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+/** @var \Magento\CatalogSearch\Block\Advanced\Form $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
+/** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
+$catalogSearchHelper = $block->getData('catalogSearchHelper');
+
+$maxQueryLength = $catalogSearchHelper->getMaxQueryLength();
+
+?>
+<form class="form search advanced" action="<?= $escaper->escapeUrl($block->getSearchPostUrl()) ?>" method="get">
+<fieldset class="fieldset">
+    <legend class="legend"><span><?= $escaper->escapeHtml(__('Search Settings')) ?></span></legend><br />
+    <?php foreach ($block->getSearchableAttributes() as $attribute): ?>
+        <?php $code = $attribute->getAttributeCode() ?>
+        <div class="field <?= $escaper->escapeHtmlAttr($code) ?>">
+            <label for="<?= $escaper->escapeHtmlAttr($code) ?>">
+                <span><?= $escaper->escapeHtml(__($block->getAttributeLabel($attribute))) ?></span>
+            </label>
+            <?php
+            switch ($block->getAttributeInputType($attribute)) {
+                case 'number':
+                case 'price':
+                case 'date':
+                    $fieldTemplate = $block->getTemplateFile('Magento_CatalogSearch::advanced/field/range.phtml');
+                    echo $block->assign('attribute', $attribute)->fetchView($fieldTemplate);
+                    break;
+                case 'select':
+                case 'yesno':
+                    $fieldTemplate = $block->getTemplateFile('Magento_CatalogSearch::advanced/field/select.phtml');
+                    echo $block->assign('attribute', $attribute)->fetchView($fieldTemplate);
+                    break;
+                default:
+                    $fieldTemplate = $block->getTemplateFile('Magento_CatalogSearch::advanced/field/text.phtml');
+                    echo $block->assign('attribute', $attribute)->fetchView($fieldTemplate);
+            } ?>
+        </div>
+    <?php endforeach; ?>
+</fieldset>
+<div class="actions-toolbar">
+  <div class="primary">
+    <button type="submit"
+            class="action search primary"
+            title="<?= $escaper->escapeHtml(__('Search')) ?>">
+        <span><?= $escaper->escapeHtml(__('Search')) ?></span>
+    </button>
+  </div>
+</div>
+</form>
