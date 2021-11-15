@@ -38,9 +38,41 @@ if ($block->getMessageCollection()->getCount()):
     }
 
     (function( hyva, undefined ) {
+        let dispatchedMessages = false;
 
         hyva.initCartMessages = () => {
             try {
+                <?php
+                /**
+                 * Wrap window.dispatchMessages() to avoid duplicate error messages.
+                 * Duplicate messages are permitted to be displayed again after 10 seconds.
+                 *
+                 * Out of stock error messages are triggered when the cart page loads initially and
+                 * are then triggered again when the GraphQL cart query is processed.
+                 * This leads to duplicate error messages.
+                 */
+                ?>
+                if (dispatchedMessages === false && window.dispatchMessages) {
+                    const origDispatchMessages = window.dispatchMessages;
+                    window.dispatchMessages = function(messages, hideAfter) {
+
+                        const oldMessages = (dispatchedMessages || []).filter(message => message.ttl > Date.now());
+
+                        const newMessages = messages.filter(newMessage => {
+                            const duplicateMessages = oldMessages.filter(oldMessage => {
+                                    return newMessage.type === oldMessage.type && newMessage.text === oldMessage.text
+                                });
+                            return duplicateMessages.length === 0;
+                        });
+
+                        origDispatchMessages(newMessages, hideAfter);
+
+                        dispatchedMessages = oldMessages.concat(newMessages.map(message => {
+                            return Object.assign(message, {ttl: Date.now() + 10000}) // expire after 10 seconds
+                        }))
+                    }
+                }
+
                 const messages = <?= /** @noEscape */ json_encode($messages) ?>;
                 window.dispatchMessages && dispatchMessages(messages);
             } catch (error) {
