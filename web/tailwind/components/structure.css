@@ -63,6 +63,13 @@ body {
         }
     }
 
+    .page-with-filter {
+        .columns {
+            .sidebar-main {
+                @apply order-1 col-span-2;
+            }
+        }
+    }
 }
 
 @screen md {
@@ -72,14 +79,14 @@ body {
     .page-layout-3columns {
         .columns {
             @apply grid-cols-3;
-        }
 
-        .main {
-            @apply row-span-2;
-        }
+            .main {
+                @apply row-span-2;
+            }
 
-        .sidebar {
-            @apply col-span-1;
+            .sidebar {
+                @apply col-span-1;
+            }
         }
     }
 

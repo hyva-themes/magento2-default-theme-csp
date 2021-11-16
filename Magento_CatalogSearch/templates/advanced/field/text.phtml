@@ -1,0 +1,26 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Eav\Model\Entity\Attribute $attribute */
+/** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
+$catalogSearchHelper = $block->getData('catalogSearchHelper');
+
+$code = $attribute->getAttributeCode();
+$maxQueryLength = $catalogSearchHelper->getMaxQueryLength();
+?>
+<input type="text"
+       name="<?= $escaper->escapeHtmlAttr($code) ?>"
+       id="<?= $escaper->escapeHtmlAttr($code) ?>"
+       value="<?= $escaper->escapeHtml($block->getAttributeValue($attribute)) ?>"
+       title="<?= $escaper->escapeHtml($block->getAttributeLabel($attribute)) ?>"
+       class="form-input w-full md:w-2/3 lg:w-1/2"
+       maxlength="<?= $escaper->escapeHtmlAttr($maxQueryLength) ?>" />

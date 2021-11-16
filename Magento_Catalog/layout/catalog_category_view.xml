@@ -41,7 +41,10 @@
                     <container name="category.product.list.additional" as="additional" label="Additional Info" after="product_list_toolbar" />
                 </block>
             </block>
+        </referenceContainer>
 
+        <referenceContainer name="category.product.list.additional">
+            <block name="category.products.list.js" template="Magento_Catalog::product/list/js.phtml"/>
         </referenceContainer>
 
         <referenceBlock name="product.price.render.default">
@@ -50,14 +53,6 @@
                 <argument name="is_product_list" xsi:type="boolean">true</argument>
             </arguments>
         </referenceBlock>
-
-        <referenceContainer name="sidebar.additional">
-            <block
-                name="catalog.compare.sidebar"
-                template="Magento_Catalog::product/compare/sidebar.phtml"
-                ifconfig="catalog/frontend/show_sidebar_in_list"
-            />
-        </referenceContainer>
 
     </body>
 </page>

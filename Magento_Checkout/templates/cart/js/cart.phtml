@@ -52,6 +52,9 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
             );
         };
 
+        // the default isLoading state is true, so the class should be present from the beginning, too.
+        document.body.classList.add('overflow-hidden');
+
         return {
             cartId: null,
             customerToken: null,
@@ -60,6 +63,14 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
             isLoading: true,
             isTouchDevice: false,
             showCouponForm: false,
+            startLoading() {
+                this.isLoading = true;
+                document.body.classList.add('overflow-hidden');
+            },
+            stopLoading() {
+                this.isLoading = false;
+                document.body.classList.remove('overflow-hidden');
+            },
             getCartQuery() {
                 return <?= /** @noEscape */ json_encode($viewModelGraphQl->query(
                     'cart_query',
@@ -75,7 +86,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                 )); ?>
             },
             getCart() {
-                this.isLoading = true;
+                this.startLoading();
                 const query = (this.customerToken && this.getCustomerCartQuery()) || this.getCartQuery();
                 const variables = this.customerToken ? {} : {cartId: this.cartId}
 
@@ -100,7 +111,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                     this.updateCartDataDependencies();
 
                 }).catch(displayError).finally(() => {
-                    this.isLoading = false;
+                    this.stopLoading();
                 });
             },
             getCartItems() {
@@ -116,7 +127,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                     this.getCountriesByCustomerSectionData(data); // for shipping estimation
                 } else {
                     this.cartEmpty = true;
-                    this.isLoading = false;
+                    this.stopLoading();
                 }
             },
             isTouchEnabled() {
@@ -144,7 +155,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                 }
             },
             mutateCouponCode() {
-                this.isLoading = true;
+                this.startLoading();
 
                 const couponCode = document.getElementById('coupon_code').value;
                 const couponQuery = couponCode
@@ -195,7 +206,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                     }
                     this.reloadCustomerData();
                 }).catch(displayError).finally(() => {
-                    this.isLoading = false;
+                    this.stopLoading();
                 });
             },
             clearErrorMessages() {
@@ -209,7 +220,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                 typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(messages, 10000);
             },
             mutateItemQty(itemId, qty) {
-                this.isLoading = true;
+                this.startLoading();
 
                 const cartItemUpdateQuery = `<?= /** @noEscape */ $viewModelGraphQl->query(
                     'cart_item_update_mutation',
@@ -250,11 +261,11 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                     }
                     this.reloadCustomerData();
                 }).catch(displayError).finally(() => {
-                    this.isLoading = false;
+                    this.stopLoading();
                 });
             },
             mutateItemRemove(itemId) {
-                this.isLoading = true;
+                this.startLoading();
                 const cartItemRemoveQuery = `<?= /** @noEscape */ $viewModelGraphQl->query(
                     'cart_item_remove_mutation',
                     'mutation removeCartItemMutation($cartId: String!, $itemId: Int) {' .
@@ -296,7 +307,7 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                     }
                     this.reloadCustomerData();
                 }).catch(displayError).finally(() => {
-                    this.isLoading = false;
+                    this.stopLoading();
                 });
             },
             reloadCustomerData() {
@@ -338,6 +349,12 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                 const country = estimateShippingState.country || this.getEstimationCountry();
                 const regionId = estimateShippingState.region_id || this.getEstimationRegionId();
                 const regionName = estimateShippingState.region || this.getEstimationRegionName();
+
+                if (! this.countries[this.getEstimationCountry()]) {
+                    console.error('[Configuration Error] The default country is not in the list of allowed countries!');
+                    this.countries[this.getEstimationCountry()] = {name: ''};
+                }
+
                 if (regionId) {
                     this.setEstimationCountry(country);
                     this.setEstimationRegionById(regionId);

@@ -102,7 +102,7 @@ if ($option): ?>
                 <?php if (in_array($value->getOptionTypeId(), $configValue)): ?>
                    selected="selected"
                 <?php endif; ?>
-                x-html="'<?= $escaper->escapeHtml($value->getTitle()) ?>' +
+                x-html="'<?= $escaper->escapeJs($escaper->escapeHtml($value->getTitle())) ?> ' +
                     (
                         getFormattedOptionPrice('<?= $escaper->escapeJs($optionId) ?>') ||
                         ''

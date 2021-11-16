@@ -1,0 +1,133 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\ProductPrice;
+use Magento\Downloadable\Block\Catalog\Product\Links as DownloadableLinks;
+use Magento\Framework\Escaper;
+
+/** @var DownloadableLinks $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var ProductPrice $productPriceViewModel */
+/** @var HeroiconsOutline $iconViewModel */
+
+if (!$block->getProduct()->isSaleable() && $block->hasLinks()) {
+    return;
+}
+
+$productPriceViewModel    = $viewModels->require(ProductPrice::class);
+$iconViewModel            = $viewModels->require(HeroiconsOutline::class);
+$displayTax               = $productPriceViewModel->displayPriceIncludingTax();
+$linksPurchasedSeparately = $block->getLinksPurchasedSeparately();
+$links                    = $block->getLinks();
+
+?>
+<?php if ($linksPurchasedSeparately): ?>
+<script>
+    'use strict';
+    function initDownloadableLinks(config) {
+
+        const optionPrices = Object.keys(config.links).reduce((priceMap, optionId) => {
+            const key = '<?= /** @noEscape  */ $displayTax ? 'finalPrice' : 'basePrice' ?>'
+            priceMap[optionId] = config.links[optionId][key];
+            return priceMap;
+        }, {});
+
+        return {
+            selectedOptions: [],
+            init() {
+                this.validate();
+                // Dispatch event after a timeout of 150ms so the listener component is initialized.
+                window.setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent('update-custom-option-prices', {detail: optionPrices}));
+                }, 150);
+            },
+            validate() {
+                const message = this.selectedOptions.length === 0
+                    ? '<?= $escaper->escapeJs(__('Please select one of the options.')) ?>'
+                    : ''
+                const fields = this.$el.querySelectorAll('input[name="links[]"]');
+                fields[fields.length - 1].setCustomValidity(message);
+            },
+            linkSelectionChange(checkbox)
+            {
+                const payload = {
+                    customOptionId: checkbox.value,
+                    active: checkbox.checked
+                }
+                window.dispatchEvent(new CustomEvent('update-custom-option-active', {detail: payload}));
+                this.validate();
+            },
+            areAllSelected() {
+                return this.selectedOptions.length === <?= /** @noEscape */ count($links) ?>;
+            },
+            toggleSelection() {
+                this.selectedOptions = this.selectedOptions.length <  <?= /** @noEscape */ count($links) ?>
+                    ? Object.keys(config.links)
+                    : [];
+            }
+        };
+    }
+</script>
+<?php endif; ?>
+<legend class="text-gray-900 text-xl title-font font-medium mb-4"><span><?= $escaper->escapeHtml($block->getLinksTitle()) ?></span></legend>
+<div class="field downloads"
+    <?php if ($linksPurchasedSeparately): ?>
+     x-data="initDownloadableLinks(<?= $escaper->escapeHtmlAttr($block->getJsonConfig()) ?>)"
+     x-init="init"
+    <?php endif; ?>
+>
+    <div class="control" id="downloadable-links-list">
+        <?php foreach ($links as $link) : ?>
+            <div class="flex flow-row justify-between">
+                <div>
+                    <?php if ($linksPurchasedSeparately): ?>
+                        <input type="checkbox"
+                               form="product_addtocart_form"
+                               class="mr-2"
+                               name="links[]"
+                               id="links_<?= $escaper->escapeHtmlAttr($link->getId()) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($link->getId()) ?>" <?= $escaper->escapeHtml($block->getLinkCheckedValue($link)) ?>
+                               x-model="selectedOptions"
+                               @change="linkSelectionChange($event.target)"
+                        />
+                        <label class="inline-block" for="links_<?= $escaper->escapeHtmlAttr($link->getId()) ?>">
+                    <?php endif; ?>
+                        <span><?= $escaper->escapeHtml($link->getTitle()) ?></span>
+                    <?php if ($linksPurchasedSeparately) : ?>
+                            <?= /* @noEscape */ $block->getLinkPrice($link) ?>
+                        </label>
+                    <?php endif; ?>
+                </div>
+                <?php if ($link->getSampleFile() || $link->getSampleUrl()) : ?>
+                    <a class="item-link samples-item-link"
+                       href="<?= $escaper->escapeUrl($block->getLinkSampleUrl($link)) ?>" <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
+                        <?= $iconViewModel->documentDownloadHtml('inline-block w-6 h-6 mr-1', 26, 26) ?>
+                        </svg><?= $escaper->escapeHtml(__('sample')) ?>
+                    </a>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+        <?php if ($linksPurchasedSeparately && count($links) > 1) : ?>
+            <div class="field choice downloads-all">
+                <button type="button" class="" @click="toggleSelection">
+                    <?= $iconViewModel->checkCircleHtml('inline-flex w-6 h-6 mr-1', 26, 26) ?>
+                    <span x-text="
+                        areAllSelected()
+                            ? '<?= $escaper->escapeJs(__('Unselect all')) ?>'
+                            : '<?= $escaper->escapeJs(__('Select all')) ?>'
+                    "><?= $escaper->escapeHtml(__('Select all')) ?></span>
+                </button>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

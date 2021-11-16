@@ -6,20 +6,32 @@
  * This product is licensed per Magento install
  * See https://hyva.io/license
  */
-use Magento\Review\Block\Product\View\ListView;
+
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Framework\Escaper;
+use Magento\Review\Block\Product\View as ProductReview;
+use Magento\Theme\Block\Html\Pager;
 
-/* @var ListView $block */
-/* @var SecureHtmlRenderer $secureRenderer */
-/* @var Escaper $escaper */
+/** @var ProductReview $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Escaper $escaper */
+/** @var Pager $toolbar */
+/** @var ViewModelRegistry $viewModels */
 
 $reviewCollection = $block->getReviewsCollection();
+
+// Note: Setting the collection on the toolbar block applies pagination, so it has to happen before collection loading.
+if ($toolbar = $block->getChildBlock('review_list.toolbar')) {
+    $toolbar->setCollection($reviewCollection);
+}
+$reviewCollection->load()->addRateVotes();
+
 $items = $reviewCollection->getItems();
 $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 ?>
 <?php if (count($items)): ?>
-    <div class="container mx-auto px-5 py-6 items-center" id="customer-reviews">
+    <div class="container mx-auto px-5 py-6 items-center" id="customer-review-list">
         <div class="container mx-auto flex pt-6 pb-3 mb-6 md:flex-row border-b-2 border-gray-300">
             <?php if (!$block->getHideTitle()): ?>
                 <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
@@ -104,9 +116,9 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                 </div>
             <?php endforeach; ?>
         </div>
-        <?php if ($toolbar = $block->getChildBlock('review_list.toolbar')): ?>
+        <?php if ($toolbar): ?>
         <div class="toolbar container review-toolbar mt-4">
-            <?= $toolbar->setCollection($reviewCollection)->toHtml() ?>
+            <?= $toolbar->toHtml() ?>
         </div>
         <?php endif; ?>
     </div>

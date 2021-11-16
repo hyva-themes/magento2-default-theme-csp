@@ -14,6 +14,14 @@
             <block class="Magento\Downloadable\Block\Catalog\Product\Samples"
                    name="product.info.downloadable.samples" as="samples"
                    template="Magento_Downloadable::product/view/samples.phtml" after="-"/>
+            <block class="Magento\Downloadable\Block\Catalog\Product\Links" name="product.info.downloadable.options" as="type_downloadable_options" after="-" template="Magento_Downloadable::product/view/links.phtml">
+                <block class="Magento\Catalog\Pricing\Render" name="product.price.link" after="product.info.downloadable.options">
+                    <arguments>
+                        <argument name="price_render" xsi:type="string">product.price.render.default</argument>
+                        <argument name="price_type_code" xsi:type="string">link_price</argument>
+                    </arguments>
+                </block>
+            </block>
         </referenceContainer>
     </body>
 </page>

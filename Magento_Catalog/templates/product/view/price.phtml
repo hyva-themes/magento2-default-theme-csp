@@ -137,6 +137,12 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
                     this.initialFinalPrice
                 )
             },
+            isPriceHidden() {
+                const finalPrice = this.calculatedFinalPriceWithCustomOptions ||
+                    this.calculatedFinalPrice ||
+                    this.initialFinalPrice;
+                return <?= /** @noEscape  */ $product->isSaleable() ? 'false' : 'true' ?> && finalPrice === 0;
+            },
             eventListeners: {
                 ['@update-prices-<?= (int)$product->getId() ?>.window'](event) {
                     this.activeProductsPriceData = event.detail;
@@ -164,7 +170,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
      x-spread="eventListeners"
      class="price-box price-final_price"
 >
-    <template x-if="!activeProductsPriceData">
+    <template x-if="!activeProductsPriceData && !isPriceHidden()">
         <div class="price-container">
             <?php if ($finalPrice < $regularPrice): ?>
                 <div class="old-price mr-2 flex">
@@ -187,8 +193,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
                 <span id="product-price-<?= (int)$product->getId() ?>"
                       class="price-wrapper title-font font-medium text-2xl text-gray-900">
                     <span class="price" x-html="getFormattedFinalPrice()">
-                        <?= /** @noEscape */
-                        $productViewModel->format($finalPrice) ?>
+                        <?= /** @noEscape */ $productViewModel->format($finalPrice) ?>
                     </span>
                 </span>
                 <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($finalPrice) ?>">
