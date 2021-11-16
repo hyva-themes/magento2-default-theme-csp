@@ -28,7 +28,7 @@
         "browser-sync": "browser-sync start --config ./browser-sync.config.js",
         "output-success": "echo \"\\033[0;32mDone!\\033[0m\""
     },
-    "author": "Willem Wigman",
+    "author": "Hyvä Themes BV",
     "license": "ISC",
     "private": true
 }

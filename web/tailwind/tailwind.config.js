@@ -99,6 +99,10 @@ module.exports = {
                 'screen-25': '25vh',
                 'screen-50': '50vh',
                 'screen-75': '75vh',
+            },
+            container: {
+                center: true,
+                padding: '1.5rem'
             }
         },
     },

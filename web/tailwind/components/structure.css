@@ -12,10 +12,6 @@ body {
     @apply my-8;
 }
 
-.container {
-    @apply mx-auto px-6;
-}
-
 .flex-columns-wrapper {
     @apply flex flex-col;
 
