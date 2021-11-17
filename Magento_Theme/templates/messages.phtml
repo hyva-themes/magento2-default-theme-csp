@@ -74,8 +74,7 @@ declare(strict_types=1);
                 <template x-for="(message, index) in messages" :key="index">
                     <div>
                         <template x-if="message">
-                            <div :class="message.type
-                + ' message flex items-center justify-between w-full p-2 bg-gray-600 shadow rounded text-white mb-2'"
+                            <div class="message" :class="message.type"
                                  :ui-id="'message-' + message.type"
                             >
                                 <span x-html="message.text"></span>

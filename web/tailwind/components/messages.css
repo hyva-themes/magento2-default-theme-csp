@@ -1,21 +1,30 @@
 .page.messages {
     @apply sticky z-10;
     top: 0px;
+
+    .messages
+    section#messages {
+        @apply container mx-auto py-3;
+    }
 }
-section#messages {
-    .message {
-        &.error {
-            @apply bg-red-500;
-        }
 
-        &.success {
-            @apply bg-green-500;
-        }
+.message {
+    @apply flex items-center justify-between w-full p-2 bg-gray-600 shadow rounded text-white mb-2;
+}
 
-        &.warning,
-        &.notice {
-            @apply bg-yellow-500;
-        }
+.message {
+    &.error {
+        @apply bg-red-500;
+    }
+
+    &.success {
+        @apply bg-green-500;
+    }
+
+    &.info,
+    &.warning,
+    &.notice {
+        @apply bg-yellow-500;
     }
 
     a {

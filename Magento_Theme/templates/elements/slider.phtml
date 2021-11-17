@@ -142,7 +142,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
             currency: [],
             loading: true,
             minHeight() {
-                return 'min-height: ' + ((this.loading && '491px') || 0);
+                return 'min-height: ' + ((this.loading && '650px') || 0);
             },
             query: <?= /** @noEscape */ json_encode($graphqlQuery) ?>,
             getProducts($nextTick) {
@@ -266,7 +266,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
             getSlider() {
                 return this.$el.querySelector('.js_slides');
             },
-            pageSize: 1,
+            pageSize: 4,
             pageFillers: 0,
             calcPageSize() {
                 var slider = this.getSlider();
@@ -298,7 +298,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
          @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
 >
     <template x-if="products && products.length">
-        <div class="container relative px-5">
+        <div class="relative">
             <?php if ($title): ?>
                 <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 border-b-2
                     border-gray-300 md:flex-row">
@@ -307,7 +307,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                     </h3>
                 </div>
             <?php endif; ?>
-            <div class="relative w-full overflow-x-hidden">
+            <div class="relative w-full overflow-x-hidden focus-within:ring-1 active:ring-0 ring-blue-500 ring-opacity-50">
                 <div class="relative flex flex-nowrap w-full overflow-auto transition-all js_slides snap"
                      @scroll.debounce="calcActive"
                 >
@@ -341,13 +341,13 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                                 </p>
                                 <p class="pt-1 text-lg text-center text-gray-900"
                                    x-text="hyva.formatPrice(product.price_range.minimum_price.final_price.value)"></p>
-                                <p class="flex flex-wrap gap-2 inline p-3">
+                                <p class="flex flex-wrap gap-2 inline px-1 pt-3">
                                     <a class="justify-center w-auto mr-auto btn btn-primary"
                                        :href="'<?= $escaper->escapeUrl($block->getBaseUrl()) ?>' +
                                             product.url_key + (product.url_suffix || '')">
                                         <span class="inline"><?= $escaper->escapeHtml(__('View Product')) ?></span>
                                     </a>
-                                    <span class="inline-flex gap-2">
+                                    <span class="inline-flex gap-2 ml-auto">
                                         <?php if ($compareViewModel->showInProductList()): ?>
                                             <button @click.prevent="addToCompare(product.id)"
                                                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
@@ -383,10 +383,12 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                         }"></div>
                 </div>
             </div>
+            <div style="min-height: 65px">
             <template x-if="products.length && products.length > pageSize">
-                <div class="flex items-center justify-center flex-1 p-4" x-cloak>
+                <div class="flex items-center justify-center flex-1 p-4">
                     <button
                         aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
+                        tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active === 0 }"
                         @click="getSlider().scrollLeft =
@@ -395,6 +397,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                     </button>
                     <template x-for="(product, index) in products" :key="index">
                         <span class="flex-shrink-0 block w-3 h-3 mx-1 bg-black bg-opacity-25 rounded-full shadow cursor-pointer"
+                              tabindex="-1"
                               :class="{
                                     'bg-opacity-100': active === index,
                                     'hidden': (pageSize !== 1 && !!(index % pageSize))
@@ -405,6 +408,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                     </template>
                     <button
                         aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
+                        tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active >= products.length-pageSize }"
                         @click="getSlider().scrollLeft =
@@ -413,6 +417,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                     </button>
                 </div>
             </template>
+            </div>
         </div>
     </template>
 </section>

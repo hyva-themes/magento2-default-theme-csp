@@ -18,16 +18,26 @@
         </referenceBlock>
 
         <referenceContainer name="page.messages">
-            <block class="Magento\Checkout\Block\Cart\ValidationMessages" name="checkout.cart.validationmessages"/>
+            <block
+                class="Magento\Checkout\Block\Cart\ValidationMessages"
+                name="checkout.cart.validationmessages"
+                template="Magento_Checkout::messages.phtml"
+            />
         </referenceContainer>
+
         <referenceContainer name="content">
             <block name="cart_dynamic" template="Magento_Checkout::cart.phtml" cacheable="false">
                 <block name="cart_main_js" template="Magento_Checkout::cart/js/cart.phtml"/>
                 <block name="loading" template="Hyva_Theme::ui/loading.phtml"/>
-                <block name="items" template="Magento_Checkout::cart/items.phtml"/>
+                <block name="items" template="Magento_Checkout::cart/items.phtml">
+                    <container name="additional.cart.item.options" as="cart.item.options"/>
+                </block>
                 <block name="coupon" class="Magento\Checkout\Block\Cart\Coupon"
                        template="Magento_Checkout::cart/coupon/form.phtml"/>
-                <block name="totals" template="Magento_Checkout::cart/totals.phtml"/>
+                <container name="additional.cart.information"/>
+                <block name="totals" template="Magento_Checkout::cart/totals.phtml">
+                    <block name="estimate_shipping" template="Magento_Checkout::cart/estimate-shipping.phtml"/>
+                </block>
                 <block name="empty" template="Magento_Checkout::cart/noItems.phtml"/>
                 <block name="checkout.cart.methods.bottom" class="Magento\Checkout\Block\Cart"
                        template="Magento_Checkout::cart/methods.phtml">

@@ -35,6 +35,9 @@ $activeSelectOptions = [];
            data-option-id="<?= (int)$optionId ?>"
            data-selection-id="<?= (int)$selections[0]->getSelectionId() ?>"
     />
+    <?php if ((int)$selections[0]->getSelectionId()) {
+        array_push($activeSelectOptions, (int)$selections[0]->getSelectionId());
+    } ?>
 <?php else: ?>
     <?php if (!$option->getRequired()): ?>
         <div class="field choice">
@@ -45,6 +48,10 @@ $activeSelectOptions = [];
                    class="radio product bundle option"
                    <?= ($default && $default->isSalable())?'':' checked="checked" ' ?>
                    value=""
+                   x-on:change="
+                        activeSelectOptions['<?= (int)$optionId ?>'] = [$event.target.value];
+                        $nextTick(() => {calculateTotalPrice()});
+                   "
             />
             <label class="label text-sm"
                    for="bundle-option-<?= (int)$optionId ?>">
@@ -72,7 +79,7 @@ $activeSelectOptions = [];
                    value="<?= (int)$selectionId ?>"
                    data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
                    x-on:change="
-                        activeSelectOptions['<?= (int)$optionId ?>'] = $event.target.value;
+                        activeSelectOptions['<?= (int)$optionId ?>'] = [$event.target.value];
                         $nextTick(() => {calculateTotalPrice()});
                    "
             />
@@ -92,45 +99,7 @@ $activeSelectOptions = [];
         <span><?= $escaper->escapeHtml(__('Quantity')) ?></span>
     </label>
     <script>
-        const qtyHelper_<?= (int)$optionId ?> = (() => {
-            return {
-                getQtyValue(optionConfig, activeSelectOptions) {
-                    const activeSelectOption = activeSelectOptions[<?= (int)$optionId ?>];
-                    if (!activeSelectOption || !activeSelectOption.length) {
-                        return "<?= $escaper->escapeHtmlAttr($defaultQty) ?>";
-                    }
-                    const selectionConfig = optionConfig
-                        .options[<?= (int)$optionId ?>]
-                        .selections[activeSelectOption[0]];
 
-                    return selectionConfig ? selectionConfig.qty : "0";
-
-                },
-                getQtyDisabled(optionConfig, activeSelectOptions) {
-                    const activeSelectOption = activeSelectOptions[<?= (int)$optionId ?>];
-                    if (!activeSelectOption || !activeSelectOption.length) {
-                        return true;
-                    }
-                    const selectionConfig = optionConfig
-                        .options[<?= (int)$optionId ?>]
-                        .selections[activeSelectOption[0]];
-
-                    return !selectionConfig || selectionConfig.customQty === "0";
-
-                },
-                setQtyValue(optionConfig, activeSelectOptions, value) {
-                    const activeSelectOption = activeSelectOptions[<?= (int)$optionId ?>];
-                    if (!activeSelectOption || !activeSelectOption.length) {
-                        return;
-                    }
-                    const selectionConfig = optionConfig
-                        .options[<?= (int)$optionId ?>]
-                        .selections[activeSelectOption[0]];
-
-                    selectionConfig.qty = value;
-                }
-            }
-        })();
     </script>
     <input
         id="bundle-option-<?= (int)$optionId ?>-qty-input"
@@ -140,12 +109,12 @@ $activeSelectOptions = [];
         type="number"
         min="0"
         value="<?= $escaper->escapeHtmlAttr($defaultQty) ?>"
-        :value="qtyHelper_<?= (int)$optionId ?>.getQtyValue(optionConfig, activeSelectOptions)"
+            :value="getQtyValue(<?= (int)$optionId ?>)"
         x-on:change="
-            qtyHelper_<?= (int)$optionId ?>.setQtyValue(optionConfig, activeSelectOptions, $event.target.value);
+            setQtyValue(<?= (int)$optionId ?>, $event.target.value);
             calculateTotalPrice($dispatch)"
         <?php if (!$canChangeQty): ?> disabled <?php endif; ?>
-        :disabled="qtyHelper_<?= (int)$optionId ?>.getQtyDisabled(optionConfig, activeSelectOptions)"
+        :disabled="getQtyDisabled(<?= (int)$optionId ?>)"
     />
 </div>
 

@@ -8,8 +8,10 @@
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\BlockCache;
+use Hyva\Theme\ViewModel\CurrentCategory;
 use Hyva\Theme\ViewModel\ProductPage;
 use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Helper\Product as ProductViewHelper;
 use Magento\Framework\Escaper;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
@@ -19,11 +21,14 @@ use Magento\Framework\Escaper;
 /** @var ViewModelRegistry $viewModels */
 /** @var ProductPage $productViewModel */
 /** @var BlockCache $blockCacheViewModel */
+/** @var CurrentCategory $currentCategoryViewModel */
 
 $productViewModel    = $viewModels->require(ProductPage::class);
 $blockCacheViewModel = $viewModels->require(BlockCache::class);
+$currentCategoryViewModel = $viewModels->require(CurrentCategory::class);
 
 $productCollection = $block->getLoadedProductCollection();
+
 ?>
 <?php if (!$productCollection->count()):?>
     <div class="message info empty">
@@ -62,7 +67,10 @@ $productCollection = $block->getLoadedProductCollection();
                 $templateType,
                 $block->getTemplate(),
                 $product->getStoreId(),
-                $productViewModel->getCurrencyData()['code']
+                $productViewModel->getCurrencyData()['code'],
+                $productViewModel->isProductUrlIncludesCategory() && $currentCategoryViewModel->exists()
+                    ? $currentCategoryViewModel->get()->getId()
+                    : '0'
             ];
             ?>
                 <?= $block->getLayout()->getBlock('product_list_item')

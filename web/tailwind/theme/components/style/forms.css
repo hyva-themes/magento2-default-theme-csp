@@ -1,43 +1,34 @@
-form .field {
-    @apply my-3;
-}
+form,
+fieldset {
+    .field {
+        @apply my-3;
+    }
 
-form label {
-    @apply mb-2 block text-secondary-darker;
-}
+    label {
+        @apply mb-2 block text-secondary-darker;
+    }
 
-form .field.choice {
-    @apply flex items-center
-}
+    .field.choice {
+        @apply flex items-center
+    }
 
-form .field.choice input {
-    @apply mr-4
-}
+    .field.choice input {
+        @apply mr-4
+    }
 
-form .field.choice label {
-    @apply mb-0
-}
+    .field.choice label {
+        @apply mb-0
+    }
 
-form legend {
-    @apply text-primary text-xl mb-3
-}
+    legend {
+        @apply text-primary text-xl mb-3
+    }
 
-form legend + br {
-    @apply hidden
+    legend + br {
+        @apply hidden
+    }
 }
 
 fieldset ~ fieldset {
     @apply mt-8;
-}
-
-form select {
-    @apply border border-primary bg-white w-full py-2 pl-3 pr-10;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a0aec0'%3e%3cpath d='M15.3 9.3a1 1 0 0 1 1.4 1.4l-4 4a1 1 0 0 1-1.4 0l-4-4a1 1 0 0 1 1.4-1.4l3.3 3.29 3.3-3.3z'/%3e%3c/svg%3e");
-    appearance: none;
-    color-adjust: exact;
-    background-repeat: no-repeat;
-    font-size: 1rem;
-    line-height: 1.5;
-    background-position: right .5rem center;
-    background-size: 1.5em 1.5em;
 }

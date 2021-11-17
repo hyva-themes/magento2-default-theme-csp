@@ -13,26 +13,25 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 ?>
 <?= $block->getChildHtml('cart_main_js') ?>
-<div class="container">
-    <section class="relative min-h-screen-50"
-             :class="{ 'min-h-screen-50 sm:min-h-screen-75 lg:min-h-screen-50': cartEmpty }"
-             x-data="initCart()"
-             x-init="isTouchEnabled();"
-             @private-content-loaded.window="getCartByCustomerSectionData($event.detail.data)"
-    >
-        <?= $block->getChildHtml('loading') ?>
-        <?= $block->getChildHtml('items') ?>
-        <div class="grid lg:grid-cols-2" x-show="!isLoading && !cartEmpty">
-            <div>
-                <?= $block->getChildHtml('coupon') ?>
-            </div>
-            <div>
-                <?= $block->getChildHtml('totals') ?>
-            </div>
+<section class="relative min-h-screen-50"
+         :class="{ 'min-h-screen-50 sm:min-h-screen-75 lg:min-h-screen-50': cartEmpty }"
+         x-data="initCart()"
+         x-init="isTouchEnabled();"
+         @private-content-loaded.window="getCartByCustomerSectionData($event.detail.data)"
+>
+    <?= $block->getChildHtml('loading') ?>
+    <?= $block->getChildHtml('items') ?>
+    <div class="grid lg:grid-cols-2 gap-8" x-show="!isLoading && !cartEmpty">
+        <div>
+            <?= $block->getChildHtml('coupon') ?>
+            <?= $block->getChildHtml('additional.cart.information') ?>
         </div>
-        <div x-show="!isLoading && !cartEmpty">
-        <?= $block->getChildHtml('checkout.cart.methods.bottom') ?>
+        <div>
+            <?= $block->getChildHtml('totals') ?>
         </div>
-        <?= $block->getChildHtml('empty') ?>
-    </section>
-</div>
+    </div>
+    <div x-show="!isLoading && !cartEmpty">
+    <?= $block->getChildHtml('checkout.cart.methods.bottom') ?>
+    </div>
+    <?= $block->getChildHtml('empty') ?>
+</section>

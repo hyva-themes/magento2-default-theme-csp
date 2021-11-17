@@ -1,0 +1,36 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+/** @var Term $block */
+/** @var Escaper $escaper */
+
+use Magento\Framework\Escaper;
+use Magento\Search\Block\Term;
+?>
+<?php if (count($block->getTerms()) > 0): ?>
+    <ul class="flex flex-wrap -mx-2 md:-mx-4 items-baseline">
+        <?php foreach ($block->getTerms() as $term): ?>
+            <li class="m-2 md:mx-4"
+                style="font-size: <?= /** @noEscape */ ($term->getRatio()*70+75) ?>%"
+            >
+                <a href="<?= $escaper->escapeUrl($block->getSearchUrl($term)) ?>"
+                   class="hover:underline"
+                >
+                    <?= $escaper->escapeHtml($term->getQueryText()) ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <div>
+        <?= $escaper->escapeHtml(__('There are no search terms available.')) ?>
+    </div>
+<?php endif; ?>
+

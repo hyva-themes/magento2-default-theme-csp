@@ -7,6 +7,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
@@ -22,6 +23,9 @@ $viewModelItemOutput = $viewModels->require(ItemOutput::class);
 /** @var Wishlist $wishlistViewModel */
 $wishlistViewModel = $viewModels->require(Wishlist::class);
 
+/** @var HeroiconsSolid $heroiconsSolid */
+$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
+
 $displayPriceTaxBoth = $viewModelItemOutput->isItemPriceDisplayBoth();
 $displayPriceInclTax = $viewModelItemOutput->isItemPriceInclTax();
 $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
@@ -36,7 +40,7 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
             <div class="p-2 text-center"><?= $escaper->escapeHtml(__('Qty')) ?></div>
             <div class="p-2 text-right"><?= $escaper->escapeHtml(__('Subtotal')) ?></div>
         </div>
-        <template x-for="item in cartData.items">
+        <template x-for="item in getCartItems()">
             <div
                 class="table-row-item flex flex-row flex-wrap lg:grid lg:grid-cols-7 xl:grid-cols-8
                     py-4 justify-end md:justify-start">
@@ -103,7 +107,12 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                         </div>
                                         <template x-for="selected_option in option.values">
                                             <div class="text-sm col-span-3 inline-block">
-                                                <span x-text="selected_option.label"></span>
+                                                <template x-if="selected_option.label === ''">
+                                                    <span x-text="selected_option.value"></span>
+                                                </template>
+                                                <template x-if="selected_option.label !== ''">
+                                                    <span x-text="selected_option.label"></span>
+                                                </template>
                                                 <template x-if="selected_option.price.value">
                                                     <span class="text-gray-700">
                                                         + <span
@@ -117,6 +126,13 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                                     </div>
                                 </template>
                             </div>
+                        </template>
+                        <?= $block->getChildHtml('cart.item.options') ?>
+                        <template x-if="item.errors">
+                            <p class="bg-red-500 py-2 px-4 rounded my-2 text-white">
+                                <?= $heroiconsSolid->exclamationHtml('w-6 h-6 mr-2 inline', 25, 25); ?>
+                                <span x-text="item.errors"></span>
+                            </p>
                         </template>
                         <p x-show="item.product_type !== 'grouped'">
                             <a class="mt-2 underline text-sm inline-block text-primary-dark"
@@ -192,14 +208,18 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                             <?= $escaper->escapeHtml(__('Qty')) ?>
                         </p>
                         <div class="block text-left flex items-center">
+                            <label class="label sr-only" :for="'qty-' + item.id">
+                                <?= $escaper->escapeHtml(__('Quantity')) ?>
+                            </label>
                             <input type="number"
-                                :name="'qty' + item.id"
-                                x-model.number="item.quantity"
-                                :value="item.quantity"
-                                class="form-input px-2 py-2 w-20 text-center"
-                                max="99"
-                                min="1"
-                                x-on:input.debounce.1000="mutateItemQty(item.id, $event.target.value);"
+                                   :id="'qty-' + item.id"
+                                   :name="'qty' + item.id"
+                                   x-model.number="item.quantity"
+                                   :value="item.quantity"
+                                   class="form-input px-2 py-2 w-20 text-center"
+                                   max="99"
+                                   min="1"
+                                   x-on:input.debounce.1000="mutateItemQty(item.id, $event.target.value);"
                             />
                         </div>
                     </div>

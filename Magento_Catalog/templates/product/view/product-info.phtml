@@ -35,7 +35,7 @@ $product = $productViewModel->getProduct();
     </h1>
 
     <div class="my-2 cursor-pointer"
-         onclick="document.getElementById('customer-reviews').scrollIntoView({behavior: 'smooth'})">
+         onclick="(document.getElementById('customer-review-list') || document.getElementById('customer-reviews')).scrollIntoView({behavior: 'smooth'})">
         <?= $block->getChildHtml('product.info.review') ?>
     </div>
 

@@ -41,7 +41,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
             getSlider() {
                 return this.$el.querySelector('.js_slides');
             },
-            pageSize: 1,
+            pageSize: 4,
             pageFillers: 0,
             calcPageSize() {
                 const slider = this.getSlider();
@@ -66,13 +66,16 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
     }
 
 </script>
-<section class="my-12 text-gray-700 body-font"
+<?php ?>
+<section class="<?=
+$escaper->escapeHtmlAttr($block->getData('maybe_purged_tailwind_section_classes')) ?: 'my-12 text-gray-700 body-font';
+?>"
          x-data="initSliderComponent<?= /** @noEscape */ $uniqueId?>()"
          x-init="calcPageSize();"
          @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
 >
     <?php if ($items): ?>
-        <div class="container relative px-5">
+        <div class="relative">
             <?php if ($title): ?>
                 <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 border-b-2
                     border-gray-300 md:flex-row">
@@ -81,7 +84,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                     </h3>
                 </div>
             <?php endif; ?>
-            <div class="relative w-full overflow-x-hidden">
+            <div class="relative w-full overflow-x-hidden focus-within:ring-1 active:ring-0 ring-blue-500 ring-opacity-50">
                 <div class="relative flex flex-nowrap w-full overflow-auto transition-all js_slides snap"
                      @scroll.debounce="calcActive"
                 >
@@ -103,10 +106,12 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                         }"></div>
                 </div>
             </div>
+            <div style="min-height: 65px">
             <template x-if="itemCount > pageSize">
-                <div class="flex items-center justify-center flex-1 p-4" x-cloak>
+                <div class="flex items-center justify-center flex-1 p-4">
                     <button
                         aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
+                        tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active === 0 }"
                         @click="getSlider().scrollLeft =
@@ -127,6 +132,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                     <?php endforeach; ?>
                     <button
                         aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
+                        tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active >= itemCount-pageSize }"
                         @click="getSlider().scrollLeft =
@@ -135,6 +141,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                     </button>
                 </div>
             </template>
+            </div>
         </div>
     <?php endif; ?>
 </section>

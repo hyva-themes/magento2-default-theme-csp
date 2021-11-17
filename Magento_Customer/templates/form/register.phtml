@@ -20,6 +20,7 @@ use Hyva\Theme\ViewModel\ReCaptcha;
 /** @var Escaper $escaper */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+// phpcs:disable Generic.Files.LineLength.TooLong
 
 $formId = 'accountcreate';
 
@@ -33,6 +34,9 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
     $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
     $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
 }
+$region = $block->getAttributeData()->getFrontendLabel('region');
+$selectRegion = 'Please select a region, state or province.';
+$displayAll = $block->getConfig('general/region/display_all');
 ?>
 <div class="mb-8">
     <?php /* Extensions placeholder */ ?>
@@ -40,6 +44,9 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
     <form class="form create account form-create-account"
           action="<?= $escaper->escapeUrl($block->getPostActionUrl()) ?>"
           x-data="initForm()"
+          <?php if ($block->getShowAddressFields()): ?>
+          @private-content-loaded.window="onPrivateContentLoaded(event.detail.data)"
+          <?php endif; ?>
           id="<?= $escaper->escapeHtmlAttr($formId) ?>"
           @submit.prevent="submitForm()"
           method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off">
@@ -49,7 +56,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
         <?= $block->getBlockHtml($recaptchaInputFieldBlock) ?>
         <div class="md:grid grid-cols-2 gap-4">
             <fieldset class="my-8 card">
-                <legend>
+                <legend class="contents">
                     <span>
                         <?= $escaper->escapeHtml(__('Personal Information')) ?>
                     </span>
@@ -95,7 +102,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 <?= $block->getChildHtml('fieldset_create_info_additional') ?>
             </fieldset>
             <fieldset class="my-8 card">
-                <legend>
+                <legend class="contents">
                     <span>
                         <?= $escaper->escapeHtml(__('Sign-in Information')) ?></span>
                 </legend>
@@ -243,27 +250,44 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                     </div>
                 </div>
 
-                <div class="field region required">
-                    <label for="region_id" class="label"><span><?= /* @noEscape */
-                            $block->getAttributeData()->getFrontendLabel('region') ?></span></label>
+                <div class="field region w-full"
+                     x-cloak
+                     x-show="isRegionRequired || showOptionalRegion"
+                >
+                    <label class="label" for="region_id">
+                        <span><?= /* @noEscape */ $region ?></span>
+                    </label>
                     <div class="control">
-                        <select id="region_id" name="region_id" title="<?= /* @noEscape */
-                        $block->getAttributeData()->getFrontendLabel('region') ?>" class="validate-select region_id"
-                                style="display:none;">
-                            <option value="">
-                                <?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?>
-                            </option>
-                        </select>
-                        <?php //phpcs:disable ?>
-                        <input type="text" id="region" name="region"
-                               value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>" title="<?= /* @noEscape */
-                        $block->getAttributeData()->getFrontendLabel('region') ?>"
-                               class="form-input <?= $escaper->escapeHtmlAttr(
-                                   $this->helper(Address::class)->getAttributeValidationClass(
-                                       'region'
-                                   )
-                               ) ?>" style="display:none;">
-                        <?php //phpcs:enable ?>
+                        <template x-if="hasAvailableRegions() && isRegionRequired">
+                            <select id="region_id" name="region_id"
+                                    title="<?= /* @noEscape */ $region ?>"
+                                    class="form-select validate-select region_id"
+                                    :required="isRegionRequired"
+                                    x-ref="region_id"
+                                    x-model="selectedRegion"
+                            >
+                                <option value=""><?= $escaper->escapeHtml(__($selectRegion)) ?></option>
+                                <template x-for="regionId in Object.keys(availableRegions)">
+                                    <option :value="regionId"
+                                            :name="availableRegions[regionId].name"
+                                            x-text="availableRegions[regionId].name"
+                                            :selected="selectedRegion === regionId"
+                                    >
+                                    </option>
+                                </template>
+                            </select>
+                        </template>
+                        <template x-if="!hasAvailableRegions()">
+                            <input type="text"
+                                   id="region"
+                                   name="region"
+                                   x-ref="region"
+                                   value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
+                                   title="<?= /* @noEscape */ $region ?>"
+                                   class="form-input"
+                                   :required="isRegionRequired"
+                            />
+                        </template>
                     </div>
                 </div>
 
@@ -271,17 +295,17 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                     <label for="zip" class="label"><span><?= /* @noEscape */
                             $block->getAttributeData()->getFrontendLabel('postcode') ?></span></label>
                     <div class="control">
-                        <?php //phpcs:disable ?>
-                        <input type="text" name="postcode"
+                        <input type="text"
+                               name="postcode"
                                value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getPostcode()) ?>"
-                               title="<?= /* @noEscape */
-                               $block->getAttributeData()->getFrontendLabel('postcode') ?>" id="zip"
-                               class="form-input validate-zip-international <?= $escaper->escapeHtmlAttr(
-                                   $this->helper(Address::class)->getAttributeValidationClass(
-                                       'postcode'
-                                   )
-                               ) ?>">
-                        <?php //phpcs:enable ?>
+                               title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
+                               id="zip"
+                               class="form-input validate-zip-international
+                                    <?= $escaper->escapeHtmlAttr(
+                                        $this->helper(Address::class)->getAttributeValidationClass(
+                                            'postcode'
+                                        )
+                                    ) ?>">
                     </div>
                 </div>
 
@@ -289,7 +313,30 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                     <label for="country" class="label"><span><?= /* @noEscape */
                             $block->getAttributeData()->getFrontendLabel('country_id') ?></span></label>
                     <div class="control">
-                        <?= $block->getCountryHtmlSelect() ?>
+                        <?php $countries = $block
+                            ->getCountryCollection()
+                            ->setForegroundCountries($block->getTopDestinations())
+                            ->toOptionArray();
+                        ?>
+                        <select name="country_id"
+                                id="country"
+                                title="Country"
+                                required="required"
+                                class="form-select"
+                                x-ref="country_id"
+                                @change="changeCountry($event.target)"
+                        >
+                            <?php foreach ($countries as $country): ?>
+                                <option name="<?= /** @noEscape */ $country['label'] ?>"
+                                        value="<?= /** @noEscape */ $country['value'] ?>"
+                                        data-is-zip-required="<?= (isset($country['is_zipcode_optional'])) ? '0' : '1' ?>"
+                                        data-is-region-required="<?= (isset($country['is_region_required'])) ? '1' : '0' ?>"
+                                    <?= ($block->getCountryId() ===  $country['value']) ? 'selected="selected"' : '' ?>
+                                >
+                                    <?= /** @noEscape */ $country['label'] ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                 </div>
                 <?php $addressAttributes = $block->getChildBlock('customer_form_address_user_attributes'); ?>
@@ -347,7 +394,67 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                             $form.submit();
                         }
                     }
+                },
+                <?php if ($block->getShowAddressFields()): ?>
+                directoryData: {},
+                availableRegions: {},
+                selectedRegion: <?= $escaper->escapeJs($block->getRegion() ?: 0) ?>,
+                isZipRequired: true,
+                isRegionRequired: true,
+                showOptionalRegion: <?= $displayAll ? 'true': 'false' ?>,
+                onPrivateContentLoaded(data) {
+                    this.directoryData = data['directory-data'] || {};
+
+                    <?php if ($block->getCountryId()): ?>
+                    this.changeCountry(this.$refs['country_id']);
+                    <?php endif; ?>
+
+                    this.setInitialRegionSelectValue();
+                    this.setRegionInputValue('<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>');
+
+                },
+                setInitialRegionSelectValue(value) {
+                    this.$nextTick(() => {
+                        const regionSelectorElement = this.$refs['region_id'];
+                        if (regionSelectorElement) {
+
+                            const regionOptionByValue = regionSelectorElement
+                                .querySelector("[name='<?= /** @noEscape */ $block->getRegion() ?>']");
+
+                            if (regionOptionByValue) {
+                                this.$refs['region_id'].value = regionOptionByValue.value;
+                            }
+                        }
+                    })
+                },
+                setRegionInputValue(value) {
+                    this.$nextTick(() => {
+                        const regionInputElement = this.$refs['region'];
+                        if (regionInputElement) {
+                            regionInputElement.value = value;
+                        }
+                    })
+                },
+                changeCountry(countrySelectElement) {
+                    const selectedOption = countrySelectElement.options[countrySelectElement.selectedIndex];
+                    const countryCode = countrySelectElement.value;
+                    const countryData = this.directoryData[countryCode] || false;
+
+                    this.setRegionInputValue('');
+
+                    if (!countryData) {
+                        return;
+                    }
+
+                    this.isZipRequired = selectedOption.dataset.isZipRequired === "1";
+                    this.isRegionRequired = selectedOption.dataset.isRegionRequired === "1";
+
+                    this.availableRegions = countryData.regions || {};
+                },
+                hasAvailableRegions() {
+                    return Object.keys(this.availableRegions).length > 0;
                 }
+                <?php endif; ?>
             }
         }
     </script>

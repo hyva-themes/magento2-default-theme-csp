@@ -1,0 +1,171 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Navigation;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Escaper;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+
+/** @var Navigation $viewModelNavigation */
+$viewModelNavigation = $viewModels->require(Navigation::class);
+
+$uniqueId = '_' . uniqid();
+
+// Order is important here: 1. build the menu data, 2. then set the cache tags from the view model identities
+$menuItems = $viewModelNavigation->getNavigation(4);
+$block->setData('cache_tags', $viewModelNavigation->getIdentities());
+
+?>
+<div x-data="initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>()"
+     class="z-20 order-2 sm:order-1 lg:order-2 navigation lg:hidden"
+>
+    <!-- mobile -->
+    <div @load.window="setActiveMenu($el)"
+         class="bg-container-lighter"
+         :class="{'min-h-screen fixed top-0 left-0 w-full' : open}"
+         @toggle-mobile-menu.window="open = !open"
+         @keydown.window.escape="open=false"
+    >
+        <div class="flex items-baseline justify-between menu-icon">
+            <div class="flex justify-end w-full">
+                <a @click="$dispatch('toggle-mobile-menu')"
+                       class="flex items-center justify-center cursor-pointer"
+                       :class="{ 'ml-auto': open }">
+                    <svg class="hidden w-16 h-16 p-4 fill-current"
+                         :class="{ 'hidden' : !open, 'block': open }"
+                         xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                         viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0
+                          1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828
+                          4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z">
+                        </path>
+                    </svg>
+                    <svg class="block w-12 h-12 p-3 fill-current"
+                         :class="{ 'hidden' : open, 'block': !open }"
+                         xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                         viewBox="0 0 20 20">
+                        <path
+                              d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <nav
+            class="hidden w-full duration-150 ease-in-out transform border-t transition-display border-container"
+            :class="{ 'hidden' : !open }"
+        >
+        <?php foreach ($menuItems as $index => $menuItem): ?>
+            <div class="level-0">
+                <span
+                    class="flex items-center transition-transform duration-150 ease-in-out transform"
+                    :class="{
+                        '-translate-x-full' : mobilePanelActiveId,
+                        'translate-x-0' : !mobilePanelActiveId
+                    }"
+                >
+                    <a class="flex items-center w-full px-8 py-4 border-b cursor-pointer
+                        bg-container-lighter border-container hover:bg-container-darker hover:underline level-0"
+                       href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
+                       title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>">
+                        <?= $escaper->escapeHtml($menuItem['name']) ?>
+                    </a>
+                    <?php if (!empty($menuItem['childData'])): ?>
+                    <a class="absolute right-0 flex w-8 h-8 mr-8 border rounded cursor-pointer
+                        bg-container-lighter border-container hover:bg-container hover:border-container"
+                          @click="mobilePanelActiveId =
+                          mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>' ?
+                           0 : '<?= /* @noEscape */ (string) $index ?>'"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24" width="24"
+                             stroke="currentColor"
+                             class="w-full h-full p-1"
+                        >
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                    <?php endif; ?>
+                </span>
+                <?php if (!empty($menuItem['childData'])): ?>
+                    <div
+                        class="absolute top-0 right-0 z-10 w-full h-full transition-transform duration-200 ease-in-out
+                            translate-x-full transform bg-container-lighter"
+                        :class="{
+                            'translate-x-full' : mobilePanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
+                            'translate-x-0' : mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>',
+                        }"
+                    >
+                        <a class="flex items-center px-8 py-4 border-b cursor-pointer bg-container border-container"
+                              @click="mobilePanelActiveId = 0"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24"
+                                 width="24"
+                                 stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            <span class="ml-4">
+                                <?= $escaper->escapeHtml($menuItem['name']) ?>
+                            </span>
+                        </a>
+                        <a href="<?= $escaper->escapeUrl($menuItem['url']) ?>" title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
+                           class="flex items-center w-full px-8 py-4 border-b cursor-pointer
+                            bg-container-lighter border-container hover:bg-container-darker hover:underline"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                 viewBox="0 0 24 24" height="24"
+                                 width="24"></svg>
+                            <span class="ml-4"><?= $escaper->escapeHtml(__('View All')) ?></span></a>
+                        <?php foreach ($menuItem['childData'] as $subMenuItem): ?>
+
+                            <a href="<?= $escaper->escapeUrl($subMenuItem['url']) ?>"
+                               title="<?= $escaper->escapeHtmlAttr($subMenuItem['name']) ?>"
+                               class="flex items-center w-full px-8 py-4 border-b cursor-pointer
+                                bg-container-lighter border-container hover:bg-container-darker hover:underline"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                     viewBox="0 0 24 24" height="24"
+                                     width="24"></svg>
+                                <span class="ml-4 text-base text-gray-700 lg:ml-0">
+                                    <?= $escaper->escapeHtml($subMenuItem['name']) ?>
+                                </span>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+        </nav>
+    </div>
+</div>
+<script>
+    'use strict';
+
+    const initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?> = () => {
+        return {
+            mobilePanelActiveId: null,
+            hoverPanelActiveId: null,
+            open: false,
+            setActiveMenu(menuNode) {
+                Array.from(menuNode.querySelectorAll('a')).filter(link => {
+                    return link.href === window.location.href.split('?')[0];
+                }).map(item => {
+                    item.classList.add('underline');
+                    item.closest('div.level-0') &&
+                    item.closest('div.level-0').querySelector('a.level-0').classList.add('underline');
+                });
+            }
+        }
+    }
+</script>

@@ -24,16 +24,16 @@ use Magento\Framework\Escaper;
             aria-label="<?= $escaper->escapeHtml(__('Sort By')) ?>"
             @change="changeUrl(
                 'product_list_order',
-                event.currentTarget.options[event.currentTarget.selectedIndex].value,
+                $event.currentTarget.options[$event.currentTarget.selectedIndex].value,
                 options.orderDefault
             )">
-        <?php foreach ($block->getAvailableOrders() as $_key => $_order):?>
-            <option value="<?= $escaper->escapeHtmlAttr($_key) ?>"
-                <?php if ($block->isOrderCurrent($_key)):?>
+        <?php foreach ($block->getAvailableOrders() as $orderCode => $orderLabel):?>
+            <option value="<?= $escaper->escapeHtmlAttr($orderCode) ?>"
+                <?php if ($block->isOrderCurrent($orderCode)):?>
                     selected="selected"
                 <?php endif; ?>
                 >
-                <?= $escaper->escapeHtml(__($_order)) ?>
+                <?= $escaper->escapeHtml(__($orderLabel)) ?>
             </option>
         <?php endforeach; ?>
     </select>

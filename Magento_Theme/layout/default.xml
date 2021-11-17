@@ -21,25 +21,50 @@
             />
         </referenceContainer>
 
+        <referenceContainer name="main.content">
+            <block class="Magento\Framework\View\Element\Template" name="skip_to_content.target" before="-" template="Magento_Theme::html/skiptarget.phtml">
+                <arguments>
+                    <argument name="target_id" xsi:type="string">contentarea</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
         <referenceContainer name="header.container">
+            <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
+                <arguments>
+                    <argument name="target" xsi:type="string">contentarea</argument>
+                    <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>
+                </arguments>
+            </block>
             <block name="header-content" template="Magento_Theme::html/header.phtml">
                 <block class="Magento\Theme\Block\Html\Header\Logo" name="logo">
                     <arguments>
+                        <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\LogoPathResolver</argument>
+                        <!-- These values are used if no width or height is set in the adminhtml theme configuration -->
                         <argument name="logo_width" xsi:type="number">189</argument>
                         <argument name="logo_height" xsi:type="number">64</argument>
                     </arguments>
                 </block>
                 <block name="header-search" template="Magento_Theme::html/header/search-form.phtml"/>
                 <block name="cart-drawer" template="Magento_Theme::html/cart/cart-drawer.phtml" ifconfig="checkout/sidebar/display"/>
-<!--
-                <block name="topmenu_static" as="topmenu" template="Magento_Theme::html/header/topmenu_static.phtml"/>
--->
+
                 <block name="topmenu_generic"
                        as="topmenu"
-                       template="Magento_Theme::html/header/topmenu.phtml" ttl="3600">
+                       template="Magento_Theme::html/header/topmenu.phtml"
+                       ttl="3600"
+                >
                     <arguments>
                         <argument name="cache_lifetime" xsi:type="string">3600</argument>
                     </arguments>
+                    <block name="topmenu_mobile"
+                           as="topmenu.mobile"
+                           template="Magento_Theme::html/header/menu/mobile.phtml"
+                    ></block>
+
+                    <block name="topmenu_desktop"
+                           as="topmenu.desktop"
+                           template="Magento_Theme::html/header/menu/desktop.phtml"
+                    ></block>
                 </block>
             </block>
         </referenceContainer>
