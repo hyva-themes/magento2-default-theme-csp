@@ -44,7 +44,8 @@
         </referenceContainer>
 
         <referenceContainer name="category.product.list.additional">
-            <block name="category.products.list.js" template="Magento_Catalog::product/list/js.phtml"/>
+            <block name="category.products.list.js.compare" template="Magento_Catalog::product/list/js/compare.phtml"/>
+            <block name="category.products.list.js.wishlist" template="Magento_Catalog::product/list/js/wishlist.phtml"/>
         </referenceContainer>
 
         <referenceBlock name="product.price.render.default">

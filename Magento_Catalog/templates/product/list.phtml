@@ -61,18 +61,17 @@ $productCollection = $block->getLoadedProductCollection();
         <div class="mx-auto pt-4 pb-12 grid gap-4 <?= $viewMode === 'grid' ? 'sm:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1' ?>">
             <?php /** @var \Magento\Catalog\Model\Product $product */ ?>
             <?php foreach ($productCollection as $product):
-            $itemCacheKeyInfo = [
-                $product->getId(),
-                $viewMode,
-                $templateType,
-                $block->getTemplate(),
-                $product->getStoreId(),
-                $productViewModel->getCurrencyData()['code'],
-                $productViewModel->isProductUrlIncludesCategory() && $currentCategoryViewModel->exists()
-                    ? $currentCategoryViewModel->get()->getId()
-                    : '0'
-            ];
-            ?>
+                $itemCacheKeyInfo = [
+                    $product->getId(),
+                    $viewMode,
+                    $templateType,
+                    $block->getTemplate(),
+                    $product->getStoreId(),
+                    $productViewModel->getCurrencyData()['code'],
+                    $productViewModel->isProductUrlIncludesCategory() && $currentCategoryViewModel->exists()
+                        ? $currentCategoryViewModel->get()->getId()
+                        : '0'
+                ]; ?>
                 <?= $block->getLayout()->getBlock('product_list_item')
                     ->setData('product', $product)
                     ->setData('view_mode', $viewMode)

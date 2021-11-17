@@ -1,0 +1,52 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductCompare;
+use Hyva\Theme\ViewModel\Wishlist;
+use Magento\Framework\Escaper;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+
+/** @var ProductCompare $compareViewModel */
+$compareViewModel = $viewModels->require(ProductCompare::class);
+?>
+<?php if ($compareViewModel->showInProductList()): ?>
+<script>
+    function initCompare() {
+        return {
+            addToCompare(productId) {
+                const formKey = document.querySelector('input[name=form_key]').value;
+                const postUrl = BASE_URL + 'catalog/product_compare/add/';
+
+                fetch(postUrl, {
+                    "headers": {
+                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    },
+                    "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "method": "POST",
+                    "mode": "cors",
+                    "credentials": "include"
+                }).then(function (response) {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    }
+                }).catch(function (error) {
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: error
+                        }], 5000
+                    );
+                });
+            }
+        };
+    }
+</script>
+<?php endif; ?>

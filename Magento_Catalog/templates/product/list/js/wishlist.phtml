@@ -1,0 +1,75 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\ProductCompare;
+use Hyva\Theme\ViewModel\Wishlist;
+use Magento\Framework\Escaper;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+
+/** @var Wishlist $wishlistViewModel */
+$wishlistViewModel = $viewModels->require(Wishlist::class);
+?>
+<?php if ($wishlistViewModel->isEnabled()): ?>
+<script>
+    function initWishlist() {
+        return {
+            addToWishlist(productId) {
+                var formKey = document.querySelector('input[name=form_key]').value;
+                var postUrl = BASE_URL+"wishlist/index/add/";
+                fetch(postUrl, {
+                    "headers": {
+                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                    },
+                    "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "method": "POST",
+                    "mode": "cors",
+                    "credentials": "include"
+                }).then(function (response) {
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                    } else if (response.ok) {
+                        return response.json();
+                    } else {
+                        typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                            [{
+                                type: "warning",
+                                text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                            }], 5000
+                        );
+                    }
+                }).then(function (response) {
+                    if(!response) { return }
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: (response.success) ? "success" : "error",
+                            text: (response.success)
+                                ? "<?= $escaper->escapeHtml(__(
+                                    "%1 has been added to your Wish List.",
+                                    __("Product")
+                                )) ?>"
+                                : response.error_message
+                        }], 5000
+                    );
+                    var reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
+                    window.dispatchEvent(reloadCustomerDataEvent);
+                }).catch(function (error) {
+                    typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
+                        [{
+                            type: "error",
+                            text: error
+                        }], 5000
+                    );
+                });
+            }
+        }
+    }
+</script>
+<?php endif; ?>
