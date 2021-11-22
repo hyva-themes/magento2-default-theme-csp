@@ -70,9 +70,11 @@ $sortDirection === 'ASC'
     : $productListViewModel->addDescendingSortOrder($sortAttribute);
 
 if (in_array($type, ['related', 'upsell', 'crosssell'], true)) {
-    $items = $type == 'crosssell'
+
+    $items = $type === 'crosssell'
         ? $productListViewModel->getCrosssellItems(...$viewModels->require(CartItems::class)->getCartItems())
         : $productListViewModel->getLinkedItems($type, $block->getProduct());
+
 } else {
     $items = $productListViewModel->getItems();
 }
