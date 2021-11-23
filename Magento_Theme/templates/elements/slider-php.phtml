@@ -35,9 +35,11 @@ if (!$itemCount = count($items)) {
     return '';
 }
 $sliderItemRenderer = $block->getChildBlock('slider.item.template');
-?>
-<?= $block->fetchView($block->getTemplateFile('Magento_Theme::elements/slider-php-js.phtml')) ?>
 
+$sliderJsTemplate = $block->getData('js_template_file') ?? 'Magento_Theme::elements/slider-php-js.phtml';
+echo /** @noEscape */ $block->fetchView($block->getTemplateFile($sliderJsTemplate));
+
+?>
 <section class="<?=
     $escaper->escapeHtmlAttr($block->getData('maybe_purged_tailwind_section_classes'))
     ?: 'my-12 text-gray-700 body-font';
@@ -86,7 +88,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                         tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active === 0 }"
-                        @click="goPrevious">
+                        @click="scrollPrevious">
                         <?= $heroicons->chevronLeftHtml("w-5 h-5", 25, 25) ?>
                     </button>
                     <?php for ($i=0; $i < $itemCount; $i++): ?>
@@ -95,7 +97,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                                     'bg-opacity-100': active === <?= (int) $i ?>,
                                     'hidden': (pageSize !== 1 && !!(<?= (int) $i ?> % pageSize))
                                     }"
-                                @click="goTo(<?= (int) $i ?>)">
+                                @click="scrollTo(<?= (int) $i ?>)">
                         </span>
                     <?php endfor; ?>
                     <button
@@ -103,7 +105,7 @@ $sliderItemRenderer = $block->getChildBlock('slider.item.template');
                         tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active >= itemCount-pageSize }"
-                        @click="goNext">
+                        @click="scrollNext">
                         <?= $heroicons->chevronRightHtml("w-5 h-5", 25, 25) ?>
                     </button>
                 </div>

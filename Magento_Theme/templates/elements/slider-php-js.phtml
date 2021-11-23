@@ -45,13 +45,13 @@ use Magento\Framework\View\Element\Template;
                     this.active = Math.round(calculatedActiveSlide / this.pageSize) * this.pageSize;
                 }
             },
-            goPrevious() {
-                this.goTo(this.active - this.pageSize);
+            scrollPrevious() {
+                this.scrollTo(this.active - this.pageSize);
             },
-            goNext() {
-                this.goTo(this.active + this.pageSize);
+            scrollNext() {
+                this.scrollTo(this.active + this.pageSize);
             },
-            goTo(idx) {
+            scrollTo(idx) {
                 const slider = this.getSlider();
                 if (slider) {
                     const slideWidth = slider.scrollWidth / (this.itemCount + this.pageFillers);

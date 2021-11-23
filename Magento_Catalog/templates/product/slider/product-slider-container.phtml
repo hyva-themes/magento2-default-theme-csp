@@ -119,7 +119,7 @@ $sliderItemRenderer = $block->getLayout()->getBlock('product_list_item')
                         tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active === 0 }"
-                        @click="goPrevious">
+                        @click="scrollPrevious">
                         <?= $heroicons->chevronLeftHtml("w-5 h-5", 25, 25) ?>
                     </button>
                     <?php for ($i=0; $i < $itemCount; $i++): ?>
@@ -128,7 +128,7 @@ $sliderItemRenderer = $block->getLayout()->getBlock('product_list_item')
                                     'bg-opacity-100': active === <?= (int) $i ?>,
                                     'hidden': (pageSize !== 1 && !!(<?= (int) $i ?> % pageSize))
                                     }"
-                                @click="goTo(<?= (int) $i ?>)">
+                                @click="scrollTo(<?= (int) $i ?>)">
                         </span>
                     <?php endfor; ?>
                     <button
@@ -136,7 +136,7 @@ $sliderItemRenderer = $block->getLayout()->getBlock('product_list_item')
                         tabindex="-1"
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active >= itemCount - pageSize }"
-                        @click="goNext">
+                        @click="scrollNext">
                         <?= $heroicons->chevronRightHtml("w-5 h-5", 25, 25) ?>
                     </button>
                 </div>
