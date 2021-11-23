@@ -31,8 +31,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 $uniqueId = '_' . uniqid();
 $title = __('Recently Viewed Products');
 
-$widgetAttributesToShow = explode(',', $block->getData('show_attributes'));
-$widgetButtonsToShow = explode(',', $block->getData('show_buttons'));
+$widgetAttributesToShow = explode(',', (string) $block->getData('show_attributes'));
+$widgetButtonsToShow = explode(',', (string) $block->getData('show_buttons'));
 
 $jsTemplate = 'Magento_Catalog::product/widget/viewed/recently-viewed-products-js.phtml';
 echo $block->assign(['uniqueId' => $uniqueId, 'title' => $title])
@@ -147,7 +147,8 @@ echo $block->assign(['uniqueId' => $uniqueId, 'title' => $title])
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active === 0 }"
                         @click="getSlider().scrollLeft =
-                                (getSlider().scrollWidth / products.length) * (active-pageSize); active=active-pageSize;">
+                                (getSlider().scrollWidth / (products.length + pageFillers)) * (active-pageSize);
+                                active -= pageSize;">
                         <?= $heroicons->chevronLeftHtml("w-5 h-5", 25, 25) ?>
                     </button>
                     <template x-for="(product, index) in products" :key="index">
@@ -157,7 +158,8 @@ echo $block->assign(['uniqueId' => $uniqueId, 'title' => $title])
                                         'hidden': (pageSize !== 1 && !!(index % pageSize))
                                         }"
                                   @click="getSlider().scrollLeft =
-                                        (getSlider().scrollWidth / products.length) * index; active=index;">
+                                          (getSlider().scrollWidth / (products.length + pageFillers)) * index;
+                                          active = index;">
                             </span>
                     </template>
                     <button
@@ -165,7 +167,8 @@ echo $block->assign(['uniqueId' => $uniqueId, 'title' => $title])
                         class="w-8 h-8 mx-4 text-black rounded-full outline-none focus:outline-none"
                         :class="{ 'invisible' : active >= products.length-pageSize }"
                         @click="getSlider().scrollLeft =
-                                (getSlider().scrollWidth / products.length) * (active+pageSize); active=active+pageSize">
+                                (getSlider().scrollWidth / (products.length + pageFillers)) * (active+pageSize);
+                                active += pageSize">
                         <?= $heroicons->chevronRightHtml("w-5 h-5", 25, 25) ?>
                     </button>
                 </div>

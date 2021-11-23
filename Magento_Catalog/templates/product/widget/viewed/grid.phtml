@@ -31,8 +31,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 $uniqueId = '_' . uniqid();
 $title = __('Recently Viewed Products');
 
-$widgetAttributesToShow = explode(',', $block->getData('show_attributes'));
-$widgetButtonsToShow = explode(',', $block->getData('show_buttons'));
+$widgetAttributesToShow = explode(',', (string) $block->getData('show_attributes'));
+$widgetButtonsToShow = explode(',', (string) $block->getData('show_buttons'));
 
 $jsTemplate = 'Magento_Catalog::product/widget/viewed/recently-viewed-products-js.phtml';
 echo $block->assign(['uniqueId' => $uniqueId, 'title' => $title])

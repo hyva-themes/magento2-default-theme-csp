@@ -31,8 +31,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 $uniqueId = '_' . uniqid();
 $title = __('Recently Viewed Products');
 
-$widgetAttributesToShow = explode(',', $block->getData('show_attributes'));
-$widgetButtonsToShow = explode(',', $block->getData('show_buttons'));
+$widgetAttributesToShow = explode(',', (string) $block->getData('show_attributes'));
+$widgetButtonsToShow = explode(',', (string) $block->getData('show_buttons'));
+$pageSize = $block->getData('page_size') ?? 3;
 
 $jsTemplate = 'Magento_Catalog::product/widget/viewed/recently-viewed-products-js.phtml';
 echo $block->assign(['uniqueId' => $uniqueId, 'title' => $title])
@@ -40,7 +41,7 @@ echo $block->assign(['uniqueId' => $uniqueId, 'title' => $title])
 
 ?>
 <section class="my-12 text-gray-700 body-font"
-         x-data="initRecentlyViewedProductsComponent<?= /** @noEscape */ $uniqueId?>({isSlider: false, noOfProductsToShow: 3})"
+         x-data="initRecentlyViewedProductsComponent<?= /** @noEscape */ $uniqueId?>({isSlider: false, noOfProductsToShow: <?= (int) $pageSize ?>})"
          x-init="getProducts();"
          :style="minHeight()"
 >
