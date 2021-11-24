@@ -205,24 +205,8 @@
                 </arguments>
             </block>
 
+        </referenceContainer>
 
-        </referenceContainer>
-        <referenceContainer name="content.aside">
-            <block name="related" class="Magento\Catalog\Block\Product\View"
-                template="Magento_Theme::elements/slider.phtml">
-                <arguments>
-                    <argument name="type" xsi:type="string">related</argument>
-                    <argument name="title" xsi:type="string" translate="true">Related Products</argument>
-                </arguments>
-            </block>
-            <block name="upsell" class="Magento\Catalog\Block\Product\View"
-                        template="Magento_Theme::elements/slider.phtml">
-                <arguments>
-                    <argument name="type" xsi:type="string">upsell</argument>
-                    <argument name="title" xsi:type="string" translate="true">We found other products you might like!</argument>
-                </arguments>
-            </block>
-        </referenceContainer>
         <move element="alert.urls" destination="product.info" as="alert.urls"/>
 
         <referenceContainer name="before.body.end">
