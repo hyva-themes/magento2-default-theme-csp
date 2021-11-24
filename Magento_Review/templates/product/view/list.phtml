@@ -31,7 +31,7 @@ $items = $reviewCollection->getItems();
 $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 ?>
 <?php if (count($items)): ?>
-    <div class="mx-auto px-5 py-6 items-center" id="customer-review-list">
+    <div class="mx-auto py-6 items-center" id="customer-review-list">
         <div class="container mx-auto flex pt-6 pb-3 mb-6 md:flex-row border-b-2 border-gray-300">
             <?php if (!$block->getHideTitle()): ?>
                 <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
@@ -117,7 +117,7 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
             <?php endforeach; ?>
         </div>
         <?php if ($toolbar): ?>
-        <div class="toolbar container review-toolbar mt-4">
+        <div class="toolbar review-toolbar mt-4">
             <?= $toolbar->toHtml() ?>
         </div>
         <?php endif; ?>
