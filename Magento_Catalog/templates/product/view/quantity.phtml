@@ -35,32 +35,37 @@ $step = $stockItemViewModel->getQtyIncrements($product)
     ? $stockItemViewModel->getQtyIncrements($product)
     : null;
 
-
 ?>
 <?php if ($block->shouldRenderQuantity()): ?>
     <script>
         function initQtyField() {
+
+            function findPathParam(key) {
+                // get all path pairs after BASE_URL/front_name/action_path/action
+                const baseUrl = (BASE_URL.substr(0, 2) === '//' ? 'http:' : '') + BASE_URL;
+                const baseUrlParts = (new URL(baseUrl)).pathname.replace(/\/$/, '').split('/');
+                const pathParts = window.location.pathname.split('/').slice(baseUrlParts.length + 3);
+                for (let i = 0; i < pathParts.length; i += 2) {
+                    if (pathParts[i] === key && pathParts.length > i) {
+                        return pathParts[i + 1];
+                    }
+                }
+            }
+
             return {
                 qty: <?= $block->getProductDefaultQty() * 1 ?>,
-                itemId: '<?= (int)$block->getRequest()->getParam('id') ?>',
+                itemId: (new URLSearchParams(window.location.search)).get('id') || findPathParam('id'),
                 productId: '<?= (int)$product->getId() ?>',
-                onGetCartData: function onGetCartData($dispatch) {
-                    // This code seems buggy
-                    // Reference: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/288
-                    const cart = event.detail.data && event.detail.data.cart;
-                    if (cart && cart.items) {
-                        const cartItem = cart.items.find(function (item) {
-                            return (
-                                item.item_id === this.itemId
-                                && item.product_id === this.productId
-                            )
+                <?php // populate the qty when editing a product from the cart ?>
+                onGetCartData: function onGetCartData(data, $dispatch) {
+                    const cart = data && data.data && data.data.cart;
+                    if (this.itemId && cart && cart.items) {
+                        const cartItem = cart.items.find((item) => {
+                            return item.item_id === this.itemId && item.product_id === this.productId;
                         });
                         if (cartItem && cartItem.qty) {
-                            qty = cartItem.qty;
-                            $dispatch('update-qty-<?= (int)$product->getId() ?>', qty);
-                        }
-                        if (cartItem && cartItem.options && cartItem.options.length) {
-                            $dispatch('update-options', cartItem.options);
+                            this.qty = cartItem.qty;
+                            $dispatch('update-qty-' + this.productId, this.qty);
                         }
                     }
                 }
@@ -77,7 +82,7 @@ $step = $stockItemViewModel->getQtyIncrements($product)
                     <?= $escaper->escapeHtml(__('Quantity')) ?>
                 </label>
                 <input name="qty"
-                    @private-content-loaded.window="onGetCartData($dispatch)"
+                    @private-content-loaded.window="onGetCartData($event.detail, $dispatch)"
                     id="qty[<?= (int)$product->getId() ?>]"
                     form="product_addtocart_form"
                     <?php if ($stockItemViewModel->isQtyDecimal($product)): ?>
