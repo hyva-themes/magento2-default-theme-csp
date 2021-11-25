@@ -70,7 +70,7 @@ $updateParams = $block->getUpdateParams() ?: null;
                 Array.from(document.querySelectorAll(
                     '[name^=options], [name^=super_attribute], [name^=bundle_option], [name^=super_group]')
                 ).map(input => {
-                    if(input.type === "select-multiple") {
+                    if (input.type === "select-multiple") {
                         Array.from(input.selectedOptions).forEach(option => {
                             postData += `&${input.name}=${option.value}`
                         })

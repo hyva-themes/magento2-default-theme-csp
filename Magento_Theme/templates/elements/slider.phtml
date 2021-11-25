@@ -215,7 +215,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                         );
                     }
                 }).then(function (response) {
-                    if(!response) { return }
+                    if (!response) { return }
                     typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                         [{
                             type: (response.success) ? "success" : "error",

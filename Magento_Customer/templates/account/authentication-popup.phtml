@@ -56,7 +56,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 }
             },
             redirectIfAuthenticated: function (event) {
-                if (event.detail && event.detail.url){
+                if (event.detail && event.detail.url) {
                     this.checkoutUrl = event.detail.url;
                 }
                 if (!this.forceAuthentication) {

@@ -188,7 +188,7 @@ if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRec
                 this.displayErrorMessage = this.errorMessages.length
             },
             submitForm() {
-                if (!this.checkPasswordsMatch()){
+                if (!this.checkPasswordsMatch()) {
                     return;
                 }
                 // Do not rename $form, it is expected to be declared in the child block output

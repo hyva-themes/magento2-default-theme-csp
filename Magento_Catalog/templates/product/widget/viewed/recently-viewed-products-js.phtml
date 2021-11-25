@@ -164,7 +164,7 @@ $title = $title ?? __('Recently Viewed Products');
                             const sortedProducts = [];
                             skusToFetch.forEach(sku => {
                                 responseProducts.forEach(productData => {
-                                    if (sku === productData.sku){
+                                    if (sku === productData.sku) {
                                         sortedProducts.push(productData);
                                     }
                                 });

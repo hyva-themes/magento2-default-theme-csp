@@ -112,7 +112,7 @@ use Magento\Framework\View\Element\Template;
                     )
                 );
             },
-            calculateIsMinimalPrice(){
+            calculateIsMinimalPrice() {
                 return (
                     this.selectedValues.filter(value => !!value).length <
                         Object.keys(this.optionConfig.attributes).length

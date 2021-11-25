@@ -106,7 +106,7 @@ function initCompare() {
 
 function initWishlist() {
     return {
-        addToWishlist(productId){
+        addToWishlist(productId) {
             fetch(BASE_URL + "wishlist/index/add/", {
                 "headers": {
                     "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -129,7 +129,7 @@ function initWishlist() {
                     );
                 }
             }).then(function (response) {
-                if(!response) { return }
+                if (!response) { return }
                 typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                     [{
                         type: (response.success) ? "success" : "error",

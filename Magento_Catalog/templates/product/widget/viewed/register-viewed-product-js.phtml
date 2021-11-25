@@ -107,7 +107,7 @@ if (! $recentlyViewed->isRecentlyViewedProductsEnabled()) {
         function removeExpiredProductsInLocalStorage() {
             const updatedLocalStorageData = [];
             readRecentlyViewedFromStorage().forEach(productData => {
-                if(productData.expiry > Date.now()){
+                if (productData.expiry > Date.now()) {
                     updatedLocalStorageData.push(productData);
                 }
             });

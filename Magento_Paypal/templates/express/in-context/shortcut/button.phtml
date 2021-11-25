@@ -26,11 +26,11 @@ $uniqueId = '_' . uniqid();
             customerSection: {},
             cartSection: false,
             actions: {},
-            getSectionData(sectionData){
-                if (sectionData.customer){
+            getSectionData(sectionData) {
+                if (sectionData.customer) {
                     this.customerSection = sectionData.customer;
                 }
-                if (sectionData.cart){
+                if (sectionData.cart) {
                     this.cartSection = sectionData.cart;
                 }
                 if (this.cartSection.items && this.cartSection.items.length) {

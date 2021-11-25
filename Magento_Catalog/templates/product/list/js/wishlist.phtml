@@ -45,7 +45,7 @@ $wishlistViewModel = $viewModels->require(Wishlist::class);
                         );
                     }
                 }).then(function (response) {
-                    if(!response) { return }
+                    if (!response) { return }
                     typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                         [{
                             type: (response.success) ? "success" : "error",

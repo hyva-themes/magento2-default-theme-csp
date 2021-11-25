@@ -44,17 +44,17 @@ if ($block->getIsInCatalogProduct()) {
             isInCatalogProduct: <?= $isInCatalogProduct ? 'true' : 'false' ?>,
             returnUrlId: 'return_url',
             submitForm() {
-                if(this.isInCatalogProduct) {
+                if (this.isInCatalogProduct) {
                     this.submitFromCatalog();
                 }
-                if(!this.isInCatalogProduct){
+                if (!this.isInCatalogProduct) {
                     this.submitFromCart();
                 }
             },
             submitFromCatalog() {
                 const formParentId = 'product_addtocart_form';
                 const returnUrlValue = "<?= $escaper->escapeUrl($block->getCheckoutUrl()) ?>";
-                if(!document.getElementById(this.returnUrlId)){
+                if (!document.getElementById(this.returnUrlId)) {
                     const elReturnUrl = document.createElement('input');
                     elReturnUrl.setAttribute('type', 'hidden');
                     elReturnUrl.setAttribute('name', 'return_url');

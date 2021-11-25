@@ -98,7 +98,7 @@ use Magento\Framework\View\Element\Template;
                     return '';
                 }
             },
-            getSwatchText(attributeId, optionId){
+            getSwatchText(attributeId, optionId) {
                 const config = this.getSwatchConfig(attributeId, optionId);
                 return config.label || config.value || this.getOptionLabelFromOptionConfig(attributeId, optionId);
             },

@@ -155,7 +155,7 @@ $options = $block->decorateArray($block->getOptions());
                                 .filter(option => option.checked).length;
 
                             requiredOptions.forEach(input => {
-                                if(checkedOptionsQty) {
+                                if (checkedOptionsQty) {
                                     input.required = false;
                                     input.setCustomValidity('');
                                 } else {

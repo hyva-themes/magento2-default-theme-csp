@@ -383,7 +383,7 @@ $displayAll = $block->getConfig('general/region/display_all');
                     return false;
                 },
                 submitForm() {
-                    if(this.checkPasswordsMatch()) {
+                    if (this.checkPasswordsMatch()) {
                         // Do not rename $form, it is expected to be declared in the child block output
                         const $form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
                         <?= $block->getChildHtml('recaptcha_validation'); ?>

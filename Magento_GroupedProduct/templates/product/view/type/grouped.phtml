@@ -57,7 +57,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
                 document.querySelector("#product_addtocart_form")
                     .addEventListener("submit", (e) => {
                         // don't submit on errors
-                        if(!this.validateForm()){
+                        if (!this.validateForm()) {
                             e.preventDefault();
                         }
                     });

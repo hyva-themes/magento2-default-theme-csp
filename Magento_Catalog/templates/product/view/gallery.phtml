@@ -172,7 +172,7 @@ $productName = $block->getProduct()->getName();
                 }
                 this.setActive(active);
             },
-            setActive(index){
+            setActive(index) {
                 this.active = index;
                 if (window.youtubePlayer) {
                     window.youtubePlayer.stopVideo();
@@ -180,11 +180,11 @@ $productName = $block->getProduct()->getName();
                 if (this.vimeoPlayer) {
                     this.vimeoPlayer.contentWindow.postMessage(JSON.stringify({"method": "pause"}), "*");
                 }
-                if(this.images[index].type === 'video') {
+                if (this.images[index].type === 'video') {
                     this.activateVideo();
                 }
             },
-            activateVideo(){
+            activateVideo() {
                 const videoData = this.getVideoData();
 
                 if (!videoData) { return }
@@ -192,7 +192,7 @@ $productName = $block->getProduct()->getName();
                 this.activeVideoType = videoData.type;
 
                 if (videoData.type === "youtube") {
-                    if(!window.youtubePlayer) {
+                    if (!window.youtubePlayer) {
                         this.initYoutubeAPI(videoData);
                     } else {
                         window.youtubePlayer.loadVideoById(videoData.id);
@@ -202,7 +202,7 @@ $productName = $block->getProduct()->getName();
                     this.initVimeoVideo(videoData);
                 }
             },
-            getVideoData(){
+            getVideoData() {
                 const videoUrl = this.images[this.active] && this.images[this.active].videoUrl;
 
                 if (!videoUrl) { return }
@@ -305,10 +305,10 @@ $productName = $block->getProduct()->getName();
                 this.vimeoPlayer = vimeoContainer.childNodes[0];
             },
             eventListeners: {
-                ['@keydown.window.escape'](){
+                ['@keydown.window.escape']() {
                     this.fullscreen = false
                 },
-                ['@update-gallery.window'](event){
+                ['@update-gallery.window'](event) {
                     this.receiveImages(event.detail);
                 }
             }
