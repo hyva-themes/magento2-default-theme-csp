@@ -18,5 +18,5 @@ declare(strict_types=1);
                                        $event.detail.cart.items &&
                                        $event.detail.cart.items.length > 0"
 >
-    <template x-if="show"><?= $this->getChildHtml() ?></template>
+    <template x-if="show"><?= $block->getChildHtml() ?></template>
 </div>
