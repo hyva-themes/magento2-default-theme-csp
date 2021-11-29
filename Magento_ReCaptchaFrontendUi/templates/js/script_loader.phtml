@@ -19,7 +19,7 @@ use Magento\Framework\View\Element\Template;
 /** @var $storeConfig StoreConfig */
 $storeConfig = $viewModels->require(StoreConfig::class);
 $siteKey = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
-$siteKeyV2 = $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/private_key');
+$siteKeyV2 = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha/public_key');
 ?>
 
 <?php if ($siteKey || $siteKeyV2): ?>
