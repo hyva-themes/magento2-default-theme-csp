@@ -29,7 +29,8 @@ $iconViewModel            = $viewModels->require(HeroiconsOutline::class);
 $displayTax               = $productPriceViewModel->displayPriceIncludingTax();
 $linksPurchasedSeparately = $block->getLinksPurchasedSeparately();
 $links                    = $block->getLinks();
-
+$configuredValues         = $block->getProduct()->getPreconfiguredValues();
+$configuredLinks          = $configuredValues->getLinks() ?? [];
 ?>
 <?php if ($linksPurchasedSeparately): ?>
 <script>
@@ -45,11 +46,20 @@ $links                    = $block->getLinks();
         return {
             selectedOptions: [],
             init() {
-                this.validate();
-                // Dispatch event after a timeout of 150ms so the listener component is initialized.
-                window.setTimeout(() => {
+                this.$nextTick(() => {
                     window.dispatchEvent(new CustomEvent('update-custom-option-prices', {detail: optionPrices}));
-                }, 150);
+                    [<?= /** noEscape */ join(',', $configuredLinks)?>].map(linkId => {
+                       this.toggleOption(linkId, true);
+                    })
+                    this.validate();
+                })
+            },
+            toggleOption(optionId, value = true) {
+                const elementToSelect = this.$el.querySelector('#links_' + optionId);
+                if (elementToSelect) {
+                    elementToSelect.checked = value;
+                    elementToSelect.dispatchEvent(new CustomEvent('change'));
+                }
             },
             validate() {
                 const message = this.selectedOptions.length === 0
@@ -68,12 +78,20 @@ $links                    = $block->getLinks();
                 this.validate();
             },
             areAllSelected() {
-                return this.selectedOptions.length === <?= /** @noEscape */ count($links) ?>;
+                /**
+                 * we need to check if all options are included in this.selectedOptions since the way
+                 * x-model works, an option might be included multiple times in selectedOptions.
+                 * So we check that the length of config.links items *not* present in selectOptions is 0
+                 */
+                return Object.keys(config.links)
+                    .filter(link => !this.selectedOptions.includes(link))
+                    .length === 0;
             },
-            toggleSelection() {
-                this.selectedOptions = this.selectedOptions.length <  <?= /** @noEscape */ count($links) ?>
-                    ? Object.keys(config.links)
-                    : [];
+            toggleAll() {
+                const targetValue = !this.areAllSelected();
+                Object.keys(config.links).map(link => {
+                    this.toggleOption(link, targetValue)
+                });
             }
         };
     }
@@ -85,7 +103,7 @@ $links                    = $block->getLinks();
 <div class="field downloads"
     <?php if ($linksPurchasedSeparately): ?>
      x-data="initDownloadableLinks(<?= $escaper->escapeHtmlAttr($block->getJsonConfig()) ?>)"
-     x-init="init"
+     x-init="init()"
     <?php endif; ?>
 >
     <div class="control" id="downloadable-links-list">
@@ -123,7 +141,7 @@ $links                    = $block->getLinks();
         <?php endforeach; ?>
         <?php if ($linksPurchasedSeparately && count($links) > 1): ?>
             <div class="field choice downloads-all">
-                <button type="button" class="" @click="toggleSelection">
+                <button type="button" class="" @click="toggleAll">
                     <?= $iconViewModel->checkCircleHtml('inline-flex w-6 h-6 mr-1', 26, 26) ?>
                     <span x-text="
                         areAllSelected()
