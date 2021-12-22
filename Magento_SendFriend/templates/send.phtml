@@ -151,6 +151,8 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                         <button type="button"
                                                 class="btn btn-secondary"
                                                 @click="removeField(index)"
+                                                :disabled="fields.length <= 1"
+                                                :class="{'opacity-25': fields.length <= 1}"
                                         >
                                             <?= $icons->trashHtml('h-6 w-6') ?>
                                         </button>
@@ -199,8 +201,10 @@ $recipients = $formData->getRecipientData() ?? '[]';
             </div>
             <script>
                 function rowHandler() {
+                    const recipients = <?= /** @noEscape */ $recipients ?>;
+
                     return {
-                        fields: <?= /** @noEscape */ $recipients ?>,
+                        fields: recipients.length === 0 ? [{name: '', email: ''}] : recipients,
                         plural: '<?= $escaper->escapeJs(__('Invitees')) ?>',
                         single: '<?= $escaper->escapeJs(__('Invitee')) ?>',
                         addNewField() {
