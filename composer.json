@@ -6,7 +6,7 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "php": "~7.3.0||~7.4.0||~8.0.0",
+        "php": ">=7.3.0",
         "magento/framework": ">=102.0.0",
         "hyva-themes/magento2-reset-theme":  "*",
         "hyva-themes/magento2-theme-module": ">=1.1.9",
