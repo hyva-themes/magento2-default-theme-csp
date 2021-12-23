@@ -19,7 +19,7 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
 ?>
 <?php if ($compareViewModel->showInProductList()): ?>
 <script>
-    function initCompare() {
+    function initCompareOnProductList() {
         return {
             addToCompare(productId) {
                 const formKey = document.querySelector('input[name=form_key]').value;

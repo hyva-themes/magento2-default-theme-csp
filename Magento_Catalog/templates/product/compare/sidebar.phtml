@@ -55,7 +55,7 @@ function compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = true) {
     });
 }
 
-function compareSidebarProducts() {
+function initCompareOnCompareSidebar() {
     return {
         compareProducts: null,
         itemCount: 0,
@@ -112,7 +112,7 @@ function initCompareSidebarClear() {
 }
 </script>
 
-<div x-data="compareSidebarProducts()"
+<div x-data="initCompareOnCompareSidebar()"
      @private-content-loaded.window="receiveCompareData($event.detail.data)"
      class="compare-widget mt-8 hidden"
      :class="{ 'hidden': !(itemCount > 0) }">

@@ -37,7 +37,7 @@ if (!$product->getId() || !$compareViewModel->showOnProductPage()) {
 }
 ?>
 <script>
-    function initCompare() {
+    function initCompareOnProductView() {
         return {
             addToCompare: function (productId) {
                 const formKey = document.querySelector('input[name=form_key]').value;
@@ -68,7 +68,7 @@ if (!$product->getId() || !$compareViewModel->showOnProductPage()) {
     }
 </script>
 
-<button x-data="initCompare()"
+<button x-data="initCompareOnProductView()"
         @click.prevent="addToCompare(<?= (int)$product->getId() ?>)"
         title="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"

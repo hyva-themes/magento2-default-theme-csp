@@ -159,7 +159,7 @@ $hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
             </button>
             <?php endif; ?>
             <?php if ($showAddToCompare): ?>
-            <button x-data="initCompare()"
+            <button x-data="initCompareOnProductList()"
                     @click.prevent="addToCompare(<?= (int)$productId ?>)"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
                     type="button"

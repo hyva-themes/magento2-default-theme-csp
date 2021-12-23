@@ -45,7 +45,7 @@ function initPrint() {
     };
 }
 
-function initCompare() {
+function initCompareOnCompareList() {
     return {
         removeFromCompare(productId, productName) {
             const formKey = hyva.getFormKey();
@@ -249,7 +249,7 @@ function initWishlist() {
                                             </svg>
                                         </button>
                                     <?php endif; ?>
-                                    <button x-data="initCompare()"
+                                    <button x-data="initCompareOnCompareList()"
                                         @click.prevent="removeFromCompare(<?= (int)$product->getId() ?>, '<?= $escaper
                                             ->escapeJs($product->getName()) ?>')"
                                         aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
