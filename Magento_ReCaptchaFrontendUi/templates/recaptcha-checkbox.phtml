@@ -19,6 +19,10 @@ use Magento\Framework\View\Element\Template;
 /** @var StoreConfig $storeConfig */
 
 $storeConfig = $viewModels->require(StoreConfig::class);
-$siteKeyV2 = $storeConfig->getStoreConfig('recaptcha_frontend/type_checkbox/public_key');
+$siteKeyV2 = $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha/public_key');
 ?>
+
+<div class="g-recaptcha"
+     data-sitekey="<?= $siteKeyV2 ?>">
+</div>
 

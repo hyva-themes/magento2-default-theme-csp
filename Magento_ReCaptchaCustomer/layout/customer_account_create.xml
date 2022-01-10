@@ -29,6 +29,8 @@
         <referenceContainer name="before.body.end">
             <block name="recaptcha_base" template="Magento_ReCaptchaFrontendUi::js/script_loader.phtml"
                    ifconfig="recaptcha_frontend/type_for/customer_create"/>
+            <block name="checkbox_recaptcha_base" template="Magento_ReCaptchaFrontendUi::js/checkbox_script_loader.phtml"
+                   ifconfig="recaptcha_frontend/type_for/customer_create"/>
         </referenceContainer>
     </body>
 </page>

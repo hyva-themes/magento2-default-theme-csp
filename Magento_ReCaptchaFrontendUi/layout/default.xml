@@ -9,9 +9,9 @@
  -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <block name="recaptcha_v2_checkbox" template="Magento_ReCaptchaFrontendUi::recaptcha-checkbox.phtml" />
-        <block name="recaptcha_v2_invisible" template="Magento_ReCaptchaFrontendUi::recaptcha-invisible.phtml" />
-        <block name="recaptcha_input_field" template="Magento_ReCaptchaFrontendUi::recaptcha.phtml" />
+        <block name="recaptcha_input_field_recaptcha" template="Magento_ReCaptchaFrontendUi::recaptcha-checkbox.phtml" />
+        <block name="recaptcha_input_field_invisible" template="Magento_ReCaptchaFrontendUi::recaptcha-invisible.phtml" />
+        <block name="recaptcha_input_field_recaptcha_v3" template="Magento_ReCaptchaFrontendUi::recaptcha.phtml" />
         <block name="recaptcha_legal_notice" template="Magento_ReCaptchaFrontendUi::legal_notice.phtml" />
 
         <block name="recaptcha_v2_checkbox" template="Magento_ReCaptchaFrontendUi::js/checkbox_script_loader.phtml" />

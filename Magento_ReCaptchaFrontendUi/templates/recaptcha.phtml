@@ -7,30 +7,12 @@
  */
 declare(strict_types=1);
 
-use Hyva\Theme\Model\ViewModelRegistry;
-use Magento\Framework\Escaper;
-use Hyva\Theme\ViewModel\StoreConfig;
-use Magento\Framework\View\Element\Template;
-
-/** @var Template $block */
-/** @var Escaper $escaper */
-/** @var ViewModelRegistry $viewModels */
-
-/** @var StoreConfig $storeConfig */
-
-$storeConfig = $viewModels->require(StoreConfig::class);
-$siteKeyV2 = $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/public_key');
+/** @var \Magento\ReCaptchaUi\Block\ReCaptcha $block */
 ?>
-<?php if ($siteKeyV2): ?>
-    <div class="g-recaptcha"
-         data-sitekey="<?= $escaper->escapeJs($siteKeyV2) ?>">
-    </div>
-<?php else: ?>
-    <div class="control">
-        <input type="hidden"
-               value=""
-               class="form-input"
-               name="g-recaptcha-response"
-        />
-    </div>
-<?php endif; ?>
+<div class="control">
+    <input type="hidden"
+           value=""
+           class="form-input"
+           name="g-recaptcha-response"
+    />
+</div>
