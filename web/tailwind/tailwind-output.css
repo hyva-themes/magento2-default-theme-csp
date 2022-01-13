@@ -2404,6 +2404,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 	white-space: nowrap;
 	border-width: 0;
 }
+.pointer-events-none {
+	pointer-events: none;
+}
 .visible {
 	visibility: visible;
 }
@@ -2491,6 +2494,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .m-2 {
 	margin: 0.5rem;
+}
+.m-1 {
+	margin: 0.25rem;
 }
 .m-auto {
 	margin: auto;
@@ -3018,9 +3024,6 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .items-baseline {
 	align-items: baseline;
 }
-.items-stretch {
-	align-items: stretch;
-}
 .justify-start {
 	justify-content: flex-start;
 }
@@ -3035,9 +3038,6 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .justify-evenly {
 	justify-content: space-evenly;
-}
-.justify-items-start {
-	justify-items: start;
 }
 .gap-8 {
 	gap: 2rem;
@@ -3678,6 +3678,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .ring-opacity-75 {
 	--tw-ring-opacity: 0.75;
 }
+.ring-offset-2 {
+	--tw-ring-offset-width: 2px;
+}
 .filter {
 	filter: var(--tw-filter);
 }
@@ -3883,6 +3886,11 @@ fieldset ~ fieldset {
 .focus-within\:ring-1:focus-within {
 	--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
 	--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+	box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+.focus-within\:ring-2:focus-within {
+	--tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+	--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
 	box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
 }
 .hover\:border-primary:hover {
@@ -4304,6 +4312,10 @@ fieldset ~ fieldset {
 		padding-left: 1.5rem;
 		padding-right: 1.5rem;
 	}
+	.md\:px-1 {
+		padding-left: 0.25rem;
+		padding-right: 0.25rem;
+	}
 	.md\:py-6 {
 		padding-top: 1.5rem;
 		padding-bottom: 1.5rem;
@@ -4538,5 +4550,9 @@ fieldset ~ fieldset {
 	}
 	.xl\:border-none {
 		border-style: none;
+	}
+	.xl\:px-2 {
+		padding-left: 0.5rem;
+		padding-right: 0.5rem;
 	}
 }
