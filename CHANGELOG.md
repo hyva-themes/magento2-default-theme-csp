@@ -78,9 +78,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **Bugfix: Fixed class name typo to change the width of totals on large screens**
 
-  More information can be found in [merge requesr #366](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/366)
+  More information can be found in [merge request #366](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/366)
 
   Thanks to Guus Portegies (Cees en Co) for the contribution!
+
+- **Improvement: Better SSR slider styling for overflowing pagination bullets and equal item heights**
+
+  More information can be found in [issue #320](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/320)
 
 ### Removed
 
