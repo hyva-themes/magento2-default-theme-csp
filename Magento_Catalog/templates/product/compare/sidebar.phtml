@@ -131,7 +131,7 @@ function initCompareSidebarClear() {
                         <img :src="product.image" :alt="product.name" loading="lazy">
                     </a>
                     <strong class="mr-2 text-sm leading-6 font-normal">
-                        <a :href="product.product_url" :title="product.name" x-text="product.name"></a>
+                        <a :href="product.product_url" :title="product.name" x-html="product.name"></a>
                     </strong>
                     <button
                         @click.prevent="removeFromCompare(product.id)"
