@@ -26,12 +26,15 @@
                     <action method="setToolbarBlockName">
                         <argument name="name" xsi:type="string">product_list_toolbar</argument>
                     </action>
-                    <container name="search.result.list.additional" as="additional" label="Additional Info" />
                 </block>
                 <action method="setListOrders"/>
                 <action method="setListModes"/>
                 <action method="setListCollection"/>
             </block>
+        </referenceContainer>
+
+        <referenceContainer name="additional">
+            <container name="search.result.list.additional" as="additional" label="Additional Info" />
         </referenceContainer>
 
         <referenceContainer name="search.result.list.additional">
