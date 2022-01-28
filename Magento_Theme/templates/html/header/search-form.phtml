@@ -28,10 +28,11 @@ $helper = $this->helper(SearchHelper::class);
             minSearchLength: <?= (int) $helper->getMinQueryLength() ?>,
             suggestions: [],
             suggest() {
-                const term = this.$refs.searchInput.value;
-                if (term.length >= this.minSearchLength) {
-                    this.$refs.searchInput.setCustomValidity('');
-                    this.fetchSuggestions(term);
+                const search = this.$refs.searchInput;
+                if (search.value.length >= this.minSearchLength) {
+                    search.setCustomValidity('');
+                    search.reportValidity();
+                    this.fetchSuggestions(search.value);
                 } else {
                     this.suggestions = [];
                 }
@@ -49,17 +50,17 @@ $helper = $this->helper(SearchHelper::class);
                 .then(result => this.suggestions = result);
             },
             search(term) {
-                term = term || document.getElementById('search').value;
-                this.$refs.searchInput.setCustomValidity('');
+                const search = this.$refs.searchInput;
+                term = term || search.value;
                 if (term.length < this.minSearchLength) {
-                    this.$refs.searchInput.setCustomValidity('<?= $escaper->escapeJs(
+                    search.setCustomValidity('<?= $escaper->escapeJs(
                         __('Minimum Search query length is %1', $helper->getMinQueryLength())
                     ) ?>');
-                    this.$refs.searchInput.reportValidity();
+                    search.reportValidity();
                 } else {
-                    this.$refs.searchInput.setCustomValidity('');
-                    this.$refs.searchInput.value = term;
-                    document.getElementById('search_mini_form').submit();
+                    search.setCustomValidity('');
+                    search.value = term;
+                    this.$refs.form.submit();
                 }
             },
             focusElement(element) {
@@ -74,7 +75,7 @@ $helper = $this->helper(SearchHelper::class);
     }
 </script>
 <div class="container py-2 mx-auto text-black" x-data="initMiniSearch()">
-     <form class="form minisearch" id="search_mini_form" @submit.prevent="search()"
+     <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search()"
           action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get">
         <label class="hidden" for="search" data-role="minisearch-label">
             <span><?= $escaper->escapeHtml(__('Search')) ?></span>
