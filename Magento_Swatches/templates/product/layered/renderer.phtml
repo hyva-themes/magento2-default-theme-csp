@@ -85,7 +85,11 @@ $swatchData = $block->getSwatchData();
      x-data="initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>()"
 >
     <div class="swatch-attribute-options clearfix">
-        <?php foreach ($swatchData['options'] as $option => $label): ?>
+        <?php foreach ($swatchData['options'] as $option => $label):
+            // check required if attribute property "is_filterable" is set to "Filterable (no results)"
+            if (!isset($swatchData['swatches'][$option])):
+                continue;
+            endif; ?>
             <a href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
                aria-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
                class="swatch-option-link-layered swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
