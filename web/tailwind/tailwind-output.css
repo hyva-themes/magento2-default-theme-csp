@@ -2432,6 +2432,10 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 	top: 0px;
 	bottom: 0px;
 }
+.inset-x-0 {
+	left: 0px;
+	right: 0px;
+}
 .right-0 {
 	right: 0px;
 }
@@ -2759,6 +2763,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .max-h-screen-75 {
 	max-height: 75vh;
+}
+.max-h-screen {
+	max-height: 100vh;
 }
 .min-h-screen-50 {
 	min-height: 50vh;
@@ -3284,6 +3291,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 .bg-opacity-95 {
 	--tw-bg-opacity: 0.95;
 }
+.bg-opacity-50 {
+	--tw-bg-opacity: 0.5;
+}
 .fill-current {
 	fill: currentColor;
 }
@@ -3322,6 +3332,9 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .p-8 {
 	padding: 2rem;
+}
+.p-10 {
+	padding: 2.5rem;
 }
 .py-4 {
 	padding-top: 1rem;
@@ -3453,6 +3466,12 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 }
 .pl-2 {
 	padding-left: 0.5rem;
+}
+.pb-1 {
+	padding-bottom: 0.25rem;
+}
+.pl-1 {
+	padding-left: 0.25rem;
 }
 .text-left {
 	text-align: left;
