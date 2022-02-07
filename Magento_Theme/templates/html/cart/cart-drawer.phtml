@@ -197,6 +197,7 @@ use Magento\Framework\View\Element\Template;
                                 <?= $escaper->escapeHtml(__('View and Edit Cart')) ?>
                             </a>
                         </div>
+                        <?= $block->getChildHtml('extra_actions') ?>
                     </div>
                 </div>
             </div>

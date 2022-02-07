@@ -46,7 +46,9 @@
                     </arguments>
                 </block>
                 <block name="header-search" template="Magento_Theme::html/header/search-form.phtml"/>
-                <block name="cart-drawer" template="Magento_Theme::html/cart/cart-drawer.phtml" ifconfig="checkout/sidebar/display"/>
+                <block name="cart-drawer" template="Magento_Theme::html/cart/cart-drawer.phtml" ifconfig="checkout/sidebar/display">
+                    <block class="Magento\Catalog\Block\ShortcutButtons" name="extra_actions"/>
+                </block>
 
                 <block name="topmenu_generic"
                        as="topmenu"
