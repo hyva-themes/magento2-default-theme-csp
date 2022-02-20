@@ -20,7 +20,6 @@ $customerRegistration = $viewModels->require(CustomerRegistration::class);
     <a
         href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getUrl('customer/account'))) ?>"
         id="customer-menu"
-        type="button"
         class="block hover:text-black"
         @click.prevent="open = true"
         aria-haspopup="true"
