@@ -22,8 +22,7 @@ $customerRegistration = $viewModels->require(CustomerRegistration::class);
         id="customer-menu"
         class="block hover:text-black"
         @click.prevent="open = true"
-        aria-haspopup="true"
-        aria-expanded="true"
+        :aria-expanded="open ? 'true' : 'false'"
         aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
     >
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
