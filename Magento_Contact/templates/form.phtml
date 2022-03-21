@@ -30,7 +30,7 @@ $recaptchaInputFieldBlock = '';
 $recaptchaLegalNoticeBlock = '';
 if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('contact')) {
     $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
-    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE];
 }
 ?>
 <div class="flex-columns-wrapper justify-between py-8 gap-4">

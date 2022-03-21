@@ -48,7 +48,7 @@ $recaptchaInputFieldBlock = '';
 $recaptchaLegalNoticeBlock = '';
 if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('product_review')) {
     $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
-    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE];
 }
 ?>
 <div class="mx-auto py-6 items-center" id="review-form">

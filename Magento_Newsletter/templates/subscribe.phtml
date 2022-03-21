@@ -27,7 +27,7 @@ $recaptchaInputField = '';
 $recaptchaLegalNotice = '';
 if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('newsletter')) {
     $recaptchaInputField = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD]);
-    $recaptchaLegalNotice = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK]);
+    $recaptchaLegalNotice = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE]);
 }
 ?>
 <div class="pr-4 lg:w-1/4 md:w-1/2">

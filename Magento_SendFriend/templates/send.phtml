@@ -36,7 +36,7 @@ $recaptchaInputField = '';
 $recaptchaLegalNotice = '';
 if ($recaptchaViewModel !== null && ($recaptchaData = $recaptchaViewModel->getRecaptchaData('sendfriend'))) {
     $recaptchaInputField = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD]);
-    $recaptchaLegalNotice = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK]);
+    $recaptchaLegalNotice = $block->getBlockHtml($recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE]);
 }
 
 $formData = $block->getFormData();

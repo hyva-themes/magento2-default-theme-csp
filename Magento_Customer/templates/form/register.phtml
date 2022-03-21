@@ -32,7 +32,7 @@ $recaptchaInputFieldBlock = '';
 $recaptchaLegalNoticeBlock = '';
 if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('customer_create')) {
     $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
-    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE];
 }
 $region = $block->getAttributeData()->getFrontendLabel('region');
 $selectRegion = 'Please select a region, state or province.';

@@ -29,7 +29,7 @@ $recaptchaInputFieldBlock = '';
 $recaptchaLegalNoticeBlock = '';
 if ($recaptchaViewModel !== null && $recaptchaData = $recaptchaViewModel->getRecaptchaData('customer_login')) {
     $recaptchaInputFieldBlock = $recaptchaData[ReCaptcha::RECAPTCHA_INPUT_FIELD];
-    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE_BLOCK];
+    $recaptchaLegalNoticeBlock = $recaptchaData[ReCaptcha::RECAPTCHA_LEGAL_NOTICE];
 }
 ?>
 <script>
