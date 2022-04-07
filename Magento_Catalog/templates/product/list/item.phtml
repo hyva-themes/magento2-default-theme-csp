@@ -113,6 +113,12 @@ $hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
             <?= $block->getProductDetailsHtml($product) ?>
         <?php endif; ?>
 
+        <?php if ($showDescription): ?>
+        <div class="mt-2 mb-1 items-center justify-center text-primary text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
+            <?= /* @noEscape */ $productViewModel->getShortDescriptionForProduct($product) ?>
+        </div>
+        <?php endif; ?>
+
         <script>
             function initPriceBox_<?= /** @noEscape */ $uniqueId ?>()
             {
