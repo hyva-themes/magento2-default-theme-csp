@@ -45,9 +45,9 @@ use Magento\Framework\View\Element\Template;
             },
             findSimpleIndex() {
                 // a better method name would be `updateSelectedSimpleIndex` but keeping for bc
-                this.productIndex = this.calculateSimpleIndex(this.selectedValues);
+                this.productIndex = this.calculateSimpleIndexForFullSelection(this.selectedValues);
             },
-            calculateSimpleIndex(selectedValues) {
+            calculateSimpleIndexForFullSelection(selectedValues) {
                 const productIndexes = this.optionConfig.index;
                 return Object.keys(productIndexes).find(productIndex => {
                     const productCandidateOptions = productIndexes[productIndex];
@@ -115,8 +115,18 @@ use Magento\Framework\View\Element\Template;
                     ? opt.products
                     : [];
             },
-            findCheapestProductForOption(option) {
-                return this.getProductIdsForOption(option).reduce((cheapest, simpleIdx) => {
+            findProductIdsForPartialSelection(optionSelection) {
+                const candidateProducts = Object.values(optionSelection).reduce((candidates, optionId) => {
+                    const newCandidates = this.getProductIdsForOption({id: optionId});
+                    return candidates === null
+                        ? newCandidates
+                        : candidates.filter(productId => newCandidates.includes(productId));
+                }, null);
+                return candidateProducts || [];
+            },
+            findCheapestProductForPartialSelection(optionSelection) {
+                const candidateProducts = this.findProductIdsForPartialSelection(optionSelection);
+                return candidateProducts.reduce((cheapest, simpleIdx) => {
                     // in the first iteration we start with simpleIdx as the currently cheapest product
                     if (! this.optionConfig.optionPrices[cheapest]) return simpleIdx;
                     const knownCheapestPrice = this.optionConfig.optionPrices[cheapest].finalPrice.amount;
@@ -129,9 +139,9 @@ use Magento\Framework\View\Element\Template;
                 // try to find a product for a complete selection
                 const attributeId = this.findAttributeByOptionId(option.id);
                 const optionSelection = Object.assign({}, this.selectedValues, {[attributeId]: option.id});
-                const simpleIndex = this.calculateSimpleIndex(optionSelection);
+                const matchingSimpleIndex = this.calculateSimpleIndexForFullSelection(optionSelection);
                 // if there is no complete selection, use the cheapest product for the option
-                return simpleIndex || this.findCheapestProductForOption(option);
+                return matchingSimpleIndex || this.findCheapestProductForPartialSelection(optionSelection);
             },
             getAttributeOptionLabel(option) {
                 const optionProduct = this.findProductIdToUseForOptionPrice(option);
