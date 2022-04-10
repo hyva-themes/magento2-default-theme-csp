@@ -148,7 +148,7 @@ $title = $title ?? __('Recently Viewed Products');
 }'
                 ) ?>`;
                 const variables = JSON.stringify({skus: skusToFetch});
-                window.fetch('/graphql?' + new URLSearchParams({query, variables}), {
+                window.fetch(BASE_URL + 'graphql?' + new URLSearchParams({query, variables}), {
                     method: 'GET',
                     headers: {
                         'Store': '<?= $escaper->escapeJs($viewModelStore->getStoreCode()) ?>',
