@@ -12,8 +12,10 @@ use Hyva\Theme\ViewModel\Cart\GraphQlQueriesWithVariables as GraphQlQueries;
 use Hyva\Theme\ViewModel\Currency;
 use Hyva\Theme\ViewModel\Directory as DirectoryViewModel;
 use Hyva\Theme\ViewModel\Store as StoreViewModel;
+use Magento\Catalog\Model\Config\Source\Product\Thumbnail;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\StoreConfig as StoreConfigViewModel;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
@@ -29,6 +31,9 @@ $viewModelGraphQl = $viewModels->require(GraphqlViewModel::class);
 $currencyViewModel = $viewModels->require(Currency::class);
 /** @var DirectoryViewModel $currencyViewModel */
 $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
+/** @var StoreConfigViewModel $storeConfigViewModel */
+$storeConfigViewModel = $viewModels->require(StoreConfigViewModel::class);
+
 ?>
 <script>
     'use strict';
@@ -106,7 +111,6 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
                     if (data && data.errors) {
                         this.initErrorMessages(data.errors);
                     }
-
                     this.cartData = (data && data.data && (data.data.customerCart || data.data.cart)) || {};
                     this.updateCartDataDependencies();
 
@@ -116,6 +120,18 @@ $directoryViewModel = $viewModels->require(DirectoryViewModel::class);
             },
             getCartItems() {
                 return (this.cartData && this.cartData.items || []).filter(cartItem => !!cartItem);
+            },
+            getCartItemImage(item) {
+                <?php if($storeConfigViewModel->getStoreConfig(
+                    Magento\ConfigurableProduct\Model\Product\Configuration\Item\ItemProductResolver::CONFIG_THUMBNAIL_SOURCE)
+                    === Thumbnail::OPTION_USE_OWN_IMAGE
+                ):
+                ?>
+                if(item && item.configured_variant) {
+                    return item.configured_variant.small_image
+                }
+                <?php endif; ?>
+                return item.product.small_image
             },
             getCartByCustomerSectionData(data) {
                 if (data && data.cart && data.cart.cartId) {

@@ -48,9 +48,9 @@ $displayPriceExclTax = $viewModelItemOutput->isItemPriceExclTax();
                     <div class="w-3/12 mr-2 md:mr-4 px-1">
                         <a class=""
                            :href="window.BASE_URL + item.product.url_key + (item.product.url_suffix || '')"
-                           :title="item.product.small_image.label"
+                           :title="getCartItemImage(item).label"
                         >
-                            <img :src="item.product.small_image.url" :alt="item.product.small_image.label"/>
+                            <img :src="getCartItemImage(item).url" :alt="getCartItemImage(item).label"/>
                         </a>
                     </div>
                     <div class="w-9/12">
