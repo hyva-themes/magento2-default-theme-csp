@@ -147,7 +147,7 @@ use Magento\PageBuilder\Block\GoogleMapsApi;
                     initMaps(mapElements);
                 });
 
-                script.src = '<?= $escaper->escapeJs($escaper->escapeUrl($block->getLibraryUrl())) ?>';
+                script.src = '<?= $escaper->escapeJs($block->getLibraryUrl()) ?>';
                 document.head.appendChild(script);
             }
         });
