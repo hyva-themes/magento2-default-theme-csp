@@ -131,6 +131,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   Many thanks to Lucas van Staden (ProxyBlue) for the contribution!
 
+- **Fix pager jump styles**
+
+  Previously the "gap" in the pager buttons was missing some styles.
+
+  More information can be found in the [merge request #419](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/419)
+
+  Many thanks to Alex Galdin (IT-Delight) for the contribution!
+
+- **Fix PageBuilder full width row support**
+
+  Previously full width and full bleed row content elements did not break out of the main content container.
+
+  More information can be found in the [issue #361](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/361)
+
+
+
 ### Removed
 
 - **Remove dependency on Magento_SendFriend**
