@@ -1,11 +1,21 @@
 form,
 fieldset {
     .field {
-        @apply mt-3 mb-7;
+        @apply mt-3;
+    }
+
+    .field input,
+    .field textarea {
+        @apply mb-7
     }
 
     .field.generated-wrapper {
-        @apply m-0;
+        @apply my-0;
+    }
+
+    .field.generated-wrapper input,
+    .field.generated-wrapper textarea {
+        @apply mb-0
     }
 
     label {
@@ -25,15 +35,15 @@ fieldset {
     }
 
     .field ul {
-        @apply -mb-6;
+        @apply -mt-6;
+    }
+
+    .field.generated-wrapper ul {
+        @apply mt-0;
     }
 
     .field .messages {
         @apply text-sm;
-    }
-
-    .field.generated-wrapper .messages {
-        @apply m-0;
     }
 
     .field.field--error .messages {
