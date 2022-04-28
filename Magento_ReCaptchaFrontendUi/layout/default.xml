@@ -18,10 +18,6 @@
                template="Magento_ReCaptchaFrontendUi::js/script_token.phtml" />
 
         <block name="recaptcha_script_token_invisible"
-               template="Magento_ReCaptchaFrontendUi::js/invisible_script_loader.phtml">
-            <arguments>
-                <argument name="viewModelStoreConfig" xsi:type="object">Hyva\Theme\ViewModel\StoreConfig</argument>
-            </arguments>
-        </block>
+               template="Magento_ReCaptchaFrontendUi::js/invisible_script_loader.phtml" />
     </body>
 </page>
