@@ -7,7 +7,40 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.13...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.14...main
+
+## [1.1.14] - 2022-04-29
+
+[1.1.14]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.13...1.1.14
+
+### Added
+
+- **Allow modules to automatically add tailwind config and css to styles.css compilation**
+
+  This feature allows modules to be ready to use after installation, without manual adjustments to a themes purge config.
+  The feature is enabled for new themes automatically, but can also be used in older themes by installing the npm module
+  `@hyva-themes/hyva-modules`, and making two small adjustments to the `tailwind.config.js` and the `postcss.config.js` files.
+
+  More information can be found in [merge request #394](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/394).  
+  The documentation for this new feature will be published shortly, too.
+
+### Changed
+
+- **Compress default-theme background hero image**
+
+  This change reduces the file size by 92%!
+
+  Many thanks to Jesse de Boer (Elgentos) for the contribution!
+
+- **Do not cache preconfigured swatch options while editing cart**
+
+  This change in addition to small change in the swatches JS allows setting default product options in PHP again.  
+
+  For more information see [issue #368](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/368).
+
+### Removed
+
+- Nothing
 
 ## [1.1.13] - 2022-04-12
 
