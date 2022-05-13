@@ -41,6 +41,7 @@ $smallHeight = $block->getImageAttribute('product_page_image_small', 'height', 9
 $mediumWidth = $block->getImageAttribute('product_page_image_medium', 'width', 700);
 $mediumHeight = $block->getImageAttribute('product_page_image_medium', 'height', 700);
 
+$thumbsWrapperWidth = ((count($images) * $smallWidth) + ((count($images) - 1) * 19)) . 'px;';
 $productName = $block->getProduct()->getName();
 ?>
 
@@ -48,6 +49,7 @@ $productName = $block->getProduct()->getName();
      x-data="initGallery()"
      x-init="initActive()"
      x-spread="eventListeners"
+     @resize.window.debounce="calcThumbsWrapperWidth()"
      class="order-1 w-full md:w-5/12 lg:w-1/2 md:h-auto"
     >
     <div :class="{'w-full h-full fixed block top-0 left-0 bg-white z-50 flex': fullscreen}">
@@ -119,24 +121,26 @@ $productName = $block->getProduct()->getName();
                 </div>
             </div>
         </div>
-        <div id="thumbs" class="flex flex-wrap"
-            :class="{ 'fixed justify-center bottom-0 left-0 right-0 mx-6': fullscreen}"
-            style="min-height: 100px;">
-            <template x-for="(image, index) in images" :key="index">
-                <div class="mb-2 mr-2 lg:mr-4 last:mr-0">
-                    <a href="#" @click.prevent="setActive(index);"
-                       class="block border border-gray-300 hover:border-primary focus:border-primary"
-                       :class="{'border-primary': active === index}"
-                    >
-                        <img :src="image.thumb"
-                             :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
-                             :title="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
-                             width="<?= /* @noEscape */ $smallWidth ?>"
-                             height="<?= /* @noEscape */ $smallHeight ?>"
-                        />
-                    </a>
-                </div>
-            </template>
+        <div id="thumbs" class="block overflow-x-scroll"
+             :class="{ 'fixed justify-center bottom-0 left-0 right-0 mx-6': fullscreen}"
+             style="min-height: 100px;">
+            <div class="thumbs-wrapper" style="width: <?= $thumbsWrapperWidth ?>">
+                <template x-for="(image, index) in images" :key="index">
+                    <div class="float-left mb-2 mr-2 lg:mr-4 last:mr-0">
+                        <a href="#" @click.prevent="setActive(index);"
+                           class="block border border-gray-300 hover:border-primary focus:border-primary"
+                           :class="{'border-primary': active === index}"
+                        >
+                            <img :src="image.thumb"
+                                 :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
+                                 :title="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
+                                 width="<?= /* @noEscape */ $smallWidth ?>"
+                                 height="<?= /* @noEscape */ $smallHeight ?>"
+                            />
+                        </a>
+                    </div>
+                </template>
+            </div>
         </div>
     </div>
 </div>
@@ -151,6 +155,9 @@ $productName = $block->getProduct()->getName();
             "relatedVideos": false,
             "vimeoPlayer": null,
             "fullscreen": false,
+            "milliseconds": 2000,
+            "thumbWidth": <?= $smallWidth ?>,
+            "thumbsCount": <?= count($images) ?>,
             "initialImages": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
             "images": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
             "appendOnReceiveImages": <?= $block->getVar(
@@ -180,6 +187,10 @@ $productName = $block->getProduct()->getName();
                     active = 0;
                 }
                 this.setActive(active);
+
+                setTimeout(() => {
+                    this.calcThumbsWrapperWidth();
+                }, this.milliseconds);
             },
             setActive(index) {
                 this.active = index;
@@ -191,6 +202,16 @@ $productName = $block->getProduct()->getName();
                 }
                 if (this.images[index].type === 'video') {
                     this.activateVideo();
+                }
+            },
+            calcThumbsWrapperWidth() {
+                if ((window.innerWidth <= 1024) && (window.innerWidth >= 768)) {
+                    const thumbsWrapperElement = document.querySelector('.thumbs-wrapper'),
+                        firstThumb = thumbsWrapperElement.getElementsByTagName('div')[0],
+                        firstThumbStyles = window.getComputedStyle(firstThumb);
+
+                    thumbsWrapperElement.style.width = ((this.thumbsCount * this.thumbWidth)
+                        + ((this.thumbsCount - 1) * (parseInt(firstThumbStyles.marginRight) + 3)))+'px';
                 }
             },
             activateVideo() {
