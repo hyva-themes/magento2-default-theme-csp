@@ -12,6 +12,8 @@ use Magento\Customer\Block\Widget\Name;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\ReCaptcha;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /** @var \Magento\Customer\Block\Form\Edit $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 /** @var Escaper $escaper */
@@ -95,22 +97,23 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         <template x-if="showPasswordFields">
             <div>
                 <div class="field">
-                    <label class="label" for="password"><span><?= $escaper->escapeHtml(
-                                __('New Password')
-                            ) ?></span></label>
+                    <label class="label" for="password"><span>
+                            <?= $escaper->escapeHtml(__('New Password')) ?>
+                    </span></label>
                     <div class="control">
                         <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
                         <input type="password" class="form-input" name="password" id="password" required
                                x-on:change="checkPasswordsMatch()"
                                minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>" autocomplete="off"/>
                     </div>
-                    <p class="text-sm text-secondary mt-3"><?= $escaper->escapeHtml(
+                    <p class="text-sm text-secondary mt-3">
+                        <?= $escaper->escapeHtml(
                             __(
-                                'Minimum of different classes of characters in password is %1.'
-                                . ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
+                                'Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
                                 $block->getRequiredCharacterClassesNumber()
                             )
-                        ) ?></p>
+                        ) ?>
+                    </p>
                 </div>
 
                 <div class="field">
