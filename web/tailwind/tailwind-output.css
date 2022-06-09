@@ -3296,6 +3296,10 @@ a.pagebuilder-button-secondary:focus, button.pagebuilder-button-secondary:focus,
 	--tw-border-opacity: 1;
 	border-color: rgba(245, 245, 245, var(--tw-border-opacity));
 }
+.border-gray-200 {
+	--tw-border-opacity: 1;
+	border-color: rgba(229, 231, 235, var(--tw-border-opacity));
+}
 .border-green-400 {
 	--tw-border-opacity: 1;
 	border-color: rgba(52, 211, 153, var(--tw-border-opacity));
@@ -4085,6 +4089,10 @@ fieldset ~ fieldset {
 .focus\:border-blue-300:focus {
 	--tw-border-opacity: 1;
 	border-color: rgba(147, 197, 253, var(--tw-border-opacity));
+}
+.focus\:border-primary-lighter:focus {
+	--tw-border-opacity: 1;
+	border-color: rgba(37, 99, 235, var(--tw-border-opacity));
 }
 .focus\:border-primary:focus {
 	--tw-border-opacity: 1;
