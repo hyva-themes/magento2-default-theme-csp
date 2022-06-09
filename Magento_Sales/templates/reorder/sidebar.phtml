@@ -6,11 +6,22 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Customer;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Reorder\Sidebar;
 
 /** @var Escaper $escaper */
 /** @var Sidebar $block */
+/** @var ViewModelRegistry $viewModels  */
+/** @var Customer $customer */
+
+$customer = $viewModels->require(Customer::class);
+
+if (! $customer->customerLoggedIn()) {
+    return '';
+}
+
 ?>
 
 <script>
