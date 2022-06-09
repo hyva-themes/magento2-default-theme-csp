@@ -88,6 +88,12 @@
                         <argument name="block_id" xsi:type="string">footer_content</argument>
                     </arguments>
                 </block>
+                <block
+                    class="Magento\Theme\Block\Html\Footer"
+                    name="footer-copyright"
+                    template="Magento_Theme::html/footer/copyright.phtml"
+                    as="copyright"
+                />
             </block>
         </referenceContainer>
 

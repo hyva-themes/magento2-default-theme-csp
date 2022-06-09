@@ -17,7 +17,9 @@ use Magento\Framework\Escaper;
 <div class="text-gray-700 body-font bg-container-darker border-t border-container-darker shadow pb-16">
     <div class="container py-8 mx-auto">
         <div class="flex flex-wrap order-first gap-y-16">
-            <?= $block->getChildHtml() ?>
+            <?php foreach ($block->getChildNames() as $childName): ?>
+                <?= $childName !== 'copyright' ? $block->getChildHtml($childName) : '' ?>
+            <?php endforeach; ?>
         </div>
     </div>
     <div class="bg-container border-t border-b border-container">
@@ -26,10 +28,8 @@ use Magento\Framework\Escaper;
                 class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
                 <span class="ml-3 text-xl">Hyvä Themes</span>
             </a>
-            <p class="text-sm text-gray-800 sm:ml-6 sm:mt-0 mt-4">
-                © 2020 Hyva Themes B.V. —
-                <a class="text-gray-700 ml-1" href="https://twitter.com/hyva_io"
-                   target="_blank" rel="noopener noreferrer">@hyva_io</a>
+            <p>
+                <?= $block->getChildHtml('copyright') ?>
             </p>
         </div>
     </div>
