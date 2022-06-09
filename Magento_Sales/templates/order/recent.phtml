@@ -38,7 +38,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     <div class="block-content">
         <?= $block->getChildHtml() ?>
         <?php if ($count > 0): ?>
-            <div class="grid grid-cols-3 lg:grid-cols-6">
+            <div class="grid grid-cols-3 lg:grid-cols-6" id="my-orders-table">
                 <div class="text-sm text-secondary p-2">
                     <?= $escaper->escapeHtml(__('Order #')) ?>
                 </div>
