@@ -95,7 +95,6 @@ $isVisibleProduct = $product->isVisibleInSiteVisibility();
                         <span class="label sr-only"><?= $escaper->escapeHtml(__('Qty')) ?></span>
                         <input id="cart-<?= $escaper->escapeHtmlAttr($item->getId()) ?>-qty"
                                name="cart[<?= $escaper->escapeHtmlAttr($item->getId()) ?>][qty]"
-                               data-cart-item-id="<?= $escaper->escapeHtmlAttr($item->getSku()) ?>"
                                value="<?= $escaper->escapeHtmlAttr($block->getQty()) ?>"
                                type="number"
                                size="4"
