@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.15...main
 
-## [1.1.15] - 2022-06-10
+## [1.1.15] - 2022-06-13
 
 [1.1.15]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.14...1.1.15
 
@@ -177,6 +177,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Fix: initConfigurableOptions is not defined on out of stock configurable product page**
 
   Please refer to the [Issue #410](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/410) for more details.
+
+- **Fix ApplePay shortcut button throwing an exception when logged in on FPC cache pages**
+
+  The virtual type `Magento\Catalog\Block\ShortcutButtons\InCatalog` is now used instead of the original type `Magento\Catalog\Block\ShortcutButtons`.
+
+  Please refer to the [Issue #413](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/413) for more details.
+
+- **Use image of product matching partial option selection**
+
+  Previously, the product image was only swapped when a full option selection was made. Now the image is updated already after the first selection (like in Luma).
+  Also, images already in the initial image set will not be added to the gallery as duplicates when "append to gallery" is selected.
+
+  For more information please refer to the [Merge Request #462](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/462). 
 
 ### Removed
 
