@@ -96,7 +96,11 @@ if (! $customer->customerLoggedIn()) {
      class="block block-reorder mt-8 hidden"
      :class="{ 'hidden': itemCount === 0 }">
     <div class="border-t border-container mb-6 pt-5">
-        <strong id="block-reorder-heading" role="heading" aria-level="2">
+        <strong id="block-reorder-heading"
+                class="block title text-primary font-semibold text-lg"
+                role="heading"
+                aria-level="2"
+        >
             <?= $escaper->escapeHtml(__('Recently Ordered')) ?>
         </strong>
     </div>
@@ -105,47 +109,49 @@ if (! $customer->customerLoggedIn()) {
               action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>" id="reorder-validate-detail">
             <strong class="subtitle hidden"><?= $escaper->escapeHtml(__('Last Ordered Items')) ?></strong>
             <template x-if="itemCount">
-                <ol id="cart-sidebar-reorder" class="product-items product-items-names">
-                    <template x-for="product in reorderItems">
-                        <li class="flex items-start mb-4">
-                            <div class="flex-shrink-0 mr-2">
-                                <label class="label hidden">
-                                    <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
-                                </label>
-                                <div class="control">
-                                    <input type="checkbox"
-                                           name="order_items[]"
-                                           :id="checkboxId + product.id"
-                                           :value="product.id"
-                                           :title="product.is_saleable
-                                            ? '<?= $escaper->escapeJs(__('Add to Cart')) ?>'
-                                            : '<?= $escaper->escapeJs(__('Product is not salable.')) ?>'"
-                                           :disabled="!product.is_saleable"
-                                    />
+                <div>
+                    <ol id="cart-sidebar-reorder" class="product-items product-items-names">
+                        <template x-for="product in reorderItems">
+                            <li class="flex items-start mb-4">
+                                <div class="flex-shrink-0 mr-2">
+                                    <label class="label hidden">
+                                        <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
+                                    </label>
+                                    <div class="control">
+                                        <input type="checkbox"
+                                               name="order_items[]"
+                                               :id="checkboxId + product.id"
+                                               :value="product.id"
+                                               :title="product.is_saleable
+                                                ? '<?= $escaper->escapeJs(__('Add to Cart')) ?>'
+                                                : '<?= $escaper->escapeJs(__('Product is not salable.')) ?>'"
+                                               :disabled="!product.is_saleable"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <strong class="text-sm leading-6 font-normal hover:underline">
-                                <a :href="product.url" :title="product.name" x-text="product.name"></a>
-                            </strong>
-                        </li>
-                    </template>
-                </ol>
-                <div id="cart-sidebar-reorder-advice-container"></div>
-                <div class="flex flex-wrap items-center md:mt-5 text-sm">
-                    <template x-if="isShowAddToCart">
-                        <button
-                            @click.prevent="addToCart('<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>')"
-                            aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
-                            title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
-                            class="action tocart primary btn btn-primary">
-                            <?= $escaper->escapeHtml(__('Add to Cart')) ?>
-                        </button>
-                    </template>
-                    <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>#my-orders-table"
-                       title="<?= $escaper->escapeHtmlAttr(__('View All')); ?>"
-                       class="px-4 text-sm text-gray-500 hover:text-primary">
-                        <span><?= $escaper->escapeHtml(__('View All')); ?></span>
-                    </a>
+                                <strong class="text-sm leading-6 font-normal hover:underline">
+                                    <a :href="product.url" :title="product.name" x-text="product.name"></a>
+                                </strong>
+                            </li>
+                        </template>
+                    </ol>
+                    <div id="cart-sidebar-reorder-advice-container"></div>
+                    <div class="flex flex-wrap gap-y-2 items-center md:mt-5 text-sm">
+                        <template x-if="isShowAddToCart">
+                            <button
+                                @click.prevent="addToCart('<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>')"
+                                aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?>"
+                                title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                class="action tocart btn btn-primary text-sm">
+                                <?= $escaper->escapeHtml(__('Add to Cart')) ?>
+                            </button>
+                        </template>
+                        <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>#my-orders-table"
+                           title="<?= $escaper->escapeHtmlAttr(__('View All')); ?>"
+                           class="px-4 text-sm text-gray-500 hover:text-primary">
+                            <span><?= $escaper->escapeHtml(__('View All')); ?></span>
+                        </a>
+                    </div>
                 </div>
             </template>
         </form>

@@ -124,11 +124,11 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                             </strong>
                             <div class="mr-2 text-sm leading-6 font-bold" x-html="product.product_price"></div>
                             <template x-if="product.product_is_saleable_and_visible">
-                                <div class="actions-primary">
+                                <div class="actions-primary my-2">
                                     <template x-if="!product.product_has_required_options">
                                         <button
                                             @click.prevent="addToCart(product.add_to_cart_params)"
-                                            class="action tocart primary btn btn-primary"
+                                            class="action tocart primary btn btn-primary text-sm"
                                             title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>">
                                             <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                         </button>
