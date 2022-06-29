@@ -46,7 +46,7 @@ $siteKeyV3   = (string) $storeConfig->getStoreConfig('recaptcha_frontend/type_re
             const siteKey = '<?= $escaper->escapeJs($siteKeyV3) ?>';
             const script = document.createElement('script');
             script.type = 'text/javascript';
-            script.src = siteKey ? `${url}&render=${siteKey}` : url;
+            script.src = siteKey ? `${url}&render=${siteKey}` : `${url}&render=explicit`;
             script.async = true;
             document.head.appendChild(script);
         }
