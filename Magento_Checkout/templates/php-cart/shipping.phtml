@@ -136,7 +136,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 if (this.shippingMethod) {
                     const splitShippingMethod = this.shippingMethod.split('_');
                     carrierCode = splitShippingMethod[0];
-                    methodCode = splitShippingMethod[1] || null;
+                    // methodCode might contain multiple underscores
+                    methodCode = this.shippingMethod.replace(carrierCode + '_', '') || null;
                 }
                 const path = this.customer && this.customer.fullname
                     ? '/V1/carts/mine/totals-information'
