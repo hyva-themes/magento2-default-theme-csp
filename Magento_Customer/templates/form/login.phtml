@@ -67,7 +67,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         <input name="login[password]"
                                class="form-input"
                                required
-                               type="password"
+                               :type="showPassword ? 'text' : 'password'"
                             <?php if ($block->isAutocompleteDisabled()): ?>
                                 autocomplete="off"
                             <?php endif; ?>
