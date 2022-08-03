@@ -15,7 +15,7 @@
     <?php if ($total->getBlockName()): ?>
         <?= $block->getChildHtml($total->getBlockName(), false) ?>
     <?php else:?>
-        <div<?= /* @noEscape */ $block->getLabelProperties() ?>>
+        <div <?= /* @noEscape */ $block->getLabelProperties() ?>>
             <?php if ($total->getStrong()): ?>
                 <strong><?= $escaper->escapeHtml($total->getLabel()) ?></strong>
             <?php else: ?>
