@@ -14,7 +14,7 @@ use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
 /** @var SmartButton $block */
 /** @var Escaper $escaper */
 
-$widgetData = json_decode($block->getJsInitParams());
+$widgetData = json_decode($block->getJsInitParams(), true);
 $widgetJson = json_encode($widgetData['Magento_Paypal/js/in-context/button']);
 $uniqueId   = '_' . uniqid();
 ?>
