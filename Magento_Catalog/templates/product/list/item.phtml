@@ -149,12 +149,12 @@ $hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
                     <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                 </span>
             </button>
-            <?php else:?>
-                <?php if ($product->isAvailable()):?>
+            <?php else: ?>
+                <?php if ($product->isAvailable()): ?>
                     <div class="mr-auto text-green-500">
                         <span><?= $escaper->escapeHtml(__('In stock')) ?></span>
                     </div>
-                <?php else:?>
+                <?php else: ?>
                     <div class="mr-auto text-red-500">
                         <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
                     </div>
