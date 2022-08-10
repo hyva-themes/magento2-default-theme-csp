@@ -67,13 +67,24 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         <input name="login[password]"
                                class="form-input"
                                required
-                               type="password"
+                               :type="showPassword ? 'text' : 'password'"
                             <?php if ($block->isAutocompleteDisabled()): ?>
                                 autocomplete="off"
                             <?php endif; ?>
                                id="pass"
                                title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"/>
                     </div>
+                </div>
+                <div class="field choice">
+                    <input name="show-password"
+                           class="checkbox"
+                           id="show-password"
+                           type="checkbox"
+                           x-model="showPassword"
+                           title="<?= $escaper->escapeHtmlAttr(__('Show Password')) ?>"/>
+                    <label for="show-password" class="label">
+                        <span><?= $escaper->escapeHtml(__('Show Password')) ?></span>
+                    </label>
                 </div>
 
                 <?= $recaptcha ? $recaptcha->getInputHtml('customer_login') : '' ?>
@@ -109,6 +120,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             return {
                 errors: 0,
                 hasCaptchaToken: 0,
+                showPassword: false,
                 displayErrorMessage: false,
                 errorMessages: [],
                 setErrorMessages(messages) {
