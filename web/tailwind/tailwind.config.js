@@ -37,6 +37,11 @@ module.exports = hyvaModules.mergeTailwindConfig({
             },
             textColor: {
                 orange: colors.orange,
+                red: {
+                    ...colors.red,
+                    "DEFAULT": colors.red['500']
+                },
+
                 primary: {
                     lighter: colors.gray['700'],
                     "DEFAULT": colors.gray['800'],
