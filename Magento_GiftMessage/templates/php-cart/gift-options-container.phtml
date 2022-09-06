@@ -59,7 +59,7 @@ $uniqueId = uniqid();
                     this.resultBlockVisibility = true;
                 }
 
-                <?php if ($slideOutDrawer) : ?>
+                <?php if ($slideOutDrawer): ?>
                     const onDrawerToggle = () => {
                         if (this.formBlockVisibility) {
                             document.body.style.overflow = 'hidden';
@@ -139,7 +139,7 @@ $uniqueId = uniqid();
     <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
         <span @click="formBlockVisibility = !formBlockVisibility" class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline">
             <?= $escaper->escapeHtml(__('Gift options')) ?>
-            <?php if (!$slideOutDrawer) : ?>
+            <?php if (!$slideOutDrawer): ?>
                 <span x-show="!formBlockVisibility">
                     <?= $heroicons->chevronDownHtml('inline-block', 16, 16) ?>
                 </span>
@@ -149,7 +149,7 @@ $uniqueId = uniqid();
             <?php endif ?>
         </span>
     </div>
-    <?php if ($slideOutDrawer) : ?>
+    <?php if ($slideOutDrawer): ?>
         <div role="dialog"
             aria-labelledby="enquiry-form-drawer-title"
             aria-modal="true"
@@ -185,7 +185,7 @@ $uniqueId = uniqid();
                 <?= $block->getChildHtml('gift-options-body') ?>
             </div>
         </div>
-    <?php else : ?>
+    <?php else: ?>
         <?= $block->getChildHtml('gift-options-body') ?>
     <?php endif ?>
     <div x-show="(resultBlockVisibility && !formBlockVisibility) || (resultBlockVisibility && inSlideOut)" class="gift-summary pt-2" @click="formBlockVisibility = true">
