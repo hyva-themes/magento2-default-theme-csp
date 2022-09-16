@@ -1,4 +1,10 @@
 <?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
 
 declare(strict_types=1);
 
@@ -17,127 +23,9 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $slideOutDrawer = (bool) $block->getSlideOutDrawer();
-
-$uniqueId = uniqid();
 ?>
 
-<script>
-    function giftOptions_<?= /** @noEscape */ $uniqueId ?>() {
-        'use strict';
-        return {
-            inSlideOut: <?= $slideOutDrawer ? 'true' : 'false' ?>,
-            isLoading: false,
-            formBlockVisibility: false,
-            resultBlockVisibility: false,
-            hasActiveOptions: false,
-            itemId: '<?= (int) $block->getItem()->getId() ?>',
-            isGiftMsgEnabled: window.giftOptionsConfig.isItemLevelGiftOptionsEnabled &&
-                window.giftOptionsConfig.giftMessage.itemLevel['<?= (int) $block->getItem()->getId() ?>'].is_available !== false,
-            formMessage: {
-                recipient: null,
-                sender: null,
-                message: null,
-                alreadyAdded: null,
-            },
-            savedFormMessage: {
-                recipient: null,
-                sender: null,
-                message: null,
-                alreadyAdded: null,
-            },
-            extensionAttributes: {},
-            initialize() {
-                const message = window.giftOptionsConfig.giftMessage.hasOwnProperty('itemLevel') &&
-                    window.giftOptionsConfig.giftMessage.itemLevel.hasOwnProperty(this.itemId) ?
-                    window.giftOptionsConfig.giftMessage.itemLevel[this.itemId].message : null;
-                const isObject = Object.prototype.toString.call(message) == '[object Object]'
-
-                if (isObject) {
-                    this.savedFormMessage.recipient = message.recipient;
-                    this.savedFormMessage.sender = message.sender;
-                    this.savedFormMessage.message = message.message;
-                    this.savedFormMessage.alreadyAdded = true;
-                    this.formMessage = Object.assign({}, this.savedFormMessage);
-                    this.resultBlockVisibility = true;
-                }
-
-                <?php if ($slideOutDrawer): ?>
-                    const onDrawerToggle = () => {
-                        if (this.formBlockVisibility) {
-                            document.body.style.overflow = 'hidden';
-                        } else {
-                            document.body.style.overflow = null;
-                        }
-                    }
-                    this.$watch('formBlockVisibility', value => onDrawerToggle(value));
-                <?php endif ?>
-
-                window.addEventListener('addional-gift-options-loaded-' + this.itemId, (e) => {
-                    if (this.hasActiveOptions) return;
-
-                    if (e.detail.isItemLevelGiftOptionsEnabled) this.hasActiveOptions = true;
-                });
-
-                window.addEventListener('addional-gift-options-results-' + this.itemId, (e) => {
-                    if (this.resultBlockVisibility) return;
-
-                    this.resultBlockVisibility = e.detail.hasResults;
-                });
-
-                window.addEventListener('update-gift-options-extension-attributes-' + this.itemId, (e) => {
-                    this.extensionAttributes = {
-                        ...this.extensionAttributes,
-                        ...e.detail
-                    };
-                });
-            },
-
-            submitGiftOption() {
-                let endPoint;
-                const restBaseUrl = BASE_URL + 'rest/' + CURRENT_STORE_CODE + '/V1/';
-
-                window.dispatchEvent(new CustomEvent('before-gift-options-submit-' + this.itemId, {
-                    detail: {}
-                }))
-
-                if (window.giftOptionsConfig.isCustomerLoggedIn) {
-                    endPoint = restBaseUrl + 'carts/mine/gift-message/' + this.itemId;
-                } else {
-                    endPoint = restBaseUrl + 'guest-carts/' + window.giftOptionsConfig.quoteId + '/gift-message/' + this.itemId;
-                }
-
-                this.isLoading = true;
-
-                fetch(endPoint, {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        gift_message: {
-                            recipient: this.formMessage.recipient,
-                            sender: this.formMessage.sender,
-                            message: this.formMessage.message,
-                            extension_attributes: this.extensionAttributes
-                        }
-                    }),
-                }).then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        console.warn("GET request failed", response);
-                    }
-                }).then(() => {
-                    this.savedFormMessage = Object.assign({}, this.formMessage);
-                    document.querySelector('form[action*="checkout/cart/updatePost/"]').submit();
-                });
-            }
-        }
-    }
-</script>
-<div x-data="giftOptions_<?= /** @noEscape */ $uniqueId ?>()" x-init="initialize" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
-    <?= $block->getChildHtml('item-loading') ?>
+<div x-data="initGiftItemOptions({itemId: '<?= (int) $block->getItem()->getId() ?>'})" x-init="init" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
     <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
         <span @click="formBlockVisibility = !formBlockVisibility" class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline">
             <?= $escaper->escapeHtml(__('Gift options')) ?>
@@ -179,10 +67,13 @@ $uniqueId = uniqid();
                 x-transition:leave-end="translate-x-full"
             >
                 <div class="relative">
-                    <h2 class="text-lg font-medium leading-7 text-gray-900 "><?= $escaper->escapeHtml('Item Gift Options') ?></h4>
-                        <div class="absolute top-0 right-0 cursor-pointer" @click="formBlockVisibility=false" aria-label="Close panel" tabindex="0" role="button">
-                            <?= $heroicons->xHtml('inline-block', 24, 24) ?>
-                        </div>
+                    <h2 class="text-lg font-medium leading-7 text-gray-900 "><?= $escaper->escapeHtml('Item Gift Options') ?></h2>
+                    <div class="absolute top-0 right-0 cursor-pointer" @click="formBlockVisibility=false" aria-label="Close panel" tabindex="0" role="button">
+                        <?= $heroicons->xHtml('inline-block', 24, 24) ?>
+                    </div>
+                </div>
+                <div class="gift-options-item">
+                    <span><?= $escaper->escapeHtml($block->getItem()->getName()) ?></span>
                 </div>
                 <?= $block->getChildHtml('gift-options-body') ?>
             </div>
@@ -193,7 +84,7 @@ $uniqueId = uniqid();
     <div x-show="(resultBlockVisibility && !formBlockVisibility) || (resultBlockVisibility && inSlideOut)" class="gift-summary pt-2" @click="formBlockVisibility = true">
         <div class="additional-options-summary"></div>
         <div x-show="savedFormMessage.message">
-            <span><?= $escaper->escapeHtml(__('Message:')) ?></span><span x-text="savedFormMessage.message"></span>
+            <span><?= $escaper->escapeHtml(__('Message:')) ?></span> <span x-text="savedFormMessage.message"></span>
         </div>
     </div>
 </div>
