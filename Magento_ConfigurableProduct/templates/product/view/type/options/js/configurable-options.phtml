@@ -209,10 +209,11 @@ use Magento\Framework\View\Element\Template;
                         {
                             detail: {
                                 productId: this.productId,
-                                optionId: this.optionId,
-                                value: this.value,
+                                optionId: optionId,
+                                value: value,
                                 productIndex: this.productIndex,
-                                selectedValues: this.selectedValues
+                                selectedValues: this.selectedValues,
+                                candidates: this.findProductIdsForPartialSelection(this.selectedValues),
                             }
                         }
                     )
