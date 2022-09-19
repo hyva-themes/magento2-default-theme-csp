@@ -7,7 +7,157 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.17...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.18...main
+
+## [1.1.18] - 2022-09-19
+
+[1.1.18]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.17...1.1.18
+
+
+### Added
+
+- **Add support for Gift Messages**
+
+  Previously this feature was not supported in Hyvä.
+
+  For more information please refer to [merge request #505](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/505).
+
+  Many thanks to Ross McHugh (Monsoon Consulting) for the contribution!
+
+- **Add extension point for shipping method selection in PHP Cart**
+
+  Child blocks added to the `checkout.cart.shipping` block on `checkout_cart_index` will now be automatically rendered.  
+  Also, the region code is now provided as a `data-code` attribute on the region select options.
+
+  For more information please refer to [merge request #503](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/503).
+
+  Many thanks to Lucas van Staden (ProxiBlue) for the contribution!
+
+- **Add extension point to cart drawer template**
+
+  Four new layout containers are now available to customize the cart drawer: `cart-drawer.top`, `cart-drawer.items.before`, `cart-drawer.items.after`, `cart-drawer.bottom`.
+
+  For more information please refer to [merge request #514](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/514).
+
+  Many thanks to Kiel Pykett (Youwe - formerly Fisheye) for the contribution!
+
+- **Allow displaying products assigned to child categories for anchor category sliders**
+
+  For sliders configured with a single category ID, the property `include_child_category_products` can now be set in layout XML on the slider block
+  to cause products assigned to child categories to be displayed, too.
+
+  For more information please refer to [issue #473](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/473).
+
+### Changed
+
+- **Validation of Postcode and Telephone fields in customer address form**
+
+  The validation for the customer/address/edit form now uses the advanced validation library to validate
+  postcode and region according to the selected country, and also applies telephone validation according to the store
+  configuration.
+
+  For more information please refer to [issue #114](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/114).
+
+  Many thanks to Oleksandr Melnychuk (Eltrino) for the contribution!
+
+- **Automatically scroll to review section on review pagination**
+
+  Previously, the page reloaded at the page top, and a visitor would have to manually scroll down to the reviews page
+  they navigated to.
+
+  For more information please refer to [issue #453](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/453).
+
+  Many Thanks to Dung La (JaJuMa) for the contribution!
+
+- **Fix wrong product name used in review section when editing wishlist items**
+
+  For more information please refer to [issue #462](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/462).
+
+  Many Thanks to Dung La (JaJuMa) for the contribution!
+
+- **Open the overleay keyboard when user clicks on search icon on mobile**
+
+  This allows visitors to start typing right away, without first having to tap the search bar.
+
+  For more information please refer to [issue #456](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/456).
+
+  Many thanks to Nick Hall (MFG Supply) for the contribution!
+
+- **Fix gallery images not compatible with many images**
+
+  Previously, when quite a lot of images where added to a product, say 6 or more, the fullscreen gallery view on mobile was filled up with thumbnails.
+
+  For more information please refer to [issue #136](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/136).
+
+  Many thanks to Oleksandr Melnychuk (Eltrino) for the contribution!
+
+- **The cart drawer should use the QuoteShortcutButtons block instead of InCatalog**
+
+  Third party extensions can now correctly use the `is_catalog_product` property to determine if the product actions
+  are being rendered on a PDP / PLP or on a checkout related page.
+
+  For more information please refer to [merge request #504](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/504).
+
+  Many thanks to Ravinder (redChamps) for the contribution!
+
+- **A11y improvement: use aside tag for sidebars**
+
+  The `aside` tag is used to mark certain elements as complimentary to the main content.  
+  The sidebar main and additional are always complimentary to the catalog page so it makes sense to use the `aside` html tag instead of a generic `div`.
+
+  For more information please refer to [issue #458](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/458).
+
+  Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+
+- **Fix comment description of the meaning of the `assistance_allowed` value**
+
+  Previously the comment reversed the meaning of the value.
+
+  For more information please refer to [issue #461](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/461).
+
+  Many thanks to Jerke Combee (Elgentos) for the contribution!
+
+- **Fix the URL suffix determination for recently viewed products**
+
+  This fixes a bug that occured when the product URL suffix was configured to be empty.
+
+  For more information please refer to [issue #463](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/463).
+
+- **Fix crosssell slider on the PHP-Cart page if PageBuilder is disabled**
+
+  For more information please refer to [issue #457](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/457).
+
+  Many thanks to Rich Jones (Aware Digital) for the contribution!
+
+- **Allow some HTML tags in order comments**
+
+  Since Magento 2.4.4 the HTML tags `['b', 'br', 'strong', 'i', 'u', 'a']` are allowed to be rendered in order comments on the frontend. 
+
+  For more information please refer to [issue #465](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/465).
+
+- **Fix configurable-selection-changed event arguments**
+
+  For more information please refer to [issue #468](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/468).
+
+  Many thanks to Richard Brown (Lawson-His) for the report and the suggested fix!
+
+- **Fix edit and remove icons for bundled products in the PHP-Cart**
+
+  For more information please refer to [issue #469](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/469).
+
+- **Use PHP reCaptcha view model constants instead of strings to refer to reCaptcha configuration**
+
+  The ReCaptcha view model now has constants for the different built-in forms supporting ReCaptcha.
+
+  For more information please refer to [merge request #517](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/517).
+
+  Many thanks to Kiel Pykett (Youwe - formerly Fisheye) for the contribution!
+
+
+### Removed
+
+- Nothing removed
+
 
 ## [1.1.17] - 2022-08-16
 
