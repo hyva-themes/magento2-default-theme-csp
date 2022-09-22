@@ -10,12 +10,14 @@ declare(strict_types=1);
 
 use Magento\Catalog\Helper\Data;
 use Magento\Framework\Escaper;
+use Magento\Framework\Locale\LocaleFormatter;
 use Magento\LayeredNavigation\Block\Navigation\FilterRenderer;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 /** @var FilterRenderer $block */
 /** @var Escaper $escaper */
+/** @var LocaleFormatter $localeFormatter */
 
 $catalogHelper = $this->helper(Data::class);
 
@@ -27,14 +29,14 @@ $catalogHelper = $this->helper(Data::class);
            class="flex justify-between py-1 hover:text-black">
             <span><?= /* @noEscape */ $filterItem->getLabel() ?></span>
             <?php if ($catalogHelper->shouldDisplayProductCountOnLayer()): ?>
-                <span class="count text-primary">(<?= /* @noEscape */(int)$filterItem->getCount() ?>)</span>
+                <span class="count text-primary">(<?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?>)</span>
             <?php endif; ?>
         </a>
     <?php else: ?>
         <span class="flex justify-between py-1 hover:text-black">
                 <span><?= /* @noEscape */ $filterItem->getLabel() ?></span>
             <?php if ($catalogHelper->shouldDisplayProductCountOnLayer()): ?>
-                <span class="count text-primary">(<?= /* @noEscape */ (int)$filterItem->getCount() ?>)</span>
+                <span class="count text-primary">(<?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?>)</span>
             <?php endif; ?>
         </span>
     <?php endif; ?>
