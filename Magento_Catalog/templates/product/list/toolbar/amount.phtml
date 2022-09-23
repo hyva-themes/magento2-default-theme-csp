@@ -30,14 +30,16 @@ use Magento\Framework\Locale\LocaleFormatter;
         ) ?>
     <?php elseif ($block->getTotalNum() == 1): ?>
         <?= $escaper->escapeHtml(
-            __('%1 Item',
+            __(
+                '%1 Item',
                 '<span class="toolbar-number">' . $localeFormatter->formatNumber($block->getTotalNum()) . '</span>'
             ),
             ['span']
         ) ?>
     <?php else: ?>
         <?= $escaper->escapeHtml(
-            __('%1 Items',
+            __(
+                '%1 Items',
                 '<span class="toolbar-number">' . $localeFormatter->formatNumber($block->getTotalNum()) . '</span>'
             ),
             ['span']
