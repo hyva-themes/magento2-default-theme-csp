@@ -66,6 +66,8 @@ $formId     = $block->getData('form_id') ?? '';
                             window.dispatchMessages && window.dispatchMessages([{type: "error", text: error}], 5000);
                         }
                     }
+                }).catch(exception => {
+                    console.error(exception || `An unknown error occurred during ReCaptcha validation. Are the tokens and the domain correctly set up in the Google console?`)
                 });
             })
         }
