@@ -8,13 +8,15 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Customer\CreateAccountButton;
+use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Customer\Block\Form\Register;
 use Magento\Customer\Block\Widget\Dob;
 use Magento\Customer\Block\Widget\Gender;
 use Magento\Customer\Block\Widget\Taxvat;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\Escaper;
-use Hyva\Theme\ViewModel\ReCaptcha;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 // phpcs:disable Generic.Files.LineLength.TooLong
@@ -22,12 +24,15 @@ use Hyva\Theme\ViewModel\ReCaptcha;
 /** @var Register $block */
 /** @var Escaper $escaper */
 /** @var ReCaptcha $recaptcha */
+/** @var CreateAccountButton $createAccountButtonViewModel */
+/** @var ViewModelRegistry $viewModels */
 
 $formId = 'accountcreate';
 
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
+$createAccountButtonViewModel = $block->getData('create_account_button_view_model') ?? $viewModels->require(CreateAccountButton::class);
 $region    = $block->getAttributeData()->getFrontendLabel('region');
 $selectRegion = 'Please select a region, state or province.';
 $displayAll = $block->getConfig('general/region/display_all');
@@ -346,9 +351,10 @@ $displayAll = $block->getConfig('general/region/display_all');
         <div class="actions-toolbar flex">
             <div class="primary">
                 <button type="submit" class="action submit primary btn btn-primary"
-                        title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"><span><?= $escaper->escapeHtml(
-                            __('Create an Account')
-                        ) ?></span></button>
+                        title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
+                        <?php if ($createAccountButtonViewModel->disabled()): ?> disabled="disabled" <?php endif; ?>>
+                        <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>
+                </button>
             </div>
             <div class="secondary ml-4 self-center">
                 <a class="action back"
