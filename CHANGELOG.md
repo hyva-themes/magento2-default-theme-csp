@@ -182,6 +182,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   For more information please refer to [issue #486](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/486).
 
   Many thanks to Sean van Zuidam (Grimlink) for the contribution!
+  
+- **Fix broken review summary link and unintentional scroll**
+
+  For more information please refer to [issue #486](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/486).
+
+  Many thanks to Kenneth Danielsen (Novicell) for the contribution!
+
 
 ### Removed
 
