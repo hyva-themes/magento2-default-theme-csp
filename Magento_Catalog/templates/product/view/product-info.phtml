@@ -34,11 +34,7 @@ $product = $productViewModel->getProduct();
         <?= $escaper->escapeHtml($product->getName()) ?>
     </h1>
 
-    <div class="my-2 cursor-pointer"
-         onclick="(
-              document.getElementById('customer-review-list') ||
-              document.getElementById('customer-reviews')).scrollIntoView({behavior: 'smooth'}
-              )">
+    <div class="my-2 flex">
         <?= $block->getChildHtml('product.info.review') ?>
     </div>
 

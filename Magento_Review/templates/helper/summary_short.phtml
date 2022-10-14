@@ -21,7 +21,12 @@ $yellowHex = '#f6e05e';
 $greyHex = '#cbd5e0';
 ?>
 <?php if ($block->isReviewEnabled()): ?>
-    <div class="rating-summary flex"
+    <div class="rating-summary flex cursor-pointer"
+         onclick="(
+              document.getElementById('customer-review-list') ||
+              document.getElementById('customer-reviews') ||
+              document.getElementById('review-form')).scrollIntoView({behavior: 'smooth'}
+              )"
         <?php if (!$rating): ?>
          title="<?= $escaper->escapeHtmlAttr(__('Be the first to review this product')) ?>"
         <?php endif; ?>>
