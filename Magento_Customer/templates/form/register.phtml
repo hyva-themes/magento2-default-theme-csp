@@ -32,7 +32,7 @@ $formId = 'accountcreate';
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
-$createAccountButtonViewModel = $block->getData('create_account_button_view_model') ?? $viewModels->require(CreateAccountButton::class);
+$createAccountButtonViewModel = $viewModels->require(CreateAccountButton::class);
 $region    = $block->getAttributeData()->getFrontendLabel('region');
 $selectRegion = 'Please select a region, state or province.';
 $displayAll = $block->getConfig('general/region/display_all');
