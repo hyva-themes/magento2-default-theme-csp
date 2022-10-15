@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.18...main
 
-## [1.1.18] - 2022-10-14
+## [1.1.18] - 2022-10-15
 
 [1.1.18]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.17...1.1.18
 
@@ -65,7 +65,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   For more information please refer to [issue #114](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/114).
 
-  Many thanks to Oleksandr Melnychuk (Eltrino) for the contribution!
+  Many thanks to Oleksandr Melnychuk (Atwix) for the contribution!
 
 - **Automatically scroll to review section on review pagination**
 
@@ -82,7 +82,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   Many Thanks to Dung La (JaJuMa) for the contribution!
 
-- **Open the overleay keyboard when user clicks on search icon on mobile**
+- **Open the overlay keyboard when user clicks on search icon on mobile**
 
   This allows visitors to start typing right away, without first having to tap the search bar.
 
@@ -92,11 +92,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **Fix gallery images not compatible with many images**
 
-  Previously, when quite a lot of images where added to a product, say 6 or more, the fullscreen gallery view on mobile was filled up with thumbnails.
+  Previously, when quite a lot of images where added to a product, say 6 or more, the full-screen gallery view on mobile was filled up with thumbnails.
 
   For more information please refer to [issue #136](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/136).
 
-  Many thanks to Oleksandr Melnychuk (Eltrino) for the contribution!
+  Many thanks to Oleksandr Melnychuk (Atwix) for the contribution!
 
 - **The cart drawer should use the QuoteShortcutButtons block instead of InCatalog**
 
@@ -126,7 +126,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **Fix the URL suffix determination for recently viewed products**
 
-  This fixes a bug that occured when the product URL suffix was configured to be empty.
+  This fixes a bug that occurred when the product URL suffix was configured to be empty.
 
   For more information please refer to [issue #463](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/463).
 
@@ -169,7 +169,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Integrate changes from Magento 2.4.5**
 
   These changes include rendering numbers with a LocalFormatter, and adding new view models to that allow disabling some functionality in Adobe Commerce.  
-  Because Hyvä supports Magento since 2.4.0 wrapper classes are used to provide the same functionality in Magento versions befor 2.4.5.
+  Because Hyvä supports Magento since 2.4.0 wrapper classes are used to provide the same functionality in Magento versions before 2.4.5.
 
   For more information please refer to [issue #479](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/479).
 
