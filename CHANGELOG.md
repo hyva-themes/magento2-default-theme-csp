@@ -7,12 +7,39 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.18...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.2.0-beta1...main
+
+
+## [1.2.0-beta1] - 2022-10-16
+
+[1.2.0-beta1]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.18...1.2.0-beta1
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Migrate Alpine.js to version 3**
+
+  The `hyva-themes/magento2-default-theme` package is no longer compatible with Alpine.js version 2.
+
+  For more information please refer to [merge request #293](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/293)
+
+- **Migrate Tailwind CSS to version 3**
+
+  The `hyva-themes/magento2-default-theme` package is no longer compatible with Tailwind CSS version 2.
+
+  For more information please refer to [merge request #506](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/506)
+
+### Removed
+
+- Nothing removed
+
 
 ## [1.1.18] - 2022-10-15
 
 [1.1.18]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.17...1.1.18
-
 
 ### Added
 
