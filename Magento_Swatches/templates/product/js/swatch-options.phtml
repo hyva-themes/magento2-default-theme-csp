@@ -174,12 +174,12 @@ use Magento\Framework\View\Element\Template;
                             entries.map(entry => {
                                 if (entry.isIntersecting) {
                                     this.showSwatches = true;
-                                    io.unobserve(this.$el);
+                                    io.unobserve(this.$root);
                                 }
                             })
                         }
                     );
-                    io.observe(this.$el);
+                    io.observe(this.$root);
                 } else {
                     this.showSwatches = true
                 }

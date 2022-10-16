@@ -38,7 +38,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
         <div class="relative inline-block text-left">
             <div>
                 <button @click.prevent="open = !open"
-                        @click.away="open = false"
+                        @click.outside="open = false"
                         @keydown.window.escape="open=false"
                         type="button"
                         class="inline-flex justify-center w-full form-select px-4 py-2 bg-white focus:outline-none"

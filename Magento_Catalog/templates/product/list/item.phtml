@@ -119,8 +119,8 @@ $hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
             {
                 return {
                     updatePrice(priceData) {
-                        const regularPriceLabel = this.$el.querySelector('.normal-price .price-label');
-                        const regularPriceElement = this.$el.querySelector('.normal-price .price-wrapper .price');
+                        const regularPriceLabel = this.$root.querySelector('.normal-price .price-label');
+                        const regularPriceElement = this.$root.querySelector('.normal-price .price-wrapper .price');
                         if (priceData.finalPrice.amount < priceData.oldPrice.amount) {
                             regularPriceLabel.classList.add('hidden');
                         } else {

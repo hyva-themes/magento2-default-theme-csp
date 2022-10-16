@@ -273,7 +273,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
                 });
             },
             getSlider() {
-                return this.$el.querySelector('.js_slides');
+                return this.$root.querySelector('.js_slides');
             },
             pageSize: 4,
             pageFillers: 0,

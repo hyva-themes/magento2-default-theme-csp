@@ -32,7 +32,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
     <?= $escaper->escapeHtml(__('Customer Address')) ?>
 </div>
 <form class="form-address-edit"
-      x-data="Object.assign(initCustomerAddressEdit(), hyva.formValidation($el))"
+      x-data="Object.assign(initCustomerAddressEdit(), hyva.formValidation($root))"
       @private-content-loaded.window="onPrivateContentLoaded($event.detail.data)"
       @submit="onSubmit"
       action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>"

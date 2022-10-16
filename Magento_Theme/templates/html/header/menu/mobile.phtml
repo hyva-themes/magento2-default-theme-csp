@@ -33,7 +33,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
      class="z-20 order-2 sm:order-1 lg:order-2 navigation lg:hidden"
 >
     <!-- mobile -->
-    <div @load.window="setActiveMenu($el)"
+    <div @load.window="setActiveMenu($root)"
          class="bg-container-lighter"
          :class="{'h-screen overflow-x-hidden overflow-y-auto fixed top-0 left-0 w-full' : open}"
          @toggle-mobile-menu.window="open = !open"

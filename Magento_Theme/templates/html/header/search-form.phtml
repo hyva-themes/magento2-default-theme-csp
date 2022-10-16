@@ -92,7 +92,7 @@ $helper = $this->helper(SearchHelper::class);
                 focus:outline-none focus:border-transparent lg:text-xl"
                @focus.once="suggest"
                @input.debounce.300="suggest"
-               @keydown.arrow-down.prevent="focusElement($el.querySelector('[tabindex]'))"
+               @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
         />
          <template x-if="suggestions.length > 0">
              <div class="w-full leading-normal transition appearance-none text-grey-800 flex flex-col mt-1">

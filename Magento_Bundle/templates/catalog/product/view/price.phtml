@@ -146,7 +146,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
     }
 </script>
 <div x-data="initPrice<?= (int)$product->getId() ?>()"
-     x-spread="eventListeners"
+     x-bind="eventListeners"
      class="price-box price-final_price my-4"
 >
     <div class="final-price flex">

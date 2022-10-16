@@ -31,10 +31,10 @@ $customerRegistration = $viewModels->require(CustomerRegistration::class);
     >
         <?= $heroicons->userHtml('md:h-6 md:w-6', 32, 32, ['aria-hidden' => 'true']); ?>
     </a>
-    <nav class="absolute right-0 z-20 hidden w-40 py-2 mt-2 -mr-4 px-1 overflow-auto origin-top-right rounded-sm
+    <nav class="absolute right-0 z-20 w-40 py-2 mt-2 -mr-4 px-1 overflow-auto origin-top-right rounded-sm
         shadow-lg sm:w-48 lg:mt-3 bg-container-lighter"
-         :class="{ 'hidden' : !open }"
-         @click.away="open = false"
+         x-cloak x-show="open"
+         @click.outside="open = false"
          aria-labelledby="customer-menu"
     >
         <?php if ($block->customerLoggedIn()): ?>

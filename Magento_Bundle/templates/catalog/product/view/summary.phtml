@@ -52,7 +52,7 @@ $product = $block->getProduct();
 
         </div>
         <div x-data="initBundleSummary()"
-             x-spread="eventListeners"
+             x-bind="eventListeners"
              class="bundle-summary"
         >
             <div x-show="selectedOptions.length">

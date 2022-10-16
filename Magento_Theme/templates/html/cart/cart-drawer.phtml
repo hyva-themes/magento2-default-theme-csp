@@ -102,7 +102,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <div role="dialog"
              aria-labelledby="cart-drawer-title"
              aria-modal="true"
-             @click.away="open=false"
+             @click.outside="open=false"
              class="fixed inset-y-0 right-0 z-30 flex max-w-full">
             <div class="backdrop"
                  x-show="open"

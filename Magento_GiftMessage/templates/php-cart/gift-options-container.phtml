@@ -189,7 +189,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
 >
     <?= $block->getChildHtml('loading') ?>
 </div>
-<div x-data="initGiftOptions()" x-init="init" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
+<div x-data="initGiftOptions()" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
     <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || hasActiveOptions">
         <span @click="formBlockVisibility = !formBlockVisibility" class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline">
             <?= $escaper->escapeHtml(__('Gift options')) ?>

@@ -135,7 +135,7 @@ $swatchItemBlock->setData('product_id', $productId);
                         }
                     },
                     resizeEvent() {
-                        Array.from(this.$el.querySelectorAll('.snap')).forEach(slider => {
+                        Array.from(this.$root.querySelectorAll('.snap')).forEach(slider => {
                             slider.scrollLeft = 0;
                         })
                     }
@@ -166,7 +166,7 @@ $swatchItemBlock->setData('product_id', $productId);
                 <template x-if="showSwatches">
                     <div class="flex flex-nowrap w-full overflow-auto transition-all snap items-center py-1"
                          role="radiogroup"
-                         x-spread="scrollEvents"
+                         x-bind="scrollEvents"
                     >
                         <label class="sr-only"
                                for="attribute<?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"

@@ -73,7 +73,7 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
 <div id="cart-totals"
      class="cart-totals relative"
      x-data="initCartTotals()"
-     x-spread="eventListeners"
+     x-bind="eventListeners"
 >
     <?= $block->getBlockHtml('block-loader') ?>
     <template x-for="(segment, index) in getSortedSegments()" :key="index">

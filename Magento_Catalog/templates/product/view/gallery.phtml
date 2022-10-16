@@ -49,7 +49,7 @@ $productName = $block->getProduct()->getName();
 <div id="gallery"
      x-data="initGallery()"
      x-init="initActive(); $nextTick(() => calcPageSize())"
-     x-spread="eventListeners"
+     x-bind="eventListeners"
      class="order-1 w-full md:w-5/12 lg:w-1/2 md:h-auto"
     >
     <div :class="{'w-full h-full fixed block top-0 left-0 bg-white z-50 flex': fullscreen}">
@@ -100,12 +100,12 @@ $productName = $block->getProduct()->getName();
                         height="<?= /* @noEscape */ $mediumHeight ?>"
                         :loading="active!==index ? 'lazy' : 'eager'"
                         :src="fullscreen ? image.full : image.img"
-                        x-show.transition.opacity.duration.500ms="active===index"
+                        x-transition.opacity.duration.500ms x-show="active===index"
                     />
                 </template>
                 <div class="absolute inset-0 hidden w-full h-full bg-white nonmobile"
                      :class="{ 'hidden': activeVideoType !== 'youtube' }"
-                     x-show.transition.opacity.duration.500ms="
+                     x-transition.opacity.duration.500ms x-show="
                          images[active].type === 'video' && activeVideoType === 'youtube'
                      "
                 >
@@ -113,7 +113,7 @@ $productName = $block->getProduct()->getName();
                 </div>
                 <div class="absolute inset-0 hidden w-full h-full bg-white"
                      :class="{ 'hidden': activeVideoType !== 'vimeo' }"
-                     x-show.transition.opacity.duration.500ms="
+                     x-transition.opacity.duration.500ms x-show="
                          images[active].type === 'video' && activeVideoType === 'vimeo'
                      "
                 >

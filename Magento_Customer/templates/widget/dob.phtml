@@ -65,8 +65,8 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
             class="absolute left-0 top-full p-3 mt-12 bg-white rounded-lg shadow"
             style="width: 21rem"
             x-cloak=""
-            x-show.transition="showDatepicker"
-            @click.away="showDatepicker = false"
+            x-transition x-show="showDatepicker"
+            @click.outside="showDatepicker = false"
         >
 
             <div class="flex justify-between items-center mb-2">

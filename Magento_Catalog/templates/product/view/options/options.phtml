@@ -166,7 +166,7 @@ $options = $block->decorateArray($block->getOptions());
             refs = $refs;
             $nextTick(() => { calculateOptionPrices(); initSelectedOptions($dispatch); })
          "
-         x-spread="eventListeners"
+         x-bind="eventListeners"
          class="mb-6">
     <?php foreach ($options as $option):?>
         <?= $block->getOptionHtml($option) ?>

@@ -78,7 +78,7 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
             active: 0,
             itemCount: 0,
             getSlider() {
-                return this.$el.querySelector('.js_slides');
+                return this.$root.querySelector('.js_slides');
             },
             pageSize: 4,
             pageFillers: 0,

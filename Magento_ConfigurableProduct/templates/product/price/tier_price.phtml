@@ -62,7 +62,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
 </script>
 <div
      x-data="initTierPrices<?= (int)$product->getId() ?>()"
-     x-spread="eventListeners"
+     x-bind="eventListeners"
 >
     <template x-if="getConfiguredTierPrices()">
         <ul class="prices-tier items mb-4">

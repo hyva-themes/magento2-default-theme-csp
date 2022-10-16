@@ -65,7 +65,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
         }
     }
 </script>
-<div class="my-12" x-data="initGroupedOptions()" x-init="init()">
+<div class="my-12" x-data="initGroupedOptions()">
 <?php if ($hasAssociatedProducts): ?>
     <h2 class="text-gray-900 text-xl title-font font-medium mb-2">
         <?= $escaper->escapeHtml(__('Grouped product items')) ?>

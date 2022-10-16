@@ -149,11 +149,10 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
         </div>
     </div>
     <!--Search-->
-    <div class="absolute z-10 hidden w-full border-t shadow-sm bg-container-lighter border-container-lighter"
+    <div class="absolute z-10 w-full border-t shadow-sm bg-container-lighter border-container-lighter"
          id="search-content"
-         :class="{ 'block': searchOpen, 'hidden': !searchOpen }"
-         @click.away="searchOpen = false"
-         x-show="true"
+         :class="{ 'block': searchOpen}" x-cloak x-show="searchOpen"
+         @click.outside="searchOpen = false"
     >
         <?= $block->getChildHtml('header-search'); ?>
     </div>

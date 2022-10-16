@@ -167,7 +167,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
     }
 </script>
 <div x-data="initPrice<?= (int)$product->getId() ?>()"
-     x-spread="eventListeners"
+     x-bind="eventListeners"
      class="price-box price-final_price"
 >
     <template x-if="!activeProductsPriceData && !isPriceHidden()">

@@ -68,7 +68,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 </script>
 <section id="messages"
          x-data="initMessages()"
-         x-spread="eventListeners"
+         x-bind="eventListeners"
 >
     <template x-if="!isEmpty()">
         <div class="w-full">
