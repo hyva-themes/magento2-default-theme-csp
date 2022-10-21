@@ -350,7 +350,7 @@ $displayAll = $block->getConfig('general/region/display_all');
         <?php endif; ?>
         <div class="actions-toolbar flex">
             <div class="primary">
-                <button type="submit" class="action submit primary btn btn-primary"
+                <button type="submit" class="action submit primary btn btn-primary disabled:opacity-75"
                         title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
                         <?php if ($createAccountButtonViewModel->disabled()): ?> disabled="disabled" <?php endif; ?>>
                         <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>

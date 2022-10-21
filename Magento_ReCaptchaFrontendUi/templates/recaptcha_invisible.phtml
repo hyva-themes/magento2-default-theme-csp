@@ -35,7 +35,7 @@ $grecaptchaInstanceId  = "grecaptchaInstance$instanceSuffix";
 </div>
 <script>
     'use strict';
-    <?php // Explicitly render the recaptcha, so it doesn't use the first .g-recaptcha on the page ?>
+    <?php /* Explicitly render the recaptcha, so it doesn't use the first .g-recaptcha on the page */ ?>
     document.addEventListener('DOMContentLoaded', () => {
         grecaptchaV2LoadCallbacks.push(() => {
             const containerId = '<?= $escaper->escapeJs($grecaptchaContainerId) ?>';

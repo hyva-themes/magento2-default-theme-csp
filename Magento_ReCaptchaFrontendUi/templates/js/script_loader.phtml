@@ -49,15 +49,21 @@ $siteKeyV3   = (string) $storeConfig->getStoreConfig('recaptcha_frontend/type_re
             script.src = siteKey ? `${url}&render=${siteKey}` : `${url}&render=explicit`;
             script.async = true;
             document.head.appendChild(script);
+
+            if (event.target.form.querySelector) {
+                script.addEventListener('load', () => {
+                    Array.from(event.target.form.querySelectorAll('button[disabled]')).forEach(btn => btn.disabled && btn.removeAttribute('disabled'));
+                });
+            }
         }
 
-        window.forceLoadRecaptchaScript = () => {
-            loadRecaptchaScript({target: {form: 'dummy'}});
+        window.forceLoadRecaptchaScript = (form) => {
+            loadRecaptchaScript({target: {form: form || 'dummy'}});
             executeRecaptchaLoadCallbacks();
         };
 
-        document.body.addEventListener("input", loadRecaptchaScript, { once: true });
-        document.body.addEventListener("focus", loadRecaptchaScript, { once: true });
+        document.body.addEventListener('input', loadRecaptchaScript, { once: true });
+        document.body.addEventListener('focus', loadRecaptchaScript, { once: true });
 
     }());
 
