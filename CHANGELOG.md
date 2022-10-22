@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   Passwords can now be hidden or shown by clicking on an eye/eye-off icon in the login, registration and edit account customer forms.
 
-  For more information, please refer to [issue #498](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/issues/498).
+  For more information, please refer to [issue #498](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/498).
 
   Many Thanks to Dung La (JaJuMa) for the contribution! 
 
@@ -27,14 +27,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **Fix double h1 tag on PDP**
 
-  For more information, please refer to [issue #452](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/issues/452) and [merge request #542](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/542)
+  For more information, please refer to [issue #452](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/452) and [merge request #542](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/542)
 
   Many thanks to Sean van Zuidam (Grimlink) for the contribution!
 
 - **Fix Structured Data for Product Item (Missing Image)**
 
   This is a SEO related improvement.  
-  For more information, please refer to [issue #495](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/issues/495).
+  For more information, please refer to [issue #495](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/495).
 
   Many Thanks to Dung La (JaJuMa) for the contribution!
 
@@ -42,7 +42,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   This change fixes a regression that was introduced with 1.2.0-beta1.
 
-  For more information, please refer to [issue #497](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/issues/497).
+  For more information, please refer to [issue #497](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/497).
 
 - **Remove customer-review-list anchor in pagination URL on PLP**
   
@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   However, this anchor was also rendered on product listing pagination URLs.  
   This change now makes the pagination URL configurable via layout XML, and now only renders the review list anchor on product review pagination URLs. 
 
-  For more information, please refer to [issue #492](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/issues/492).
+  For more information, please refer to [issue #492](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/492).
 
 - **Upgrade Tailwind CSS to 3.2.0**
 
@@ -58,7 +58,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - **Remove character ')' in subtotal cart page**
 
-  For more information, please refer to [issue #494](https://gitlab.hyva.io/hyva-themes/magento2-theme-module/-/issues/494).
+  For more information, please refer to [issue #494](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/494).
 
   Many Thanks to Dung La (JaJuMa) for the contribution!
 
