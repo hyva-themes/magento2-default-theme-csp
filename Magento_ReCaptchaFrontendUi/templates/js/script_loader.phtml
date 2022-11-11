@@ -50,11 +50,9 @@ $siteKeyV3   = (string) $storeConfig->getStoreConfig('recaptcha_frontend/type_re
             script.async = true;
             document.head.appendChild(script);
 
-            if (event.target.form.querySelector) {
-                script.addEventListener('load', () => {
-                    Array.from(event.target.form.querySelectorAll('button[disabled]')).forEach(btn => btn.disabled && btn.removeAttribute('disabled'));
-                });
-            }
+            script.addEventListener('load', () => {
+                Array.from(document.querySelectorAll('button[data-recaptcha-btn]:disabled')).forEach(btn => btn.removeAttribute('disabled'));
+            });
         }
 
         window.forceLoadRecaptchaScript = (form) => {
