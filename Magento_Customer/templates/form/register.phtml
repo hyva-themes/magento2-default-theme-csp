@@ -39,7 +39,8 @@ $heroIcons = $viewModels->require(HeroiconsSolid::class);
 $createAccountButtonViewModel = $viewModels->require(CreateAccountButton::class);
 $region = $block->getAttributeData()->getFrontendLabel('region');
 $selectRegion = 'Please select a region, state or province.';
-$displayAll = $block->getConfig('general/region/display_all');
+$showOptionalRegions = $block->getConfig('general/region/display_all');
+$regionLabel = $block->getAttributeData()->getFrontendLabel('region');
 $minimumPasswordLength = $block->getMinimumPasswordLength();
 $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
 ?>
@@ -189,11 +190,11 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
 
         <?php if ($block->getShowAddressFields()): ?>
             <fieldset class="my-8 card">
-                <p class="mb-8 font-lg text-secondary-darker">
+                <legend class="contents">
                     <span>
                         <?= $escaper->escapeHtml(__('Address Information')) ?>
                     </span>
-                </p>
+                </legend>
                 <input type="hidden" name="create_address" value="1"/>
 
                 <?php $company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
@@ -214,7 +215,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                     $this->helper(Address::class)->getAttributeValidationClass(
                         'street'
                     ); ?>
-                <div class="field street required">
+                <div class="field field-reserved street required">
                     <label for="street_1" class="label"><span><?= /* @noEscape */
                             $block->getAttributeData()->getFrontendLabel('street') ?></span></label>
                     <div class="control">
@@ -249,7 +250,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                     </div>
                 </div>
 
-                <div class="field required">
+                <div class="field field-reserved required">
                     <label for="city" class="label">
                         <span>
                             <?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?>
@@ -267,65 +268,74 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                     </div>
                 </div>
 
-                <div class="field region w-full"
-                     x-cloak
-                     x-show="(hasAvailableRegions() && isRegionRequired) || showOptionalRegion"
+                <div class="field field-reserved region w-full"
+                      x-cloak
+                      x-show="(hasAvailableRegions() && isRegionRequired) || showOptionalRegions"
                 >
                     <label class="label" for="region_id">
-                        <span><?= /* @noEscape */ $region ?></span>
+                        <span><?= /* @noEscape */ $regionLabel ?></span>
                     </label>
                     <div class="control">
-                        <template x-if="hasAvailableRegions() && isRegionRequired">
+                        <template x-if="hasAvailableRegions() && (isRegionRequired || showOptionalRegions)">
                             <select id="region_id" name="region_id"
-                                    title="<?= /* @noEscape */ $region ?>"
+                                    title="<?= /* @noEscape */ $regionLabel ?>"
                                     class="form-select validate-select region_id"
-                                    :required="isRegionRequired"
                                     x-ref="region_id"
                                     x-model="selectedRegion"
+                                    @change="$refs.region.value = availableRegions[selectedRegion].name"
                             >
-                                <option value=""><?= $escaper->escapeHtml(__($selectRegion)) ?></option>
+                                <option value=""><?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?></option>
                                 <template x-for="regionId in Object.keys(availableRegions)">
+                                    <?php /* in alpine v3, if the bound props update, the template body gets evaluated before the template condition */ ?>
+                                    <?php /* because of this it is required to check if availableRegions[regionId] is set */ ?>
                                     <option :value="regionId"
-                                            :name="availableRegions[regionId].name"
-                                            x-text="availableRegions[regionId].name"
+                                            :name="availableRegions[regionId] && availableRegions[regionId].name"
+                                            x-text="availableRegions[regionId] && availableRegions[regionId].name"
                                             :selected="selectedRegion === regionId"
                                     >
                                     </option>
                                 </template>
                             </select>
                         </template>
-                        <template x-if="!hasAvailableRegions()">
-                            <input type="text"
-                                   id="region"
-                                   name="region"
-                                   x-ref="region"
-                                   value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
-                                   title="<?= /* @noEscape */ $region ?>"
-                                   class="form-input"
-                                   :required="isRegionRequired"
-                            />
-                        </template>
+                        <input :type="hasAvailableRegions() && (isRegionRequired || showOptionalRegions) ? 'hidden' : 'text'"
+                               id="region"
+                               name="region"
+                               x-ref="region"
+                               value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
+                               title="<?= /* @noEscape */ $regionLabel ?>"
+                               class="form-input"
+                               :required="isRegionRequired"
+                        />
                     </div>
                 </div>
 
-                <div class="field zip required">
-                    <label for="zip" class="label"><span><?= /* @noEscape */
-                            $block->getAttributeData()->getFrontendLabel('postcode') ?></span></label>
+                <div class="field field-reserved zip w-full">
+                    <label class="label" for="zip">
+                    <span>
+                        <?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>
+                    </span>
+                    </label>
                     <div class="control">
                         <input type="text"
                                name="postcode"
-                               value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getPostcode()) ?>"
+                               x-ref="postcode"
+                               value=""
                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                                id="zip"
-                               class="form-input validate-zip-international <?=
-                                $escaper->escapeHtmlAttr($this->helper(Address::class)->getAttributeValidationClass('postcode'))
-                                ?>">
+                               :required="isZipRequired"
+                               @change="onChange"
+                               data-validate='{"postcode": true}'
+                        class="form-input validate-zip-international
+                        <?= $escaper->escapeHtmlAttr($this->helper(Address::class)->getAttributeValidationClass('postcode')) ?>">
                     </div>
                 </div>
 
-                <div class="field country required">
-                    <label for="country" class="label"><span><?= /* @noEscape */
-                            $block->getAttributeData()->getFrontendLabel('country_id') ?></span></label>
+                <div class="field field-reserved country w-full">
+                    <label class="label" for="country">
+                    <span>
+                        <?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?>
+                    </span>
+                    </label>
                     <div class="control">
                         <?php $countries = $block
                             ->getCountryCollection()
@@ -335,7 +345,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         <select name="country_id"
                                 id="country"
                                 title="Country"
-                                required="required"
+                                required
                                 class="form-select"
                                 x-ref="country_id"
                                 @change="changeCountry($event.target)"
@@ -413,55 +423,63 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 selectedRegion: <?= $escaper->escapeJs($block->getRegion() ?: 0) ?>,
                 isZipRequired: true,
                 isRegionRequired: true,
-                showOptionalRegion: <?= $displayAll ? 'true' : 'false' ?>,
+                showOptionalRegions: <?= $showOptionalRegions ? 'true' : 'false' ?>,
                 onPrivateContentLoaded(data) {
                     this.directoryData = data['directory-data'] || {};
 
                     <?php if ($block->getCountryId()): ?>
-                    this.changeCountry(this.$refs['country_id']);
+                    this.setCountry(this.$refs['country_id'], '<?= $escaper->escapeJs($block->getRegion()) ?>');
                     <?php endif; ?>
 
-                    this.setInitialRegionSelectValue();
-                    this.setRegionInputValue('<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>');
-
                 },
-                setInitialRegionSelectValue(value) {
-                    this.$nextTick(() => {
-                        const regionSelectorElement = this.$refs['region_id'];
-                        if (regionSelectorElement) {
-
-                            const regionOptionByValue = regionSelectorElement
-                                .querySelector("[name='<?= /** @noEscape */ $block->getRegion() ?>']");
-
-                            if (regionOptionByValue) {
-                                this.$refs['region_id'].value = regionOptionByValue.value;
-                            }
-                        }
-                    })
-                },
-                setRegionInputValue(value) {
+                setRegionInputValue(regionName) {
                     this.$nextTick(() => {
                         const regionInputElement = this.$refs['region'];
                         if (regionInputElement) {
-                            regionInputElement.value = value;
+                            regionInputElement.value = regionName;
                         }
                     })
                 },
-                changeCountry(countrySelectElement) {
+                setCountry(countrySelectElement, initialRegion) {
                     const selectedOption = countrySelectElement.options[countrySelectElement.selectedIndex];
                     const countryCode = countrySelectElement.value;
                     const countryData = this.directoryData[countryCode] || false;
 
-                    this.setRegionInputValue('');
-
                     if (!countryData) {
+                        this.setRegionInputValue('');
                         return;
                     }
 
-                    this.isZipRequired = selectedOption.dataset.isZipRequired === "1";
-                    this.isRegionRequired = selectedOption.dataset.isRegionRequired === "1";
+                    this.isZipRequired = selectedOption.dataset.isZipRequired === '1';
+                    this.isRegionRequired = selectedOption.dataset.isRegionRequired === '1';
 
                     this.availableRegions = countryData.regions || {};
+
+                    const initialRegionId = Object.keys(this.availableRegions).filter(regionId => this.availableRegions[regionId].name === initialRegion)[0];
+                    this.selectedRegion = initialRegionId || '0';
+                    this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
+
+                },
+                changeCountry(countrySelectElement, initialRegion) {
+                    this.setCountry(countrySelectElement, initialRegion);
+
+                    this.validateCountryDependentFields();
+                },
+                validateCountryDependentFields() {
+                    this.$nextTick(() => {
+                        <?php /* Reinitialize validation rules for fields that depend on the country */ ?>
+                        this.fields['postcode'] && this.removeMessages(this.fields['postcode'])
+                        this.fields['region'] && this.removeMessages(this.fields['region'])
+                        delete this.fields['postcode'];
+                        delete this.fields['region'];
+                        <?php /* Initialize country_id, too, because the postcode validation depends on it */ ?>
+                        this.setupField(this.$refs['country_id']);
+                        this.setupField(this.$refs['postcode']);
+                        this.setupField(this.$refs['region']);
+
+                        this.fields['postcode'] && this.validateField(this.fields['postcode']);
+                        this.fields['region'] && this.validateField(this.fields['region']);
+                    })
                 },
                 hasAvailableRegions() {
                     return Object.keys(this.availableRegions).length > 0;
@@ -469,5 +487,42 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 <?php endif; ?>
             }
         }
+
+        window.addEventListener('DOMContentLoaded', () => {
+
+            hyva.formValidation.addRule('telephone', (value, options) => {
+                const phoneNumber = value.trim().replace(' ', '');
+                if (phoneNumber && phoneNumber.length < (options.minlength || 3)) {
+                    return '<?= $escaper->escapeJs(__('The telephone number is too short.')) ?>';
+                }
+
+                return true;
+            });
+
+            const postCodeSpecs = <?= /* @noEscape */ $block->getPostCodeConfig()->getSerializedPostCodes() ?>;
+
+            hyva.formValidation.addRule('postcode', (postCode, options, field, context) => {
+                context.removeMessages(field, 'postcode-warning')
+                const countryId = (context.fields['country_id'] && context.fields['country_id'].element.value),
+                    validatedPostCodeExamples = [],
+                    countryPostCodeSpecs = countryId && postCodeSpecs ? postCodeSpecs[countryId] : false;
+
+                if (! postCode || ! countryPostCodeSpecs) return true;
+
+                for (const postCodeSpec of Object.values(countryPostCodeSpecs)) {
+                    if (new RegExp(postCodeSpec.pattern).test(postCode)) return true;
+                    validatedPostCodeExamples.push(postCodeSpec.example);
+                }
+                if (validatedPostCodeExamples) {
+                    context.addMessages(field, 'postcode-warning', [
+                        '<?= $escaper->escapeJs(__('Provided Zip/Postal Code seems to be invalid.')) ?>',
+                        '<?= $escaper->escapeJs(__('Example: ')) ?>' + validatedPostCodeExamples.join('; ') + '. ',
+                        '<?= $escaper->escapeJs(__('If you believe it is the right one you can ignore this notice.')) ?>'
+                    ]);
+                }
+
+                return true;
+            });
+        })
     </script>
 </div>
