@@ -199,7 +199,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                     <span><?= /* @noEscape */ $regionLabel ?></span>
                 </label>
                 <div class="control">
-                    <template x-if="hasAvailableRegions() && isRegionRequired">
+                    <template x-if="hasAvailableRegions() && (isRegionRequired || showOptionalRegions)">
                         <select id="region_id" name="region_id"
                                 title="<?= /* @noEscape */ $regionLabel ?>"
                                 class="form-select validate-select region_id"
@@ -209,16 +209,18 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                         >
                             <option value=""><?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?></option>
                             <template x-for="regionId in Object.keys(availableRegions)">
+                                <?php /* in alpine v3, if the bound props update, the template body gets evaluated before the template condition */ ?>
+                                <?php /* because of this it is required to check if availableRegions[regionId] is set */ ?>
                                 <option :value="regionId"
-                                        :name="availableRegions[regionId].name"
-                                        x-text="availableRegions[regionId].name"
+                                        :name="availableRegions[regionId] && availableRegions[regionId].name"
+                                        x-text="availableRegions[regionId] && availableRegions[regionId].name"
                                         :selected="selectedRegion === regionId"
                                 >
                                 </option>
                             </template>
                         </select>
                     </template>
-                    <input :type="hasAvailableRegions() ? 'hidden' : 'text'"
+                    <input :type="hasAvailableRegions() && (isRegionRequired || showOptionalRegions) ? 'hidden' : 'text'"
                            id="region"
                            name="region"
                            x-ref="region"
@@ -334,6 +336,8 @@ function initCustomerAddressEdit() {
         validateCountryDependentFields() {
             this.$nextTick(() => {
                 <?php /* Reinitialize validation rules for fields that depend on the country */ ?>
+                this.fields['postcode'] && this.removeMessages(this.fields['postcode'])
+                this.fields['region'] && this.removeMessages(this.fields['region'])
                 delete this.fields['postcode'];
                 delete this.fields['region'];
                 <?php /* Initialize country_id, too, because the postcode validation depends on it */ ?>
