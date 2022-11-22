@@ -107,6 +107,7 @@ $sliderHtml = $sliderViewModel->getSliderForItems($itemTemplate, $items, $contai
     ->setData('hide_details', $hideDetails)
     ->setData('hide_rating_summary', $hideRatingSummary)
     ->setData('title', $title)
+    ->setData('item_relation_type', $type)
     ->toHtml();
 
 if (empty($sliderHtml)) {
