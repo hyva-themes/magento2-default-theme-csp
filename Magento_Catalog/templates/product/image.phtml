@@ -11,8 +11,8 @@ declare(strict_types=1);
 use Magento\Catalog\Block\Product\Image;
 use Magento\Framework\Escaper;
 
-/** @var $block Image */
-/** @var $escaper Escaper */
+/** @var Image $block */
+/** @var Escaper $escaper */
 ?>
 <img class="photo image <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
     <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
