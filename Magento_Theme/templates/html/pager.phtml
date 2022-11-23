@@ -132,7 +132,7 @@ $pagerItemBtnClass = $pagerItemClass
                                 aria-label="<?= $escaper->escapeHtml(__('Page') . ' ' . $page) ?>"
                             >
                                 <a
-                                    href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . /* @noEscape */ /* @noEscape *//* @noEscape *//* @noEscape *//* @noEscape */    $paginationUrlAnchor ?>"
+                                    href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . /* @noEscape */ $paginationUrlAnchor ?>"
                                     class="page <?= /* @noEscape */ $pagerItemBtnClass ?> z-10 px-4 py-2 text-gray-700
                                      bg-gray-100 border-primary"
                                     aria-current="page"
@@ -148,7 +148,7 @@ $pagerItemBtnClass = $pagerItemClass
                         <?php else: ?>
                             <li class="item -ml-px">
                                 <a
-                                    href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . /* @noEscape */ /* @noEscape *//* @noEscape *//* @noEscape */   $paginationUrlAnchor ?>"
+                                    href="<?= $escaper->escapeUrl($block->getPageUrl($page)) . /* @noEscape */ $paginationUrlAnchor ?>"
                                     class="page <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2 text-gray-700"
                                 >
                                     <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
@@ -161,7 +161,7 @@ $pagerItemBtnClass = $pagerItemClass
                     <?php if ($block->canShowNextJump()): ?>
                         <li class="item -ml-px">
                             <a
-                                href="<?= $escaper->escapeUrl($block->getNextJumpUrl()) . /* @noEscape */ /* @noEscape *//* @noEscape */  $paginationUrlAnchor ?>"
+                                href="<?= $escaper->escapeUrl($block->getNextJumpUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
                                 class="page next jump <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2 text-gray-700"
                                 aria-label="<?= $escaper->escapeHtmlAttr(__(
                                     'Skip to page %1',
@@ -174,7 +174,7 @@ $pagerItemBtnClass = $pagerItemClass
                     <?php if ($block->canShowLast()): ?>
                         <li class="item -ml-px text-gray-500">
                             <a
-                                href="<?= $escaper->escapeUrl($block->getLastPageUrl()) . /* @noEscape */ /* @noEscape */ $paginationUrlAnchor ?>"
+                                href="<?= $escaper->escapeUrl($block->getLastPageUrl()) . /* @noEscape */ $paginationUrlAnchor ?>"
                                 class="page last <?= /* @noEscape */ $pagerItemBtnClass ?> px-4 py-2"
                             >
                                 <span class="sr-only label"><?= $escaper->escapeHtml(__('Page')) ?></span>
