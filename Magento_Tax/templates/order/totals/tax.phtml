@@ -6,8 +6,11 @@
  * See https://hyva.io/license
  */
 
+declare(strict_types=1);
+
 use Magento\Framework\Escaper;
 use Magento\Tax\Block\Sales\Order\Tax;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
@@ -16,8 +19,12 @@ use Magento\Tax\Block\Sales\Order\Tax;
 
 $order    = $block->getOrder();
 $source   = $block->getSource();
-$fullInfo = $this->helper(\Magento\Tax\Helper\Data::class)->getCalculatedTaxes($source);
+$fullInfo = $this->helper(TaxHelper::class)->getCalculatedTaxes($source);
 
+/**
+ * This template is used to render the tax total within the order totals in the storefront.
+ * It is not used for order emails, which use Magento_Tax::order/tax.phtml (not part of the hyva-default-theme).
+ */
 ?>
 <?php if ($fullInfo && $block->displayFullSummary()): ?>
     <?php foreach ($fullInfo as $info): ?>
