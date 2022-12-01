@@ -24,5 +24,8 @@
             </block>
             <block class="Magento\Checkout\Block\Registration" name="checkout.registration" template="Magento_Checkout::registration.phtml" cacheable="false"/>
         </referenceContainer>
+        <!-- Bypass waiting for user interaction to load external scripts on the order success page -->
+        <!-- For example, for running analytics/conversion scripts -->
+        <referenceBlock name="init.external.scripts" template="Hyva_Theme::page/js/init-external-scripts-user-interaction-bypass.phtml"/>
     </body>
 </page>
