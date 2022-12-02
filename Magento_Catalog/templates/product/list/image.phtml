@@ -13,6 +13,9 @@ use Magento\Framework\Escaper;
 
 /** @var Image $block */
 /** @var Escaper $escaper */
+
+$hasLoadingAttribute = ($block->getCustomAttributes() ?: [])['loading'] ?? false;
+
 ?>
 <img class="hover:shadow-sm object-contain <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
      x-data=""
@@ -21,7 +24,9 @@ use Magento\Framework\Escaper;
         <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
     <?php endforeach; ?>
     src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
+    <?php if (! $hasLoadingAttribute): ?>
     loading="lazy"
+    <?php endif; ?>
     width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
     height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
     alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"
