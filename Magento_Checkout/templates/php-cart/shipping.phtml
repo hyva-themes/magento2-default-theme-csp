@@ -163,6 +163,17 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 })
                     .then(response => response.json())
                     .then(result => {
+                        <?php /* Update total titles to value from window.checkoutConfig so theme translations are applied */ ?>
+                        if (window.checkoutConfig && window.checkoutConfig.totalsData) {
+                            const checkoutConfigTotals = window.checkoutConfig.totalsData.total_segments || [];
+                            result.total_segments.forEach(total => {
+                                const totalFromConfig = checkoutConfigTotals.find(fromConfig => fromConfig.code === total.code)
+                                totalFromConfig && (total.title = totalFromConfig.title);
+                            })
+                        }
+                        return result;
+                    })
+                    .then(result => {
                         this.dispatch('update-totals', {data: result});
                     })
                     .catch(this.displayError)
