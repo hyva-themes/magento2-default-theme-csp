@@ -1,0 +1,135 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CurrentProduct;
+use Hyva\Theme\ViewModel\Navigation;
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\Catalog\ViewModel\Product\Breadcrumbs;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\Framework\Escaper;
+use Magento\Theme\Block\Html\Breadcrumbs as BreadcrumbsBlock;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var Escaper $escaper */
+/** @var BreadcrumbsBlock $block */
+
+$storeConfigViewModel = $viewModels->require(StoreConfig::class);
+$breadcrumbsViewModel = $viewModels->require(Breadcrumbs::class);
+$navigationViewModel = $viewModels->require(Navigation::class);
+$currentProductViewModel = $viewModels->require(CurrentProduct::class);
+
+$productUrlSuffix = $storeConfigViewModel->getStoreConfig(ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX);
+$categoryUrlSuffix = $breadcrumbsViewModel->getCategoryUrlSuffix();
+
+// Modules may disable the rendering of application/ld+json BreadcrumbList by setting this flag in layout XML
+$skipLinkedDataJsonSchema = $block->getData('skip_ld_json_schema');
+
+$product = $currentProductViewModel->exists() ? $currentProductViewModel->get() : null;
+
+?>
+<nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
+    <div class="container">
+        <ol x-data="initBreadcrumbsProduct()" class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
+            <span>&#8203;</span>
+            <template x-for="item in breadcrumbs">
+                <li class="item flex">
+                    <template x-if="item.name !== 'home'">
+                        <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
+                    </template>
+                    <template x-if="item.name === 'product'">
+                        <span class="text-primary-lighter" x-text="item.label"></span>
+                    </template>
+                    <template x-if="item.name !== 'product'">
+                        <a :href="item.link" class="no-underline" x-text="item.label"></a>
+                    </template>
+                </li>
+            </template>
+        </ol>
+    </div>
+</nav>
+<script>
+    function initBreadcrumbsProduct() {
+
+        const categories = <?= /** @noEscape */ json_encode($navigationViewModel->getCategories()) ?>;
+
+        const breadcrumbs = [{
+            name: 'home',
+            label: '<?= $escaper->escapeJs(__('Home')) ?>',
+            title: '<?= $escaper->escapeJs(__('Go to Home Page')) ?>',
+            link: BASE_URL || ''
+        }];
+
+        function getProductCategoryUrl() {
+            <?php if ($breadcrumbsViewModel->isCategoryUsedInProductUrl()): ?>
+            const productUrl = window.location.href.split('?')[0];
+            return productUrl.substring(0, productUrl.lastIndexOf('/')) + '<?= $escaper->escapeJs($categoryUrlSuffix) ?>';;
+            <?php else: ?>
+            return document.referrer
+            <?php endif; ?>
+        }
+
+        const categoryUrl = getProductCategoryUrl();
+
+        const category = Object.values(categories).find(cat => cat.url === categoryUrl);
+
+        if (category) {
+            let parts = category.path.split('/');
+            // remove root category
+            parts.splice(0, 2)
+            for (let i in parts) {
+                breadcrumbs.push({
+                    name: 'category',
+                    label: categories['c' + parts[i]]['name'],
+                    title: '',
+                    link: categories['c' + parts[i]]['url']
+                });
+            }
+        }
+
+        // add current product to breadcrumbs
+        <?php if ($product): ?>
+        breadcrumbs.push({
+            name: 'product',
+            label: '<?= $escaper->escapeJs($product->getName()) ?>',
+            title: '',
+            link: BASE_URL + '<?= $escaper->escapeJs($product->getUrlKey()) ?>' + '<?= $escaper->escapeJs($productUrlSuffix) ?>'
+        });
+        <?php endif; ?>
+
+        <?php if (! $skipLinkedDataJsonSchema): ?>
+        function addJsonBreadcrumbsHead(breadcrumbs) {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+
+            const itemListElement = breadcrumbs.map((crumb, i) => {
+                return {
+                    "@type": "ListItem",
+                    "position": i + 1,
+                    "name": crumb.label,
+                    "item": crumb.link
+                }
+            });
+
+            script.appendChild(document.createTextNode(JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                "itemListElement": itemListElement
+            })));
+
+            document.head.appendChild(script);
+        }
+
+        addJsonBreadcrumbsHead(breadcrumbs);
+        <?php endif; ?>
+
+        return {breadcrumbs};
+    }
+</script>
