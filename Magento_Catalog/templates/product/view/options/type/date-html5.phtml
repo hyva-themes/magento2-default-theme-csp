@@ -61,7 +61,10 @@ $htmlInputTypes = [
         </span>
         <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
             <div class="text-xs">
-                (<?= $escaper->escapeHtml(__('Excl. Tax')) ?>: <?= /* @noEscape */ $productPriceViewModel->format($basePrice) ?>)
+                (<?= $escaper->escapeHtml(__('Excl. Tax')) ?>:
+                <span x-html="getFormattedOptionPrice('<?= $escaper->escapeHtmlAttr($optionId) ?>', true) || ''">
+                    <?= /* @noEscape */ $productPriceViewModel->format($basePrice) ?>
+                </span>)
             </div>
         <?php endif; ?>
     </label>

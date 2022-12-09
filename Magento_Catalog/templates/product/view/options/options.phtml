@@ -45,10 +45,15 @@ $options = $block->decorateArray($block->getOptions());
                 customOptionBasePrices: {},
                 <?php endif; ?>
                 refs: [],
-                getFormattedOptionPrice(optionId) {
-                    if (this.customOptionPrices[optionId]) {
+                getFormattedOptionPrice(optionId, useBasePrice) {
+
+                    const customOptionPrice = (useBasePrice) ?
+                        this.customOptionBasePrices[optionId] :
+                        this.customOptionPrices[optionId];
+
+                    if (customOptionPrice) {
                         const showSign = true;
-                        return hyva.formatPrice(this.customOptionPrices[optionId], showSign);
+                        return hyva.formatPrice(customOptionPrice, showSign);
                     }
                     return false;
                 },

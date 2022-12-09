@@ -22,9 +22,10 @@ use Magento\Catalog\Block\Product\View\Options\Type\File;
 
 $product = $block->getProduct();
 $option = $block->getOption();
+$optionId = $option->getId();
 $fileInfo = $block->getFileInfo();
 $fileExists = $fileInfo->hasData();
-$fileName = 'options_' . $escaper->escapeHtmlAttr($option->getId()) . '_file';
+$fileName = 'options_' . $escaper->escapeHtmlAttr($optionId) . '_file';
 $fieldNameAction = $fileName . '_action';
 $fieldValueAction = $fileExists ? 'save_old' : 'save_new';
 $fileNamed = $fileName . '_name';
@@ -38,17 +39,20 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
 ?>
 <div class="flex flex-col sm:flex-row border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-700 text-left w-full sm:w-1/2"
-           for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text">
+           for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text">
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>
             <span class="sup text-sm">*</span>
         <?php endif; ?>
-        <span x-html="getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($option->getId()) ?>) || ''">
+        <span x-html="getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($optionId) ?>) || ''">
             <?= /* @noEscape */ $block->getFormattedPrice() ?>
         </span>
         <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
             <div class="text-xs">
-                (<?= $escaper->escapeHtml(__('Excl. Tax')) ?>: <?= /* @noEscape */ $productPriceViewModel->format($optionBasePrice) ?>)
+                (<?= $escaper->escapeHtml(__('Excl. Tax')) ?>:
+                <span x-html="getFormattedOptionPrice('<?= $escaper->escapeHtmlAttr($optionId) ?>', true) || ''">
+                    <?= /* @noEscape */ $productPriceViewModel->format($optionBasePrice) ?>
+                </span>)
             </div>
         <?php endif; ?>
     </label>
@@ -66,9 +70,9 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                 $event.target.parentNode.remove();
                 // show file upload
                 document.getElementById('input-box-<?= /* @noEscape */ $fileName ?>').style.display = 'block';
-                $refs['option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>'].disabled = false;
+                $refs['option-<?= $escaper->escapeHtmlAttr($optionId) ?>'].disabled = false;
                 // update hidden upload field
-                $refs['option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>-hidden']
+                $refs['option-<?= $escaper->escapeHtmlAttr($optionId) ?>-hidden']
                     .dispatchEvent(new Event('image-removed'));"
         >
             <?= $escaper->escapeHtml(__('Change')) ?>
@@ -91,24 +95,24 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
             <?php endif; ?>
                data-price-amount="<?= $escaper->escapeHtmlAttr($optionPrice) ?>"
                data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
-               data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
-               x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+               data-option-id="<?= $escaper->escapeHtmlAttr($optionId) ?>"
+               x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"
                x-on:change="updateCustomOptionValue(
                     $dispatch,
-                    '<?= $escaper->escapeJs($option->getId()) ?>',
+                    '<?= $escaper->escapeJs($optionId) ?>',
                     $event.target
                 )"
         />
         <input type="hidden" name="<?= /* @noEscape */ $fieldNameAction ?>"
-               x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>-hidden"
+               x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-hidden"
                class="product-custom-option hidden-form-file"
                data-price-amount="<?= $escaper->escapeHtmlAttr($option->getPrice()) ?>"
                data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
-               data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+               data-option-id="<?= $escaper->escapeHtmlAttr($optionId) ?>"
                value="<?= /* @noEscape */ $fieldValueAction ?>"
                @image-removed="$event.target.value = 'save_new'; updateCustomOptionValue(
                     $dispatch,
-                    '<?= $escaper->escapeHtmlAttr($option->getId()) ?>',
+                    '<?= $escaper->escapeHtmlAttr($optionId) ?>',
                     $event.target
                 )"
         />
