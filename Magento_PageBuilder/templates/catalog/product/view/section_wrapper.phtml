@@ -1,0 +1,33 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/**
+ * Wrapper for product sections to include title
+ *
+ * @var Template $block
+ * @var Escaper $escaper
+ */
+
+$childHtml = $block->getChildHtml();
+$sectionId = $block->getSectionId();
+$sectionIdAttribute = $sectionId ? ' id="' . $escaper->escapeHtmlAttr($sectionId) . '"' : '';
+?>
+<?php if (trim($childHtml) !== ""): ?>
+    <div class="container mx-auto flex pt-6 pb-3 mb-6 md:flex-row border-b-2 border-gray-300"<?= /* @noEscape */ $sectionIdAttribute ?>>
+        <h2 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full"><?= $escaper->escapeHtml($block->getTitle()); ?></h2>
+    </div>
+    <div class="card w-full">
+        <?= $block->getChildHtml(); ?>
+    </div>
+<?php endif; ?>
+
