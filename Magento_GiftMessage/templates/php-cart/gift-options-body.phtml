@@ -29,12 +29,12 @@ use Magento\Framework\View\Element\Template;
 <div x-show="formBlockVisibility" class="gift-options-buttons w-full order-3">
     <div class="actions-toolbar my-6">
         <div class="primary">
-            <button type="submit" class="action action-update btn btn-primary" @click.prevent="submitGiftOption()">
+            <button type="button" class="action action-update btn btn-primary" @click.prevent="submitGiftOption()">
                 <span><?= $escaper->escapeHtml(__('Update')) ?></span>
             </button>
         </div>
         <div class="secondary">
-            <button class="action action-cancel underline" @click.prevent="formBlockVisibility = !formBlockVisibility">
+            <button type="button" class="action action-cancel underline" @click="formBlockVisibility = false">
                 <span><?= $escaper->escapeHtml(__('Cancel')) ?></span>
             </button>
         </div>

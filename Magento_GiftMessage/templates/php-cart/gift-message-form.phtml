@@ -28,7 +28,9 @@ use Magento\Framework\View\Element\Template;
                     <span><?= $escaper->escapeHtml(__('To:')) ?></span>
                 </label>
                 <div class="control">
-                    <input type="text" x-model="formMessage.recipient" class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none">
+                    <input type="text" x-model="formMessage.recipient"
+                           @keydown.enter.prevent="submitGiftOption()"
+                           class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none">
                 </div>
             </div>
 
@@ -37,7 +39,9 @@ use Magento\Framework\View\Element\Template;
                     <span><?= $escaper->escapeHtml(__('From:')) ?></span>
                 </label>
                 <div class="control">
-                    <input type="text" x-model="formMessage.sender" class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none">
+                    <input type="text" x-model="formMessage.sender"
+                           @keydown.enter.prevent="submitGiftOption()"
+                           class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none">
                 </div>
             </div>
             <div class="field text">

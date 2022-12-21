@@ -99,10 +99,9 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
             },
             getRestEndpoint() {
                 const restBaseUrl = BASE_URL + 'rest/' + CURRENT_STORE_CODE + '/V1/';
-
                 return window.giftOptionsConfig.isCustomerLoggedIn
                     ? restBaseUrl + 'carts/mine/gift-message'
-                    : restBaseUrl + 'guest-carts/' + window.giftOptionsConfig.quoteId + '/gift-message';
+                    : restBaseUrl + 'guest-carts/' + window.checkoutConfig.quoteData.entity_id + '/gift-message';
             },
             submitGiftOption() {
 
@@ -178,7 +177,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 const restBaseUrl = BASE_URL + 'rest/' + CURRENT_STORE_CODE + '/V1/';
                 return window.giftOptionsConfig.isCustomerLoggedIn
                     ? restBaseUrl + 'carts/mine/gift-message/' + itemId
-                    : restBaseUrl + 'guest-carts/' + window.giftOptionsConfig.quoteId + '/gift-message/' + itemId;
+                    : restBaseUrl + 'guest-carts/' + window.checkoutConfig.quoteData.entity_id + '/gift-message/' + itemId;
             }
         })
     }
