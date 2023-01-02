@@ -180,7 +180,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     <p><span x-html="item.product_price"></span></p>
                                     <div class="pt-4">
                                         <a :href="item.configure_url"
-                                           x-show="item.product_type !== 'grouped'"
+                                           x-show="item.product_type !== 'grouped' && item.is_visible_in_site_visibility === true"
                                            class="inline-flex p-2 mr-2 btn btn-primary">
                                             <?= $heroicons->pencilHtml('', 20, 20); ?>
                                         </a>
