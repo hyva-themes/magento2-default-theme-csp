@@ -14,7 +14,7 @@ body {
 
 .columns {
     @apply grid grid-cols-1 gap-x-8 gap-y-4 container;
-    grid-template-rows: auto minmax(0,1fr);
+    grid-template-rows: auto minmax(0, 1fr);
 
     .main {
         @apply order-2;
@@ -42,7 +42,6 @@ body {
 }
 
 @screen sm {
-
     .page-layout-2columns-left,
     .page-layout-2columns-right,
     .page-layout-3columns {
@@ -69,7 +68,6 @@ body {
 }
 
 @screen md {
-
     .page-layout-2columns-left,
     .page-layout-2columns-right,
     .page-layout-3columns {
@@ -99,7 +97,6 @@ body {
             .sidebar ~ .sidebar-additional {
                 @apply order-3;
             }
-
         }
     }
 
@@ -112,7 +109,6 @@ body {
 }
 
 @screen lg {
-
     .page-layout-2columns-left,
     .page-layout-2columns-right,
     .page-layout-3columns {
