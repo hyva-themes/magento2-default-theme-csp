@@ -46,6 +46,11 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
             }
         }
     }
+    function initCartTooltip() {
+        return {
+            showTooltip: false
+        }
+    }
 </script>
 <div id="header"
      class="relative z-30 w-full border-b shadow bg-container-lighter border-container-lighter"
@@ -125,9 +130,37 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                <?php if ($showMiniCart): ?>@click.prevent.stop="$dispatch('toggle-cart',{});"<?php endif ?>
                class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black"
                href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/index')) ?>"
+               x-data="initCartTooltip()"
+               @mouseover.prevent.stop="showTooltip = true"
+               @mouseleave.prevent.stop="showTooltip = false"
+               @focus.prevent.stop="showTooltip = true"
+               @blur.prevent.stop="showTooltip = false"
+               :aria-label="
+                cart.summary_count === 0 ?
+                    '<?= $escaper->escapeHtml(__('Cart is empty')) ?>' :
+                    `You have ${cart.summary_count} products in your cart.`
+                "
+               :aria-disabled="cart.summary_count === 0"
             >
                 <span class="sr-only label">
                     <?= $escaper->escapeHtml(__('Cart')) ?>
+                </span>
+
+                <span
+                    x-cloak
+                    x-show="cart.summary_count === 0 && showTooltip"
+                    x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 scale-90"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-90"
+                    class="
+                        absolute left-1/2 -translate-x-1/2 translate-y-8 px-4 py-1 shadow-md whitespace-nowrap
+                        rounded-md text-white bg-gray-800 text-sm pointer-events-none
+                    "
+                >
+                    <?= $escaper->escapeHtml(__('Cart is empty')) ?>
                 </span>
 
                 <?= $heroicons->shoppingCartHtml(
@@ -142,7 +175,8 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
                         translate-y-1/2 rounded-full bg-primary"
                       :class="{
                         'hidden': !cart.summary_count,
-                        'block': cart.summary_count }"
+                        'block': cart.summary_count
+                      }"
                 ></span>
             </a>
 
