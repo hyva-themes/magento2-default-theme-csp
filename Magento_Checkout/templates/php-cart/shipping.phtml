@@ -350,22 +350,40 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
      x-init="init($dispatch)"
      @private-content-loaded.window="receiveCustomerData($event.detail.data)"
 >
-    <div class="title" data-role="title">
-        <span @click="toggleEstimateShipping"
-              class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none text-primary-lighter"
-              id="shipping-estimate-toggle"
-              role="heading" aria-level="2"
+    <div
+        class="title"
+        data-role="title"
+    >
+        <div
+            @click="toggleEstimateShipping"
+            @keydown.enter="toggleEstimateShipping"
+            class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none text-primary-lighter"
+            id="shipping-estimate-toggle"
+            role="heading"
+            aria-level="2"
+            :aria-expanded="showEstimateShipping"
+            tabindex="0"
         >
             <?= $block->getQuote()->isVirtual()
                 ? $escaper->escapeHtml(__('Estimate Tax'))
                 : $escaper->escapeHtml(__('Estimate Shipping and Tax'))
             ?>
             <span :class="{ 'rotate-180' : showEstimateShipping}" class="block transform rotate-180">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" width="25" height="25">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="w-6 h-6"
+                    width="25"
+                    height="25"
+                    role="presentation"
+                    focusable="false"
+                >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                 </svg>
             </span>
-        </span>
+        </div>
     </div>
     <div id="block-summary"
          class="content my-4 card"
@@ -469,17 +487,22 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                             <div>
                                 <div class="font-semibold" x-text="carrier"></div>
                                 <template x-for="(rate, index) in getRatesForCarrier(carrier)" :key="index">
-                                    <label class="flex items-center px-2">
-                                        <input class="mr-2" type="radio"
-                                               :id="'shipping_method_' + rate.method_code"
-                                               :value="rate.carrier_code + '_' + rate.method_code"
-                                               x-model="shippingMethod"
-                                               @change="updateShippingMethod()"/>
-                                        <div class="grid grid-cols-2 w-full">
-                                            <div x-text="rate.method_title"></div>
-                                            <div x-text="hyva.formatPrice(rate.price_excl_tax)"></div>
-                                        </div>
-                                    </label>
+                                    <div class="flex items-center px-2 mb-2">
+                                        <input
+                                            class="mr-2 cursor-pointer"
+                                            type="radio"
+                                            :id="'shipping_method_' + rate.method_code"
+                                            :value="rate.carrier_code + '_' + rate.method_code"
+                                            x-model="shippingMethod"
+                                            @change="updateShippingMethod()"
+                                        />
+                                        <label :for="'shipping_method_' + rate.method_code" class="w-full mb-0 cursor-pointer">
+                                            <div class="grid grid-cols-2 w-full">
+                                                <div x-text="rate.method_title"></div>
+                                                <div x-text="hyva.formatPrice(rate.price_excl_tax)"></div>
+                                            </div>
+                                        </label>
+                                    </div>
                                 </template>
                             </div>
                         </template>
