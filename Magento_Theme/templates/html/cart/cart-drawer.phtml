@@ -88,6 +88,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     }], result.success ? 5000 : 0)
                     window.dispatchEvent(new CustomEvent('reload-customer-section-data'));
                 });
+            },
+            closeCartDrawer() {
+                this.$dispatch('toggle-cart', { isOpen: this.open === 1 })
             }
         }
     }
@@ -95,14 +98,14 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <section id="cart-drawer"
          x-data="initCartDrawer()"
          @private-content-loaded.window="getData($event.detail.data)"
-         @toggle-cart.window="open=true"
-         @keydown.window.escape="open=false"
+         @toggle-cart.window="open=$event.detail.isOpen"
+         @keydown.window.escape="closeCartDrawer"
 >
     <template x-if="cart && cart.summary_count">
         <div role="dialog"
              aria-labelledby="cart-drawer-title"
              aria-modal="true"
-             @click.outside="open=false"
+             @click.outside="closeCartDrawer"
              class="fixed inset-y-0 right-0 z-30 flex max-w-full">
             <div class="backdrop"
                  x-show="open"
@@ -112,7 +115,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                  x-transition:leave="ease-in-out duration-500"
                  x-transition:leave-start="opacity-100"
                  x-transition:leave-end="opacity-0"
-                 @click="open=false"
+                 @click="closeCartDrawer"
                  aria-label="Close panel"></div>
             <div class="relative w-screen max-w-md shadow-2xl"
                  x-show="open"
@@ -131,8 +134,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     x-transition:leave="ease-in-out duration-500"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
-                    <button @click="open=false" aria-label="Close panel"
-                            class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black">
+                    <button
+                        @click="closeCartDrawer"
+                        aria-label="Close panel"
+                        class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black"
+                    >
                         <?= $heroicons->xHtml(); ?>
                     </button>
                 </div>
