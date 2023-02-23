@@ -8,9 +8,11 @@
 
 /**
  * @var \Magento\Sales\Block\Order\Info $block
+ * @var \Hyva\Theme\ViewModel\Sales\PaymentResolver $paymentResolver
  * @var \Magento\Framework\Escaper $escaper
  */ ?>
 <?php $order = $block->getOrder() ?>
+<?php $paymentResolver = $block->getData('paymentResolver') ?>
 <div class="mb-4 pb-4 border-b border-container">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
         <div class="w-full py-4">
@@ -40,7 +42,7 @@
         <div class="w-full py-4">
             <p class="font-semibold mb-2"><?= $escaper->escapeHtml(__('Payment Method')) ?></p>
             <div class="box-content">
-                <?= $block->getPaymentInfoHtml() ?>
+                <?= $paymentResolver->getPaymentInfo() ?>
             </div>
         </div>
     </div>
