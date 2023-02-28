@@ -21,9 +21,7 @@ use Magento\Sales\Block\Order\Recent;
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
-<div
-    class="block block-dashboard-orders card mt-4"
->
+<div class="block block-dashboard-orders card mt-4">
     <?php
     $orders = $block->getOrders();
     $count  = count($orders);
