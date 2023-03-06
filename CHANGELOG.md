@@ -7,7 +7,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.21...1.1.x-main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.22...1.1.x-main
+
+## [1.1.22] - 2023-03-06
+
+[1.1.22]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.1.21...1.1.22
+
+This default-them release only exists to keep the version synchronized with the theme-module. It contains no functional changes.
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- Nothing changed
+
+### Removed
+
+- Nothing removed
 
 ## [1.1.21] - 2023-01-19
 
