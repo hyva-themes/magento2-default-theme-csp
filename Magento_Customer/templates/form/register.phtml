@@ -167,10 +167,8 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             type="button"
                             :aria-pressed="showPassword ? true : false"
                             x-on:click="showPassword = !showPassword"
-                            class="cursor-pointer px-4 py-3"
-                            :aria-label="
-                                showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'
-                            "
+                            class="px-4 py-3"
+                            :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPassword">
                                 <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
