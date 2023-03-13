@@ -104,8 +104,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             <div
                 role="cell"
                 class="p-2 items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
-                aria-label="<?= $escaper->escapeHtmlAttr($date->format('Y-m-d')) ?>"
             >
+                <!-- A11y TO DO: user should be informed about current date format, should be added in `sr-only element`. Issue: #629: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/629 -->
                 <?= $escaper->escapeHtml($date->format('m/d/y')) ?>
             </div>
             <div
