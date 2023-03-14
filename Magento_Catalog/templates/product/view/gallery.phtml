@@ -141,6 +141,7 @@ $productName = $block->getProduct()->getName();
                             <a href="#" @click.prevent="setActive(index);"
                                class="block border border-gray-300 hover:border-primary focus:border-primary"
                                :class="{'border-primary': active === index}"
+                               aria-live="polite"
                             >
                                 <img :src="image.thumb"
                                      :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
