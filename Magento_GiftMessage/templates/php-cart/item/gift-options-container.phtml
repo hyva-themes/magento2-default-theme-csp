@@ -68,9 +68,9 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
             >
                 <div class="relative">
                     <h2 class="text-lg font-medium leading-7 text-gray-900 "><?= $escaper->escapeHtml('Item Gift Options') ?></h2>
-                    <div class="absolute top-0 right-0 cursor-pointer" @click="formBlockVisibility=false" aria-label="Close panel" tabindex="0" role="button">
-                        <?= $heroicons->xHtml('inline-block', 24, 24) ?>
-                    </div>
+                    <button class="absolute top-0 right-0 cursor-pointer" @click="formBlockVisibility=false" aria-label="<?= $escaper->escapeHtmlAttr('Close panel') ?>">
+                        <?= $heroicons->xHtml('inline-block', 24, 24, ["aria-hidden" => "true"]) ?>
+                    </button>
                 </div>
                 <div class="gift-options-item" id="enquiry-form-drawer-title-<?= $block->getItem()->getId() ?>">
                     <span><?= $escaper->escapeHtml($block->getItem()->getName()) ?></span>
