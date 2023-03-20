@@ -48,6 +48,7 @@ if (!$itemCount = count($items)) {
     return '';
 }
 
+$sliderIndex = 1;
 $sliderItemRenderer = $block->getLayout()->getBlock('product_list_item')
     ?: $block->getChildBlock('slider.item.template')
     ?: $block->getLayout()->createBlock(Template::class);
@@ -117,30 +118,50 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
         }
     }
 </script>
-<section class="<?=
-    $escaper->escapeHtmlAttr($block->getData('maybe_purged_tailwind_section_classes'))
-    ?: 'my-12 text-gray-700 body-font';
-?>"
-         x-data="initSliderComponent()"
-         x-init="calcPageSize();"
-         @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
+<section
+    class="<?=
+        $escaper->escapeHtmlAttr($block->getData('maybe_purged_tailwind_section_classes'))
+        ?: 'my-12 text-gray-700 body-font';
+    ?>"
+    x-data="initSliderComponent()"
+    x-init="calcPageSize();"
+    x-id="['slider-heading']"
+    @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
+    role="group"
+    aria-label="carousel"
+    :aria-labelledby="$id('slider-heading')"
 >
     <?php if ($items): ?>
         <div class="relative">
             <?php if ($title): ?>
                 <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 border-b-2
                     border-gray-300 md:flex-row">
-                    <h3 class="text-2xl font-medium text-gray-900 title-font">
+                    <h3
+                        :id="$id('slider-heading')"
+                        class="text-2xl font-medium text-gray-900 title-font"
+                    >
                         <?= $escaper->escapeHtml($title); ?>
                     </h3>
                 </div>
+
+                <button
+                    class="sr-only "
+                    type="button"
+                    tabindex="0"
+                >
+                    Click to skip <?= $escaper->escapeHtml($title); ?> carousel
+                </button>
             <?php endif; ?>
+
             <div class="flex-none relative w-full overflow-x-hidden focus-within:ring-2 ring-offset-2 active:ring-0 ring-blue-500/50">
                 <div class="relative flex flex-nowrap w-full overflow-auto js_slides snap md:px-1 xl:px-2"
                      @scroll.debounce="calcActive"
                 >
                     <?php foreach ($items as $product): ?>
-                        <div class="flex shrink-0 w-full mr-1 p-1 js_slide md:w-1/2 lg:w-1/3 xl:w-1/4">
+                        <div class="flex shrink-0 w-full mr-1 p-1 js_slide md:w-1/2 lg:w-1/3 xl:w-1/4"
+                             role="group"
+                             aria-label="<?= $escaper->escapeHtmlAttr(__('Slide %1', $sliderIndex++)) ?>"
+                        >
                             <?= /** @noEscape */ $productListItemViewModel->getItemHtmlWithRenderer(
                                 $sliderItemRenderer,
                                 $product,
@@ -167,31 +188,43 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
             <template x-if="itemCount > pageSize">
                 <div class="flex items-center justify-center py-4">
                     <button
-                        aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
-                        tabindex="-1"
-                        class="mr-4 text-black rounded-full outline-none focus:outline-none flex-none"
+                        type="button"
+                        aria-label="<?= $escaper->escapeHtml(__('Previous page')) ?>"
+                        :disabled="active === 0"
+                        class="mr-4 text-black flex-none"
                         :class="{ 'opacity-25 pointer-events-none' : active === 0 }"
-                        @click="scrollPrevious">
-                        <?= $heroicons->chevronLeftHtml("w-5 h-5", 25, 25) ?>
+                        @click="scrollPrevious"
+                    >
+                        <?= $heroicons->chevronLeftHtml("w-11 h-11", 44, 44, ['aria-hidden' => 'true']) ?>
                     </button>
                     <div class="flex flex-wrap w-full md:w-auto justify-center">
                     <?php for ($i=0; $i < $itemCount; $i++): ?>
-                        <span class="shrink-0 block w-3 h-3 m-1 bg-black bg-opacity-25 rounded-full shadow cursor-pointer"
+                        <button
+                            type="button"
+                            :class="{
+                                    'hidden': (pageSize !== 1 && !!(<?= (int) $i ?> % pageSize))
+                                }"
+                            :aria-current="active === <?= (int) $i ?>"
+                            :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Go to page %0')) ?>', Math.ceil(<?= (int) $i + 1 ?> / pageSize))"
+                            @click="scrollTo(<?= (int) $i ?>)"
+                        >
+                            <span
+                                class="shrink-0 block w-3 h-3 m-1 bg-black bg-opacity-25 rounded-full shadow cursor-pointer"
                                 :class="{
                                     'bg-opacity-100': active === <?= (int) $i ?>,
-                                    'hidden': (pageSize !== 1 && !!(<?= (int) $i ?> % pageSize))
-                                    }"
-                                @click="scrollTo(<?= (int) $i ?>)">
-                        </span>
+                                }"
+                            ></span>
+                        </button>
+
                     <?php endfor; ?>
                     </div>
                     <button
                         aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
-                        tabindex="-1"
-                        class="ml-4 text-black rounded-full outline-none focus:outline-none flex-none"
+                        :disabled="active >= itemCount-pageSize"
+                        class="ml-4 text-black flex-none"
                         :class="{ 'opacity-25 pointer-events-none' : active >= itemCount-pageSize }"
                         @click="scrollNext">
-                        <?= $heroicons->chevronRightHtml("w-5 h-5", 25, 25) ?>
+                        <?= $heroicons->chevronRightHtml("w-11 h-11", 44, 44, ['aria-hidden' => 'true']) ?>
                     </button>
                 </div>
             </template>
