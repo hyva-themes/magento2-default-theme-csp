@@ -182,7 +182,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                             required
                             class="form-select"
                             x-ref="country_id"
-                            @input.debounce="changeCountry($event.target)"
+                            @input.debounce="changeCountry"
                     >
                         <?php foreach ($countries as $country): ?>
                             <option name="<?= /** @noEscape */ $country['label'] ?>"
@@ -336,10 +336,10 @@ function initCustomerAddressEdit() {
             this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
 
         },
-        changeCountry(countrySelectElement, initialRegion) {
-            this.setCountry(countrySelectElement, initialRegion);
-
+        changeCountry(event, initialRegion) {
+            this.setCountry(event.target, initialRegion);
             this.validateCountryDependentFields();
+            this.onChange(event);
         },
         validateCountryDependentFields() {
             this.$nextTick(() => {
