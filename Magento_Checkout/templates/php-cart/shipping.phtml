@@ -467,30 +467,27 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 </div>
 
                 <template x-if="getEstimatedShippingRateCarriers().length > 0">
-                    <div class="pt-2 relative">
-
+                    <div
+                        class="pt-2 relative"
+                        role="radiogroup"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Shipping methods')) ?>"
+                    >
                         <?= $block->getBlockHtml('block-loader') ?>
-
                         <template x-for="carrier in getEstimatedShippingRateCarriers()" :key="carrier">
                             <div>
-                                <div class="font-semibold" x-text="carrier"></div>
+                                <h4 class="font-semibold" x-text="carrier"></h4>
                                 <template x-for="(rate, index) in getRatesForCarrier(carrier)" :key="index">
-                                    <div class="flex items-center px-2 mb-2">
-                                        <input
-                                            class="mr-2 cursor-pointer"
-                                            type="radio"
-                                            :id="'shipping_method_' + rate.method_code"
-                                            :value="rate.carrier_code + '_' + rate.method_code"
-                                            x-model="shippingMethod"
-                                            @change="updateShippingMethod()"
-                                        />
-                                        <label :for="'shipping_method_' + rate.method_code" class="w-full mb-0 cursor-pointer">
-                                            <div class="grid grid-cols-2 w-full">
-                                                <span x-text="rate.method_title"></span>
-                                                <span x-text="hyva.formatPrice(rate.price_excl_tax)"></span>
-                                            </div>
-                                        </label>
-                                    </div>
+                                    <label class="flex items-center px-2 cursor-pointer">
+                                        <input class="mr-2 cursor-pointer" type="radio"
+                                               :id="'shipping_method_' + rate.method_code"
+                                               :value="rate.carrier_code + '_' + rate.method_code"
+                                               x-model="shippingMethod"
+                                               @change="updateShippingMethod()"/>
+                                        <div class="grid grid-cols-2 w-full">
+                                            <span x-text="rate.method_title"></span>
+                                            <span x-text="hyva.formatPrice(rate.price_excl_tax)"></span>
+                                        </div>
+                                    </label>
                                 </template>
                             </div>
                         </template>
