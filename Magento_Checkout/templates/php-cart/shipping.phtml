@@ -350,15 +350,13 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
      x-init="init($dispatch)"
      @private-content-loaded.window="receiveCustomerData($event.detail.data)"
 >
-    <h2 class="title">
+    <h3 class="title" id="block-shipping-title">
         <button
             @click="toggleEstimateShipping"
             class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none text-primary-lighter"
             id="shipping-estimate-toggle"
-            role="heading"
-            aria-level="2"
+            type="button"
             :aria-expanded="showEstimateShipping"
-            tabindex="0"
         >
             <?= $block->getQuote()->isVirtual()
                 ? $escaper->escapeHtml(__('Estimate Tax'))
@@ -379,7 +377,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
                 </svg>
             </span>
         </button>
-    </h2>
+    </h3>
     <div id="block-summary"
          class="content my-4 card"
          data-role="content"
@@ -388,12 +386,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
          x-show="showEstimateShipping"
     >
         <form method="post" id="shipping-zip-form" @submit.prevent="fetchTotals()">
-            <fieldset class="fieldset estimate">
-                <legend class="legend sr-only">
-                    <?= $escaper->escapeHtml($block->getQuote()->isVirtual() ?
-                        __('Estimate Tax') :
-                        __('Estimate Shipping and Tax')) ?>
-                </legend>
+            <fieldset class="fieldset estimate" aria-labelledby="block-shipping-title">
                 <p class="field note">
                     <?= $block->getQuote()->isVirtual() ?
                         $escaper->escapeHtml(__('Enter your billing address to get a tax estimate.')) :
