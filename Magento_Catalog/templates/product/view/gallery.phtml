@@ -60,7 +60,7 @@ $productName = $block->getProduct()->getName();
              x-transition:enter-end="opacity-100"
         >
             <div class="relative mb-6" aria-live="polite" aria-atomic="true">
-                <span class="sr-only"><?= $escaper->escapeHtml(__('Main image')) ?></span>
+                <span class="invisible" id="main-image-description"><?= $escaper->escapeHtml(__('Main image')) ?></span>
                 <span class="invisible" id="fullscreen-btn-label"><?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?></span>
                 <?php
                 /**
@@ -99,7 +99,7 @@ $productName = $block->getProduct()->getName();
                         :tabindex="fullscreen ? '-1' : '0'"
                         :aria-describedby="fullscreen
                             ? ''
-                            : 'fullscreen-btn-label'
+                            : 'main-image-description fullscreen-btn-label'
                         "
                         :role="fullscreen ? 'img' : 'button'"
                     />
