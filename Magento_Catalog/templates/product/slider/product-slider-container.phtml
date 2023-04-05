@@ -127,11 +127,11 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
     ?>"
     x-data="initSliderComponent()"
     x-init="calcPageSize();"
-    x-id="['slider-heading', 'slider-nav', 'slider-end']"
+    x-id="['slider-nav', 'slider-end', 'slider-desc']"
     @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
     role="group"
-    aria-label="carousel"
-    :aria-labelledby="$id('slider-heading')"
+    aria-label="<?= $escaper->escapeHtml(__('Carousel %1', $title)) ?>"
+    :aria-describedby="$id('slider-desc')"
 >
     <?php if ($items): ?>
         <div class="relative">
@@ -139,8 +139,8 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
                 <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 border-b-2
                     border-gray-300 md:flex-row">
                     <h3
-                        :id="$id('slider-heading')"
                         class="text-2xl font-medium text-gray-900 title-font"
+
                     >
                         <?= $escaper->escapeHtml($title); ?>
                     </h3>
@@ -243,8 +243,13 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
                 </div>
             </template>
             </div>
-            <div :id="$id('slider-end')">
-        </div>
+            <span :id="$id('slider-end')"></span>
+            <span
+                class="sr-only"
+                :id="$id('slider-desc')"
+            >
+                <?= $escaper->escapeHtml(__('Navigating through the elements of the carousel is possible using the tab key. You can skip the carousel or go straight to navigation using the skip links.')) ?>
+            </span>
     <?php endif; ?>
 </section>
 <?php
