@@ -50,10 +50,6 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
 <div id="header"
      class="relative z-30 w-full border-b shadow bg-container-lighter border-container-lighter"
      x-data="initHeader()"
-     @keydown.window.escape="
-        searchOpen = false;
-        $refs.searchButton.focus();
-     "
      @private-content-loaded.window="getData(event.detail.data)"
 >
     <div class="container flex flex-wrap items-center justify-between w-full px-6 py-3 mx-auto mt-0">
@@ -156,6 +152,10 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
          id="search-content"
          x-cloak x-show="searchOpen"
          @click.outside="searchOpen = false"
+         @keydown.escape="
+            searchOpen = false;
+            $refs.searchButton.focus();
+         "
     >
         <?= $block->getChildHtml('header-search'); ?>
     </div>
