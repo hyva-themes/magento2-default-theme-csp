@@ -127,7 +127,7 @@ $uniqueId = $productId . uniqid();
 <script>
     'use strict';
 
-    const initRating<?= $uniqueId ?> = () => {
+    function initRating<?= $uniqueId ?>() {
         return {
             reviewsSection: document.getElementById('customer-review-list')
                 || document.getElementById('customer-reviews')
