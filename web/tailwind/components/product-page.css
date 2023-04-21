@@ -34,10 +34,4 @@
             }
         }
     }
-
-    .options-list {
-        .price-wrapper {
-            @apply font-semibold;
-        }
-    }
 }
