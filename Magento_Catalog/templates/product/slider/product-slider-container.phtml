@@ -146,7 +146,7 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
             <?php endif; ?>
             <a
                 :href="`#${$id('slider-end')}`"
-                class="action skip sr-only focus:not-sr-only focus:absolute focus:z-20 focus:bg-white"
+                class="action skip sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
             >
                 <?= $escaper->escapeHtml(__('Press to skip carousel')) ?>
             </a>
@@ -154,7 +154,7 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
                 x-show="itemCount > pageSize"
                 x-cloak
                 :href="`#${$id('slider-nav')}`"
-                class="action skip sr-only focus:not-sr-only focus:absolute focus:z-20 focus:bg-white"
+                class="action skip sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
             >
                 <?= $escaper->escapeHtml(__('Press to go to carousel navigation')) ?>
             </a>
