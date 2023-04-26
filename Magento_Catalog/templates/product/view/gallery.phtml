@@ -165,6 +165,8 @@ $productName = $block->getProduct()->getName();
 </div>
 <script>
     function initGallery () {
+        let touchXDown, touchYDown;
+
         return {
             "active": 0,
             "videoData": {},
@@ -184,8 +186,6 @@ $productName = $block->getProduct()->getName();
             "itemCount": 0,
             "pageSize": 4,
             "pageFillers": 0,
-            "touchXDown": null,
-            "touchYDown": null,
             init() {
                 this.initActive();
                 this.$nextTick(() => this.calcPageSize());
@@ -405,25 +405,22 @@ $productName = $block->getProduct()->getName();
                     this.resetGallery();
                 }
             },
-            getTouches: function (event) {
-                return event.touches;
-            },
             handleTouchStart: function (event) {
-                let firstTouch = this.getTouches(event)[0];
+                let firstTouch = event.touches[0];
 
-                this.touchXDown = firstTouch.clientX;
-                this.touchYDown = firstTouch.clientY;
+                touchXDown = firstTouch.clientX;
+                touchYDown = firstTouch.clientY;
             },
             handleTouchMove: function (event) {
-                if (!this.touchXDown || !this.touchYDown) {
+                if (!touchXDown || !touchYDown) {
                     return;
                 }
 
                 let xUp = event.touches[0].clientX;
                 let yUp = event.touches[0].clientY;
 
-                let xDiff = this.touchXDown - xUp;
-                let yDiff = this.touchYDown - yUp;
+                let xDiff = touchXDown - xUp;
+                let yDiff = touchYDown - yUp;
 
                 if (Math.abs(xDiff) > Math.abs(yDiff)) {
                     if (xDiff > 0) {
@@ -434,8 +431,8 @@ $productName = $block->getProduct()->getName();
                 }
 
                 /* reset values */
-                this.touchXDown = null;
-                this.touchYDown = null;
+                touchXDown = null;
+                touchYDown = null;
             },
             showPrevious() {
                 let activeIndex = --this.active;
