@@ -29,7 +29,8 @@ $customerRegistration = $viewModels->require(CustomerRegistration::class);
         href="<?= $escaper->escapeHtmlAttr($escaper->escapeUrl($block->getUrl('customer/account'))) ?>"
         id="customer-menu"
         class="block hover:text-black"
-        @click.prevent="open = true"
+        @click="open = !open"
+        @click.outside="open = false"
         :aria-expanded="open ? 'true' : 'false'"
         aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
         aria-haspopup="true"
@@ -43,8 +44,13 @@ $customerRegistration = $viewModels->require(CustomerRegistration::class);
         "
         x-cloak
         x-show="open"
-        @click.outside="open = false"
         aria-labelledby="customer-menu"
+        x-transition:enter="transition ease-out duration-100"
+        x-transition:enter-start="opacity-0 scale-90"
+        x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-100"
+        x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-90"
     >
         <?php if ($block->customerLoggedIn()): ?>
             <a class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
