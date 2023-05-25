@@ -28,17 +28,14 @@ $catalogHelper = $this->helper(Data::class);
         <a
             href="<?= $escaper->escapeUrl($filterItem->getUrl()) ?>"
             class="flex justify-between py-1 hover:text-black"
-            aria-label="<?=
-                $escaper->escapeHtmlAttr(
-                    __("Filter products by %1 attribute: %2", $filterItem->getName(), $filterItem['label']) . ', ' .
-                    __("%1 products available", $localeFormatter->formatNumber((int)$filterItem->getCount()))
-                )
-            ?>"
         >
             <span><?= /* @noEscape */ $filterItem->getLabel() ?></span>
             <?php if ($catalogHelper->shouldDisplayProductCountOnLayer()): ?>
                 <span class="count text-primary">
-                    (<?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?>)
+                    (<?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?>
+                    <span class="sr-only">
+                        <?= $escaper->escapeHtml(__('products available')) ?>
+                    </span>)
                 </span>
             <?php endif; ?>
         </a>
@@ -46,7 +43,10 @@ $catalogHelper = $this->helper(Data::class);
         <span class="flex justify-between py-1 hover:text-black">
                 <span><?= /* @noEscape */ $filterItem->getLabel() ?></span>
             <?php if ($catalogHelper->shouldDisplayProductCountOnLayer()): ?>
-                <span class="count text-primary">(<?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?>)</span>
+                (<span class="count text-primary"><?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?></span>
+                <span class="sr-only">
+                    <?= $escaper->escapeHtml(__('products available')) ?>
+                </span>)
             <?php endif; ?>
         </span>
     <?php endif; ?>
