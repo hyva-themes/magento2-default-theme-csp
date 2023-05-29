@@ -88,12 +88,21 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <?= $escaper->escapeHtml($order->getRealOrderId()) ?>
                     <p class="lg:hidden text-sm"><?= $escaper->escapeHtml($block->formatDate($order->getCreatedAt())) ?></p>
                 </div>
-                <?php $date = new DateTime($order->getCreatedAt()); ?>
+                <?php
+                    $date = $order->getCreatedAt();
+                    $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
+                    $formatLong = $block->getDateFormat() ?: \IntlDateFormatter::LONG;
+                ?>
                 <div
                     role="cell"
                     class="p-2 hidden lg:flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"
                 >
-                    <?= $escaper->escapeHtml($date->format('m/d/y')) ?>
+                    <time datetime="<?= $escaper->escapeHtmlAttr($block->formatDate($date, $format)); ?>">
+                        <span aria-hidden="true"><?= $escaper->escapeHtml($block->formatDate($date, $format)); ?></span>
+                        <span class="sr-only">
+                            <?= $escaper->escapeHtml($block->formatDate($date, $formatLong)); ?>
+                        </span>
+                    </time>
                 </div>
                 <div
                     role="cell"
