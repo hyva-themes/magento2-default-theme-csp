@@ -139,7 +139,7 @@ $productName = $block->getProduct()->getName();
                     :class="{ 'opacity-25 pointer-events-none' : activeSlide === 0, 'hidden' : !isSlider }"
                     aria-hidden="true"
                     @click="scrollPrevious"
-                ><?= $heroicons->chevronLeftHtml('', 24, 24, ['aria-hidden' => 'true']) ?></button>
+                ><?= $heroicons->chevronLeftHtml('', 24, 24) ?></button>
                 <div class="js_thumbs_slides thumbs-wrapper relative flex flex-nowrap w-full overflow-auto js_slides snap md:px-1 xl:px-2"
                      x-ref="jsThumbSlides"
                      @scroll.debounce="calcPageSize(); calcActive()"
@@ -176,7 +176,7 @@ $productName = $block->getProduct()->getName();
                     :class="{ 'opacity-25 pointer-events-none' : activeSlide >= itemCount-pageSize, 'hidden' : !isSlider }"
                     aria-hidden="true"
                     @click="scrollNext"
-                ><?= $heroicons->chevronRightHtml('', 24, 24, ['aria-hidden' => 'true']) ?></button>
+                ><?= $heroicons->chevronRightHtml('', 24, 24) ?></button>
             </div>
         </div>
         <div class="absolute top-0 right-0 pt-4 pr-4">
