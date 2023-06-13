@@ -36,10 +36,10 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
         >
             <?= $escaper->escapeHtml(__('Gift options')) ?>
             <?php if (!$slideOutDrawer): ?>
-                <span x-show="!formBlockVisibility">
+                <span x-show="!formBlockVisibility" aria-hidden="true">
                     <?= $heroicons->chevronDownHtml('inline-block', 16, 16) ?>
                 </span>
-                <span x-show="formBlockVisibility">
+                <span x-show="formBlockVisibility" aria-hidden="true">
                     <?= $heroicons->chevronUpHtml('inline-block', 16, 16) ?>
                 </span>
             <?php endif ?>

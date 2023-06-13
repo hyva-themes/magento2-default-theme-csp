@@ -234,14 +234,13 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
             class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline"
             :aria-expanded="formBlockVisibility"
             aria-haspopup="dialog"
-
         >
             <?= $escaper->escapeHtml(__('Gift options')) ?>
             <?php if (!$slideOutDrawer): ?>
-                <span x-show="!formBlockVisibility">
+                <span x-show="!formBlockVisibility" aria-hidden="true">
                     <?= $heroicons->chevronDownHtml('inline-block', 16, 16) ?>
                 </span>
-                <span x-show="formBlockVisibility">
+                <span x-show="formBlockVisibility" aria-hidden="true">
                     <?= $heroicons->chevronUpHtml('inline-block', 16, 16) ?>
                 </span>
             <?php endif ?>
