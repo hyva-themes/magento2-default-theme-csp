@@ -33,7 +33,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
          class="w-full sm:w-1/2 md:w-full pr-4"
     >
         <h2
-            id="footer-currency-heading"
+            id="currency-heading"
             class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3 uppercase"
         >
             <?= $escaper->escapeHtml(__('Currency')) ?>
@@ -64,7 +64,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
                             <button
                                role="link"
                                class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-                               aria-describedby="footer-currency-heading"
+                               aria-describedby="currency-heading"
                                @click.prevent='hyva.postForm(<?= /* @noEscape */ $currencyViewModel->getSwitchCurrencyPostData($code) ?>)'
                             >
                                 <?= $escaper->escapeHtml($code) ?> - <?= $escaper->escapeHtml($name) ?>
