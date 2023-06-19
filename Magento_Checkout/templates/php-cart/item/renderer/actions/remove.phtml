@@ -32,7 +32,7 @@ if ($item->getProductType() === 'configurable') {
     class="flex action action-delete"
     x-data="{}"
     @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getDeletePostJson() ?>)'
-    aria-label="<?= $escaper->escapeHtml(__('Remove %1', $productName)) ?>"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Remove %1', $productName)) ?>"
     type="button"
 >
     <?= $heroicons->trashHtml('w-6 h-6', 24, 24, ['aria-hidden' => 'true']) ?>
