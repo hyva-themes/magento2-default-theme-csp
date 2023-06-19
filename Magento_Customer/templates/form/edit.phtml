@@ -126,7 +126,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         type="button"
                         @click="showPasswordCurrent = !showPasswordCurrent"
                         class="px-4 self-stretch"
-                        :aria-label="showPasswordCurrent ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeHtmlAttr(__('Show Password')) ?>'"
+                        :aria-label="showPasswordCurrent ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                     >
                         <template x-if="!showPasswordCurrent">
                             <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
@@ -157,7 +157,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             type="button"
                             @click="showPasswordNew = !showPasswordNew"
                             class="px-4 self-stretch"
-                            :aria-label="showPasswordNew ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeHtmlAttr(__('Show Password')) ?>'"
+                            :aria-label="showPasswordNew ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordNew">
                                 <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
@@ -193,7 +193,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                             type="button"
                             @click="showPasswordConfirm = !showPasswordConfirm"
                             class="px-4 self-stretch"
-                            :aria-label="showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeHtmlAttr(__('Show Password')) ?>'"
+                            :aria-label="showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
                             <template x-if="!showPasswordConfirm">
                                 <?= $heroIcons->eyeHtml('w-5 h-5'); ?>
