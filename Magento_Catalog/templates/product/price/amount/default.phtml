@@ -10,14 +10,14 @@
 <?php /** @var Type $block */ ?>
 
 <span
-    <?php if ($block->getPriceId()) :?>x-data x-id="['<?= $block->escapeHtmlAttr($block->getPriceId()) ?>']"<?php endif; ?>
+    <?php if ($block->getPriceId()) :?>x-data x-id="['<?= $block->escapeJs($block->getPriceId()) ?>']"<?php endif; ?>
     class="price-container <?= $block->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>"
         <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>
 >
     <?php if ($block->getDisplayLabel()) :?>
         <span class="price-label"><?= $block->escapeHtml($block->getDisplayLabel()) ?></span>
     <?php endif; ?>
-    <span <?php if ($block->getPriceId()) :?> :id="$id('<?= $block->escapeHtmlAttr($block->getPriceId()) ?>')"<?php endif; ?>
+    <span <?php if ($block->getPriceId()) :?> :id="$id('<?= $block->escapeJs($block->getPriceId()) ?>')"<?php endif; ?>
         <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $block->escapeHtmlAttr($block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes()) . '"' : '' ?>
         data-price-amount="<?= $block->escapeHtmlAttr($block->getDisplayValue()) ?>"
         data-price-type="<?= $block->escapeHtmlAttr($block->getPriceType()) ?>"
