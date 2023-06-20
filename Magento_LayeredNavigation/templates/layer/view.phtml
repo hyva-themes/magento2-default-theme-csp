@@ -32,12 +32,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         role="region"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Product filters')) ?>"
     >
-        <a
-            href="#products-list"
-            class="sr-only focus:not-sr-only bg-blue-600 text-white px-12 py-4 text-center block rounded-sm"
-        >
-            <?= $escaper->escapeHtml(__('Skip to products list')) ?>
-        </a>
         <h2
             id="filters-heading"
             class="block-title"
@@ -76,6 +70,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             x-show="isMobile && blockOpen || !isMobile"
         >
             <?= $block->getChildHtml('state') ?>
+            <a
+                href="#products-list"
+                class="sr-only focus:not-sr-only bg-blue-600 text-white px-12 py-4 text-center block rounded-sm"
+            >
+                <?= $escaper->escapeHtml(__('Skip to products list')) ?>
+            </a>
             <?php foreach ($block->getFilters() as $filter): ?>
                 <?php if ($filter->getItemsCount()): ?>
                     <div
