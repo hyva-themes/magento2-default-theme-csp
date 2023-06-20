@@ -20,11 +20,7 @@
                 <block class="Magento\Sales\Block\Order\Info\Buttons" name="sales.creditmemo.buttons"
                        template="Magento_Sales::order/info/buttons_creditmemo.phtml"/>
                 <container name="order_top_items"></container>
-                <block class="Magento\Sales\Block\Order\Info" name="sales.order.info">
-                    <arguments>
-                        <argument name="paymentResolver" xsi:type="object">Hyva\Theme\ViewModel\Sales\PaymentResolver</argument>
-                    </arguments>
-                </block>
+                <block class="Magento\Sales\Block\Order\Info" name="sales.order.info"/>
                 <block class="Magento\Sales\Block\Order\Creditmemo\Items" name="creditmemo_items" template="Magento_Sales::order/creditmemo/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.creditmemo.renderers" as="renderer.list"/>
                     <block class="Magento\Sales\Block\Order\Creditmemo\Totals" name="creditmemo_totals" template="Magento_Sales::order/totals/totals.phtml">

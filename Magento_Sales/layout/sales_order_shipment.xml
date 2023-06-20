@@ -23,11 +23,7 @@
                 <block class="Magento\Sales\Block\Order\Info\Buttons" name="sales.shipment.buttons"
                        template="Magento_Sales::order/info/buttons_shipment.phtml"/>
                 <container name="order_top_items"></container>
-                <block class="Magento\Sales\Block\Order\Info" name="sales.order.info">
-                    <arguments>
-                        <argument name="paymentResolver" xsi:type="object">Hyva\Theme\ViewModel\Sales\PaymentResolver</argument>
-                    </arguments>
-                </block>
+                <block class="Magento\Sales\Block\Order\Info" name="sales.order.info"/>
                 <block class="Magento\Sales\Block\Order\Items" name="order_items"
                        template="Magento_Sales::order/shipment/items.phtml">
                     <arguments>

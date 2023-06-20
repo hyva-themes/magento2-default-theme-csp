@@ -23,9 +23,6 @@
                 <block class="Magento\Sales\Block\Order\View" name="order.comments"
                        template="Magento_Sales::order/order_comments.phtml" />
                 <block class="Magento\Sales\Block\Order\Info" name="sales.order.info">
-                    <arguments>
-                        <argument name="paymentResolver" xsi:type="object">Hyva\Theme\ViewModel\Sales\PaymentResolver</argument>
-                    </arguments>
                 </block>
                 <block class="Magento\Sales\Block\Order\Items" name="order_items"
                        template="Magento_Sales::order/items.phtml">

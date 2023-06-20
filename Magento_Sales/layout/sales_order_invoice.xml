@@ -20,11 +20,7 @@
                 <block class="Magento\Sales\Block\Order\Info\Buttons" name="sales.invoice.buttons"
                        template="Magento_Sales::order/info/buttons_invoice.phtml"/>
                 <container name="order_top_items"></container>
-                <block class="Magento\Sales\Block\Order\Info" name="sales.order.info">
-                    <arguments>
-                        <argument name="paymentResolver" xsi:type="object">Hyva\Theme\ViewModel\Sales\PaymentResolver</argument>
-                    </arguments>
-                </block>
+                <block class="Magento\Sales\Block\Order\Info" name="sales.order.info"/>
                 <block class="Magento\Sales\Block\Order\Invoice\Items" name="invoice_items" template="Magento_Sales::order/invoice/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.invoice.renderers" as="renderer.list"/>
                     <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="Magento_Sales::order/totals/totals.phtml">
