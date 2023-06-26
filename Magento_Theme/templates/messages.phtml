@@ -69,10 +69,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <section id="messages"
          x-data="initMessages()"
          x-bind="eventListeners"
+         aria-live="assertive"
+         role="alert"
 >
     <template x-if="!isEmpty()">
         <div class="w-full">
-            <div role="alert" class="messages container mx-auto py-3">
+            <div class="messages container mx-auto py-3">
                 <template x-for="(message, index) in messages" :key="index">
                     <div>
                         <template x-if="message">
