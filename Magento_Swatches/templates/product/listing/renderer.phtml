@@ -49,6 +49,16 @@ $swatchItemBlock->setData('product_id', $productId);
                         this.findAllowedAttributeOptions();
                         this.updatePrices();
                         !skipUpdateGallery && this.updateGallery();
+                        window.dispatchEvent(new CustomEvent('listing-configurable-selection-changed', {
+                            detail: {
+                                productId: this.productId,
+                                optionId,
+                                value,
+                                productIndex: this.productIndex,
+                                selectedValues: this.selectedValues,
+                                candidates: this.findProductIdsForPartialSelection(this.selectedValues),
+                            }
+                        }));
                     },
                     updateGallery() {
                         if (!this.productIndex) {
