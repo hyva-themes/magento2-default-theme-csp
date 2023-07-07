@@ -11,7 +11,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
 
-        <block class="Magento\Catalog\Block\Product\AbstractProduct" name="product_list_item"
+        <block class="Magento\Catalog\Block\Product\View" name="product_list_item"
                template="Magento_Catalog::product/list/item.phtml">
             <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
                 <block name="category.product.type.details.renderers.default" as="default"/>
