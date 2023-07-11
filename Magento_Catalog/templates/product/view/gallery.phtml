@@ -60,7 +60,8 @@ $productName = $block->getProduct()->getName();
             </button>
         </div>
         <div class="relative self-center w-full"
-             x-ref="galleryMainImagesWrapper"
+             @touchstart="handleTouchStart"
+             @touchmove="handleTouchMove"
              x-transition:enter="ease-out duration-500"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
@@ -189,10 +190,6 @@ $productName = $block->getProduct()->getName();
             init() {
                 this.initActive();
                 this.$nextTick(() => this.calcPageSize());
-
-                const galleryMainImagesWrapper = this.$refs.galleryMainImagesWrapper;
-                galleryMainImagesWrapper.addEventListener('touchstart', (event) => this.images.length > 1 && this.handleTouchStart(event));
-                galleryMainImagesWrapper.addEventListener('touchmove', (event) => this.images.length > 1 && this.handleTouchMove(event));
             },
             receiveImages(images) {
                 if (this.appendOnReceiveImages) {
@@ -407,13 +404,17 @@ $productName = $block->getProduct()->getName();
                 }
             },
             handleTouchStart(event) {
+                if (this.images.length <= 1) {
+                    return;
+                }
+
                 const firstTouch = event.touches[0];
 
                 touchXDown = firstTouch.clientX;
                 touchYDown = firstTouch.clientY;
             },
             handleTouchMove(event) {
-                if (!touchXDown || !touchYDown) {
+                if (this.images.length <= 1 || !touchXDown || !touchYDown) {
                     return;
                 }
 
