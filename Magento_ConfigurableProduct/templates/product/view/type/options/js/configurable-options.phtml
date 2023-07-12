@@ -94,7 +94,7 @@ use Magento\Framework\View\Element\Template;
                 });
 
                 const selectionWithoutAttr = attrId => {
-                    <?php /* return the current selection without the given attribute */ ?>
+                    <?php /* return the current selection without the given attribute as an object (not array) */ ?>
                     return Object.keys(selectedValues).reduce((acc, id) => {
                         if (id !== attrId) acc[id] = selectedValues[id];
                         return acc;
@@ -115,6 +115,16 @@ use Magento\Framework\View\Element\Template;
             },
             calculateAvailableProductIndexes(selectedOptions) {
                 if (Object.keys(selectedOptions).length === 0) {
+                    <?php /* for Magento >= 2.4.4 when out-of-stock products are shown */ ?>
+                    if (Object.values(this.optionConfig.salable || {}).length) {
+                        <?php
+                        // The object this.optionConfig.salable is a map {attrId: {optionId: [productIndexes]}}
+                        // This turns the objects into arrays and flattens them, and removes duplicates
+                        // avoiding Array.flat and Set because they don't quite make our coverage requirement on caniuse.com.
+                        // This ends up returning an array of salable product indexes.
+                        ?>
+                        return [].concat.apply([], [].concat.apply([], Object.values(this.optionConfig.salable).map(Object.values))).filter((x, i, a) => a.indexOf(x) === i)
+                    }
                     <?php /* no selected options mean all products are available for selection */ ?>
                     return Object.keys(this.optionConfig.index);
                 }
