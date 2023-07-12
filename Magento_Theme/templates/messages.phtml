@@ -83,11 +83,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             >
                                 <span x-html="message.text"></span>
                                 <button
-                                    class="close cursor-pointer"
-                                    aria-label="<?= $escaper->escapeHtml(__('close message')) ?>"
+                                    class="text-gray-600 hover:text-black"
+                                    aria-label="<?= $escaper->escapeHtml(__('Close message')) ?>"
                                     @click.prevent="removeMessage(index)"
                                 >
-                                    <?= $heroicons->xHtml('text-white', 18, 18); ?>
+                                    <?= $heroicons->xHtml('stroke-current', 18, 18, ['aria-hidden' => 'true']); ?>
                                 </button>
                             </div>
                         </template>
