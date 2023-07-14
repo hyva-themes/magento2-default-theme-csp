@@ -122,10 +122,10 @@ function initCompareSidebarClear() {
      :class="{ 'hidden': !itemCount }"
      :aria-hidden="!itemCount"
 >
-    <h2 class="border-t border-container mb-6 pt-5" id="compare-sidebar">
-        <strong class="block title text-primary font-semibold text-lg">
-            <?= $escaper->escapeHtml(__('Compare Products')) ?>
-        </strong>
+    <h2 class="border-t border-container mb-6 pt-5 text-primary font-semibold text-lg"
+        id="compare-sidebar"
+    >
+        <?= $escaper->escapeHtml(__('Compare Products')) ?>
     </h2>
     <template x-if="itemCount">
         <ul class="my-4" aria-labelledby="compare-sidebar">
@@ -147,6 +147,7 @@ function initCompareSidebarClear() {
                         <a :href="product.product_url" :title="product.name" x-html="product.name"></a>
                     </strong>
                     <button
+                        type="button"
                         @click.prevent="removeFromCompare(product.id)"
                         :aria-label="hyva.str('<?= $escaper->escapeJs(__('Remove product "%1" from the comparison')) ?>', product.name)"
                         class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500
