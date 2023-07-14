@@ -9,25 +9,33 @@
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Data\Helper\PostHelper;
-use Magento\Sales\Helper\Reorder;
+use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Recent;
+use Magento\Sales\Helper\Reorder;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
-/** @var Recent $block */
 /** @var Escaper $escaper */
+/** @var Recent $block */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+$orders = $block->getOrders();
+$count  = count($orders);
 ?>
-<div class="block block-dashboard-orders card mt-4">
-    <?php
-    $orders = $block->getOrders();
-    $count  = count($orders);
-    ?>
+<div class="block block-dashboard-orders card mt-4"
+     x-data="{ tabIndex: -1 }"
+>
     <div class="block-title order my-4 flex justify-between items-center">
-        <h2 id="recentOrders" class="text-2xl block"><?= $escaper->escapeHtml(__('Recent Orders')) ?></h2>
+        <h2 id="recentOrders"
+            class="text-2xl block"
+            @focus="tabIndex = 0;"
+            @blur="tabIndex = -1"
+            :tabindex="tabIndex"
+        >
+          <?= $escaper->escapeHtml(__('Recent Orders')) ?>
+        </h2>
         <?php if ($count > 0): ?>
             <a
                 class="action view inline-block underline"
