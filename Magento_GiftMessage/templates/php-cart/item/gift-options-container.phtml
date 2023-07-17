@@ -14,7 +14,6 @@ use Magento\GiftMessage\Block\Cart\GiftOptions;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
-use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 
 /** @var Escaper $escaper */
 /** @var GiftOptions $block */
@@ -26,7 +25,7 @@ use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 $heroIcons = $viewModels->require(HeroiconsOutline::class);
 $storeConfigViewModel = $viewModels->require(StoreConfig::class);
 
-if (! $storeConfigViewModel->getStoreConfig(GiftMessageHelper::XPATH_CONFIG_GIFT_MESSAGE_ALLOW_ITEMS)) {
+if (! $storeConfigViewModel->getStoreConfig('sales/gift_options/allow_items')) {
     return;
 }
 
