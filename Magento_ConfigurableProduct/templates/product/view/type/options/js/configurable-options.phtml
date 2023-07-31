@@ -236,16 +236,16 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             },
             changeOption(attributeId, value) {
                 if (value === '') {
-                    // create new array so the length property is reset if no option is selected (avoiding delete)
+                    <?php /* create new array so the length property is reset if no option is selected (avoiding delete) */ ?>
                     this.selectedValues = this.selectedValues.reduce((newSelection, val, attr) => {
                         if (attr !== attributeId) {
                             newSelection[attr] = val;
                         }
                         return newSelection;
                     }, []);
-                } else {
-                    const isAllowedValue = value && this.getAllowedAttributeOptions(attributeId).find(option => option.id === value)
-                    isAllowedValue && (this.selectedValues[attributeId] = value);
+                } else if (value && this.getAllowedAttributeOptions(attributeId).find(option => option.id === value)) {
+                    <?php /* Only set as selected value if it is valid */ ?>
+                    this.selectedValues[attributeId] = value;
                 }
                 this.findSimpleIndex();
                 this.findAllowedAttributeOptions();
