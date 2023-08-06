@@ -29,25 +29,11 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
         return {
             searchOpen: false,
             cart: {},
-            isCartOpen: false,
             getData(data) {
                 if (data.cart) { this.cart = data.cart }
             },
             isCartEmpty() {
                 return !this.cart.summary_count
-            },
-            toggleCart(event) {
-                if (event.detail && typeof event.detail.isOpen !== 'undefined') {
-                    this.isCartOpen = event.detail.isOpen
-                } else {
-                    <?php
-                    /*
-                     * The toggle-cart event was previously dispatched without parameter to open the drawer (not toggle).
-                     * Keeping this in here for backwards compatibility.
-                     */
-                    ?>
-                    this.isCartOpen = true
-                }
             }
         }
     }
@@ -63,6 +49,18 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
             }
         }
     }
+    function initCartButton() {
+        return {
+            isCartOpen: false,
+            closeCart(event) {
+                if (this.isCartOpen) {
+                    this.isCartOpen = false
+                    this.$nextTick(() => { this.$refs?.cartButton?.focus() })
+                }
+            }
+        }
+    }
+
 </script>
 <div id="header"
      class="relative z-30 w-full border-b shadow bg-container-lighter border-container-lighter"
@@ -144,12 +142,13 @@ $showMiniCart = $storeConfig->getStoreConfig(\Magento\Checkout\Block\Cart\Sideba
             <?php endif ?>
                 id="menu-cart-icon"
                 class="relative inline-block ml-1 no-underline sm:ml-3 hover:text-black"
+                x-data="initCartButton()"
+                x-ref="cartButton"
                 :aria-disabled="isCartEmpty()"
+                title="<?= $escaper->escapeHtmlAttr(__('Cart')) ?>"
                 <?php if ($showMiniCart): ?>
-                    @click.prevent.stop="() => {
-                        $dispatch('toggle-cart', { isOpen: true })
-                    }"
-                    @toggle-cart.window="toggleCart($event)"
+                    @click.prevent.stop="$dispatch('open-cart'); isCartOpen = true"
+                    @close-cart.window="closeCart($event)"
                     :aria-expanded="isCartOpen"
                     aria-haspopup="dialog"
                 <?php else: ?>
