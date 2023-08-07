@@ -114,17 +114,30 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     window.dispatchEvent(new CustomEvent('reload-customer-section-data'));
                 });
             },
+            toggleCartDrawer(event) {
+                if (event.detail && typeof event.detail.isOpen !== 'undefined') {
+                    event.detail.isOpen ? this.openCartDrawer() : this.open = false
+                } else {
+                    <?php
+                    /*
+                     * The toggle-cart event was previously dispatched without parameter to open the drawer (not toggle).
+                     * Keeping this in here for backwards compatibility.
+                     */
+                    ?>
+                    this.openCartDrawer()
+                }
+            },
             openCartDrawer() {
                 this.open = true;
                 this.$nextTick(() => {
-                    this.$refs?.cartDialogContent?.focus()
-                    this.trapFocus(this.$refs?.cartDialogContent)
+                    if (this.$refs && this.$refs.cartDialogContent) {
+                        this.$refs.cartDialogContent.focus()
+                        this.trapFocus(this.$refs.cartDialogContent)
+                    }
                 })
-
             },
             closeCartDrawer() {
-                this.open = false;
-                this.$dispatch('close-cart')
+                this.$dispatch('toggle-cart', { isOpen: false })
             }
         }
     }
@@ -134,14 +147,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
          id="cart-drawer"
          x-data="initCartDrawer()"
          @private-content-loaded.window="getData($event.detail.data)"
-         @open-cart.window="openCartDrawer"
+         @toggle-cart.window="toggleCartDrawer($event)"
          @keydown.window.escape="closeCartDrawer"
 >
     <div role="dialog"
          aria-labelledby="cart-drawer-title"
          aria-modal="true"
          :aria-hidden="!open"
-         @click.outside="closeCartDrawer"
          class="fixed inset-y-0 right-0 z-30 flex max-w-full">
         <div class="backdrop"
              x-show="open"
@@ -168,6 +180,22 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
              aria-label="<?= $escaper->escapeHtmlAttr(__('My Cart')) ?>"
 
         >
+            <div
+                x-show="open"
+                x-transition:enter="ease-in-out duration-500"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="ease-in-out duration-500"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
+                <button
+                    @click="closeCartDrawer"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Close minicart')) ?>"
+                    class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black"
+                >
+                    <?= $heroicons->xHtml(); ?>
+                </button>
+            </div>
             <div class="flex flex-col h-full py-6 space-y-6 bg-white shadow-xl">
                 <?= $block->getChildHtml('cart-drawer.top'); ?>
 
@@ -276,22 +304,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </template>
 
                 <?= $block->getChildHtml('cart-drawer.bottom'); ?>
-            </div>
-            <div
-                x-show="open"
-                x-transition:enter="ease-in-out duration-500"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="ease-in-out duration-500"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0" class="absolute top-0 right-0 flex p-2 mt-2">
-                <button
-                    @click="closeCartDrawer"
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('Close minicart')) ?>"
-                    class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black"
-                >
-                    <?= $heroicons->xHtml(); ?>
-                </button>
             </div>
         </div>
         <?= $block->getChildHtml('loading') ?>
