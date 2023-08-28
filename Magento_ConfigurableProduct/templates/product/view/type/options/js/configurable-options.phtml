@@ -227,7 +227,7 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                     ? this.optionConfig.optionPrices[cheapestForSelection].finalPrice.amount
                     : this.optionConfig.prices.finalPrice.amount; // default price if no option selection
             },
-            clearOption(optionId, value) {
+            clearOptionIfActive(optionId, value) {
                 if (this.selectedValues[optionId] === value) {
                     this.blurLabel()
                     this.changeOption(optionId, '')
