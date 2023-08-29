@@ -73,7 +73,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
 
                                 <label
                                     class="w-full sm:w-1/2 text-left text-gray-700 label product-option-label"
-                                    id="attribute-label-<?= $productId . '-' . $attributeId ?>"
+                                    id="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
                                     aria-hidden="true"
                                 >
                                     <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
