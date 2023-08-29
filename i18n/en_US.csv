@@ -1,20 +1,16 @@
 "
-                        
                         <div class=""container"">
                             <p>No Checkout module installed.</p>
                             <p>Either install Hyvä Checkout, the Luma Fallback Checkout, or another alternative checkout.</p>
                             <p>Please refer to <a href=""https://docs.hyva.io/checkout/index.html"" target=""_blank"">the documentation</a> for more information.</p>
                         </div>
-                        
-                    ","
-                        
+                        ","
                         <div class=""container"">
                             <p>No Checkout module installed.</p>
                             <p>Either install Hyvä Checkout, the Luma Fallback Checkout, or another alternative checkout.</p>
                             <p>Please refer to <a href=""https://docs.hyva.io/checkout/index.html"" target=""_blank"">the documentation</a> for more information.</p>
                         </div>
-                        
-                    "
+                        "
 "%0 of %1 products in cart displayed","%0 of %1 products in cart displayed"
 "%1 filter options","%1 filter options"
 "%1 filter, %2 available products","%1 filter, %2 available products"
@@ -152,7 +148,7 @@ Subcategories,Subcategories
 "Toggle minicart","Toggle minicart"
 "Toggle search form","Toggle search form"
 "Track Shipment","Track Shipment"
-"Unable to find the SVG icon ""%1","Unable to find the SVG icon ""%1"
+"Unable to find the SVG icon ""%1""","Unable to find the SVG icon ""%1"""
 "Update item","Update item"
 "View all orders","View all orders"
 "View all recent orders","View all recent orders"
