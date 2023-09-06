@@ -85,7 +85,6 @@ $productListViewModel->setPageSize($pageSize);
 $productListViewModel->addFilter('website_id', $storeViewModel->getWebsiteId());
 $productListViewModel->addFilter('visibility', [
     ProductVisibility::VISIBILITY_IN_CATALOG,
-    ProductVisibility::VISIBILITY_IN_SEARCH,
     ProductVisibility::VISIBILITY_BOTH,
 ], 'in');
 if ($sortAttribute) {
