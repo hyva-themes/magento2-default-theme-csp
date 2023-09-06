@@ -179,7 +179,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </template>
 
                 <template x-if="itemsCount">
-                    <div class="grow relative grid gap-6 px-4 py-6 overflow-y-auto bg-white border-b
+                    <div class="grow relative grid gap-6 px-4 py-6 overflow-y-auto overscroll-y-contain bg-white border-b
                                 sm:gap-8 sm:px-6 border-container"
                     >
                         <template x-for="item in cartItems">
