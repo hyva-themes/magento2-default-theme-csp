@@ -69,7 +69,6 @@ $uniqueId = '_' . uniqid();
 
 $hideDetails       = $block->getData('hide_details') ?: false;
 $hideRatingSummary = $block->getData('hide_rating_summary') ?: false;
-$slideUniqueId = $block->hasData('slide_unique_id') ? '-' . $block->getData('slide_unique_id') : '';
 
 $imageCustomAttributes = $product->getData('image_custom_attributes')
     ?? $block->getData('image_custom_attributes')
@@ -112,7 +111,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
             <a
                 class="product-item-link"
                 href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
-                id="slide-desc-<?= $escaper->escapeHtmlAttr($product->getId() . $slideUniqueId) ?>"
+                :id="`slide-desc-<?= $escaper->escapeHtmlAttr($product->getId()) ?>-${$id('slider-id')}`"
             >
                 <?= /* @noEscape */ $productName ?>
             </a>

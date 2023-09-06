@@ -50,7 +50,6 @@ if (!$itemCount = count($items)) {
 }
 
 $sliderIndex = 1;
-$uniqueId = uniqid();
 $sliderItemRenderer = $block->getLayout()->getBlock('product_list_item')
     ?: $block->getChildBlock('slider.item.template')
     ?: $block->getLayout()->createBlock(Template::class);
@@ -60,7 +59,6 @@ $hideDetails       = (bool) $block->getData('hide_details');
 
 $sliderItemRenderer->setData('hide_details', $hideDetails);
 $sliderItemRenderer->setData('hide_rating_summary', $hideRatingSummary);
-$sliderItemRenderer->setData('slide_unique_id', $uniqueId);
 
 // The slider item renderer block is often a shared instance.
 // If a specific item template is set for this slider, the previously set template must be reset later
@@ -136,7 +134,7 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
     ?>"
     x-data="initSliderComponent()"
     x-init="calcPageSize();"
-    x-id="['slider-nav', 'slider-end', 'slider-desc']"
+    x-id="['slider-nav', 'slider-end', 'slider-desc', 'slider-id']"
     @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
     role="group"
     aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
@@ -184,7 +182,7 @@ if ($isSharedItemRenderer && $block->getChildBlock('slider.item.template')) {
                              role="group"
                              :aria-hidden="<?= (int) $sliderIndex ?> > active && <?= (int) $sliderIndex ?> <= (active + pageSize) ? 'false' : 'true'"
                              aria-label="<?= $escaper->escapeHtmlAttr(__('Item %1', $sliderIndex++)) ?>"
-                             aria-describedby="slide-desc-<?= $escaper->escapeHtmlAttr($product->getId().'-'.$uniqueId) ?>"
+                             :aria-describedby="`slide-desc-<?= $escaper->escapeHtmlAttr($product->getId()) ?>-${$id('slider-id')}`"
                         >
                             <?= /** @noEscape */ $productListItemViewModel->getItemHtmlWithRenderer(
                                 $sliderItemRenderer,
