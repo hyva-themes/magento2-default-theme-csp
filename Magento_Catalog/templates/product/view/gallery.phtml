@@ -142,7 +142,7 @@ $productName = $block->getProduct()->getName();
                     aria-hidden="true"
                     @click="scrollPrevious"
                 ><?= $heroicons->chevronLeftHtml() ?></button>
-                <div class="js_thumbs_slides thumbs-wrapper relative flex flex-nowrap w-full overflow-auto js_slides snap md:px-1 xl:px-2"
+                <div class="js_thumbs_slides thumbs-wrapper relative flex flex-nowrap w-full overflow-auto js_slides snap"
                      x-ref="jsThumbSlides"
                      @scroll.debounce="calcPageSize(); calcActive()"
                 >
