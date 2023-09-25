@@ -21,7 +21,7 @@ use Magento\Framework\Escaper;
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 
-<?php if ($block->isEnabled()) : ?>
+<?php if ($block->isEnabled()): ?>
     <div
         class="z-10 fixed bottom-4 inset-x-4 w-96 max-w-prose mx-auto p-4 rounded shadow-2xl bg-container-lighter
             lg:absolute lg:bottom-auto lg:right-auto lg:top-[var(--msrp-block-offset)] lg:left-[var(--msrp-inline-offset)] lg:shadow-lg lg:max-w-xs"
