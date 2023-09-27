@@ -14,7 +14,7 @@
             <block name="header.customer"
                    as="customer"
                    class="Magento\Customer\Block\Account\Customer"
-                   template="Magento_Customer::header/customer-menu-itemized.phtml">
+                   template="Magento_Customer::header/customer-menu.phtml">
                 <block name="header.customer.logged.in.links"
                        class="Hyva\Theme\Block\SortableItems">
                     <block name="customer.header.dashboard.link"
