@@ -53,19 +53,13 @@ if (!$productId || !$attributeId) {
                 @mouseleave.self="activeTooltipItem = false"
             <?php endif; ?>
         >
-            <template x-if="isTextSwatch(<?= (int) $attributeId ?>, item.id)">
-                <div
-                    x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
-                    class="pointer-events-none whitespace-nowrap"
-                    aria-hidden="true"
-                ></div>
-            </template>
             <input
                 :id="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
                 :value="item.id"
                 name="super_attribute[<?= (int) $attributeId ?>]"
                 type="radio"
-                class="absolute inset-0 w-full h-full p-0 border-0 focus:border-0 focus:ring-0 product-option-value-input rounded-none bg-transparent focus:outline-0 checked:bg-none checked:bg-transparent hover:checked:bg-transparent focus:checked:bg-transparent"
+                class="inline-block absolute p-0 border-0 focus:border-0 focus:ring-0 product-option-value-input"
+                style="z-index:-1"
                 x-on:focus="focusLabel(item.id)"
                 x-on:blur="blurLabel()"
                 x-on:change="changeOption(<?= (int) $attributeId ?>, $event.target.value)"
@@ -77,6 +71,13 @@ if (!$productId || !$attributeId) {
                 :aria-label="getSwatchText(<?= $escaper->escapeHtmlAttr($attributeId) ?>, item.id)"
                 aria-describedby="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
             >
+            <template x-if="isTextSwatch(<?= (int) $attributeId ?>, item.id)">
+                <div
+                    x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
+                    class="whitespace-nowrap"
+                    aria-hidden="true"
+                ></div>
+            </template>
         </label>
     </template>
 
