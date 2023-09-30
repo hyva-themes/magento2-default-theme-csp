@@ -7,7 +7,35 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.1...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.2...main
+
+## [1.3.2] - 2023-09-30
+
+[1.3.2]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.1...1.3.2
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Allow adding additional links to header customer menu**
+
+    Previously, it was not possible to add additional links to the customer-menu.phtml template without overriding the template.
+
+    For more information please refer to the 1.3.2 upgrade notes or [issue #730](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/730).
+
+- **Fix missing translation function for product gallery thumbnail alt text**
+
+    For more information please refer to [issue #777](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/777).
+
+### Removed
+
+- **Removed obsolete href attribute from button**
+
+    After the accessibility update, the customer menu button (previously a link) still had the href attribute.
+
+    For more information please refer to [issue #766](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/766).
 
 ## [1.3.1] - 2023-09-06
 
