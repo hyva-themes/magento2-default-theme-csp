@@ -27,6 +27,14 @@
         @apply border-2 border-yellow-500 bg-yellow-50;
     }
 
+    &.global {
+        @apply border-b-2 border-blue-500 bg-blue-50;
+    }
+
+    &.global.demo {
+        @apply border-b-2 border-red-500 bg-red-50;
+    }
+
     a {
         @apply underline
     }
