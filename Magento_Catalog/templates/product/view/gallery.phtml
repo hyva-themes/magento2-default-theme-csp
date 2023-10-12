@@ -221,6 +221,16 @@ $productName = $block->getProduct()->getName();
             init() {
                 this.initActive();
                 this.$nextTick(() => this.calcPageSize());
+
+                this.$watch('fullscreen', open => {
+                    this.$nextTick(() => {
+                        this.scrollLock(open);
+
+                        window.requestAnimationFrame(() => {
+                            this.calcPageSize()
+                        });
+                    });
+                })
             },
             receiveImages(images) {
                 if (this.appendOnReceiveImages) {
