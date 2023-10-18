@@ -75,7 +75,7 @@ use Magento\Wishlist\Block\Customer\Sharing;
                           @blur="validateForm()"
                           @input.debounce="validateForm()"
                           x-ref="emails"
-                          required="required"
+                          required
                 ><?= /* @noEscape */ $block->getEnteredData('emails') ?></textarea>
             </div>
         </div>

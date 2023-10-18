@@ -44,7 +44,7 @@ list($defaultQty, $canChangeQty) = $block->getDefaultValues();
             class="bundle-option-<?= (int)$optionId ?>
                 form-multiselect max-w-full"
             <?php if ($option->getRequired()): ?>
-                required="required"
+                required
             <?php endif; ?>
             x-on:change="calculateTotalPrice()"
     >

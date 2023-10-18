@@ -109,7 +109,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                                     id="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
                                     class="form-select super-attribute-select"
                                     x-on:change="changeOption(<?= (int) $attribute->getAttributeId() ?>, event.target.value)"
-                                    required="required">
+                                    required>
                                 <option value="">
                                     <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
                                 </option>
