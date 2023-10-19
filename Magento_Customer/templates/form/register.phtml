@@ -126,7 +126,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         />
                     </div>
                 </div>
-                <div class="field field-reserved">
+                <div class="field field-reserved required">
                     <label for="password" class="label">
                         <span><?= $escaper->escapeHtml(__('Password')) ?></span>
                     </label>
@@ -316,9 +316,11 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                     </div>
                 </div>
 
-                <div class="field field-reserved region w-full"
-                      x-cloak
-                      x-show="(hasAvailableRegions() && isRegionRequired) || showOptionalRegions"
+                <div
+                    class="field field-reserved region w-full"
+                    x-cloak
+                    x-show="(hasAvailableRegions() && isRegionRequired) || showOptionalRegions"
+                    :class="{ 'required': isRegionRequired }"
                 >
                     <label class="label" for="region_id">
                         <span><?= /* @noEscape */ $regionLabel ?></span>
@@ -357,7 +359,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                     </div>
                 </div>
 
-                <div class="field field-reserved zip w-full">
+                <div class="field field-reserved zip w-full" :class="{ 'required': isZipRequired }">
                     <label class="label" for="zip">
                         <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?></span>
                     </label>
@@ -376,7 +378,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                     </div>
                 </div>
 
-                <div class="field field-reserved country w-full">
+                <div class="field field-reserved required country w-full">
                     <label class="label" for="country">
                         <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?></span>
                     </label>
