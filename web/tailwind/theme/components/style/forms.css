@@ -50,3 +50,9 @@ fieldset {
 fieldset ~ fieldset {
     @apply mt-8
 }
+
+.field.required {
+    & > label::after {
+        @apply content-[""] relative -top-1 text-red-600 icon-asterisk;
+    }
+}

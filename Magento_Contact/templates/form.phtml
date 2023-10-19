@@ -49,7 +49,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 <div class="field name required p-2 w-1/2 text-left">
                     <label class="label text-gray-700" for="name">
                         <span><?= $escaper->escapeHtml(__('Name')) ?></span>
-                        <span class="relative -top-1 text-base leading-none text-red-600" aria-hidden="true">*</span>
                     </label>
                     <input name="name" id="name" required title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>"
                            value="<?= $escaper->escapeHtmlAttr(
@@ -64,7 +63,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 <div class="field email required p-2 w-1/2 text-left">
                     <label class="label text-gray-700" for="email">
                         <span><?= $escaper->escapeHtml(__('Email')) ?></span>
-                        <span class="relative -top-1 text-base leading-none text-red-600" aria-hidden="true">*</span>
                     </label>
                     <input name="email" id="email" required title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
                            value="<?= $escaper->escapeHtmlAttr(
@@ -91,7 +89,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 <div class="field comment required p-2 w-full text-left">
                     <label class="label text-gray-700" for="comment">
                         <span><?= $escaper->escapeHtml(__('What’s on your mind?')) ?></span>
-                        <span class="relative -top-1 text-base leading-none text-red-600" aria-hidden="true">*</span>
                     </label>
                     <textarea name="comment" id="comment" required
                               title="<?= $escaper->escapeHtmlAttr(__('What’s on your mind?')) ?>"
