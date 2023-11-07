@@ -98,9 +98,9 @@ $swatchData = $block->getSwatchData();
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
                 class="swatch-option-link-layered swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker <?= $isVisualSwatch ? 'w-6 h-6' : '' ?>"
                 <?php if ($isVisualSwatch): ?>
-                    style="background: <?= $swatchType === '2'
-                        ? $escaper->escapeUrl($block->getSwatchPath('swatch_image', $swatchValue))
-                        : (/* @noEscape */ $swatchType === '1' ? $swatchValue : '#fff0') ?> center/cover no-repeat;"
+                    style="<?= $swatchType === '2'
+                        ? 'background: #fff ' . $escaper->escapeUrl($block->getSwatchPath('swatch_image', $swatchValue)) . ' center no-repeat'
+                        : 'background-color: ' . (/* @noEscape */ $swatchType === '1' ? $swatchValue : '') ?>;"
                 <?php endif; ?>
                 <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
                     <?php $swatchThumbPath = $block->getSwatchPath('swatch_thumb', $swatchValue); ?>
