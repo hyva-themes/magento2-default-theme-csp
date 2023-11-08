@@ -44,7 +44,7 @@ $uniqueId = $productId . uniqid();
             ? '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars. Click to go to reviews.', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
             : '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
         "
-        role="group"
+        role="button"
     >
         <?php if ($reviewCount): ?>
             <span class="hidden" itemprop="ratingValue"><?= $starsFilled + $starFragment; ?></span>
