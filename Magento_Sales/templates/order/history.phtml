@@ -26,9 +26,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <?= $block->getChildHtml('info') ?>
 <?php if ($orders && count($orders)): ?>
     <div class="overflow-x-auto card mb-4">
-        <table class="w-full sm:table-fixed lg:table-auto" aria-labelledby="my-orders-title">
+        <table
+            id="my-orders-table"
+            class="w-full sm:table-fixed lg:table-auto"
+            aria-labelledby="my-orders-title"
+        >
             <thead class="text-sm text-secondary">
-                <tr id="my-orders-table">
+                <tr>
                     <th class="p-2 text-start">
                         <?= $escaper->escapeHtml(__('Order #')) ?>
                     </th>
@@ -125,7 +129,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         </table>
     </div>
     <?php if ($block->getPagerHtml()): ?>
-        <div class="order-products-toolbar toolbar bottom"><?= $block->getPagerHtml() ?></div>
+        <div class="order-products-toolbar toolbar bottom">
+            <?= $block->getPagerHtml() ?>
+        </div>
     <?php endif ?>
 <?php else: ?>
     <div class="message info empty"><span><?= $escaper->escapeHtml($block->getEmptyOrdersMessage()) ?></span></div>

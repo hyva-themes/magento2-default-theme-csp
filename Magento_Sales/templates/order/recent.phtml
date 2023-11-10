@@ -48,9 +48,13 @@ $count  = count($orders);
     <div class="overflow-x-auto">
         <?= $block->getChildHtml() ?>
         <?php if ($count > 0): ?>
-            <table class="block-content w-full sm:table-fixed lg:table-auto" aria-labelledby="recentOrders">
+            <table
+                id="my-orders-table"
+                class="block-content w-full sm:table-fixed lg:table-auto"
+                aria-labelledby="recentOrders"
+            >
                 <thead class="text-sm text-secondary">
-                    <tr id="my-orders-table">
+                    <tr>
                         <th class="p-2 text-start">
                             <?= $escaper->escapeHtml(__('Order #')) ?>
                         </th>
