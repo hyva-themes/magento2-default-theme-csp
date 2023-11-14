@@ -34,16 +34,17 @@ if (!$productId || !$attributeId) {
     <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && optionIsActive(<?= (int) $attributeId ?>, item.id)">
         <label
             :for="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
-            class="swatch-option relative border-2 shadow-sm cursor-pointer select-none bg-container-lighter product-option-value-label
-                focus-within:border-container-lighter focus-within:ring focus-within:ring-primary/75"
+            class="swatch-option relative border-2 shadow-sm cursor-pointer select-none bg-container-lighter product-option-value-label"
             :class="{
                 'border-container-lighter ring ring-primary/50':
                     (selectedValues[<?= (int)$attributeId ?>] === item.id),
                 'border-container-darker':
                     (selectedValues[<?= (int)$attributeId ?>] !== item.id),
-                'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id)
+                'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
+                'border-container-lighter ring ring-primary/75' : focusedLabel === item.id
             }"
             :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
+            <?php /* The dummy touchstart event listener prevents mobile safari from requiring a double tap to select swatches */ ?>
             @touchstart=""
             <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
                 @mouseenter.self="activeTooltipItem = {
@@ -61,8 +62,10 @@ if (!$productId || !$attributeId) {
                 type="radio"
                 class="inline-block absolute inset-0 w-full h-full p-0 border-0 focus:border-0 focus:ring-0 product-option-value-input"
                 style="z-index:-1"
-                @change.stop="changeOption(<?= (int) $attributeId ?>, $event.target.value)"
-                @click.stop="clearOptionIfActive(<?= (int) $attributeId ?>, item.id)"
+                @focus="focusLabel(item.id)"
+                @blur="blurLabel()"
+                @change="changeOption(<?= (int) $attributeId ?>, $event.target.value)"
+                @click="clearOptionIfActive(<?= (int) $attributeId ?>, item.id)"
                 x-model="selectedValues[<?= (int) $attributeId ?>]"
                 :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(
                     attributeOption => selectedValues[attributeOption]

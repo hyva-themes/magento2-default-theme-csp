@@ -233,6 +233,7 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             },
             clearOptionIfActive(optionId, value) {
                 if (this.selectedValues[optionId] === value) {
+                    this.blurLabel()
                     this.changeOption(optionId, '')
                 }
             },
