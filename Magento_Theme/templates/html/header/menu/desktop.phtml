@@ -30,7 +30,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
 ?>
 <div x-data="initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>()"
-     class="z-20 order-2 sm:order-1 lg:order-2 navigation hidden lg:flex"
+     class="z-20 order-2 sm:order-1 lg:order-2 navigation hidden lg:flex max-w-[calc(100%_-_340px)]"
 >
     <!-- desktop -->
     <div x-ref="nav-desktop"
@@ -40,7 +40,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             class="duration-150 ease-in-out transform w-auto relative min-h-0 transition-display"
             aria-label="<?= $escaper->escapeHtmlAttr(__('Main menu')) ?>"
         >
-            <ul class="flex justify-start">
+            <ul class="flex justify-start flex-wrap py-3">
                 <?php foreach ($menuItems as $index => $menuItem): ?>
                     <li class="relative mr-2 level-0"
                         @mouseenter="hoverPanelActiveId = '<?= /* @noEscape */ (string) $index ?>'"
@@ -48,7 +48,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                         @keyup.escape="hoverPanelActiveId = 0"
                     >
                         <span class="flex items-center gap-1 p-3 text-md bg-opacity-95">
-                            <a class="w-full py-3 text-base text-gray-700 hover:underline level-0"
+                            <a class="w-full text-base text-gray-700 hover:underline level-0"
                                href="<?= $escaper->escapeUrl($menuItem['url']) ?>"
                                title="<?= $escaper->escapeHtmlAttr($menuItem['name']) ?>"
                                @focus="hoverPanelActiveId = 0"
