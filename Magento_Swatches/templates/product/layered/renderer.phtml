@@ -100,19 +100,17 @@ $swatchData = $block->getSwatchData();
                aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
                class="swatch-option-link-layered swatch-option border-2 cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
                :class="{ 'w-6 h-6' : getSwatchType('<?= (string) $swatchData['swatches'][$option]['type'] ?>') !== 'text' }"
+               <?php $isImageSwatch = $swatchData['swatches'][$option]['type'] === '2'; ?>
                :style="getSwatchBackgroundStyle(
                     '<?= (string) $swatchData['swatches'][$option]['type'] ?>',
                     '<?= (string) $swatchData['swatches'][$option]['value'] ?>',
-                    '<?= $escaper->escapeUrl($block->getSwatchPath(
-                        'swatch_image',
-                        $swatchData['swatches'][$option]['value']
-                    )) ?>'
+                    '<?= $escaper->escapeUrl($isImageSwatch ? $block->getSwatchPath('swatch_image',$swatchData['swatches'][$option]['value']) : '' )?>'
                 )"
                 <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
-                    <?php $swatchThumbPath = $block->getSwatchPath(
+                    <?php $swatchThumbPath = $isImageSwatch ? $block->getSwatchPath(
                         'swatch_thumb',
                         $swatchData['swatches'][$option]['value']
-                    ); ?>
+                    ) : '' ; ?>
                     @mouseenter.self="activeTooltipItem = {
                             attribute: '<?= $escaper->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?>',
                             type: '<?= $escaper->escapeHtmlAttr($swatchData['swatches'][$option]['type']) ?>',
