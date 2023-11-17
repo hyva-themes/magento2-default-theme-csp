@@ -8,6 +8,7 @@
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Laminas\Escaper\Escaper;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Sales\Helper\Reorder;
 use Magento\Sales\Block\Order\Recent;
@@ -89,6 +90,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         ) ?>
                     </div>
                     <div class="p-2 flex items-center justify-evenly<?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>">
+                    <?php // 'received' is an order status added in Magento_AsyncOrder in Adobe Commerce ?>
+                    <?php // The condition will always return 'true' in Magento Open Source ?>
+                    <?php if ($order->getStatus() !== 'received'): ?>
                         <a href="<?= $escaper->escapeUrl($block->getViewUrl($order)) ?>"
                            class="inline-block text-sm underline text-secondary-darker"
                            title="<?= $escaper->escapeHtmlAttr(__('View Order')) ?>">
@@ -114,6 +118,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 </button>
                             </form>
                         <?php endif ?>
+                    <?php endif ?>
                     </div>
                 <?php endforeach; ?>
             </div>
