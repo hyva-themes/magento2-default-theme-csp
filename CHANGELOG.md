@@ -7,7 +7,101 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.2...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.4...main
+
+## [1.3.4] - 2023-11-21
+
+[1.3.4]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.3...1.3.4
+
+### Added
+
+- **Add missing translation phrase "Show Password"**
+
+    Previously this phrase was missing from the Hyvä translation CSV dictionary.  
+    The phrase is not part of the Magento core translation phases, where it is surrounded by single quotes `"'Show Password'"`.
+
+    For more information, please refer to [issue #838](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/838).
+  
+    Many thanks to Tom Muir (e3n - Die Magento Agentur) for the contribution!
+
+### Changed
+
+- **Use HTML unordered list for product listings instead of div-based grid**
+
+    Using semantic HTML improves accessibility.   
+    BC Note: this change can require updates to DOM selectors in end-to-end tests like Cypress or Playwright.
+
+    For more information, please refer to [issue #652](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/652).
+
+- **Use HTML tables for customer order history, recent orders, and customer downloadable products**
+
+    Using semantic HTML improves accessibility.
+    BC Note: this change can require updates to DOM selectors in end-to-end tests like Cypress or Playwright.
+
+    For details, please refer to merge request [#931](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/931).
+
+- **Accommodate additional blocks on customer login page without breaking layout**
+
+    Previously, when adding another widget to the login container, the layout did not automatically wrap the widget to the next line, leading to a broken layout.
+    BC Note: the `web/tailwind/components/customer.css` styles need to be manually removed from existing themes after the upgrade for a theme to profit from this change.
+
+    For more information, please refer to [issue #775](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/775).
+
+- **Update Tailwindcss from 3.2.4 to 3.2.7**
+
+    This change is backward compatible. The newer tailwind version fixes some issues.
+
+    For a list of changes in Tailwindcss, please refer to [issue #820](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/820).
+
+- **Remove superfluous container class on forgot password page**
+
+    This change removes an extra indent on the left of the card block.
+
+    For more information, please refer to [issue #836](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/836).
+
+    Many thanks to Viktor Yakaba (Perspective Magento Team) for the contribution!
+
+- **Fix: layered navigation on 1column page layouts hidden**
+
+    For more information, please refer to [issue #678](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/678).
+
+    Many thanks to Ivan Matsii (Perspective Magento Team) for the contribution!
+
+- **Fix: keyboard navigation on desktop menu ESC focusses mini cart button**
+
+    For more information, please refer to [issue #768](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/768).
+
+- **Align the text on layered navigation toggle buttons to the beginning**
+
+    Previously, for long attribute labels that caused a line wrap, the second line was centered.
+
+    For more information, please refer to [issue #783](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/783).
+
+- **Use hyva.trapFocus for product gallery instead of individual implementation**
+
+    Using the hyva.trapFocus method introduced in Hyvä 1.2.6 improves the overall consistency within the default theme.
+
+    For more information, please refer to [issue #793](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/793).
+
+- **Ensure consistent PLP list view image size**
+
+    In the list view, the product image size previously depended on the product short description length. 
+
+    For more information, please refer to [issue #799](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/799).
+
+- **Update product gallery itemCount when images are received after option selection**
+
+    The itemCount property is used for the calculation of the product thumbnail gallery slider.
+
+    For more information, please refer to [issue #801](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/801).
+
+- **Fix whitespace around layered navigation filter options with zero matching products**
+
+    For more information, please refer to [issue #802](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/802).
+
+### Removed
+
+- Nothing removed
 
 ## [1.3.3] - 2023-11-16
 
