@@ -107,7 +107,7 @@ if (empty($sliderHtml)) {
     return '';
 }
 ?>
-<div class="product-slider">
+<div class="product-slider <?= $type ?>-product-slider">
     <div>
         <?= /* @noEscape */ $sliderHtml ?>
     </div>
