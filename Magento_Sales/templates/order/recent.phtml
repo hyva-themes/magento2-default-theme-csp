@@ -83,6 +83,16 @@ $count  = count($orders);
                         <?php $shippingAddress = $order->getShippingAddress(); ?>
                         <?php $billingAddress = $order->getBillingAddress(); ?>
                         <?php $shipToName = ''; ?>
+                        <?php if ($shippingAddress && $shippingAddress->getCompany()): ?>
+                            <?php $shipToName = $shippingAddress->getCompany() ?>
+                        <?php elseif ($billingAddress && $billingAddress->getCompany()): ?>
+                            <?php $shipToName = $billingAddress->getCompany() ?>
+                        <?php elseif ($shippingAddress && $shippingAddress->getLastName()): ?>
+                            <?php $shipToName = $shippingAddress->getFirstname() . ' ' . $shippingAddress->getMiddlename() . ' ' . $shippingAddress->getLastName()  ?>
+                        <?php else: ?>
+                            <?php $shipToName = '&nbsp;'; ?>
+                        <?php endif; ?>
+
                         <tr class="align-top even:bg-container-darker">
                             <th
                                 id="order<?= $escaper->escapeHtmlAttr($order->getRealOrderId()) ?>"
@@ -107,15 +117,6 @@ $count  = count($orders);
                                 </span>
                             </td>
                             <td class="p-2">
-                                <?php if ($shippingAddress && $shippingAddress->getCompany()): ?>
-                                    <?php $shipToName = $shippingAddress->getCompany() ?>
-                                <?php elseif ($billingAddress && $billingAddress->getCompany()): ?>
-                                    <?php $shipToName = $billingAddress->getCompany() ?>
-                                <?php elseif ($shippingAddress && $shippingAddress->getLastName()): ?>
-                                    <?php $shipToName = $shippingAddress->getFirstname() . ' ' . $shippingAddress->getMiddlename() . ' ' . $shippingAddress->getLastName()  ?>
-                                <?php else: ?>
-                                    <?php $shipToName = '&nbsp;'; ?>
-                                <?php endif; ?>
                                 <?= $escaper->escapeHtml($shipToName) ?>
                             </td>
                             <td class="p-2 hidden lg:table-cell">
