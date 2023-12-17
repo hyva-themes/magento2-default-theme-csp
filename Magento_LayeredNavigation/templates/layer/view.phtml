@@ -129,6 +129,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 isMobile: false,
                 blockOpen: false,
                 checkIsMobileResolution() {
+                    <?php /* Check if the media query matches the Tailwind `md` breakpoint, on the max width size */ ?>
                     this.isMobile = window.matchMedia('(max-width: 767px)').matches;
                 }
             }
