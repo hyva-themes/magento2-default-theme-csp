@@ -478,7 +478,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 <?php if ($block->getShowAddressFields()): ?>
                 directoryData: {},
                 availableRegions: {},
-                <?php /* $block->getRegion() returns an ID or a region name. The selectedRegion is used only for selects, so it must be an int. String names result in 0 when cast to int. */ ?>
+                    <?php /* $block->getRegion() returns an ID or a region name. The selectedRegion is used only for selects, so it must be an int. String names result in 0 when cast to int. */ ?>
                 selectedRegion: <?= (int) $block->getRegion() ?>,
                 isZipRequired: true,
                 isRegionRequired: true,
