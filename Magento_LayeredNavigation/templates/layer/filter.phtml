@@ -32,22 +32,23 @@ $catalogHelper = $this->helper(Data::class);
             <a
                 href="<?= $escaper->escapeUrl($filterItem->getUrl()) ?>"
                 class="flex justify-between py-1 hover:text-black"
+                <?php if ((int) $filterItem->getCount() === 1): ?>
+                aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter, 1 available product', strip_tags((string)$filterItem->getLabel()))) ?>"
+                <?php else: ?>
+                aria-label="<?= $escaper->escapeHtmlAttr(__('%1 filter, %2 available products', strip_tags((string)$filterItem->getLabel()), $filterItem->getCount())) ?>"
+                <?php endif; ?>
             >
                 <span><?= /* @noEscape */ $filterItem->getLabel() ?></span>
-                <span
-                    class="count <?= $catalogHelper->shouldDisplayProductCountOnLayer() ? 'text-primary' : 'sr-only' ?>"
-                    aria-label="<?= ((int) $filterItem->getCount() === 1)
-                        ? $escaper->escapeHtmlAttr(__('1 product available in filter'))
-                        : $escaper->escapeHtmlAttr(__('%1 products available in filter', $filterItem->getCount())) ?>"
-                >(<?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?>)</span>
+                <?php if ($catalogHelper->shouldDisplayProductCountOnLayer()): ?>
+                    <span class="count text-primary">(<?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?>)</span>
+                <?php endif; ?>
             </a>
         <?php else: ?>
             <span class="flex justify-between py-1 hover:text-black">
-                <span><?= /* @noEscape */ $filterItem->getLabel() ?></span>
-                <span
-                    class="count <?= $catalogHelper->shouldDisplayProductCountOnLayer() ? 'text-primary' : 'sr-only' ?>"
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('%1 products available in filter', $filterItem->getCount())) ?>"
-                >(<?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?>)</span>
+                    <span><?= /* @noEscape */ $filterItem->getLabel() ?></span>
+                <?php if ($catalogHelper->shouldDisplayProductCountOnLayer()): ?>
+                    <span class="count text-primary">(<?= /* @noEscape */ $localeFormatter->formatNumber((int)$filterItem->getCount()) ?>)</span>
+                <?php endif; ?>
             </span>
         <?php endif; ?>
     </li>
