@@ -96,18 +96,18 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                         </template>
                     </div>
                 <?php else: ?>
-                    <div class="flex items-center py-2 w-full border-t border-gray-300 last:border-b">
-                        <label class="w-1/2 text-left text-gray-700 label"
+                    <div class="flex flex-col sm:flex-row items-center py-2 w-full border-t border-gray-300 last:border-b">
+                        <label class="w-full sm:w-1/2 text-left text-gray-700 label"
                                for="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
                         >
                             <span>
                                 <?= $escaper->escapeHtml($attribute->getProductAttribute()->getStoreLabel()) ?>
                             </span>
                         </label>
-                        <div class="ml-2 w-1/2 text-left text-gray-900">
+                        <div class="w-full sm:ml-2 sm:w-1/2 text-left text-gray-900">
                             <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
                                     id="attribute<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>"
-                                    class="form-select super-attribute-select"
+                                    class="form-select super-attribute-select max-w-full"
                                     x-on:change="changeOption(<?= (int) $attribute->getAttributeId() ?>, event.target.value)"
                                     required="required">
                                 <option value="">
