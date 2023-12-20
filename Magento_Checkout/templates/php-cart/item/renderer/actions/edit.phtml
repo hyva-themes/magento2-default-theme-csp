@@ -22,7 +22,7 @@ $heroicons = $viewModels->require(HeroiconsSolid::class);
 $item = $block->getItem();
 
 if ($item->getProductType() === 'configurable') {
-    $productOptions = $item->getProduct()->getTypeInstance(true)->getOrderOptions($item->getProduct());
+    $productOptions = $item->getProduct()->getTypeInstance()->getOrderOptions($item->getProduct());
     $productName = $productOptions["simple_name"];
 } else {
     $productName = $item->getName();
