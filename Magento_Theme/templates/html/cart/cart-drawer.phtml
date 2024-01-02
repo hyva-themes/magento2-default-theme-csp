@@ -89,6 +89,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     window.dispatchEvent(new CustomEvent('reload-customer-section-data'));
                 });
             },
+            scrollLock(use = true) {
+                document.body.style.overflow = use ? "hidden" : "";
+            },
             toggleCartDrawer(event) {
                 if (event.detail && event.detail.isOpen !== undefined) {
                     if (event.detail.isOpen) {
@@ -108,12 +111,14 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             },
             openCartDrawer() {
                 this.open = true;
+                this.scrollLock(true);
                 this.$nextTick(() => {
                     this.$refs && this.$refs.cartDialogContent && hyva.trapFocus(this.$refs.cartDialogContent)
                 })
             },
             closeCartDrawer() {
                 this.open = false;
+                this.scrollLock(false);
                 this.$refs && this.$refs.cartDialogContent && hyva.releaseFocus(this.$refs.cartDialogContent);
             }
         }
