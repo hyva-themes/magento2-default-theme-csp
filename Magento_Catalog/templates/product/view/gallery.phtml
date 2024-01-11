@@ -421,7 +421,7 @@ $productName = $block->getProduct()->getName();
                 const slider = this.getSlider();
                 if (slider) {
                     this.isSliderStart = slider.scrollLeft === 0;
-                    this.isSliderEnd = (slider.scrollLeft + slider.offsetWidth) === slider.scrollWidth;
+                    this.isSliderEnd = Math.ceil(slider.scrollLeft + slider.offsetWidth) >= slider.scrollWidth;
                 }
             },
             calcActive() {
