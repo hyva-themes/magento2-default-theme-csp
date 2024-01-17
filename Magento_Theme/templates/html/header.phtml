@@ -90,6 +90,17 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                title="<?= $escaper->escapeHtml(__('Compare Products')) ?>"
                x-data="initCompareHeader()"
                @private-content-loaded.window="receiveCompareData($event.detail.data)"
+               :aria-label="`
+                    <?= $escaper->escapeHtml(__('View Compare')) ?>,
+                    ${itemCount === 0
+                        ? '<?= $escaper->escapeHtml(__('Compare is empty')) ?>'
+                        : hyva.str(
+                            'You have %1 item%2 in the Compare.',
+                            itemCount,
+                            itemCount === 1 ? '' : 's'
+                        )
+                    }
+                `"
             >
                 <?= $heroicons->scaleHtml(
                     "w-8 h-8 md:h-6 md:w-6 hover:text-black",
@@ -97,9 +108,6 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                     25
                 ) ?>
 
-                <span class="sr-only label">
-                   <?= $escaper->escapeHtml(__('Compare Products')) ?>
-                </span>
 
                 <span class="absolute top-0 right-0 h-5 px-2 py-1 -mt-5 -mr-4 text-xs font-semibold
                     leading-none text-center text-white uppercase transform -translate-x-1
