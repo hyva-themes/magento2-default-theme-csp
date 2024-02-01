@@ -258,7 +258,9 @@ $productName = $block->getProduct()->getName();
                 this.images = this.initialImages;
                 this.itemCount = this.images.length;
                 this.setActive(0);
-                this.scrollTo(0);
+                this.$nextTick(() => {
+                    this.scrollTo(this.active);
+                });
             },
             initActive() {
                 let active = this.images.findIndex(function(image) {
