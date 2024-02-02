@@ -67,7 +67,6 @@ $productName = $block->getProduct()->getName();
             <div class="relative mb-6" aria-live="polite" aria-atomic="true">
                 <span class="sr-only" id="main-image-description"><?= $escaper->escapeHtml(__('Main image')) ?></span>
                 <span class="sr-only" id="fullscreen-btn-label"><?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?></span>
-                <span class="sr-only" id="video-btn-label"><?= $escaper->escapeHtml(__('Click to play video')) ?></span>
                 <?php
                 /**
                  * The first image is a placeholder that determines the
@@ -120,8 +119,7 @@ $productName = $block->getProduct()->getName();
                 <button
                     type="button"
                     class="group absolute inset-0 outline-offset-2 grid place-items-center"
-                    aria-describedby="main-image-description video-btn-label"
-                    aria-labelledby="video-btn-label"
+                    aria-label="<?= $escaper->escapeHtml(__('Click to play video')) ?>"
                     x-show="images[active].type === 'video' && !activeVideoType"
                     x-cloak
                     @click="activateVideo()"
