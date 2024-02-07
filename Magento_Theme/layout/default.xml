@@ -76,6 +76,7 @@
                            template="Magento_Theme::html/header/menu/desktop.phtml"
                     ></block>
                 </block>
+                <block class="Magento\Framework\View\Element\Template" name="additional" as="additional" />
             </block>
         </referenceContainer>
 
