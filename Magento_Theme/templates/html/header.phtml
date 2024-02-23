@@ -154,7 +154,8 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                 title="<?= $escaper->escapeHtmlAttr(__('Cart')) ?>"
                 <?php if ($showMiniCart): ?>
                     @click.prevent.stop="() => {
-                        $dispatch('toggle-cart', { isOpen: true })
+                        isCartOpen = !isCartOpen;
+                        $dispatch('toggle-cart', { isOpen: isCartOpen });
                     }"
                     @toggle-cart.window="toggleCart($event)"
                     :aria-expanded="isCartOpen"
