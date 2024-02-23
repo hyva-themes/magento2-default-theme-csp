@@ -115,6 +115,45 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             },
             closeCartDrawer() {
                 this.$dispatch('toggle-cart', { isOpen: false })
+            },
+            getSectionDataExtraActions() {
+                if (! this.cart.extra_actions) {
+                    return '';
+                }
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(`<html><body><div id="__extra_actions">${this.cart.extra_actions}</div></body></html>`, 'text/html');
+                const contentNode = doc.getElementById('__extra_actions')
+
+                if (!contentNode || !contentNode.innerHTML.length) {
+                    return;
+                }
+
+                // Extract all the script tags from the new content.
+                // Script tags won't execute when inserted into a dom-element directly,
+                // therefore we need to inject them to the head of the document.
+                const tmpScripts = contentNode.getElementsByTagName('script');
+
+                if (tmpScripts.length > 0) {
+                    // Push all script tags into an array
+                    // (to prevent dom manipulation while iterating over dom nodes)
+                    const scripts = [];
+                    for (let i = 0; i < tmpScripts.length; i++) {
+                        scripts.push(tmpScripts[i]);
+                    }
+
+                    // Iterate over all script tags and duplicate+inject each into the head
+                    for (let i = 0; i < scripts.length; i++) {
+                        let script = document.createElement('script');
+                        script.innerHTML = scripts[i].innerHTML;
+
+                        document.head.appendChild(script);
+
+                        // Remove the original (non-executing) node from the page
+                        scripts[i].parentNode.removeChild(scripts[i]);
+                    }
+                }
+                return contentNode.innerHTML;
             }
         }
     }
@@ -261,7 +300,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                     <?= $escaper->escapeHtml(__('View and Edit Cart')) ?>
                                 </a>
                             </div>
-                            <?= $block->getChildHtml('extra_actions') ?>
+                            <div x-html="getSectionDataExtraActions()"></div>
+                            <?= $block->getChildHtml('extra_actions'); ?>
                         </div>
                     </div>
                 </template>
