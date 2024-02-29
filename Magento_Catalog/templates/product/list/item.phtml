@@ -51,7 +51,9 @@ $heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
 $productOptionsViewmodel = $viewModels->require(ProductOptionsData::class);
 
 /** @var Magento\Catalog\Model\Product $product */
-$product = $block->getData('product');
+if (! ($product = $block->getData('product'))) {
+    return;
+}
 $imageDisplayArea = $block->getData('image_display_area');
 $templateType = $block->getData('template_type');
 $viewMode = $block->getData('view_mode');
@@ -61,10 +63,6 @@ $showAddToCompare = $compareViewModel->showInProductList();
 $viewIsGrid = $viewMode === 'grid';
 $productType = $product->getTypeId();
 $isProductGroupedOrBundle = $productType === 'bundle' || $productType === "grouped";
-
-if (!$product) {
-    return '';
-}
 $productId = $product->getId();
 $options   = $productOptionsViewmodel->getOptionsData($product);
 $uniqueId = '_' . uniqid();
@@ -154,10 +152,10 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
                 }
             }
         </script>
-        
+
         <?php if ($isProductGroupedOrBundle): ?>
             <span class="sr-only">
-                <?= $escaper->escapeHtml(__('Price depends on the chosen options on the product page')) ?>
+                <?= $escaper->escapeHtml(__('The price depends on the options chosen on the product page')) ?>
             </span>
         <?php endif; ?>
 
@@ -170,20 +168,21 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
 
         <div class="mt-auto pt-3 flex flex-wrap justify-center items-center">
             <?php if ($product->isSaleable()): ?>
-            <button class="w-auto btn btn-primary justify-center text-sm
-                <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
                 <?php if ($isProductGroupedOrBundle): ?>
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('Go to %1 product page to choose options', $productName)) ?>"
+                <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
+                    <?= $escaper->escapeHtml(__('Go to the product page to choose options', $productName)) ?>
+                </a>
                 <?php else: ?>
+                <button class="w-auto btn btn-primary justify-center text-sm
+                    <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart') . ' ' . $productName) ?>"
+                >
+                    <?= $heroicons->shoppingCartHtml("h-6 w-6 border-current inline", 25, 25, ['aria-hidden' => 'true']) ?>
+                    <span class="ml-2 inline <?= $viewIsGrid ? 'md:ml-0 md:hidden lg:ml-2 lg:inline' : '' ?>">
+                        <?= $escaper->escapeHtml(__('Add to Cart')) ?>
+                    </span>
+                </button>
                 <?php endif; ?>
-            >
-                <?= $heroicons->shoppingCartHtml("h-6 w-6 border-current inline", 25, 25, ['aria-hidden' => 'true']) ?>
-                <span class="ml-2 inline <?= $viewIsGrid ? 'md:ml-0 md:hidden lg:ml-2 lg:inline' : '' ?>">
-                    <?= $escaper->escapeHtml(__('Add to Cart')) ?>
-                </span>
-            </button>
-            <?php else: ?>
             <div class="w-auto justify-center <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>">
                 <?= $block->getChildBlock('stockstatus')->setData('product', $product)->toHtml() ?>
             </div>
