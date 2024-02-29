@@ -183,6 +183,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
                     </span>
                 </button>
                 <?php endif; ?>
+            <?php else: ?>
             <div class="w-auto justify-center <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>">
                 <?= $block->getChildBlock('stockstatus')->setData('product', $product)->toHtml() ?>
             </div>
