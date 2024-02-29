@@ -34,7 +34,7 @@ $msrpPrice = $block->renderAmount(
         'skip_adjustments' => true
     ]
 );
-$priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElementIdPrefix() : 'product-price-';
+$priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
 
 ?>
 
