@@ -18,11 +18,16 @@ use Magento\Search\Model\QueryResult;
 /** @var LocaleFormatter $localeFormatter */
 /** @var QueryResult[] $data */
 /** @var SearchData $block */
-?>
 
+// The translated title "Related search terms" returned by the \Magento\AdvancedSearch\Block\Suggestions::getTitle() originates in magento/module-advanced-search/etc/di.xml
+// It can be adjusted with di.xml or in the theme with layout XML by declaring `title` argument on the `search_recommendations` block.
+
+$title = $block->getData('title') ? __($block->getData('title')) : $block->getTitle();
+
+?>
 <?php if (count($block->getItems())): ?>
     <dl class="my-6">
-        <dt class="mb-2 font-bold"><?= $escaper->escapeHtml(__($block->getTitle())) ?></dt>
+        <dt class="mb-2 font-bold"><?= $escaper->escapeHtml($title) ?></dt>
         <?php foreach ($block->getItems() as $additionalInfo): ?>
             <dd>
                 <a
