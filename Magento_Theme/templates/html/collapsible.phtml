@@ -52,9 +52,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 24,
                 24,
                 [
-                    ":class" => "{ 'rotate-180': blockOpen }",
+                    ':class'      => "{ 'rotate-180': blockOpen }",
                     'aria-hidden' => 'true',
-                    "focusable" => "false"
+                    'focusable' => 'false'
                 ]
             ); ?>
         </span>
@@ -75,7 +75,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             checkIsMobileResolution() {
                 const mobileElement = this.$refs.AccountNavigationMobileToggleIcon;
                 this.isMobile = mobileElement
-                    ? getComputedStyle(mobileElement).display !== "none"
+                    ? getComputedStyle(mobileElement).display !== 'none'
                     : window.matchMedia('(max-width: 767px)').matches; // Fallback to `md` breakpoint
             }
         }
