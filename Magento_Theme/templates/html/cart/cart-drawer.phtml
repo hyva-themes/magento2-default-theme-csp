@@ -97,7 +97,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     if (event.detail.isOpen) {
                         this.openCartDrawer();
                     } else {
-                        this.closeCartDrawer();
+                        this.open = false;
+                        this.scrollLock(false);
+                        this.$refs && this.$refs.cartDialogContent && hyva.releaseFocus(this.$refs.cartDialogContent);
                     }
                 } else {
                     <?php
@@ -117,9 +119,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 })
             },
             closeCartDrawer() {
-                this.open = false;
-                this.scrollLock(false);
-                this.$refs && this.$refs.cartDialogContent && hyva.releaseFocus(this.$refs.cartDialogContent);
+                this.$dispatch('toggle-cart', { isOpen: false });
             }
         }
     }
