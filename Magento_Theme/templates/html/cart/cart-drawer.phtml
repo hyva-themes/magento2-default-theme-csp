@@ -179,12 +179,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 </template>
 
                 <template x-if="itemsCount">
-                    <div class="relative grid gap-6 px-4 py-6 overflow-y-auto overscroll-y-contain bg-white border-b
-                                sm:gap-8 sm:px-6 border-container"
-                    >
+                    <div class="relative grid gap-6 sm:gap-8 px-1 py-3 sm:px-3 bg-white border-b border-container overflow-y-auto overscroll-y-contain">
                         <template x-for="item in cartItems">
-                            <div class="flex items-start p-3 -m-3 space-x-4 transition duration-150
-                        ease-in-out rounded-lg hover:bg-gray-100">
+                            <div class="flex items-start p-3 space-x-4 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100">
                                 <a :href="item.product_url"
                                     class="w-1/4"
                                     :aria-label="hyva.strf('<?= $escaper->escapeJs(__('Product "%0"')) ?>', item.product_name)"
@@ -238,15 +235,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <div>
                         <?= $block->getChildHtml('cart-drawer.totals.before'); ?>
 
-                        <div class="relative grid gap-6 px-4 py-6 bg-white sm:gap-8 sm:px-6">
-                            <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
-                                        hover:bg-gray-100"
-                            >
+                        <div class="relative grid gap-6 sm:gap-8 py-3 px-1 sm:px-3 bg-white">
+                            <div class="w-full p-3 space-x-4 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100">
                                 <p><?= $escaper->escapeHtml(__('Subtotal')) ?>: <span x-html="cart.subtotal"></span></p>
                             </div>
-                            <div class="w-full p-3 -m-3 space-x-4 transition duration-150 ease-in-out rounded-lg
-                                        hover:bg-gray-100"
-                            >
+                            <div class="w-full p-3 space-x-4 transition duration-150 ease-in-out rounded-lg hover:bg-gray-100">
                                 <a @click.prevent.stop="$dispatch('toggle-authentication',
                                     {url: '<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>'});"
                                     href="<?= $escaper->escapeUrl($block->getUrl('checkout')) ?>"
