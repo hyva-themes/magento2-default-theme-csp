@@ -77,7 +77,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                                title="<?= $escaper->escapeHtmlAttr(__('Sign Up for Newsletter')) ?>" value="1"
                                id="is_subscribed"
                                 <?php if ($block->getFormData()->getIsSubscribed()): ?>
-                                    checked="checked"
+                                    checked
                                 <?php endif; ?>
                                class="checkbox">
                         <label for="is_subscribed" class="label">
@@ -440,7 +440,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
             <div class="primary">
                 <button type="submit" class="action submit primary btn btn-primary disabled:opacity-75"
                         title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
-                        <?php if ($createAccountButtonViewModel->disabled()): ?> disabled="disabled" data-recaptcha-btn<?php endif; ?>>
+                        <?php if ($createAccountButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>>
                         <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>
                 </button>
             </div>

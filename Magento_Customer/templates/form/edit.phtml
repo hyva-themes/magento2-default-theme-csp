@@ -83,7 +83,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                 value="1"
                 title="<?= $escaper->escapeHtmlAttr(__('Change Password')) ?>"
                 @change="handleCheckboxChange('password-fields')"
-                <?php if ($block->getChangePassword()): ?> checked="checked"<?php endif; ?>
+                <?php if ($block->getChangePassword()): ?> checked<?php endif; ?>
                 class="checkbox"
                 aria-describedby="change_password_description"
             />
