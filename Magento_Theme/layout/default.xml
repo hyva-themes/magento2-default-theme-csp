@@ -14,6 +14,7 @@
 
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\FormKey" name="formkey" />
+            <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="Magento_Theme::html/notices.phtml"/>
         </referenceContainer>
 
         <referenceContainer name="page.messages">
