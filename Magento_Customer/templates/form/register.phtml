@@ -290,7 +290,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                                         <input type="text" name="street[]"
                                                value="<?= $escaper->escapeHtmlAttr($block
                                                    ->getFormData()
-                                                   ->getStreetLine($i - 1)) ?>"
+                                                   ->getStreet($i - 1)) ?>"
                                                title="<?= $escaper
                                                    ->escapeHtmlAttr(__('Street Address %1', $i)) ?>"
                                                id="street_<?= (int) $i ?>"
@@ -371,7 +371,7 @@ $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
                         <input type="text"
                                name="postcode"
                                x-ref="postcode"
-                               value=""
+                               value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getPostcode()) ?>"
                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                                id="zip"
                                :required="isZipRequired"
