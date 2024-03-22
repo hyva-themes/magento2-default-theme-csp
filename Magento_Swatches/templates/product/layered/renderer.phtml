@@ -10,6 +10,7 @@ use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Swatches\Block\LayeredNavigation\RenderLayered;
+use Magento\Swatches\Model\Swatch;
 use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
@@ -100,25 +101,30 @@ $swatchData = $block->getSwatchData();
                aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
                class="swatch-option-link-layered swatch-option cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
                :class="{ 'w-6 h-6' : getSwatchType('<?= (string) $swatchData['swatches'][$option]['type'] ?>') !== 'text' }"
-               :style="getSwatchBackgroundStyle(
-                    '<?= (string) $swatchData['swatches'][$option]['type'] ?>',
-                    '<?= (string) $swatchData['swatches'][$option]['value'] ?>',
-                    '<?= $escaper->escapeUrl($block->getSwatchPath(
-                        'swatch_image',
-                        $swatchData['swatches'][$option]['value']
-                    )) ?>'
-                )"
+               <?php if ((int)$swatchData['swatches'][$option]['type'] !== Swatch::SWATCH_TYPE_TEXTUAL): ?>
+                   :style="getSwatchBackgroundStyle(
+                        '<?= (string) $swatchData['swatches'][$option]['type'] ?>',
+                        '<?= (string) $swatchData['swatches'][$option]['value'] ?>',
+                        '<?= $escaper->escapeUrl($block->getSwatchPath(
+                            'swatch_image',
+                            $swatchData['swatches'][$option]['value']
+                        )) ?>'
+                    )"
+                <?php endif; ?>
                 <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
-                    <?php $swatchThumbPath = $block->getSwatchPath(
-                        'swatch_thumb',
-                        $swatchData['swatches'][$option]['value']
-                    ); ?>
+                    <?php if ((int)$swatchData['swatches'][$option]['type'] !== Swatch::SWATCH_TYPE_TEXTUAL): ?>
+                        <?php $swatchThumbPath = $block->getSwatchPath(
+                            'swatch_thumb',
+                            $swatchData['swatches'][$option]['value']
+                        ); ?>
+                    <?php endif; ?>
+
                     @mouseenter.self="activeTooltipItem = {
                             attribute: '<?= $escaper->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?>',
                             type: '<?= $escaper->escapeHtmlAttr($swatchData['swatches'][$option]['type']) ?>',
                             id: '<?= $escaper->escapeHtmlAttr($option) ?>',
                             label: '<?= $escaper->escapeHtmlAttr($label['label']) ?>',
-                            thumb: '<?= $escaper->escapeUrl($swatchThumbPath) ?>',
+                            thumb: '<?= $escaper->escapeUrl($swatchThumbPath ?? '') ?>',
                             value: '<?= $escaper->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?>'
                         }; tooltipPositionElement = $event.target;"
                     @mouseleave.self="activeTooltipItem = false"
