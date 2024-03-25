@@ -12,6 +12,7 @@ use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Recent;
 use Magento\Sales\Helper\Reorder;
+use Magento\Sales\Model\Order;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
@@ -22,6 +23,7 @@ use Magento\Sales\Helper\Reorder;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var Order[] $orders */
 $orders = $block->getOrders();
 $count  = count($orders);
 ?>
@@ -104,9 +106,7 @@ $count  = count($orders);
                                 </span>
                             </td>
                             <td class="p-2">
-                                <?php if ($order->getBillingAddress() && $order->getBillingAddress()->getCompany()): ?>
-                                    <?= $escaper->escapeHtml($order->getBillingAddress()->getCompany()) ?>
-                                <?php endif; ?>
+                                <?= $order->getShippingAddress() ? $block->escapeHtml($order->getShippingAddress()->getName()) : '&nbsp;' ?>
                             </td>
                             <td class="p-2 hidden lg:table-cell">
                                 <?= /* @noEscape */ $order->formatPrice($order->getGrandTotal()) ?>
