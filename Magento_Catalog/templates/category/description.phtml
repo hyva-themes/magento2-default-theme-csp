@@ -21,12 +21,8 @@ use Magento\Framework\Escaper;
 $categoryOutput = $viewModels->require(CategoryOutput::class);
 ?>
 
-<?php if ($description = $block->getCurrentCategory()->getDescription()) :?>
+<?php if ($description = $block->getCurrentCategory()->getDescription()): ?>
     <div class="category-description max-w-4xl">
-        <?= /* @noEscape */ $categoryOutput->categoryAttribute(
-            $block->getCurrentCategory(),
-            $description,
-            'description'
-        ) ?>
+        <?= /* @noEscape */ $categoryOutput->categoryAttribute($block->getCurrentCategory(), $description, 'description') ?>
     </div>
 <?php endif; ?>
