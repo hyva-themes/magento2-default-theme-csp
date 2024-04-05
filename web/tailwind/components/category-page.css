@@ -1,3 +1,8 @@
 #category-view-container {
     @apply px-0 py-4 flex flex-col items-center;
 }
+
+/*
+Use the following selector to extend the toolbar modes switcher with your own icon.
+.modes-mode.mode-grid {}
+*/
