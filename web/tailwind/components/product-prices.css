@@ -1,4 +1,6 @@
-.price-including-tax + .price-excluding-tax {
+
+.price-including-tax + .price-excluding-tax
+{
     @apply text-sm;
 
     &:before {
