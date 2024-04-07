@@ -39,6 +39,7 @@ $viewMode = 'grid';
 $imageDisplayArea = 'category_page_grid';
 $showDescription = false;
 
+$name = (string) $block->getName();
 $title = (string) $block->getTitle();
 $headingTag = $block->getData('heading_tag') ?: 'h3';
 $items = $block->getItems() ?? [];
@@ -140,12 +141,13 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
     class="<?= $escaper->escapeHtmlAttr($sliderSectionClasses) ?>"
     x-data="initSliderComponent()"
     x-init="calcPageSize();"
-    x-id="['slider-nav', 'slider-end', 'slider-desc', 'slider-id']"
+    x-id="['slider-nav', 'slider-desc', 'slider-id']"
     @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
     role="group"
     aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Carousel %1', $title)) ?>"
     :aria-describedby="$id('slider-desc')"
+    x-defer="intersect"
 >
     <?php if ($items): ?>
         <div class="relative">
@@ -166,7 +168,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
             </span>
 
             <a
-                :href="`#${$id('slider-end')}`"
+                href="#<?= $escaper->escapeHtmlAttr($name) ?>-slider-end"
                 class="action skip sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
             >
                 <?= $escaper->escapeHtml(__('Press to skip carousel')) ?>
@@ -208,7 +210,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                     <?php endfor; ?>
                 </div>
             </div>
-            <div style="min-height: 65px">
+            <div style="min-height: 76px">
             <template x-if="itemCount > pageSize">
                 <div
                     class="flex items-center justify-center py-4"
@@ -259,7 +261,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                 </div>
             </template>
             </div>
-            <span :id="$id('slider-end')" tabindex="-1"></span>
+            <span id="<?= $escaper->escapeHtmlAttr($name) ?>-slider-end" tabindex="-1"></span>
         </div>
     <?php endif; ?>
 </section>

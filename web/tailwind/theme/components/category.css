@@ -1,1 +1,3 @@
-/* .category-view .sidebar .block.filter {} */
+.category-view {
+    .sidebar .block.filter {}
+}
