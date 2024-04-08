@@ -61,6 +61,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   The dependency is updated because of new layout XML resets for the Magento_OrderCancellationUi module introduced in Magento 2.4.7.
 
+- **Fix page default title styling**
+
+  For more information, please refer to [issue #966](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/966).
+
 ### Removed
 
 - Nothing removed
