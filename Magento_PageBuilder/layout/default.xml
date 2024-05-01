@@ -38,7 +38,7 @@
                         <item name="template" xsi:type="string">Magento_PageBuilder::widgets/map.phtml</item>
                     </item>
                     <item name="page_builder.parallax" xsi:type="array">
-                        <item name="regex" xsi:type="string">/data-enable-parallax="1"/</item>
+                        <item name="regex" xsi:type="string">/data-enable-parallax="1"|data-background-type="video"/</item>
                         <item name="template" xsi:type="string">Magento_PageBuilder::widgets/parallax.phtml</item>
                     </item>
                     <item name="page_builder.show.on.hover" xsi:type="array">

@@ -49,7 +49,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 // removing it is a backward compatibility-breaking change.
 // So we won't do that. Removing it from the template, however, is backward compatible, so here it is.
 if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPrice::PRICE_CODE] ?? null) {
-    if ($msrpPrice->canApplyMsrp($product)) {
+    if ($msrpPrice->canApplyMsrp($product) && $msrpPrice->isMinimalPriceLessMsrp($product)) {
         if (! ($priceRender = $block->getLayout()->getBlock('product.price.render.default'))) {
             $priceRender = $block->getLayout()->createBlock(
                 Render::class,

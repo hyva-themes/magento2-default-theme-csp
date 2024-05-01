@@ -34,6 +34,7 @@ $wishlistViewModel    = $viewModels->require(Wishlist::class);
 $compareViewModel     = $viewModels->require(ProductCompare::class);
 $storeViewModel       = $viewModels->require(Store::class);
 
+$sliderName        = str_replace('.', '_', $block->getNameInLayout());
 $categoryIds       = $block->getData('category_ids') ?: '';
 $isAnchorCategory  = $block->getData('include_child_category_products');
 $pageSize          = $block->getData('page_size') ?: 8;
@@ -116,6 +117,7 @@ if (in_array($type, ['related', 'upsell', 'crosssell'], true)) {
 $sliderHtml = $sliderViewModel->getSliderForItems($itemTemplate, $items, $containerTemplate)
     ->setData('hide_details', $hideDetails)
     ->setData('hide_rating_summary', $hideRatingSummary)
+    ->setData('name', $sliderName)
     ->setData('title', $title)
     ->setData('item_relation_type', $type)
     ->setData('heading_tag', $headingTag)

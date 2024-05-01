@@ -26,6 +26,17 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 /** @var Order[] $orders */
 $orders = $block->getOrders();
 $count  = count($orders);
+
+$extraActions = [];
+if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-extra-action-titles')) {
+    foreach ($extraActionTitleBlocks as $alias => $extraActionTitleBlock) {
+        $extraActions[$alias] = $extraActionTitleBlock->toHtml();
+    }
+    $extraActions = array_filter($extraActions, function ($output, string $alias) use ($block): bool {
+        return trim($output) && $block->getLayout()->getChildBlock('order-list-extra-action-buttons', $alias);
+    }, ARRAY_FILTER_USE_BOTH);
+}
+
 ?>
 <div
     class="block block-dashboard-orders card mt-4"
@@ -77,6 +88,9 @@ $count  = count($orders);
                             <?php if ($this->helper(Reorder::class)->isAllow()): ?>
                                 / <?= $escaper->escapeHtml(__('Reorder')) ?>
                             <?php endif; ?>
+                            <?php foreach ($extraActions as $extraActionTitle): ?>
+                                / <?= /** @noEscape  */ $extraActionTitle ?>
+                            <?php endforeach; ?>
                         </th>
                     </tr>
                 </thead>
@@ -150,7 +164,13 @@ $count  = count($orders);
                                                     <?= $heroicons->refreshHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
                                                 </button>
                                             </form>
+                                        <?php else: ?>
+                                            <?= $heroicons->refreshHtml('text-gray-300', 24, 24, ['aria-hidden' => 'true']) ?>
                                         <?php endif ?>
+                                        <?php foreach (array_keys($extraActions) as $alias): ?>
+                                            <?php $button = $block->getLayout()->getChildBlock('order-list-extra-action-buttons', $alias) ?>
+                                            <?= $button->assign('order', $order)->setData('order', $order)->toHtml() ?>
+                                        <?php endforeach; ?>
                                     </div>
                                 <?php endif; ?>
                             </td>

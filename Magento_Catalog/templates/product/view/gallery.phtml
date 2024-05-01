@@ -65,8 +65,8 @@ $productName = $block->getProduct()->getName();
         :aria-label="fullscreen ? '<?= $escaper->escapeJs(__('Gallery modal fullscreen')) ?>' : false"
     >
         <div class="relative self-center w-full"
-             @touchstart="handleTouchStart"
-             @touchmove="handleTouchMove"
+             @touchstart.passive="handleTouchStart"
+             @touchmove.passive="handleTouchMove"
              x-transition:enter="ease-out duration-500"
              x-transition:enter-start="opacity-0"
              x-transition:enter-end="opacity-100"
