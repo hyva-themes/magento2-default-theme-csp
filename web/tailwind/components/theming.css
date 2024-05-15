@@ -35,7 +35,7 @@ body {
 }
 
 .card {
-    @apply p-4 rounded-sm bg-container-lighter shadow print:shadow-none print:border;
+    @apply p-4 rounded-sm bg-container-lighter shadow print:border;
 }
 
 .card-interactive {
