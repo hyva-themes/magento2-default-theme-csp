@@ -13,7 +13,6 @@
     </head>
     <body>
         <attribute name="class" value="page-print"/>
-        <attribute name="class" value="p-4"/>
         <referenceContainer name="header.container" remove="true"/>
         <referenceBlock name="page.top" remove="true"/>
         <referenceContainer name="div.sidebar.main" remove="true"/>
