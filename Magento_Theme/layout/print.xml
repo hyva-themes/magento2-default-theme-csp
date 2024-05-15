@@ -20,6 +20,12 @@
         <referenceContainer name="footer-container" remove="true"/>
         <move element="logo" destination="main.content" before="-" />
         <referenceBlock name="copyright" remove="true"/>
+
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\SalesLogoPathResolver</argument>
+            </arguments>
+        </referenceBlock>
         <referenceContainer name="before.body.end">
             <block class="Magento\Framework\View\Element\Template" name="sales.order.print.js" template="Magento_Theme::html/print.phtml" />
         </referenceContainer>
