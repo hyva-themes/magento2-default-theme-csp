@@ -7,7 +7,112 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.7...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.9...main
+
+## [1.3.9] - 2024-05-10
+
+[1.3.9]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.8...1.3.9
+
+### Added
+
+- **Add x-cloak to Hyva_Theme loader template**
+
+  For more information, please refer to [issue #984](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/984).
+
+### Changed
+
+- **Fix self-closing iframe for videos in product gallery**
+
+  For more information, please refer to [issue #995](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/995).
+
+- **Use attribute code not value for constructed product info CSS class name**
+
+  For more information, please refer to [issue #985](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/985).
+
+### Removed
+
+- **Remove duplicate form attribute from input element**
+
+  For more information, please refer to [issue #1003](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1003).
+
+  Many thanks to Guus Portegies (Cees&co) for the contribution!
+
+- **Remove unused variable from product/list/item template**
+
+  For more information, please refer to [issue #1004](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1004).
+
+  Many thanks to Guus Portegies (Cees&co) for the contribution!
+
+## [1.3.8] - 2024-04-25
+
+[1.3.8]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.7...1.3.8
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Correctly calculate the price for fixed-price bundled products**
+
+  For more information, please refer to [issue #973](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/973).
+
+- **Clean up the CSS in the default theme to reduce the size of the generated styles.css file**
+
+  For more information, please refer to [merge request #1096](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1096).
+
+- **Avoid showing order cancellation button in 2.4.7 if disabled in backend**
+
+  For more information, please refer to [issue #971](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/971).
+
+- **Check if the price label node is present before mutating classList**
+
+  In Magento 2.4.7, configurable product prices don't always include the "As low as" label.  
+  For more information, please refer to [issue #988](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/988).
+
+- **Remove translation of empty string in Magento_OrderCancellationUi**
+
+  The translation of an empty string __('') breaks the bin/magento i18n:collect-phrases command, so it is better to render nothing instead.
+
+  For more information, please refer to [issue #970](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/970).
+
+- **Fixed Page Builder Banner Background Video Does Not Display**
+
+  For more information, please refer to [issue #972](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/972).
+
+- **Use escapeJs instead of escapeHtml in a JavaScript string context**
+
+  For more information, please refer to [merge request #1102](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1102).
+
+  Many thanks to Arjen Miedema (JC-Electronics) for the contribution!
+
+- **Use referenceBlock instead of referenceContainer in GiftMessage layout**
+
+  For more information, please refer to [merge request #1104](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1104).
+
+  Many thanks to Vincent MARMIESSE (ph2m) for the contribution!
+
+- **Remove superfluous duplicate $order var declaration**
+
+  For more information, please refer to [merge request #1106](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1106).
+
+  Many thanks to Andrew Millar (Elgentos) for the contribution!
+
+- **Fix product option prices are placed below the option name**
+
+  For more information, please refer to [issue #979](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/979).
+
+- **Fix MSRP popover overflows on smaller mobile devices**
+
+  For more information, please refer to [issue #980](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/980).
+
+- **Update reset-theme dependency version constraint to pull in 2.4.7 compatibility updates**
+
+  The default-theme now depends on hyva-themes/magento2-reset-theme >= 1.1.7, which has been updated to include all layout changes added in Magento 2.4.7.
+
+### Removed
+
+- Nothing removed
 
 ## [1.3.7] - 2024-04-08
 
