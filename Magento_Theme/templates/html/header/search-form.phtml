@@ -82,11 +82,17 @@ $helper = $this->helper(SearchHelper::class);
     }
 </script>
 <div class="container py-2 mx-auto text-black" x-data="initMiniSearch()">
-    <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search()"
-          action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get" role="search">
-        <div class="flex">
-            <label class="sr-only" for="search" data-role="minisearch-label">
-                <span><?= $escaper->escapeHtml(__('Search')) ?></span>
+    <search title="<?= $escaper->escapeHtmlAttr(__('Store')) ?>" role="search">
+        <form
+            id="search_mini_form"
+            class="form minisearch flex"
+            action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>"
+            method="get"
+            @submit.prevent="search()"
+            x-ref="form"
+        >
+            <label class="sr-only" for="search">
+                <?= $escaper->escapeHtml(__('Search')) ?>
             </label>
             <input
                 id="search"
@@ -97,7 +103,7 @@ $helper = $this->helper(SearchHelper::class);
                 value="<?= /** @noEscape */ $helper->getEscapedQueryText() ?>"
                 placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
                 maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
-                class="w-full text-lg leading-normal lg:text-xl text-grey-800 focus:border-transparent focus:outline-none rounded-l"
+                class="w-full text-lg lg:text-xl text-grey-800 focus:border-transparent focus:outline-none rounded-l"
                 @focus.once="suggest"
                 @input.debounce.300="suggest"
                 @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
@@ -105,13 +111,12 @@ $helper = $this->helper(SearchHelper::class);
             >
             <button
                 type="submit"
-                class="btn btn-primary rounded-l-none rounded-r shrink-0 p-3 action search"
-                title="<?= $escaper->escapeHtml(__('Search')) ?>"
-                aria-label="<?= $escaper->escapeHtml(__('Search')) ?>"
+                class="action search btn btn-primary rounded-l-none rounded-r shrink-0 p-3 shadow-none"
+                title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
             >
                 <?= $heroicons->searchHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
             </button>
-        </div>
         <template x-if="suggestions.length > 0">
             <div class="w-full leading-normal transition appearance-none text-grey-800 flex flex-col mt-1">
                 <template x-for="suggestion in suggestions">
@@ -131,5 +136,6 @@ $helper = $this->helper(SearchHelper::class);
                 </template>
             </div>
         </template>
-    </form>
+        </form>
+    </search>
 </div>
