@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+ -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.cart.item.renderers.default.actions">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.default.actions.gift_options.container" template="Magento_GiftMessage::php-cart/item/gift-options-container.phtml" before="-" cacheable="false">
+                <arguments>
+                    <argument name="slide_out_drawer" xsi:type="boolean">true</argument>
+                </arguments>
+                <block name="checkout.cart.item.renderers.default.actions.gift_options.body" as="gift-options-body" template="Magento_GiftMessage::php-cart/gift-options-body.phtml">
+                    <block class="Magento\GiftMessage\Block\Cart\GiftOptions" as="gift-message" name="checkout.cart.item.renderers.default.gift.message" template="Magento_GiftMessage::php-cart/gift-message-form.phtml"/>
+                    <container name="checkout.cart.item.renderers.default.actions.gift_options.additional" as="additional-options" htmlTag="div" htmlClass="additional-options" />
+                </block>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="checkout.cart.item.renderers.simple.actions">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.simple.actions.gift_options" template="Magento_GiftMessage::php-cart/item/gift-options-container.phtml" before="-" cacheable="false">
+                <arguments>
+                    <argument name="slide_out_drawer" xsi:type="boolean">true</argument>
+                </arguments>
+                <block name="checkout.cart.item.renderers.simple.actions.gift_options.body" as="gift-options-body" template="Magento_GiftMessage::php-cart/gift-options-body.phtml">
+                    <block class="Magento\GiftMessage\Block\Cart\GiftOptions" as="gift-message" name="checkout.cart.item.renderers.simple.gift.message" template="Magento_GiftMessage::php-cart/gift-message-form.phtml"/>
+                    <container name="checkout.cart.item.renderers.simple.actions.gift_options.additional" as="additional-options" htmlTag="div" htmlClass="additional-options" />
+                </block>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="checkout.cart.item.renderers.bundle.actions">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.bundle.actions.gift_options" template="Magento_GiftMessage::php-cart/item/gift-options-container.phtml" before="-" cacheable="false">
+                <arguments>
+                    <argument name="slide_out_drawer" xsi:type="boolean">true</argument>
+                </arguments>
+                <block name="checkout.cart.item.renderers.bundle.actions.gift_options.body" as="gift-options-body" template="Magento_GiftMessage::php-cart/gift-options-body.phtml">
+                    <block class="Magento\GiftMessage\Block\Cart\GiftOptions" as="gift-message" name="checkout.cart.item.renderers.bundle.gift.message" template="Magento_GiftMessage::php-cart/gift-message-form.phtml"/>
+                    <container name="checkout.cart.item.renderers.bundle.actions.gift_options.additional" as="additional-options" htmlTag="div" htmlClass="additional-options" />
+                </block>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="checkout.cart.item.renderers.grouped.actions">
+            <!-- grouped products are rendered as simple items in the cart, no individual item gift message renderer declaration necessary -->
+        </referenceBlock>
+
+        <referenceBlock name="checkout.cart.item.renderers.configurable.actions">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.configurable.actions.gift_options" template="Magento_GiftMessage::php-cart/item/gift-options-container.phtml" before="-" cacheable="false">
+                <arguments>
+                    <argument name="slide_out_drawer" xsi:type="boolean">true</argument>
+                </arguments>
+                <block name="checkout.cart.item.renderers.configurable.actions.gift_options.body" as="gift-options-body" template="Magento_GiftMessage::php-cart/gift-options-body.phtml">
+                    <block class="Magento\GiftMessage\Block\Cart\GiftOptions" as="gift-message" name="checkout.cart.item.renderers.configurable.gift.message" template="Magento_GiftMessage::php-cart/gift-message-form.phtml"/>
+                    <container name="checkout.cart.item.renderers.configurable.actions.gift_options.additional" as="additional-options" htmlTag="div" htmlClass="additional-options" />
+                </block>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="checkout.cart.item.renderers.gift-card.actions">
+            <block class="Magento\GiftMessage\Block\Cart\Item\Renderer\Actions\GiftOptions" name="checkout.cart.item.renderers.gift-card.actions.gift_options" template="Magento_GiftMessage::php-cart/item/gift-options-container.phtml" before="-" cacheable="false">
+                <arguments>
+                    <argument name="slide_out_drawer" xsi:type="boolean">true</argument>
+                </arguments>
+                <block name="checkout.cart.item.renderers.gift-card.actions.gift_options.body" as="gift-options-body" template="Magento_GiftMessage::php-cart/gift-options-body.phtml">
+                    <block class="Magento\GiftMessage\Block\Cart\GiftOptions" as="gift-message" name="checkout.cart.item.renderers.gift-card.gift.message" template="Magento_GiftMessage::php-cart/gift-message-form.phtml"/>
+                    <container name="checkout.cart.item.renderers.gift-card.actions.gift_options.additional" as="additional-options" htmlTag="div" htmlClass="additional-options" />
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

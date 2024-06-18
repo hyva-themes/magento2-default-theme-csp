@@ -8,6 +8,7 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Block\Product\View\Options\Type\Text;
@@ -23,30 +24,33 @@ $product = $block->getProduct();
 
 /** @var Option $option */
 $option = $block->getOption();
-
+$optionId = $option->getId();
 /** @var ProductPrice $productPriceViewModel */
 $productPriceViewModel = $viewModels->require(ProductPrice::class);
 $optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptionPrice::PRICE_CODE, $product);
+if ($productPriceViewModel->displayPriceInclAndExclTax()) {
+    $optionBasePrice = $productPriceViewModel->getCustomOptionPriceExclTax($option, CustomOptionPrice::PRICE_CODE, $product);
+}
 ?>
 
 <div class="flex flex-col sm:flex-row border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-700 text-left w-full sm:w-1/2"
-           for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text">
+           for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
+           x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
+    >
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>
             <span class="sup text-sm">*</span>
         <?php endif; ?>
-        <span x-html="getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($option->getId()) ?>) || ''">
-            <?= /* @noEscape */ $block->getFormattedPrice() ?>
-        </span>
+        <span><?= /* @noEscape */ $block->getFormattedPrice() ?></span>
     </label>
 
     <div class="sm:ml-2 text-gray-900 text-left w-full sm:w-1/2">
         <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_FIELD): ?>
             <input type="text"
-                   id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text"
+                   id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
                    class="product-custom-option form-input w-full"
-                   name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
+                   name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>]"
                    value="<?= $escaper->escapeHtml($block->getDefaultValue()) ?>"
                    <?php if ($option->getMaxCharacters()): ?>
                    maxlength="<?= (int)$option->getMaxCharacters() ?>"
@@ -54,36 +58,36 @@ $optionPrice = $productPriceViewModel->getCustomOptionPrice($option, CustomOptio
                    <?= $option->getIsRequire() ? 'required' : '' ?>
                    data-price-amount="<?= $escaper->escapeHtmlAttr($optionPrice) ?>"
                    data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
-                   data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
-                   x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+                   data-option-id="<?= $escaper->escapeHtmlAttr($optionId) ?>"
+                   x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    x-on:input="updateCustomOptionValue(
                         $dispatch,
-                        '<?= $escaper->escapeHtmlAttr($option->getId()) ?>',
+                        '<?= $escaper->escapeHtmlAttr($optionId) ?>',
                         $event.target
                    )"
             />
-        <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA):?>
-            <textarea id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text"
+        <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
+            <textarea id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
                       class="product-custom-option form-textarea"
                       <?php if ($option->getMaxCharacters()): ?>
                       maxlength="<?= (int)$option->getMaxCharacters() ?>"
                       <?php endif; ?>
                       <?= $option->getIsRequire() ? 'required' : '' ?>
-                      name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
+                      name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>]"
                       rows="5"
                       cols="25"
                       data-price-amount="<?= $escaper->escapeHtmlAttr($optionPrice) ?>"
                       data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
-                      data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
-                      x-ref="option-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+                      data-option-id="<?= $escaper->escapeHtmlAttr($optionId) ?>"
+                      x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"
                       x-on:input="updateCustomOptionValue(
                         $dispatch,
-                        '<?= $escaper->escapeHtmlAttr($option->getId()) ?>',
+                        '<?= $escaper->escapeHtmlAttr($optionId) ?>',
                         $event.target
                    )"
             ><?= $escaper->escapeHtml($block->getDefaultValue()) ?></textarea>
         <?php endif; ?>
-        <?php if ($option->getMaxCharacters()):?>
+        <?php if ($option->getMaxCharacters()): ?>
             <p class="note text-sm">
                 <?= $escaper->escapeHtml(__('Maximum %1 characters', $option->getMaxCharacters())) ?>
             </p>

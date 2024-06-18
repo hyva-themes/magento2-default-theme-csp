@@ -1,0 +1,117 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\Framework\Escaper;
+use Magento\GiftMessage\Block\Cart\GiftOptions;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+
+/** @var Escaper $escaper */
+/** @var GiftOptions $block */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var ViewModelRegistry $viewModels */
+/** @var HeroiconsOutline $heroicons */
+/** @var StoreConfig $storeConfigViewModel */
+
+$storeConfigViewModel = $viewModels->require(StoreConfig::class);
+
+$isItemLevelGiftOptionsEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/allow_items');
+// Gift Wrapping is a feature for Adobe Commerce Only. On Magento Open Source this config value will always return null.
+$isItemLevelGiftWrappingEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/wrapping_allow_items');
+
+if (! $isItemLevelGiftOptionsEnabled && ! $isItemLevelGiftWrappingEnabled) {
+    return;
+}
+
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$slideOutDrawer = (bool) $block->getSlideOutDrawer();
+?>
+<div x-data="initGiftItemOptions({itemId: '<?= (int) $block->getItem()->getId() ?>'})" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
+    <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || isGiftWrapEnabled || hasActiveOptions">
+        <button
+            type="button"
+            x-ref="giftOptionsTrigger"
+            @click="openDialog"
+            class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline"
+            :aria-expanded="formBlockVisibility"
+            aria-haspopup="dialog"
+        >
+            <?= $escaper->escapeHtml(__('Gift options')) ?>
+            <?php if (!$slideOutDrawer): ?>
+                <span x-show="!formBlockVisibility" aria-hidden="true">
+                    <?= $heroicons->chevronDownHtml('inline-block', 16, 16) ?>
+                </span>
+                <span x-show="formBlockVisibility" aria-hidden="true">
+                    <?= $heroicons->chevronUpHtml('inline-block', 16, 16) ?>
+                </span>
+            <?php endif ?>
+        </button>
+    </div>
+    <?php if ($slideOutDrawer): ?>
+        <div role="dialog"
+            aria-labelledby="enquiry-form-drawer-title-<?= (int) $block->getItem()->getId() ?>"
+            aria-modal="true"
+            @keydown.window.escape="closeDialog"
+            class="fixed inset-y-0 right-0 z-30 flex max-w-full"
+            x-init="hyva.trapFocus($refs['giftOptionsDialog'])"
+            :aria-hidden="!formBlockVisibility"
+        >
+            <div
+                class="backdrop"
+                x-show="formBlockVisibility"
+                x-transition:enter="ease-in-out duration-500"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="ease-in-out duration-500"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                @click="closeDialog"
+                aria-hidden="true"
+            ></div>
+            <div
+                class="relative w-screen max-w-md shadow-2xl bg-white p-8 flex flex-col overflow-y-auto"
+                x-show="formBlockVisibility"
+                x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+                x-transition:enter-start="translate-x-full"
+                x-transition:enter-end="translate-x-0"
+                x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+                x-transition:leave-start="translate-x-0"
+                x-transition:leave-end="translate-x-full"
+                x-ref="giftOptionsDialog"
+            >
+                <div class="relative">
+                    <h2 class="text-lg font-medium leading-7 text-gray-900 "><?= $escaper->escapeHtml('Item Gift Options') ?></h2>
+                    <button type="button"
+                            class="absolute top-0 right-0 cursor-pointer"
+                            @click.prevent="closeDialog"
+                            aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+                    >
+                        <?= $heroicons->xHtml('inline-block', 24, 24, ["aria-hidden" => "true"]) ?>
+                    </button>
+                </div>
+                <div class="gift-options-item" id="enquiry-form-drawer-title-<?= (int) $block->getItem()->getId() ?>">
+                    <span><?= $escaper->escapeHtml($block->getItem()->getName()) ?></span>
+                </div>
+                <?= $block->getChildHtml('gift-options-body') ?>
+            </div>
+        </div>
+    <?php else: ?>
+        <?= $block->getChildHtml('gift-options-body') ?>
+    <?php endif ?>
+    <div x-show="(resultBlockVisibility && !formBlockVisibility) || (resultBlockVisibility && inSlideOut)" class="gift-summary pt-2" @click="formBlockVisibility = true">
+        <div class="additional-options-summary"></div>
+        <div x-show="savedFormMessage.message">
+            <span><?= $escaper->escapeHtml(__('Message:')) ?></span> <span x-text="savedFormMessage.message"></span>
+        </div>
+    </div>
+</div>

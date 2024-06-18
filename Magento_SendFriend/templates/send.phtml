@@ -45,7 +45,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
               @submit.prevent="submitForm()"
         >
             <?= $block->getBlockHtml('formkey') ?>
-            <?= $recaptcha ? $recaptcha->getInputHtml('sendfriend') : '' ?>
+            <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_SEND_FRIEND) : '' ?>
             <fieldset class="fieldset sender" id="sender_options">
                 <legend class="legend"><span><?= $escaper->escapeHtml(__('Sender')) ?></span></legend>
                 <br>
@@ -160,7 +160,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                     class="mt-4 btn btn-secondary"
                                     @click="addNewField()"
                             >
-                                <?= $escaper->escapeHtml(__('+ Add Invitee')) ?>
+                                + <?= $escaper->escapeHtml(__('Add Invitee')) ?>
                             </button>
                         </div>
                     </div>
@@ -170,14 +170,14 @@ $recipients = $formData->getRecipientData() ?? '[]';
             </div>
             <?= $block->getChildHtml('captcha'); ?>
             <div class="w-full grecaptcha-legal">
-                <?= $recaptcha ? $recaptcha->getLegalNoticeHtml('sendfriend') : '' ?>
+                <?= $recaptcha ? $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_SEND_FRIEND) : '' ?>
             </div>
             <div class="actions-toolbar">
                 <div class="primary">
                     <button type="submit"
                             class="action submit primary"
                         <?php if (!$block->canSend()): ?>
-                            disabled="disabled"
+                            disabled
                         <?php endif ?>
                     >
                         <span>
@@ -236,7 +236,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                 ], 10000);
                                 return false;
                             }
-                            <?= $recaptcha ? $recaptcha->getValidationJsHtml('sendfriend') : '' ?>
+                            <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_SEND_FRIEND) : '' ?>
 
                             if (this.errors === 0) {
                                 $form.submit();

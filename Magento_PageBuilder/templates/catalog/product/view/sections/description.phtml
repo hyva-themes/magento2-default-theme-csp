@@ -1,0 +1,32 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Hyva\Theme\ViewModel\ProductPage;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var ProductPage $productViewModel */
+/** @var Product $product */
+
+$productViewModel = $viewModels->require(ProductPage::class);
+$product = $productViewModel->getProduct();
+
+if (!$product->getDescription()) {
+    return;
+}
+?>
+
+<?= $productViewModel->productAttributeHtml($product, $product->getDescription(), 'description') ?>
+

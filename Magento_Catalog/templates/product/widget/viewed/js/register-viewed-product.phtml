@@ -11,8 +11,12 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\Currency;
+use Hyva\Theme\ViewModel\ProductPrice;
 use Hyva\Theme\ViewModel\RecentlyViewedProducts;
+use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Catalog\Block\Product\Image;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
@@ -23,13 +27,18 @@ use Magento\Framework\View\Element\Template;
 /** @var ProductPage $productPage */
 /** @var Currency $viewModelCurrency */
 /** @var Image|null $productImage */
+/** @var StoreConfig $viewModelStoreConfig */
 
-$recentlyViewed    = $viewModels->require(RecentlyViewedProducts::class);
-$productPage       = $viewModels->require(ProductPage::class);
-$currentProduct    = $productPage->getProduct();
-$viewModelCurrency = $viewModels->require(Currency::class);
+$recentlyViewed       = $viewModels->require(RecentlyViewedProducts::class);
+$productPage          = $viewModels->require(ProductPage::class);
+$currentProduct       = $productPage->getProduct();
+$viewModelCurrency    = $viewModels->require(Currency::class);
+$viewModelStoreConfig = $viewModels->require(StoreConfig::class);
+$productPrice         = $viewModels->require(ProductPrice::class);
+
+$productUrlSuffix  = $viewModelStoreConfig->getStoreConfig('catalog/seo/product_url_suffix');
 $currentProductSku = $currentProduct ? $currentProduct->getSku() : '';
-$productImage = $currentProduct
+$productImage      = $currentProduct
     ? $productPage->getImage($currentProduct, 'category_page_grid')
     : null;
 
@@ -44,26 +53,14 @@ if (! $recentlyViewed->isRecentlyViewedProductsEnabled()) {
 
         const useGraphQL = <?= /** @noEscape */ $recentlyViewed->isFetchRecentlyViewedEnabled() ? 'true' : 'false' ?>;
 
-        <?php /** This method returns the data structure to store in local storage if GraphQL is NOT queried. */ ?>
-        <?php /** It is declared in global scope to allow overriding should additional attributes be required. */ ?>
+        <?php /* This method returns the data structure to store in local storage if GraphQL is NOT queried. */ ?>
+        <?php /* It is declared in global scope to allow overriding should additional attributes be required. */ ?>
+        <?php /* Note the GraphQL API does not support prices incl + excl tax. */ ?>
+        <?php /* Set catalog/recently_products/synchronize_with_backend to No if this display mode is configured. */ ?>
         function getCurrentProductDataForRecentlyViewedList() {
             <?php if (! $currentProduct): ?>
             return {};
             <?php else: ?>
-
-            function findUrlSuffix(url) {
-                let suffix = url.lastIndexOf('.') !== -1
-                    ? url.substr(url.lastIndexOf('.'))
-                    : '';
-                if (suffix.indexOf('?') !== -1) {
-                    suffix = suffix.substring(0, suffix.indexOf('?'))
-                }
-                if (suffix.indexOf('#') !== -1) {
-                    suffix = suffix.substring(0, suffix.indexOf('#'))
-                }
-                return suffix;
-            }
-
             // Match GraphQL response structure
             return {
                 id: <?= (int) $currentProduct->getId() ?>,
@@ -73,17 +70,21 @@ if (! $recentlyViewed->isRecentlyViewedProductsEnabled()) {
                     url: '<?= $escaper->escapeJs($escaper->escapeUrl($productImage->getImageUrl())) ?>'
                 },
                 url_key: '<?= $escaper->escapeJs($currentProduct->getUrlKey()) ?>',
-                url_suffix: findUrlSuffix('<?= $escaper->escapeJs($currentProduct->getUrlInStore()) ?>'),
+                url_suffix: '<?= $escaper->escapeJs($productUrlSuffix) ?>',
                 visibility: <?= (int) $currentProduct->getVisibility() ?>,
                 status: <?= (int) $currentProduct->getStatus() ?>,
                 price_range: {
                     minimum_price: {
                         regular_price: {
-                            value: <?= (float) $currentProduct->getPrice() ?>,
+                            value: <?= (float) $productPrice->getPriceValue(RegularPrice::PRICE_CODE, $currentProduct) ?>,
                             currency: '<?= $escaper->escapeJs($viewModelCurrency->getCurrentCurrencyCode()) ?>'
                         },
                         final_price: {
-                            value: <?= (float) $currentProduct->getFinalPrice() ?>,
+                            value: <?= (float) $productPrice->getPriceValue(FinalPrice::PRICE_CODE, $currentProduct) ?>,
+                            currency: '<?= $escaper->escapeJs($viewModelCurrency->getCurrentCurrencyCode()) ?>'
+                        },
+                        base_price: {
+                            value: <?= (float) $productPrice->getPriceValueExclTax(FinalPrice::PRICE_CODE, $currentProduct) ?>,
                             currency: '<?= $escaper->escapeJs($viewModelCurrency->getCurrentCurrencyCode()) ?>'
                         }
                     }

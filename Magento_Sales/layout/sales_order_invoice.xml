@@ -23,8 +23,8 @@
                 <block class="Magento\Sales\Block\Order\Info" name="sales.order.info"/>
                 <block class="Magento\Sales\Block\Order\Invoice\Items" name="invoice_items" template="Magento_Sales::order/invoice/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.invoice.renderers" as="renderer.list"/>
-                    <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="Magento_Sales::order/totals.phtml">
-                        <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="Magento_Tax::order/tax.phtml"/>
+                    <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="Magento_Sales::order/totals/totals.phtml">
+                        <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="Magento_Tax::order/totals/tax.phtml"/>
                     </block>
                     <block class="Magento\Sales\Block\Order\Comments" name="invoice_comments"
                            template="Magento_Sales::order/comments.phtml"/>

@@ -1,7 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
  */
 
 use Magento\Framework\Escaper;
@@ -83,6 +85,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                                             @click.prevent='hyva.postForm(<?= /* @noEscape */
                                                 $block->getSharedItemAddToCartUrl($item) ?>)'
                                             class="inline-flex btn btn-primary"
+                                            data-addto="cart"
                                     >
                                         <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                                     </button>
@@ -92,6 +95,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                                @click.prevent='hyva.postForm(<?= /* @noEscape */ $block->getAddToWishlistParams($item) ?>)'
                                id="wishlist-shared-item-<?= /* @noEscape */ $item->getId() ?>"
                                class="action towishlist underline"
+                               data-addto="wishlist"
                             >
                                 <span><?= $escaper->escapeHtml(__('Add to Wish List')) ?></span>
                             </a>

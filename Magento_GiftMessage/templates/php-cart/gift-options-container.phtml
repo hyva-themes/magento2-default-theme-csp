@@ -1,0 +1,305 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\StoreConfig;
+use Magento\Framework\Escaper;
+use Magento\GiftMessage\Block\Cart\GiftOptions;
+
+/** @var Escaper $escaper */
+/** @var GiftOptions $block */
+/** @var ViewModelRegistry $viewModels */
+/** @var HeroiconsOutline $heroicons */
+/** @var StoreConfig $storeConfigViewModel */
+
+$storeConfigViewModel = $viewModels->require(StoreConfig::class);
+
+$isOrderLevelGiftOptionsEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/allow_order');
+$isItemLevelGiftOptionsEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/allow_items');
+// Gift Wrapping is a feature for Adobe Commerce Only. On Magento Open Source these config values will always return null.
+$isOrderLevelGiftWrappingEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/wrapping_allow_order');
+$isItemLevelGiftWrappingEnabled = $storeConfigViewModel->getStoreConfig('sales/gift_options/wrapping_allow_items');
+
+if (! $isOrderLevelGiftOptionsEnabled && ! $isItemLevelGiftOptionsEnabled &&
+    ! $isOrderLevelGiftWrappingEnabled && ! $isItemLevelGiftWrappingEnabled) {
+    return;
+}
+
+$heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$slideOutDrawer = (bool) $block->getSlideOutDrawer();
+?>
+<script>
+    window.giftOptionsConfig = <?= /* @noEscape */ $block->getGiftOptionsConfigJson() ?>;
+
+    function initGiftOptions() {
+        'use strict';
+        return {
+            inSlideOut: <?= $slideOutDrawer ? 'true' : 'false' ?>,
+            formBlockVisibility: false,
+            resultBlockVisibility: false,
+            hasActiveOptions: false,
+            itemId: 'orderLevel',
+            isGiftMsgEnabled: window.giftOptionsConfig.isOrderLevelGiftOptionsEnabled,
+            <?php // Gift Wrapping is a feature for Adobe Commerce Only.
+                  // On Magento Open Source this condition will always return false. ?>
+            isGiftWrapEnabled: window.giftOptionsConfig.giftWrapping && window.giftOptionsConfig.giftWrapping.allowForOrder,
+            formMessage: {
+                recipient: null,
+                sender: null,
+                message: null,
+                alreadyAdded: null,
+            },
+            savedFormMessage: {
+                recipient: null,
+                sender: null,
+                message: null,
+                alreadyAdded: null,
+            },
+            extensionAttributes: {},
+            getMessage() {
+                return window.giftOptionsConfig.giftMessage.hasOwnProperty(this.itemId)
+                    ? window.giftOptionsConfig.giftMessage[this.itemId]
+                    : null;
+            },
+            init() {
+                const message = this.getMessage();
+                const isObject = Object.prototype.toString.call(message) === '[object Object]';
+
+                if (isObject) {
+                    this.savedFormMessage.recipient = message.recipient;
+                    this.savedFormMessage.sender = message.sender;
+                    this.savedFormMessage.message = message.message;
+                    this.savedFormMessage.alreadyAdded = true;
+                    this.formMessage = Object.assign({}, this.savedFormMessage);
+                    this.resultBlockVisibility = true;
+                }
+
+                <?php if ($slideOutDrawer): ?>
+                    const onDrawerToggle = () => {
+                        if (this.formBlockVisibility) {
+                            document.body.style.overflow = 'hidden';
+                        } else {
+                            document.body.style.overflow = null;
+                        }
+                    }
+                    this.$watch('formBlockVisibility', () => onDrawerToggle());
+                <?php endif ?>
+
+                this.initEventListeners();
+            },
+            initEventListeners() {
+                window.addEventListener('additional-gift-options-loaded-' + this.itemId, (event) => {
+                    if (this.hasActiveOptions) return;
+
+                    if (event.detail.isOrderLevelGiftOptionsEnabled) this.hasActiveOptions = true;
+                });
+
+                window.addEventListener('additional-gift-options-results-' + this.itemId, (event) => {
+                    if (this.resultBlockVisibility) return;
+
+                    this.resultBlockVisibility = event.detail.hasResults;
+                });
+
+                window.addEventListener('update-gift-options-extension-attributes-' + this.itemId, (event) => {
+                    this.extensionAttributes = Object.assign({}, this.extensionAttributes, event.detail);
+                });
+            },
+            getRestEndpoint() {
+                const restBaseUrl = BASE_URL + 'rest/' + CURRENT_STORE_CODE + '/V1/';
+                return window.giftOptionsConfig.isCustomerLoggedIn
+                    ? restBaseUrl + 'carts/mine/gift-message'
+                    : restBaseUrl + 'guest-carts/' + window.checkoutConfig.quoteData.entity_id + '/gift-message';
+            },
+            submitGiftOption() {
+
+                window.dispatchEvent(new CustomEvent('before-gift-options-submit-' + this.itemId, {
+                    detail: {}
+                }))
+
+                window.dispatchEvent(new Event('gift-message-loading-start'));
+
+                fetch(this.getRestEndpoint(), {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        gift_message: {
+                            recipient: this.formMessage.recipient,
+                            sender: this.formMessage.sender,
+                            message: this.formMessage.message,
+                            extension_attributes: this.extensionAttributes
+                        }
+                    }),
+                }).then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        console.warn("GET request failed", response);
+                    }
+                }).then(() => {
+                    this.savedFormMessage = Object.assign({}, this.formMessage);
+                    document.querySelector('form[action*="checkout/cart/updatePost/"]').submit()
+                });
+            },
+            openDialog(event) {
+                event.preventDefault()
+                this.formBlockVisibility = true
+                this.$nextTick(() => hyva.trapFocus(this.$refs['giftOptionsDialog']));
+            },
+            closeDialog() {
+                if (this.formBlockVisibility) {
+                    this.$nextTick(() => {
+                        hyva.releaseFocus(this.$refs['giftOptionsDialog'])
+                        this.$refs['giftOptionsTrigger'].focus()
+                    });
+                }
+
+                this.formBlockVisibility = false
+            }
+        }
+    }
+
+    function initGiftItemOptions(options) {
+        'use strict';
+        const itemId = options.itemId;
+        return Object.assign({}, initGiftOptions(), {
+            itemId: itemId,
+
+            isGiftMsgEnabled: window.giftOptionsConfig.isItemLevelGiftOptionsEnabled &&
+                window.giftOptionsConfig.giftMessage.itemLevel[`${itemId}`].is_available !== false,
+
+            <?php // Gift Wrapping is a feature for Adobe Commerce Only.
+                  // On Magento Open Source this condition will always return false. ?>
+            isGiftWrapEnabled: window.giftOptionsConfig.giftWrapping && window.giftOptionsConfig.giftWrapping.allowForItems &&
+                window.giftOptionsConfig.giftWrapping.itemsInfo[`${itemId}`].is_available !== false,
+
+            getMessage() {
+                return window.giftOptionsConfig.giftMessage.hasOwnProperty('itemLevel') &&
+                window.giftOptionsConfig.giftMessage.itemLevel.hasOwnProperty(itemId)
+                    ? window.giftOptionsConfig.giftMessage.itemLevel[itemId].message
+                    : null;
+            },
+
+            initEventListeners() {
+                window.addEventListener('additional-gift-options-loaded-' + itemId, (event) => {
+                    if (this.hasActiveOptions) return;
+
+                    if (event.detail.isItemLevelGiftOptionsEnabled) this.hasActiveOptions = true;
+                });
+
+                window.addEventListener('additional-gift-options-results-' + itemId, (event) => {
+                    if (this.resultBlockVisibility) return;
+
+                    this.resultBlockVisibility = event.detail.hasResults;
+                });
+
+                window.addEventListener('update-gift-options-extension-attributes-' + itemId, (event) => {
+                    this.extensionAttributes = Object.assign({}, this.extensionAttributes, event.detail);
+                });
+            },
+
+            getRestEndpoint() {
+                const restBaseUrl = BASE_URL + 'rest/' + CURRENT_STORE_CODE + '/V1/';
+                return window.giftOptionsConfig.isCustomerLoggedIn
+                    ? restBaseUrl + 'carts/mine/gift-message/' + itemId
+                    : restBaseUrl + 'guest-carts/' + window.checkoutConfig.quoteData.entity_id + '/gift-message/' + itemId;
+            }
+        })
+    }
+</script>
+<div x-data="{isLoading: false}" x-cloak
+     @gift-message-loading-start.window="isLoading = true"
+     @gift-message-loading-end.window="isLoading = false"
+>
+    <?= $block->getChildHtml('loading') ?>
+</div>
+<?php
+
+if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
+    return;
+}
+// Only render the DOM elements for order level gift options if either or both gift messages or gift wrapping are enabled
+?>
+<div x-data="initGiftOptions()" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
+    <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || isGiftWrapEnabled || hasActiveOptions">
+        <button
+            type="button"
+            x-ref="giftOptionsTrigger"
+            @click="openDialog"
+            class="cursor-pointer text-primary-lighter select-none whitespace-nowrap underline"
+            :aria-expanded="formBlockVisibility"
+            aria-haspopup="dialog"
+        >
+            <?= $escaper->escapeHtml(__('Gift options')) ?>
+            <?php if (!$slideOutDrawer): ?>
+                <span x-show="!formBlockVisibility" aria-hidden="true">
+                    <?= $heroicons->chevronDownHtml('inline-block', 16, 16) ?>
+                </span>
+                <span x-show="formBlockVisibility" aria-hidden="true">
+                    <?= $heroicons->chevronUpHtml('inline-block', 16, 16) ?>
+                </span>
+            <?php endif ?>
+        </button>
+    </div>
+    <?php if ($slideOutDrawer): ?>
+        <div role="dialog"
+            aria-labelledby="enquiry-form-drawer-title-order-gift-options"
+            aria-modal="true"
+            @keydown.window.escape="closeDialog"
+            class="fixed inset-y-0 right-0 z-30 flex max-w-full"
+            :aria-hidden="!formBlockVisibility"
+        >
+            <div class="backdrop"
+                x-show="formBlockVisibility"
+                x-transition:enter="ease-in-out duration-500"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="ease-in-out duration-500"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                @click="closeDialog"
+                aria-hidden="true"
+            ></div>
+            <div
+                class="relative w-screen max-w-md shadow-2xl bg-white p-8 flex flex-col overflow-y-auto"
+                x-show="formBlockVisibility"
+                x-transition:enter="transform transition ease-in-out duration-500 sm:duration-700"
+                x-transition:enter-start="translate-x-full"
+                x-transition:enter-end="translate-x-0"
+                x-transition:leave="transform transition ease-in-out duration-500 sm:duration-700"
+                x-transition:leave-start="translate-x-0"
+                x-transition:leave-end="translate-x-full"
+                x-ref="giftOptionsDialog"
+            >
+                <div class="relative">
+                    <div class="text-lg font-medium leading-7 text-gray-900" id="enquiry-form-drawer-title-order-gift-options">
+                        <?= $escaper->escapeHtml('Order Gift Options') ?>
+                    </div>
+                    <button class="absolute top-0 right-0 cursor-pointer" @click.prevent="closeDialog" aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>">
+                        <?= $heroicons->xHtml('inline-block', 24, 24, ["aria-hidden" => "true"]) ?>
+                    </button>
+                </div>
+                <?= $block->getChildHtml('gift-options-body') ?>
+            </div>
+        </div>
+    <?php else: ?>
+        <?= $block->getChildHtml('gift-options-body') ?>
+    <?php endif ?>
+    <div x-show="(resultBlockVisibility && !formBlockVisibility) || (resultBlockVisibility && inSlideOut)" class="gift-summary pt-2" @click="formBlockVisibility = true">
+        <div class="additional-options-summary"></div>
+        <div x-show="savedFormMessage.message">
+            <span><?= $escaper->escapeHtml(__('Message:')) ?></span> <span x-text="savedFormMessage.message"></span>
+        </div>
+    </div>
+</div>

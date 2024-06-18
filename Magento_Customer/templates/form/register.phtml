@@ -8,64 +8,76 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Customer\CreateAccountButton;
+use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Customer\Block\Form\Register;
 use Magento\Customer\Block\Widget\Dob;
 use Magento\Customer\Block\Widget\Gender;
+use Magento\Customer\Block\Widget\Name as NameWidget;
 use Magento\Customer\Block\Widget\Taxvat;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\Escaper;
-use Hyva\Theme\ViewModel\ReCaptcha;
 
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var Register $block */
 /** @var Escaper $escaper */
 /** @var ReCaptcha $recaptcha */
+/** @var CreateAccountButton $createAccountButtonViewModel */
+/** @var ViewModelRegistry $viewModels */
+/** @var HeroiconsSolid $heroicons */
 
 $formId = 'accountcreate';
 
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
-$region    = $block->getAttributeData()->getFrontendLabel('region');
+$heroicons = $viewModels->require(HeroiconsSolid::class);
+$createAccountButtonViewModel = $viewModels->require(CreateAccountButton::class);
+$region = $block->getAttributeData()->getFrontendLabel('region');
 $selectRegion = 'Please select a region, state or province.';
-$displayAll = $block->getConfig('general/region/display_all');
+$showOptionalRegions = $block->getConfig('general/region/display_all');
+$regionLabel = $block->getAttributeData()->getFrontendLabel('region');
+$minimumPasswordLength = $block->getMinimumPasswordLength();
+$passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
+$isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_storefront');
+
 ?>
 <div class="mb-8">
     <?php /* Extensions placeholder */ ?>
     <?= $block->getChildHtml('customer.form.register.extra') ?>
     <form class="form create account form-create-account"
           action="<?= $escaper->escapeUrl($block->getPostActionUrl()) ?>"
-          x-data="initForm()"
+          x-data="Object.assign(hyva.formValidation($el), initForm())"
           <?php if ($block->getShowAddressFields()): ?>
           @private-content-loaded.window="onPrivateContentLoaded(event.detail.data)"
           <?php endif; ?>
           id="<?= $escaper->escapeHtmlAttr($formId) ?>"
           @submit.prevent="submitForm()"
-          method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off">
+          method="post" id="form-validate" enctype="multipart/form-data" autocomplete="off"
+    >
         <?= /* @noEscape */ $block->getBlockHtml('formkey'); ?>
         <?= $block->getChildHtml('form_fields_before') ?>
-        <?= $recaptcha ? $recaptcha->getInputHtml('customer_create') : '' ?>
+        <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_CREATE) : '' ?>
         <div class="md:grid grid-cols-2 gap-4">
             <fieldset class="my-8 card">
                 <legend class="contents">
-                    <span>
-                        <?= $escaper->escapeHtml(__('Personal Information')) ?>
-                    </span>
+                    <span><?= $escaper->escapeHtml(__('Personal Information')) ?></span>
                 </legend>
                 <input type="hidden" name="success_url" value="<?= $escaper->escapeUrl($block->getSuccessUrl()) ?>">
                 <input type="hidden" name="error_url" value="<?= $escaper->escapeUrl($block->getErrorUrl()) ?>">
-                <?= $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Name::class)->setObject(
-                    $block->getFormData()
-                )->setForceUseCustomerAttributes(true)->toHtml() ?>
+                <?= $block->getLayout()->createBlock(NameWidget::class)->setObject($block->getFormData())->setForceUseCustomerAttributes(true)->toHtml() ?>
                 <?php if ($block->isNewsletterEnabled()): ?>
                     <div class="field choice newsletter">
                         <input type="checkbox" name="is_subscribed"
                                title="<?= $escaper->escapeHtmlAttr(__('Sign Up for Newsletter')) ?>" value="1"
                                id="is_subscribed"
                                 <?php if ($block->getFormData()->getIsSubscribed()): ?>
-                                    checked="checked"
+                                    checked
                                 <?php endif; ?>
                                class="checkbox">
                         <label for="is_subscribed" class="label">
@@ -96,78 +108,148 @@ $displayAll = $block->getConfig('general/region/display_all');
             </fieldset>
             <fieldset class="my-8 card">
                 <legend class="contents">
-                    <span>
-                        <?= $escaper->escapeHtml(__('Sign-in Information')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Sign-in Information')) ?></span>
                 </legend>
-                <div class="field required">
+                <div class="field field-reserved required">
                     <label for="email_address" class="label">
-                        <span>
-                            <?= $escaper->escapeHtml(__('Email')) ?>
-                        </span>
+                        <span><?= $escaper->escapeHtml(__('Email')) ?></span>
                     </label>
                     <div class="control">
-                        <input type="email" name="email" autocomplete="email" id="email_address" required
-                               value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getEmail()) ?>"
-                               title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>" class="form-input" />
+                        <input
+                            type="email"
+                            name="email"
+                            autocomplete="email"
+                            id="email_address"
+                            required
+                            value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getEmail()) ?>"
+                            title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
+                            class="form-input"
+                            @input.debounce="onChange"
+                        />
                     </div>
                 </div>
-                <div class="field">
-                    <label for="password" class="label"><span><?= $escaper->escapeHtml(__('Password')) ?></span></label>
-                    <div class="control">
-                        <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
-                        <input type="password" name="password" id="password"
-                               title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
-                               minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>"
-                               class="form-input"
-                               required
-                               x-on:change="checkPasswordsMatch()"
-                               autocomplete="off">
+                <div class="field field-reserved required">
+                    <label for="password" class="label">
+                        <span><?= $escaper->escapeHtml(__('Password')) ?></span>
+                    </label>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="control flex items-center">
+                            <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
+                            <div class="sr-only" aria-live="polite">
+                                <template x-if="!showPassword">
+                                    <span>
+                                        <?= $escaper->escapeHtml(__('Password hidden')) ?>
+                                    </span>
+                                </template>
+                                <template x-if="showPassword">
+                                    <span>
+                                        <?= $escaper->escapeHtml(__('Password shown')) ?>
+                                    </span>
+                                </template>
+                            </div>
+                            <input
+                                :type="showPassword ? 'text' : 'password'"
+                                type="password"
+                                id="password"
+                                name="password"
+                                title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
+                                minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>"
+                                class="form-input"
+                                required
+                                data-validate='{"password-strength": {"minCharacterSets": <?= (int) $passwordMinCharacterSets ?>}}'
+                                @input.debounce="onChange"
+                                autocomplete="<?= $isAutocompleteEnabled ? 'new-password' : 'off' ?>"
+                            >
+                            <button
+                                type="button"
+                                :aria-pressed="showPassword ? true : false"
+                                x-on:click="showPassword = !showPassword"
+                                class="px-4 py-3"
+                                :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
+                            >
+                                <template x-if="!showPassword">
+                                    <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                                </template>
+                                <template x-if="showPassword">
+                                    <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                                </template>
+                            </button>
+                        </div>
+                        <div class="self-center">
+                            <div
+                                id="password-strength-meter-container"
+                                data-role="password-strength-meter"
+                                aria-live="polite"
+                            >
+                                <div id="password-strength-meter" class="password-strength-meter">
+                                    <?= $escaper->escapeHtml(__('Password Strength')) ?>:
+                                    <span id="password-strength-meter-label" data-role="password-strength-meter-label">
+                                        <?= $escaper->escapeHtml(__('No Password')) ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-sm text-secondary mt-3">
-                        <?= $escaper->escapeHtml(
-                            __(
-                                'Minimum of different classes of characters in password is %1.'
-                                . ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
-                                $block->getRequiredCharacterClassesNumber()
-                            )
-                        ) ?>
-                    </p>
                 </div>
-                <div class="field">
+                <div class="field field-reserved">
                     <label for="password-confirmation" class="label">
-                        <span>
-                            <?= $escaper->escapeHtml(__('Confirm Password')) ?>
-                        </span>
+                        <span><?= $escaper->escapeHtml(__('Confirm Password')) ?></span>
                     </label>
-                    <div class="control">
-                        <input type="password" name="password_confirmation"
-                               title="<?= $escaper->escapeHtmlAttr(__('Confirm Password')) ?>"
-                               id="password-confirmation"
-                               x-on:change="checkPasswordsMatch()"
-                               x-on:keyup="checkPasswordsMatch()"
-                               required
-                               minlength="<?= $escaper->escapeHtmlAttr($minimumPasswordLength) ?>"
-                               class="form-input"
-                               autocomplete="off">
+                    <div class="control flex items-center">
+                        <div class="sr-only" aria-live="polite">
+                            <template x-if="!showPasswordConfirm">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('Confirm password hidden')) ?>
+                                </span>
+                            </template>
+                            <template x-if="showPasswordConfirm">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('confirm password shown')) ?>
+                                </span>
+                            </template>
+                        </div>
+                        <input
+                            :type="showPasswordConfirm ? 'text' : 'password'"
+                            type="password"
+                            name="password_confirmation"
+                            title="<?= $escaper->escapeHtmlAttr(__('Confirm Password')) ?>"
+                            id="password-confirmation"
+                            data-validate='{"equalTo": "password"}'
+                            @input.debounce="onChange"
+                            required
+                            class="form-input"
+                            autocomplete="<?= $isAutocompleteEnabled ? 'new-password' : 'off' ?>"
+                        >
+                        <button
+                            type="button"
+                            x-on:click="showPasswordConfirm = !showPasswordConfirm"
+                            :aria-pressed="showPasswordConfirm ? true : false"
+                            class="px-4 py-3"
+                            :aria-label="
+                                showPasswordConfirm ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'
+                            "
+                        >
+                            <template x-if="!showPasswordConfirm">
+                                <?= $heroicons->eyeHtml('w-5 h-5'); ?>
+                            </template>
+                            <template x-if="showPasswordConfirm">
+                                <?= $heroicons->eyeOffHtml('w-5 h-5'); ?>
+                            </template>
+                        </button>
                     </div>
-                </div>
-                <div class="field">
-                <p class="my-4 text-red" :class="passwordsMatching ? 'invisible' : 'visible'">
-                    <?= $escaper->escapeHtml(__('Your password confirmation must match your password.')) ?>
-                </p>
                 </div>
                 <?= $block->getChildHtml('form_additional_info') ?>
-                <?= $recaptcha ? $recaptcha->getLegalNoticeHtml('customer_create') : '' ?>
+                <?= $recaptcha ? $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_CREATE) : '' ?>
             </fieldset>
         </div>
 
         <?php if ($block->getShowAddressFields()): ?>
             <fieldset class="my-8 card">
-                <p class="mb-8 font-lg text-secondary-darker">
+                <legend class="contents">
                     <span>
                         <?= $escaper->escapeHtml(__('Address Information')) ?>
                     </span>
-                </p>
+                </legend>
                 <input type="hidden" name="create_address" value="1"/>
 
                 <?php $company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
@@ -188,9 +270,10 @@ $displayAll = $block->getConfig('general/region/display_all');
                     $this->helper(Address::class)->getAttributeValidationClass(
                         'street'
                     ); ?>
-                <div class="field street required">
-                    <label for="street_1" class="label"><span><?= /* @noEscape */
-                            $block->getAttributeData()->getFrontendLabel('street') ?></span></label>
+                <div class="field field-reserved street required">
+                    <label for="street_1" class="label">
+                        <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?></span>
+                    </label>
                     <div class="control">
                         <input type="text" name="street[]"
                                value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getStreet(0)) ?>"
@@ -209,7 +292,7 @@ $displayAll = $block->getConfig('general/region/display_all');
                                         <input type="text" name="street[]"
                                                value="<?= $escaper->escapeHtmlAttr($block
                                                    ->getFormData()
-                                                   ->getStreetLine($i - 1)) ?>"
+                                                   ->getStreet($i - 1)) ?>"
                                                title="<?= $escaper
                                                    ->escapeHtmlAttr(__('Street Address %1', $i)) ?>"
                                                id="street_<?= (int) $i ?>"
@@ -223,11 +306,9 @@ $displayAll = $block->getConfig('general/region/display_all');
                     </div>
                 </div>
 
-                <div class="field required">
+                <div class="field field-reserved required">
                     <label for="city" class="label">
-                        <span>
-                            <?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?>
-                        </span>
+                        <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?></span>
                     </label>
                     <div class="control">
                         <input type="text" name="city"
@@ -241,68 +322,72 @@ $displayAll = $block->getConfig('general/region/display_all');
                     </div>
                 </div>
 
-                <div class="field region w-full"
-                     x-cloak
-                     x-show="(hasAvailableRegions() && isRegionRequired) || showOptionalRegion"
+                <div
+                    class="field field-reserved region w-full"
+                    x-cloak
+                    x-show="(hasAvailableRegions() && isRegionRequired) || showOptionalRegions"
+                    :class="{ 'required': isRegionRequired }"
                 >
                     <label class="label" for="region_id">
-                        <span><?= /* @noEscape */ $region ?></span>
+                        <span><?= /* @noEscape */ $regionLabel ?></span>
                     </label>
                     <div class="control">
-                        <template x-if="hasAvailableRegions() && isRegionRequired">
+                        <template x-if="hasAvailableRegions() && (isRegionRequired || showOptionalRegions)">
                             <select id="region_id" name="region_id"
-                                    title="<?= /* @noEscape */ $region ?>"
+                                    title="<?= /* @noEscape */ $regionLabel ?>"
                                     class="form-select validate-select region_id"
-                                    :required="isRegionRequired"
                                     x-ref="region_id"
                                     x-model="selectedRegion"
+                                    @change="$refs.region.value = availableRegions[selectedRegion].name"
                             >
-                                <option value=""><?= $escaper->escapeHtml(__($selectRegion)) ?></option>
+                                <option value=""><?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?></option>
                                 <template x-for="regionId in Object.keys(availableRegions)">
+                                    <?php /* in alpine v3, if the bound props update, the template body gets evaluated before the template condition */ ?>
+                                    <?php /* because of this it is required to check if availableRegions[regionId] is set */ ?>
                                     <option :value="regionId"
-                                            :name="availableRegions[regionId].name"
-                                            x-text="availableRegions[regionId].name"
+                                            :name="availableRegions[regionId] && availableRegions[regionId].name"
+                                            x-text="availableRegions[regionId] && availableRegions[regionId].name"
                                             :selected="selectedRegion === regionId"
                                     >
                                     </option>
                                 </template>
                             </select>
                         </template>
-                        <template x-if="!hasAvailableRegions()">
-                            <input type="text"
-                                   id="region"
-                                   name="region"
-                                   x-ref="region"
-                                   value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
-                                   title="<?= /* @noEscape */ $region ?>"
-                                   class="form-input"
-                                   :required="isRegionRequired"
-                            />
-                        </template>
+                        <input :type="hasAvailableRegions() && (isRegionRequired || showOptionalRegions) ? 'hidden' : 'text'"
+                               id="region"
+                               name="region"
+                               x-ref="region"
+                               value="<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>"
+                               title="<?= /* @noEscape */ $regionLabel ?>"
+                               class="form-input"
+                               :required="isRegionRequired"
+                        />
                     </div>
                 </div>
 
-                <div class="field zip required">
-                    <label for="zip" class="label"><span><?= /* @noEscape */
-                            $block->getAttributeData()->getFrontendLabel('postcode') ?></span></label>
+                <div class="field field-reserved zip w-full" :class="{ 'required': isZipRequired }">
+                    <label class="label" for="zip">
+                        <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?></span>
+                    </label>
                     <div class="control">
                         <input type="text"
                                name="postcode"
+                               x-ref="postcode"
                                value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getPostcode()) ?>"
                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                                id="zip"
-                               class="form-input validate-zip-international
-                                    <?= $escaper->escapeHtmlAttr(
-                                        $this->helper(Address::class)->getAttributeValidationClass(
-                                            'postcode'
-                                        )
-                                    ) ?>">
+                               :required="isZipRequired"
+                               @change="onChange"
+                               data-validate='{"postcode": true}'
+                        class="form-input validate-zip-international
+                        <?= $escaper->escapeHtmlAttr($this->helper(Address::class)->getAttributeValidationClass('postcode')) ?>">
                     </div>
                 </div>
 
-                <div class="field country required">
-                    <label for="country" class="label"><span><?= /* @noEscape */
-                            $block->getAttributeData()->getFrontendLabel('country_id') ?></span></label>
+                <div class="field field-reserved required country w-full">
+                    <label class="label" for="country">
+                        <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?></span>
+                    </label>
                     <div class="control">
                         <?php $countries = $block
                             ->getCountryCollection()
@@ -312,7 +397,7 @@ $displayAll = $block->getConfig('general/region/display_all');
                         <select name="country_id"
                                 id="country"
                                 title="Country"
-                                required="required"
+                                required
                                 class="form-select"
                                 x-ref="country_id"
                                 @change="changeCountry($event.target)"
@@ -333,9 +418,7 @@ $displayAll = $block->getConfig('general/region/display_all');
                 <?php $addressAttributes = $block->getChildBlock('customer_form_address_user_attributes'); ?>
                 <?php if ($addressAttributes): ?>
                     <?php $addressAttributes->setEntityType('customer_address'); ?>
-                    <?php $addressAttributes->setFieldIdFormat('address:%1$s')->setFieldNameFormat(
-                        'address[%1$s]'
-                    ); ?>
+                    <?php $addressAttributes->setFieldIdFormat('address:%1$s')->setFieldNameFormat('address[%1$s]'); ?>
                     <?php $block->restoreSessionData($addressAttributes->getMetadataForm(), 'address'); ?>
                     <?= $addressAttributes->setShowContainer(false)->toHtml() ?>
                 <?php endif; ?>
@@ -345,10 +428,11 @@ $displayAll = $block->getConfig('general/region/display_all');
         <?php endif; ?>
         <div class="actions-toolbar flex">
             <div class="primary">
-                <button type="submit" class="action submit primary btn btn-primary"
-                        title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"><span><?= $escaper->escapeHtml(
-                            __('Create an Account')
-                        ) ?></span></button>
+                <button type="submit" class="action submit primary btn btn-primary disabled:opacity-75"
+                        title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
+                        <?php if ($createAccountButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>>
+                        <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>
+                </button>
             </div>
             <div class="secondary ml-4 self-center">
                 <a class="action back"
@@ -364,84 +448,91 @@ $displayAll = $block->getConfig('general/region/display_all');
     <script>
         function initForm() {
             return {
-                passwordsMatching: true,
                 errors: 0,
                 hasCaptchaToken: 0,
-                checkPasswordsMatch() {
-                    if (document.getElementById('password').value ===
-                        document.getElementById('password-confirmation').value) {
-                            this.passwordsMatching = true;
-                            return true;
-                        }
-                    this.passwordsMatching = false;
-                    return false;
-                },
+                showPassword: false,
+                showPasswordConfirm: false,
                 submitForm() {
-                    if (this.checkPasswordsMatch()) {
-                        // Do not rename $form, the variable is expected to be declared in the recaptcha output
-                        const $form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
-                        <?= $recaptcha ? $recaptcha->getValidationJsHtml('customer_create') : '' ?>
+                    this.validate()
+                        .then(() => {
+                            // Do not rename $form, the variable is expected to be declared in the recaptcha output
+                            const $form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
+                            <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_CREATE) : '' ?>
 
-                        if (this.errors === 0) {
-                            $form.submit();
-                        }
-                    }
+                            if (this.errors === 0) {
+                                $form.submit();
+                            }
+                        })
+                        .catch((invalid) => {
+                            if (invalid.length > 0) {
+                                invalid[0].focus();
+                            }
+                        });
                 },
                 <?php if ($block->getShowAddressFields()): ?>
                 directoryData: {},
                 availableRegions: {},
-                selectedRegion: <?= $escaper->escapeJs($block->getRegion() ?: 0) ?>,
+                    <?php /* $block->getRegion() returns an ID or a region name. The selectedRegion is used only for selects, so it must be an int. String names result in 0 when cast to int. */ ?>
+                selectedRegion: <?= (int) $block->getRegion() ?>,
                 isZipRequired: true,
                 isRegionRequired: true,
-                showOptionalRegion: <?= $displayAll ? 'true': 'false' ?>,
+                showOptionalRegions: <?= $showOptionalRegions ? 'true' : 'false' ?>,
                 onPrivateContentLoaded(data) {
                     this.directoryData = data['directory-data'] || {};
 
                     <?php if ($block->getCountryId()): ?>
-                    this.changeCountry(this.$refs['country_id']);
+                    this.setCountry(this.$refs['country_id'], '<?= $escaper->escapeJs($block->getCountryId()) ?>');
                     <?php endif; ?>
 
-                    this.setInitialRegionSelectValue();
-                    this.setRegionInputValue('<?= $escaper->escapeHtmlAttr($block->getRegion()) ?>');
-
                 },
-                setInitialRegionSelectValue(value) {
-                    this.$nextTick(() => {
-                        const regionSelectorElement = this.$refs['region_id'];
-                        if (regionSelectorElement) {
-
-                            const regionOptionByValue = regionSelectorElement
-                                .querySelector("[name='<?= /** @noEscape */ $block->getRegion() ?>']");
-
-                            if (regionOptionByValue) {
-                                this.$refs['region_id'].value = regionOptionByValue.value;
-                            }
-                        }
-                    })
-                },
-                setRegionInputValue(value) {
+                setRegionInputValue(regionName) {
                     this.$nextTick(() => {
                         const regionInputElement = this.$refs['region'];
                         if (regionInputElement) {
-                            regionInputElement.value = value;
+                            regionInputElement.value = regionName;
                         }
                     })
                 },
-                changeCountry(countrySelectElement) {
+                setCountry(countrySelectElement, initialRegion) {
                     const selectedOption = countrySelectElement.options[countrySelectElement.selectedIndex];
                     const countryCode = countrySelectElement.value;
                     const countryData = this.directoryData[countryCode] || false;
 
-                    this.setRegionInputValue('');
-
                     if (!countryData) {
+                        this.setRegionInputValue('');
                         return;
                     }
 
-                    this.isZipRequired = selectedOption.dataset.isZipRequired === "1";
-                    this.isRegionRequired = selectedOption.dataset.isRegionRequired === "1";
+                    this.isZipRequired = selectedOption.dataset.isZipRequired === '1';
+                    this.isRegionRequired = selectedOption.dataset.isRegionRequired === '1';
 
                     this.availableRegions = countryData.regions || {};
+
+                    const initialRegionId = Object.keys(this.availableRegions).filter(regionId => this.availableRegions[regionId].name === initialRegion)[0];
+                    this.selectedRegion = initialRegionId || '0';
+                    this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
+
+                },
+                changeCountry(countrySelectElement, initialRegion) {
+                    this.setCountry(countrySelectElement, initialRegion);
+
+                    this.validateCountryDependentFields();
+                },
+                validateCountryDependentFields() {
+                    this.$nextTick(() => {
+                        <?php /* Reinitialize validation rules for fields that depend on the country */ ?>
+                        this.fields['postcode'] && this.removeMessages(this.fields['postcode'])
+                        this.fields['region'] && this.removeMessages(this.fields['region'])
+                        delete this.fields['postcode'];
+                        delete this.fields['region'];
+                        <?php /* Initialize country_id, too, because the postcode validation depends on it */ ?>
+                        this.setupField(this.$refs['country_id']);
+                        this.setupField(this.$refs['postcode']);
+                        this.setupField(this.$refs['region']);
+
+                        this.fields['postcode'] && this.validateField(this.fields['postcode']);
+                        this.fields['region'] && this.validateField(this.fields['region']);
+                    })
                 },
                 hasAvailableRegions() {
                     return Object.keys(this.availableRegions).length > 0;
@@ -449,5 +540,42 @@ $displayAll = $block->getConfig('general/region/display_all');
                 <?php endif; ?>
             }
         }
+
+        window.addEventListener('DOMContentLoaded', () => {
+
+            hyva.formValidation.addRule('telephone', (value, options) => {
+                const phoneNumber = value.trim().replace(' ', '');
+                if (phoneNumber && phoneNumber.length < (options.minlength || 3)) {
+                    return '<?= $escaper->escapeJs(__('The telephone number is too short.')) ?>';
+                }
+
+                return true;
+            });
+
+            const postCodeSpecs = <?= /* @noEscape */ $block->getPostCodeConfig()->getSerializedPostCodes() ?>;
+
+            hyva.formValidation.addRule('postcode', (postCode, options, field, context) => {
+                context.removeMessages(field, 'postcode-warning')
+                const countryId = (context.fields['country_id'] && context.fields['country_id'].element.value),
+                    validatedPostCodeExamples = [],
+                    countryPostCodeSpecs = countryId && postCodeSpecs ? postCodeSpecs[countryId] : false;
+
+                if (! postCode || ! countryPostCodeSpecs) return true;
+
+                for (const postCodeSpec of Object.values(countryPostCodeSpecs)) {
+                    if (new RegExp(postCodeSpec.pattern).test(postCode)) return true;
+                    validatedPostCodeExamples.push(postCodeSpec.example);
+                }
+                if (validatedPostCodeExamples) {
+                    context.addMessages(field, 'postcode-warning', [
+                        '<?= $escaper->escapeJs(__('Provided Zip/Postal Code seems to be invalid.')) ?>',
+                        '<?= $escaper->escapeJs(__(' Example: ')) ?>' + validatedPostCodeExamples.join('; ') + '. ',
+                        '<?= $escaper->escapeJs(__('If you believe it is the right one you can ignore this notice.')) ?>'
+                    ]);
+                }
+
+                return true;
+            });
+        })
     </script>
 </div>

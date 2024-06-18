@@ -132,6 +132,9 @@ use Magento\Framework\View\Element\Template;
                         this.activeTooltipItem.item
                     );
             },
+            isFirstItemCol() {
+                return this.activeTooltipItem.index === 0;
+            },
             getTooltipImageStyle(attributeId, optionId) {
                 const config = this.getSwatchConfig(attributeId, optionId);
                 const type = this.getSwatchType(attributeId, optionId);
@@ -169,17 +172,17 @@ use Magento\Framework\View\Element\Template;
             showSwatches: false,
             initShowSwatchesIntersect() {
                 if ('IntersectionObserver' in window && !window.scrollY) {
-                    const io = new IntersectionObserver(
+                    let io = new IntersectionObserver(
                         entries => {
                             entries.map(entry => {
                                 if (entry.isIntersecting) {
                                     this.showSwatches = true;
-                                    io.unobserve(this.$el);
+                                    io.unobserve(this.$root);
                                 }
                             })
                         }
                     );
-                    io.observe(this.$el);
+                    io.observe(this.$root);
                 } else {
                     this.showSwatches = true
                 }

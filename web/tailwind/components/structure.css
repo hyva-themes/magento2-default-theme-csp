@@ -1,5 +1,5 @@
-body {
-    overflow-y: scroll;
+:where(html) {
+    scrollbar-gutter: stable;
 }
 
 .clearfix::after {
@@ -12,17 +12,9 @@ body {
     @apply my-8;
 }
 
-.flex-columns-wrapper {
-    @apply flex flex-col;
-
-    @screen md {
-        @apply flex-row;
-    }
-}
-
 .columns {
     @apply grid grid-cols-1 gap-x-8 gap-y-4 container;
-    grid-template-rows: auto minmax(0,1fr);
+    grid-template-rows: auto minmax(0, 1fr);
 
     .main {
         @apply order-2;
@@ -32,11 +24,16 @@ body {
         @apply order-3;
     }
 
+    .product-main-full-width & {
+        @apply max-w-none;
+    }
+
     .page-main-full-width & {
         @apply max-w-none px-0;
     }
 }
 
+.account,
 .page-with-filter {
     .columns {
         .sidebar-main {
@@ -46,7 +43,6 @@ body {
 }
 
 @screen sm {
-
     .page-layout-2columns-left,
     .page-layout-2columns-right,
     .page-layout-3columns {
@@ -63,17 +59,25 @@ body {
         }
     }
 
+    .account,
     .page-with-filter {
         .columns {
             .sidebar-main {
-                @apply order-1 col-span-2;
+                @apply col-span-full;
+            }
+        }
+    }
+
+    .account {
+        .columns {
+            .sidebar-additional {
+                @apply col-span-2;
             }
         }
     }
 }
 
 @screen md {
-
     .page-layout-2columns-left,
     .page-layout-2columns-right,
     .page-layout-3columns {
@@ -103,7 +107,6 @@ body {
             .sidebar ~ .sidebar-additional {
                 @apply order-3;
             }
-
         }
     }
 
@@ -116,7 +119,6 @@ body {
 }
 
 @screen lg {
-
     .page-layout-2columns-left,
     .page-layout-2columns-right,
     .page-layout-3columns {

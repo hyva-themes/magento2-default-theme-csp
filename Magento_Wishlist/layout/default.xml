@@ -9,6 +9,13 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceBlock name="header.customer.logged.in.links">
+            <block name="customer.header.wishlist.link" template="Magento_Wishlist::link.phtml">
+                <arguments>
+                    <argument name="sort_order" xsi:type="number">20</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
         <referenceContainer name="sidebar.additional">
             <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml" ifconfig="wishlist/general/show_in_sidebar"/>
         </referenceContainer>

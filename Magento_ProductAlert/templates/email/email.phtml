@@ -26,7 +26,7 @@ $productId = $block->getProductId();
 <form action="<?= $escaper->escapeUrl($block->getUrl('productalert/unsubscribe/stock')) ?>"
       method="post"
       x-data=""
-      x-init="$el.submit()">
+      x-init="$root.submit()">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <input type="hidden" id="productId" name="product" value="<?= $escaper->escapeHtml($productId) ?>" />
 </form>

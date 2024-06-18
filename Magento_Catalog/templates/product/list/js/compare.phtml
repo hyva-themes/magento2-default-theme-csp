@@ -29,7 +29,7 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "body": "form_key=" + formKey + "&product=" + productId + "&uenc=" + hyva.getUenc(),
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"

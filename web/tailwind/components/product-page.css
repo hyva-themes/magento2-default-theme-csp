@@ -1,9 +1,7 @@
-
 .page-product-bundle {
     .price-final_price {
         .price-from,
         .price-to {
-
             .price-container {
                 @apply text-gray-700 block mb-4;
 
@@ -12,7 +10,15 @@
                 }
 
                 .price {
-                    @apply block font-semibold text-2xl text-gray-800 leading-tight;
+                    @apply font-semibold text-2xl text-gray-800 leading-tight;
+                }
+            }
+
+            .price-including-tax + .price-excluding-tax {
+                @apply mt-1;
+
+                .price {
+                    @apply text-base;
                 }
             }
 

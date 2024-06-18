@@ -1,0 +1,109 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CustomOption;
+use Hyva\Theme\ViewModel\ProductPrice;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Block\Product\View\Options\Type\Date;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Date $block */
+/** @var ProductPrice $productPriceViewModel */
+/** @var ViewModelRegistry $viewModels */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+/** @var CustomOption $customOptionViewModel */
+$customOptionViewModel = $viewModels->require(CustomOption::class);
+
+$option = $block->getOption();
+$optionId = $escaper->escapeHtmlAttr($option->getId());
+$class = $option->getIsRequire() ? ' required' : '';
+$fieldName = 'options_' . ((int) $optionId) . '_' . $option->getType();
+
+if ($productPriceViewModel->displayPriceInclAndExclTax()) {
+    $basePrice = $productPriceViewModel->getCustomOptionPriceExclTax($option, CustomOptionPrice::PRICE_CODE, $block->getProduct());
+}
+
+$htmlInputTypes = [
+    ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME => 'datetime-local',
+    ProductCustomOptionInterface::OPTION_TYPE_DATE => 'date',
+    ProductCustomOptionInterface::OPTION_TYPE_TIME => 'time',
+];
+/*
+ * Alternative date-time picker implementation using HTML5 browser input types.
+ *
+ * At the time of writing, the HTML date, time and datetime-local input elements do not yet have enough browser support.
+ * https://caniuse.com/input-datetime
+ *
+ * Therefore, currently, the dates are rendered using the plain select input fields in the date.phtml template.
+ *
+ * To change to the (prettier) browser native input types rename this template to date.phtml in a theme.
+ */
+?>
+<div class="flex flex-col sm:flex-row border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
+    <label class="label text-gray-700 text-left w-full sm:w-1/2"
+           for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
+           x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
+    >
+        <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
+        <?php if ($option->getIsRequire()): ?>
+            <span class="sup text-sm">*</span>
+        <?php endif; ?>
+        <span><?= /* @noEscape */ $block->getFormattedPrice() ?></span>
+    </label>
+
+    <div class="flex flex-wrap gap-y-2 sm:ml-2 text-gray-900 text-left w-full sm:w-1/2">
+        <input type="<?= /* @noEscape */ $htmlInputTypes[$option->getType()] ?>"
+               id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
+               x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"
+               name="<?= $escaper->escapeHtmlAttr($fieldName) ?>"
+            <?php if ($option->getType() !== ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
+                pattern="[0-9]{2}:[0-9]{2}"
+            <?php endif; ?>
+               @change="
+             updateCustomOptionValue($dispatch, '<?= $escaper->escapeJs($optionId) ?>', $event.target);
+             <?php if ($option->getType() !== ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
+             const d = new Date($event.target.value)
+             <?php else: /* Use arbitrary date, since for TYPE_TIME options the date part will be ignored */ ?>
+             const d = new Date(`1999-02-10T${$event.target.value.substring(0, 5)}:00`)
+             <?php endif; ?>
+             const id = <?= (int) $optionId ?>;
+             $refs[`option-${id}-day`] && ($refs[`option-${id}-day`].value = d.getDate());
+             $refs[`option-${id}-month`] && ($refs[`option-${id}-month`].value = d.getMonth() + 1);
+             $refs[`option-${id}-year`] && ($refs[`option-${id}-year`].value = d.getFullYear());
+             $refs[`option-${id}-minute`] && ($refs[`option-${id}-minute`].value = d.getMinutes());
+             <?php if ($customOptionViewModel->is24hTimeFormat()): ?>
+             $refs[`option-${id}-hour`] && ($refs[`option-${id}-hour`].value = d.getHours());
+             <?php else: ?>
+             $refs[`option-${id}-hour`] && ($refs[`option-${id}-hour`].value = d.getHours() === 0 ? 12 : (d.getHours() > 12 ? d.getHours() - 12 : d.getHours()));
+             $refs[`option-${id}-day-part`] && ($refs[`option-${id}-day-part`].value = d.getHours() < 12 ? 'am' : 'pm');
+             <?php endif; ?>
+           "
+        />
+
+        <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+            || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][day]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-day"/>
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][month]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-month"/>
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][year]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-year"/>
+        <?php endif; ?>
+
+        <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
+            || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][hour]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-hour"/>
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][minute]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-minute"/>
+            <?php if (! $customOptionViewModel->is24hTimeFormat()): ?>
+            <input type="hidden" name="options[<?= $escaper->escapeHtmlAttr($optionId) ?>][day_part]" x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>-day-part"/>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+</div>

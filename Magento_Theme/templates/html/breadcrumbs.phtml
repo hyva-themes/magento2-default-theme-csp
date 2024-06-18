@@ -13,7 +13,8 @@ use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
 /** @var Breadcrumbs $block */
-/** @var array $crumbs */
+/** @var array[] $crumbs */
+
 ?>
 <?php if ($crumbs && is_array($crumbs)): ?>
 <nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
@@ -30,10 +31,10 @@ use Magento\Framework\Escaper;
                        title="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>"
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
                 <?php elseif ($crumbInfo['last']): ?>
-                    <a href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
+                    <span
                        class="text-primary-lighter"
                        aria-current="page"
-                    ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
+                    ><?= $escaper->escapeHtml($crumbInfo['label']) ?></span>
                 <?php else: ?>
                     <?= $escaper->escapeHtml($crumbInfo['label']) ?>
                 <?php endif; ?>

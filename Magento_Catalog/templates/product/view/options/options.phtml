@@ -40,6 +40,10 @@ $options = $block->decorateArray($block->getOptions());
                 finalPriceKey: '<?= /* @noEscape */ $displayTax ? 'finalPrice' : 'basePrice' ?>',
                 productFinalPrice: false,
                 customOptionPrices: {},
+                <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                productBasePrice: false,
+                customOptionBasePrices: {},
+                <?php endif; ?>
                 refs: [],
                 getFormattedOptionPrice(optionId) {
                     if (this.customOptionPrices[optionId]) {
@@ -48,25 +52,56 @@ $options = $block->decorateArray($block->getOptions());
                     }
                     return false;
                 },
+                <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                getFormattedOptionBasePrice(optionId) {
+                    if (this.customOptionBasePrices[optionId]) {
+                        const showSign = true;
+                        return hyva.formatPrice(this.customOptionBasePrices[optionId], showSign);
+                    }
+                    return false;
+                },
+                <?php endif; ?>
+                updateOptionPrice(optionId, optionPriceEl) {
+                    const container = document.createElement('div');
+                    container.innerHTML = optionPriceEl.innerHTML;
+
+                    const price = this.customOptionPrices[optionId],
+                        priceEl = container.querySelector('.price-wrapper');
+                    if (priceEl && price) {
+                        priceEl.innerText = hyva.formatPrice(price);
+                    }
+                    <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                    const basePrice = this.customOptionBasePrices[optionId],
+                        basePriceEl = container.querySelector('.price-excluding-tax .price');
+                    if (basePriceEl && basePrice) {
+                        basePriceEl.innerText = hyva.formatPrice(basePrice);
+                    }
+                    <?php endif; ?>
+                    return container.innerHTML;
+                },
                 calculateOptionPrices() {
                     for (const [customOptionId, customOption] of Object.entries(this.optionConfig)) {
                         if (customOption.prices) {
-                            this.customOptionPrices[customOptionId] =
-                                this.calculateOptionPrice(customOption,customOptionId);
+                            this.customOptionPrices[customOptionId] = this.calculateOptionPrice(customOption,customOptionId);
+                            <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                            this.customOptionBasePrices[customOptionId] = this.calculateOptionBasePrice(customOption,customOptionId);
+                            <?php endif; ?>
                         } else {
                             for (const [childCustomOptionId, childCustomOption] of Object.entries(customOption)) {
-                                this.customOptionPrices[customOptionId + '_' + childCustomOptionId] =
-                                    this.calculateOptionPrice(childCustomOption,customOptionId,childCustomOptionId);
+                                const key = customOptionId + '_' + childCustomOptionId;
+                                this.customOptionPrices[key] = this.calculateOptionPrice(childCustomOption,customOptionId,childCustomOptionId);
+                                <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                                this.customOptionBasePrices[key] = this.calculateOptionBasePrice(childCustomOption,customOptionId,childCustomOptionId);
+                                <?php endif; ?>
                             }
                         }
                     }
 
-                    window.dispatchEvent(
-                        new CustomEvent(
-                            "update-custom-option-prices",
-                            {detail: this.customOptionPrices}
-                        )
-                    );
+                    window.dispatchEvent(new CustomEvent("update-custom-option-prices", {detail: this.customOptionPrices}));
+
+                    <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                    window.dispatchEvent(new CustomEvent("update-custom-option-base-prices", {detail: this.customOptionBasePrices}));
+                    <?php endif; ?>
                 },
                 calculateOptionPrice(customOption, customOptionId, childCustomOptionId) {
                     const customOptionCode = customOptionId + (childCustomOptionId ? '-' + childCustomOptionId : '') ;
@@ -87,14 +122,38 @@ $options = $block->decorateArray($block->getOptions());
 
                     return price;
                 },
+                <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                calculateOptionBasePrice(customOption, customOptionId, childCustomOptionId) {
+                    const customOptionCode = customOptionId + (childCustomOptionId ? '-' + childCustomOptionId : '') ;
+
+                    const optionElement = this.refs && this.refs['option-'+customOptionCode];
+
+                    let basePrice = customOption.prices['basePrice'].amount;
+
+                    if (this.productBasePrice &&
+                        optionElement &&
+                        optionElement.dataset.basePriceAmount &&
+                        optionElement.dataset.priceType
+                    ) {
+                        basePrice = optionElement.dataset.priceType !== 'percent' ?
+                            optionElement.dataset.basePriceAmount :
+                            this.productBasePrice * (optionElement.dataset.priceAmount / 100)
+                    }
+
+                    return basePrice;
+                },
+                <?php endif; ?>
                 updateCustomOptionValue($dispatch, customOptionId, target) {
                     let active;
                     switch (target.type) {
                         case 'text':
                         case 'textarea':
                         case 'file':
+                        case 'time':
+                        case 'datetime-local':
+                        case 'date':
                             active = !!target.value;
-                        break;
+                            break;
                         case 'hidden':
                             // when we're configuring an item in the cart that already has an attachment
                             // this is only needed on page-initialization
@@ -153,7 +212,12 @@ $options = $block->decorateArray($block->getOptions());
                     ['@update-product-final-price.window'](event) {
                         this.productFinalPrice = event.detail;
                         this.calculateOptionPrices();
-                    }
+                    },
+                    <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                    ['@update-product-base-price.window'](event) {
+                        this.productBasePrice = event.detail;
+                        this.calculateOptionPrices();
+                    }<?php endif; ?>
                 }
             }
         }
@@ -166,7 +230,7 @@ $options = $block->decorateArray($block->getOptions());
             refs = $refs;
             $nextTick(() => { calculateOptionPrices(); initSelectedOptions($dispatch); })
          "
-         x-spread="eventListeners"
+         x-bind="eventListeners"
          class="mb-6">
     <?php foreach ($options as $option):?>
         <?= $block->getOptionHtml($option) ?>

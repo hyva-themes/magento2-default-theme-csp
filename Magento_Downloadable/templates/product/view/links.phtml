@@ -55,7 +55,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
                 })
             },
             toggleOption(optionId, value = true) {
-                const elementToSelect = this.$el.querySelector('#links_' + optionId);
+                const elementToSelect = this.$root.querySelector('#links_' + optionId);
                 if (elementToSelect) {
                     elementToSelect.checked = value;
                     elementToSelect.dispatchEvent(new CustomEvent('change'));
@@ -65,7 +65,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
                 const message = this.selectedOptions.length === 0
                     ? '<?= $escaper->escapeJs(__('Please select one of the options.')) ?>'
                     : ''
-                const fields = this.$el.querySelectorAll('input[name="links[]"]');
+                const fields = this.$root.querySelectorAll('input[name="links[]"]');
                 fields[fields.length - 1].setCustomValidity(message);
             },
             linkSelectionChange(checkbox)
@@ -99,7 +99,6 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
 <div class="field downloads"
     <?php if ($linksPurchasedSeparately): ?>
      x-data="initDownloadableLinks(<?= $escaper->escapeHtmlAttr($block->getJsonConfig()) ?>)"
-     x-init="init()"
     <?php endif; ?>
 >
     <div class="control" id="downloadable-links-list">

@@ -8,6 +8,7 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Block\Product\View\Options\Type\Select\Checkable;
 use Magento\Catalog\Model\Product\Option;
@@ -38,14 +39,14 @@ if ($option): ?>
     ?>
 
 <div class="options-list nested" id="options-<?= $escaper->escapeHtmlAttr($option->getId()) ?>-list">
-    <?php if ($optionType === Option::OPTION_TYPE_RADIO && !$option->getIsRequire()):?>
+    <?php if ($optionType === Option::OPTION_TYPE_RADIO && !$option->getIsRequire()): ?>
     <div class="field choice">
         <input type="radio"
                id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                class="radio product-custom-option"
                name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
                value=""
-               checked="checked"
+               checked
                x-on:change="updateCustomOptionValue(
                 $dispatch, '<?= $escaper->escapeHtmlAttr($option->getId()) ?>', $event.target
                )"
@@ -75,6 +76,9 @@ if ($option): ?>
         $optionId = $option->getId() . '_' . $value->getOptionTypeId();
 
         $valuePrice = $productPriceViewModel->getCustomOptionPrice($value, CustomOptionPrice::PRICE_CODE, $product);
+        if ($productPriceViewModel->displayPriceInclAndExclTax()) {
+            $valueBasePrice = $value->getPrice(true);
+        }
         ?>
 
         <div class="field choice">
@@ -97,6 +101,9 @@ if ($option): ?>
                            ->escapeHtmlAttr(__("Please select one of the options.")) ?>"
                     <?php endif; ?>
                    data-price-amount="<?= $escaper->escapeHtmlAttr($valuePrice) ?>"
+                   <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                   data-base-price-amount="<?= $escaper->escapeHtmlAttr($valueBasePrice) ?>"
+                   <?php endif; ?>
                    data-price-type="<?= $escaper->escapeHtmlAttr($value->getPriceType()) ?>"
                    data-option-id="<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"
@@ -106,11 +113,10 @@ if ($option): ?>
             />
             <label class="label text-left"
                    for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
+                   x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
             >
                 <span><?= $escaper->escapeHtml($value->getTitle()) ?></span>
-                <span x-html="getFormattedOptionPrice('<?= $escaper->escapeHtmlAttr($optionId) ?>') || ''">
-                    <?= /* @noEscape */ $block->formatPrice($value) ?>
-                </span>
+                <span><?= /* @noEscape */ $block->formatPrice($value) ?></span>
             </label>
         </div>
     <?php endforeach; ?>

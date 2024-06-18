@@ -28,7 +28,7 @@ $tierPrices = $tierPriceModel->getTierPriceList();
                 <?= /* @noEscape */ __(
                     'Buy %1 with %2 discount each',
                     $price['price_qty'],
-                    '<strong class="benefit">' . round($price['percentage_value']) . '%</strong>'
+                    '<strong class="benefit">' . round((int) $price['percentage_value']) . '%</strong>'
                 ); ?>
             </li>
         <?php endforeach; ?>

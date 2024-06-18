@@ -6,11 +6,13 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\LocaleFormatter;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 
 /** @var DefaultRenderer $block */
 /** @var Escaper $escaper */
+/** @var LocaleFormatter $localeFormatter */
 
 $item = $block->getItem();
 $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_context_creditmemo') ? 7 : 5);
@@ -20,7 +22,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
         <span class="font-semibold"><?= $escaper->escapeHtml($item->getName()) ?></span>
         <div class="item-options mt-2">
             <div class="text-sm flex">
-                <span><?= $escaper->escapeHtml(__('Sku')) ?>:</span>
+                <span><?= $escaper->escapeHtml(__('SKU')) ?>:</span>
                 <span class="text-sm ml-1"><?= /* @noEscape */ $block->prepareSku($block->getSku()) ?></span>
             </div>
             <?php if ($options = $block->getItemOptions()): ?>
@@ -31,7 +33,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
                             <?php $formatedOptionValue = $block->getFormatedOptionValue($option) ?>
                             <span class="ml-1">
                                 <?= $escaper->escapeHtml($formatedOptionValue['value'], ['a']) ?>
-                        </span>
+                            </span>
                         <?php else: ?>
                             <span class="ml-1">
                                 <?= $escaper->escapeHtml(
@@ -53,19 +55,19 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
             <?php endif; ?>
             <?php $addtInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
             <?php if ($addtInfoBlock): ?>
-                <?= $addtInfoBlock->setItem($item)->toHtml() ?>
+                <?= $addtInfoBlock->setItem($block->getOrderItem())->toHtml() ?>
             <?php endif; ?>
             <?= $escaper->escapeHtml($item->getDescription()) ?>
         </div>
     </div>
     <?php if (!$block->getData('is_context_shipment')): ?>
         <div class="p-2 flex justify-between lg:block">
-            <p class="lg:hidden font-medium"><?= $escaper->escapeHtml(__('Price')) ?></p>
+            <p class="lg:sr-only font-medium"><?= $escaper->escapeHtml(__('Price')) ?></p>
             <?= $block->getItemPriceHtml() ?>
         </div>
     <?php endif; ?>
     <div class="p-2 flex justify-between lg:block">
-        <p class="lg:hidden font-medium">
+        <p class="lg:sr-only font-medium">
             <?php if ($block->getData('is_context_invoice')): ?>
                 <?= $escaper->escapeHtml(__('Qty Invoiced')) ?>
             <?php elseif ($block->getData('is_context_shipment')): ?>
@@ -76,34 +78,34 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
         </p>
         <div class="text-right lg:text-left">
             <?php if ($block->getData('is_context_invoice') || $block->getData('is_context_creditmemo')): ?>
-                <span class="content"><?= (float)$block->getItem()->getQty() ?></span>
+                <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQty()) ?></span>
             <?php endif; ?>
             <?php if ($block->getData('is_context_shipment')): ?>
-                <span class="content"><?= (float)$block->getItem()->getQty() ?></span>
+                <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQty()) ?></span>
             <?php endif; ?>
             <?php if ($block->getData('is_context_order')): ?>
                 <?php if ($block->getItem()->getQtyOrdered() > 0): ?>
                     <p>
                         <span class="title"><?= $escaper->escapeHtml(__('Ordered')) ?>:</span>
-                        <span class="content"><?= (float)$block->getItem()->getQtyOrdered() ?></span>
+                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQtyOrdered()) ?></span>
                     </p>
                 <?php endif; ?>
                 <?php if ($block->getItem()->getQtyShipped() > 0): ?>
                     <p>
                         <span class="title"><?= $escaper->escapeHtml(__('Shipped')) ?>:</span>
-                        <span class="content"><?= (float)$block->getItem()->getQtyShipped() ?></span>
+                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQtyShipped()) ?></span>
                     </p>
                 <?php endif; ?>
                 <?php if ($block->getItem()->getQtyCanceled() > 0): ?>
                     <p>
                         <span class="title"><?= $escaper->escapeHtml(__('Canceled')) ?>:</span>
-                        <span class="content"><?= (float)$block->getItem()->getQtyCanceled() ?></span>
+                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQtyCanceled()) ?></span>
                     </p>
                 <?php endif; ?>
                 <?php if ($block->getItem()->getQtyRefunded() > 0): ?>
                     <p>
                         <span class="title"><?= $escaper->escapeHtml(__('Refunded')) ?>:</span>
-                        <span class="content"><?= (float)$block->getItem()->getQtyRefunded() ?></span>
+                        <span class="content"><?= /** @noEscape */ $localeFormatter->formatNumber($block->getItem()->getQtyRefunded()) ?></span>
                     </p>
                 <?php endif; ?>
             <?php endif; ?>
@@ -111,17 +113,17 @@ $cols = $block->getData('is_context_shipment') ? 3 : ($block->getData('is_contex
     </div>
     <?php if (!$block->getData('is_context_shipment')): ?>
         <div class="p-2 text-right flex justify-between lg:block">
-            <p class="lg:hidden font-medium"><?= $escaper->escapeHtml(__('Subtotal')) ?></p>
+            <p class="lg:sr-only font-medium"><?= $escaper->escapeHtml(__('Subtotal')) ?></p>
             <?= $block->getItemRowTotalHtml() ?>
         </div>
     <?php endif; ?>
     <?php if ($block->getData('is_context_creditmemo')): ?>
         <div class="p-2 text-right flex justify-between lg:block">
-            <p class="lg:hidden font-medium"><?= $escaper->escapeHtml(__('Discount Amount')) ?></p>
+            <p class="lg:sr-only font-medium"><?= $escaper->escapeHtml(__('Discount Amount')) ?></p>
             <?= /* @noEscape */ $block->getOrder()->formatPrice($item->getDiscountAmount()) ?>
         </div>
         <div class="p-2 text-right flex justify-between lg:block">
-            <p class="lg:hidden font-medium"><?= $escaper->escapeHtml(__('Row Total')) ?></p>
+            <p class="lg:sr-only font-medium"><?= $escaper->escapeHtml(__('Row Total')) ?></p>
             <?= $block->getItemRowTotalAfterDiscountHtml() ?>
         </div>
     <?php endif; ?>

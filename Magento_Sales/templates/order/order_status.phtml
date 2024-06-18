@@ -6,9 +6,16 @@
  * See https://hyva.io/license
  */
 
+use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Info;
 
 /** @var Info $block */
+/** @var Escaper $escaper */
 ?>
 
-<span class="order-status inline-block px-3 py-3 border rounded border-container"><?= $block->escapeHtml($block->getOrder()->getStatusLabel()) ?></span>
+<span class="order-status inline-block px-3 py-3 border rounded border-container">
+    <span class="sr-only">
+        <?= $escaper->escapeHtml(__('Status')) ?>:&nbsp;
+    </span>
+    <?= $escaper->escapeHtml($block->getOrder()->getStatusLabel()) ?>
+</span>

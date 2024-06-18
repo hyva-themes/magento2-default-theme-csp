@@ -11,6 +11,7 @@ use Magento\Framework\Escaper;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 use Magento\Sales\Block\Order\Items;
 
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 /** @var Items $block */
@@ -31,7 +32,7 @@ $cols = $block->getData('is_context_shipment') ? 3 : 5;
         <?php if (!$block->getData('is_context_shipment')): ?>
             <div class="p-2 text-right"><?= $escaper->escapeHtml(__('Subtotal')) ?></div><?php endif; ?>
     </div>
-    <?php $items = $block->getItems(); ?>
+    <?php $items = $block->getOrder()->getAllItems(); ?>
     <?php $giftMessage = '' ?>
     <?php foreach ($items as $item): ?>
         <?php

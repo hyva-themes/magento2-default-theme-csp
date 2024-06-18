@@ -31,11 +31,9 @@ $middle = $block->showMiddlename();
 $suffix = $block->showSuffix();
 ?>
 <?php if ($prefix): ?>
-    <div class="field w-full field-name-prefix<?= $block->isPrefixRequired() ? ' required' : '' ?>">
+    <div class="field field-reserved w-full field-name-prefix<?= $block->isPrefixRequired() ? ' required' : '' ?>">
         <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('prefix')) ?>">
-            <span>
-                <?= $escaper->escapeHtml($block->getStoreLabel('prefix')) ?>
-            </span>
+            <span><?= $escaper->escapeHtml($block->getStoreLabel('prefix')) ?></span>
         </label>
         <div class="control">
             <?php if ($block->getPrefixOptions() === false): ?>
@@ -68,7 +66,7 @@ $suffix = $block->showSuffix();
         </div>
     </div>
 <?php endif; ?>
-    <div class="field w-full field-name-firstname required">
+    <div class="field field-reserved w-full field-name-firstname required">
         <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('firstname')) ?>">
             <span>
                 <?= $escaper->escapeHtml($block->getStoreLabel('firstname')) ?>
@@ -83,13 +81,14 @@ $suffix = $block->showSuffix();
                    class="form-input <?= $escaper->escapeHtmlAttr(
                        $block->getAttributeValidationClass('firstname')
                    ) ?>"
+                   @input.debounce="onChange"
                 <?= ($block->getAttributeValidationClass('firstname') == 'required-entry') ? ' required' : '' ?>
             >
         </div>
     </div>
 <?php if ($middle): ?>
     <?php $isMiddlenameRequired = $block->isMiddlenameRequired(); ?>
-    <div class="field w-full field-name-middlename<?= $isMiddlenameRequired ? ' required' : '' ?>">
+    <div class="field field-reserved w-full field-name-middlename<?= $isMiddlenameRequired ? ' required' : '' ?>">
         <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('middlename')) ?>">
             <span>
                 <?= $escaper->escapeHtml($block->getStoreLabel('middlename')) ?>
@@ -102,12 +101,13 @@ $suffix = $block->showSuffix();
                    title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('middlename')) ?>"
                    class="form-input
                      <?= $escaper->escapeHtmlAttr($block->getAttributeValidationClass('middlename')) ?>"
+                   @input.debounce="onChange"
                    <?= $isMiddlenameRequired ? ' required' : '' ?>
             >
         </div>
     </div>
 <?php endif; ?>
-    <div class="field w-full field-name-lastname required">
+    <div class="field field-reserved w-full field-name-lastname required">
         <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('lastname')) ?>">
             <span>
                 <?= $escaper->escapeHtml($block->getStoreLabel('lastname')) ?>
@@ -122,12 +122,13 @@ $suffix = $block->showSuffix();
                    class="form-input <?= $escaper->escapeHtmlAttr(
                        $block->getAttributeValidationClass('lastname')
                    ) ?>"
+                   @input.debounce="onChange"
                 <?= ($block->getAttributeValidationClass('lastname') == 'required-entry') ? ' required' : '' ?>
             >
         </div>
     </div>
 <?php if ($suffix): ?>
-    <div class="field w-full field-name-suffix<?= $block->isSuffixRequired() ? ' required' : '' ?>">
+    <div class="field field-reserved w-full field-name-suffix<?= $block->isSuffixRequired() ? ' required' : '' ?>">
         <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('suffix')) ?>">
             <span>
                 <?= $escaper->escapeHtml($block->getStoreLabel('suffix')) ?>

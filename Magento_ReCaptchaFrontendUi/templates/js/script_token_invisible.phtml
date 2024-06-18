@@ -31,7 +31,7 @@ $instanceSuffix       = $recaptcha->calcJsInstanceSuffix($inputElementId ?: $blo
 $grecaptchaInstanceId = "grecaptchaInstance$instanceSuffix";
 
 ?>
-<?php // render_script_tag is never set, it is present to force editors to see the code as JavaScript ?>
+<?php /* render_script_tag is never set, it is present to force editors to see the code as JavaScript */ ?>
 <?php if ($block->getData('render_script_tag')): ?>
 <script>
     <?php endif; ?>

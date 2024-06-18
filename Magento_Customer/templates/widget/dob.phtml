@@ -18,8 +18,8 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 /** @var Dob $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroIconsOutline $heroIcons */
-$heroIcons = $viewModels->require(HeroiconsOutline::class);
+/** @var HeroIconsOutline $heroicons */
+$heroicons = $viewModels->require(HeroiconsOutline::class);
 
 /** @var AddressViewModel $addressViewModel */
 $addressViewModel = $viewModels->require(AddressViewModel::class);
@@ -29,9 +29,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
      x-init="[initDate(), recalcDaysGrid()]"
 >
     <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>" class="label">
-        <span>
-            <?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?>
-        </span>
+        <span><?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?></span>
     </label>
     <div class="inline-block relative control customer-dob">
         <?php
@@ -58,15 +56,15 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
         <div class="absolute top-0 right-0 z-10 py-2 px-3 text-gray-300"
              @click="showDatepicker = true"
         >
-            <?= /** @noEscape */ $heroIcons->calendarHtml('w-6 h-6', 25, 25); ?>
+            <?= /** @noEscape */ $heroicons->calendarHtml('w-6 h-6', 25, 25); ?>
         </div>
 
         <div
             class="absolute left-0 top-full p-3 mt-12 bg-white rounded-lg shadow"
             style="width: 21rem"
             x-cloak=""
-            x-show.transition="showDatepicker"
-            @click.away="showDatepicker = false"
+            x-transition x-show="showDatepicker"
+            @click.outside="showDatepicker = false"
         >
 
             <div class="flex justify-between items-center mb-2">
@@ -96,7 +94,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                         :disabled="isFirstMonth()"
                         :title="labels.prevText"
                         @click="goToMonth(month - 1)">
-                        <?= /** @noEscape */ $heroIcons->chevronLeftHtml('w-6 h-6', 25, 25); ?>
+                        <?= /** @noEscape */ $heroicons->chevronLeftHtml('w-6 h-6', 25, 25); ?>
                         <span class="sr-only" x-text="labels.prevText"></span>
                     </button>
                     <button
@@ -106,7 +104,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                         :disabled="isLastMonth()"
                         :title="labels.nextText"
                         @click="goToMonth(month + 1)">
-                        <?= /** @noEscape */ $heroIcons->chevronRightHtml('w-6 h-6', 25, 25); ?>
+                        <?= /** @noEscape */ $heroicons->chevronRightHtml('w-6 h-6', 25, 25); ?>
                         <span class="sr-only" x-text="labels.nextText"></span>
                     </button>
                 </div>

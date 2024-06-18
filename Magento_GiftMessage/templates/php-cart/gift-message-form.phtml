@@ -1,0 +1,77 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+
+?>
+<div class="gift-message">
+    <div class="gift-options-title my-4">
+        <span>
+             <?= $escaper->escapeHtml(__('Gift Message (optional)')) ?>
+        </span>
+    </div>
+    <div class="gift-options-content">
+        <fieldset class="fieldset">
+            <div class="field field-to" x-id="['recipient']">
+                <label
+                    :for="$id('recipient')"
+                    class="label"
+                >
+                    <span><?= $escaper->escapeHtml(__('To:')) ?></span>
+                </label>
+                <div class="control">
+                    <input
+                        :id="$id('recipient')"
+                        type="text"
+                        x-model="formMessage.recipient"
+                        @keydown.enter.prevent="submitGiftOption()"
+                        class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
+                    >
+                </div>
+            </div>
+
+            <div class="field field-from" x-id="['sender']">
+                <label
+                    :for="$id('sender')"
+                    class="label"
+                >
+                    <span><?= $escaper->escapeHtml(__('From:')) ?></span>
+                </label>
+                <div class="control">
+                    <input
+                        :id="$id('sender')"
+                        type="text"
+                        x-model="formMessage.sender"
+                        @keydown.enter.prevent="submitGiftOption()"
+                        class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
+                    >
+                </div>
+            </div>
+            <div class="field text" x-id="['message']">
+                <label :for="$id('message')" class="label">
+                    <span><?= $escaper->escapeHtml(__('Message')) ?></span>
+                </label>
+                <div class="control">
+                    <textarea
+                        :id="$id('message')"
+                        x-model="formMessage.message"
+                        class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
+                        rows="5"
+                        cols="10">
+                    </textarea>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>

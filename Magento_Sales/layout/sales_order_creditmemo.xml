@@ -23,8 +23,8 @@
                 <block class="Magento\Sales\Block\Order\Info" name="sales.order.info"/>
                 <block class="Magento\Sales\Block\Order\Creditmemo\Items" name="creditmemo_items" template="Magento_Sales::order/creditmemo/items.phtml">
                     <block class="Magento\Framework\View\Element\RendererList" name="sales.order.creditmemo.renderers" as="renderer.list"/>
-                    <block class="Magento\Sales\Block\Order\Creditmemo\Totals" name="creditmemo_totals" template="Magento_Sales::order/totals.phtml">
-                        <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="Magento_Tax::order/tax.phtml"/>
+                    <block class="Magento\Sales\Block\Order\Creditmemo\Totals" name="creditmemo_totals" template="Magento_Sales::order/totals/totals.phtml">
+                        <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="Magento_Tax::order/totals/tax.phtml"/>
                     </block>
                     <block class="Magento\Sales\Block\Order\Comments" name="creditmemo_comments" template="Magento_Sales::order/comments.phtml"/>
                 </block>

@@ -30,14 +30,14 @@ if (!$siteKey) {
 
 $parentBlock = $block->getParentBlock();
 $action = is_object($parentBlock) && $parentBlock->getNameInLayout()
-    ? $parentBlock->getNameInLayout()
+    ? preg_replace('/[^A-Za-z0-9\/_]/', '_', $parentBlock->getNameInLayout())
     : 'submit';
 
 $recaptcha  = $viewModels->require(ReCaptcha::class);
 $formId     = $block->getData('form_id') ?? '';
 
 ?>
-<?php // render_script_tag is never set, it is present to force editors to see the code as JavaScript ?>
+<?php /* render_script_tag is never set, it is present to force editors to see the code as JavaScript */ ?>
 <?php if ($block->getData('render_script_tag')): ?>
 <script>
     <?php endif; ?>
@@ -66,6 +66,8 @@ $formId     = $block->getData('form_id') ?? '';
                             window.dispatchMessages && window.dispatchMessages([{type: "error", text: error}], 5000);
                         }
                     }
+                }).catch(exception => {
+                    console.error(exception || `An unknown error occurred during ReCaptcha validation. Are the tokens and the domain correctly set up in the Google console?`)
                 });
             })
         }

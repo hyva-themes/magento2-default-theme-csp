@@ -13,17 +13,17 @@ use Magento\Framework\Escaper;
 /** @var Telephone $block */
 ?>
 
-<div class="field telephone <?= $block->isRequired() ? 'required' : '' ?>">
+<div class="field field-reserved telephone <?= $block->isRequired() ? 'required' : '' ?>">
     <label for="telephone" class="label">
-        <span>
-            <?= $escaper->escapeHtml(__('Phone Number')) ?>
-        </span>
+        <span><?= $escaper->escapeHtml(__('Phone Number')) ?></span>
     </label>
     <div class="control">
         <input type="tel"
                name="telephone"
                id="telephone"
-               required
+               <?php if ($block->isRequired()): ?>required<?php endif; ?>
+               @input.debounce="onChange"
+               data-validate='{"telephone": true}'
                value="<?= $escaper->escapeHtmlAttr($block->getTelephone()) ?>"
                title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
                class="form-input <?= $escaper->escapeHtmlAttr(

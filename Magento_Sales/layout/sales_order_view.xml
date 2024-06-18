@@ -35,9 +35,9 @@
                            as="renderer.list"/>
                     <block class="Magento\Theme\Block\Html\Pager" name="sales_order_item_pager"/>
                     <block class="Magento\Sales\Block\Order\Totals" name="order_totals"
-                           template="Magento_Sales::order/totals.phtml">
+                           template="Magento_Sales::order/totals/totals.phtml">
                         <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax"
-                               template="Magento_Tax::order/tax.phtml"/>
+                               template="Magento_Tax::order/totals/tax.phtml"/>
                     </block>
                 </block>
                 <block class="Magento\Sales\Block\Order\Info" name="order.status" template="Magento_Sales::order/order_status.phtml"/>

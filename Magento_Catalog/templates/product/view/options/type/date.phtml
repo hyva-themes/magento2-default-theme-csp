@@ -8,41 +8,129 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\CustomOption;
+use Hyva\Theme\ViewModel\ProductPrice;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Block\Product\View\Options\Type\Date;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
 /** @var Date $block */
+/** @var ProductPrice $productPriceViewModel */
+/** @var ViewModelRegistry $viewModels */
+$productPriceViewModel = $viewModels->require(ProductPrice::class);
+$customOptionViewModel = $viewModels->require(CustomOption::class);
 
-/* TODO: implement custom select elements */
+$option = $block->getOption();
+$optionId = $escaper->escapeHtmlAttr($option->getId());
+$class = $option->getIsRequire() ? ' required' : '';
+$fieldName = 'options_' . ((int) $optionId) . '_' . $option->getType();
+
+if ($productPriceViewModel->displayPriceInclAndExclTax()) {
+    $basePrice = $productPriceViewModel->getCustomOptionPriceExclTax($option, CustomOptionPrice::PRICE_CODE, $block->getProduct());
+}
+
+$htmlInputTypes = [
+    ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME => 'datetime-local',
+    ProductCustomOptionInterface::OPTION_TYPE_DATE => 'date',
+    ProductCustomOptionInterface::OPTION_TYPE_TIME => 'time',
+];
+/*
+ * Legacy select based date-time picker implementation.
+ *
+ * At the time of writing, the HTML date, time and datetime-local input elements do not yet have enough browser support.
+ * https://caniuse.com/input-datetime
+ *
+ * Therefore, currently, the dates are rendered using the plain select inputs
+ * An alternative implementation is provided in the date-html5.phtml template.
+ */
 ?>
-<?php $option = $block->getOption() ?>
-<?php $optionId = $escaper->escapeHtmlAttr($option->getId()) ?>
-<?php $class = ($option->getIsRequire()) ? ' required' : ''; ?>
 <div class="flex flex-col sm:flex-row border-t border-gray-300 py-2 last:mb-6 last:border-b w-full items-center">
     <label class="label text-gray-700 text-left w-full sm:w-1/2"
-           for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>_text">
+           for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
+           x-html="updateOptionPrice('<?= $escaper->escapeJs($optionId) ?>', $el)"
+    >
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>
             <span class="sup text-sm">*</span>
         <?php endif; ?>
-        <span x-html="getFormattedOptionPrice(<?= $escaper->escapeHtmlAttr($option->getId()) ?>) || ''">
-            <?= /* @noEscape */ $block->getFormattedPrice() ?>
-        </span>
+        <span><?= /* @noEscape */ $block->getFormattedPrice() ?></span>
     </label>
-    <div class="flex flex-wrap gap-y-2 sm:ml-2 text-gray-900 text-left w-full sm:w-1/2">
-        <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
-            || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE):?>
 
-            <?= $block->getDateHtml() ?>
-
+    <div class="flex flex-wrap gap-y-2 sm:ml-2 text-gray-900 text-left w-full sm:w-1/2"
+          x-data="initValidateDate(<?= (int) $optionId ?>)">
+        <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE): ?>
+            <?= $customOptionViewModel->getDateDropdownsHtml((int) $optionId, [
+                'day' => ['class="form-select"'],
+                'month' => ['class="form-select"'],
+                'year' => ['class="form-select"'],
+            ]) ?>
         <?php endif; ?>
 
-        <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME
-            || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_TIME):?>
-            <?= $block->getTimeHtml() ?>
+        <?php if ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME || $option->getType() == ProductCustomOptionInterface::OPTION_TYPE_TIME): ?>
+            <?= $customOptionViewModel->getTimeDropdownsHtml((int) $optionId, [
+                'hour' => ['class="form-select"'],
+                'minute' => ['class="form-select"'],
+                'day_part' => ['class="form-select"'],
+            ]) ?>
         <?php endif; ?>
-
+        <script>
+            function initValidateDate(optionId) {
+               return {
+                   async validateDays() {
+                       const dayField = document.getElementById(`options_${optionId}_day`);
+                       const monthField = document.getElementById(`options_${optionId}_month`);
+                       const yearField = document.getElementById(`options_${optionId}_year`);
+                       if (! dayField || ! dayField.value ||
+                           ! monthField ||! monthField.value ||
+                           ! yearField || ! yearField.value
+                       ) {
+                           return;
+                       }
+                       const day = parseInt(dayField.value);
+                       const month = parseInt(monthField.value);
+                       const year = parseInt(yearField.value);
+                       const potentialDate = new Date(year, month - 1, day);
+                       if (potentialDate.getDate() !== day ||
+                           potentialDate.getMonth() !== month - 1 ||
+                           potentialDate.getFullYear() !== year
+                       ) {
+                           const maxDays = new Date(year, month, 0).getDate();
+                           if (dayField.value > maxDays) {
+                               dayField.value = maxDays;
+                           }
+                       }
+                   },
+                   init() {
+                       const parts = ['month', 'day', 'year', 'hour', 'minute', 'day_part'];
+                       const baseId = `options_${optionId}`;
+                       parts.forEach(part => {
+                           const select = document.getElementById(`${baseId}_${part}`);
+                           if (select) {
+                               select.setAttribute('x-on:change', `onChange`)
+                           }
+                       })
+                   },
+                   onChange() {
+                       this.validateDays()
+                           .then(() => this.collectDateValueAndUpdatePrice())
+                           .then(transport => this.updateCustomOptionValue(this.$dispatch, optionId, transport))
+                   },
+                   async collectDateValueAndUpdatePrice() {
+                       const input = document.createElement('input');
+                       input.type = 'text';
+                       input.id = `options_${optionId}`;
+                       input.name = 'transport';
+                       input.value = ['month', 'day', 'year', 'hour', 'minute'].map(part => {
+                           const input = document.getElementById(`options_${optionId}_${part}`);
+                           return input ? input.value : '';
+                       }).join('');
+                       return input
+                   }
+               }
+            }
+        </script>
     </div>
 </div>

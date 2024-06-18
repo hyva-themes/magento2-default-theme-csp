@@ -35,7 +35,11 @@ $productPriceViewModel = $viewModels->require(ProductPrice::class);
 $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 
 $regularPrice = $productPriceViewModel->getPriceValue(RegularPrice::PRICE_CODE, $product);
-$finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $product);
+$finalPrice = $productPriceViewModel->getPriceValue(FinalPrice::PRICE_CODE, $product);
+
+if ($productPriceViewModel->displayPriceInclAndExclTax()) {
+    $basePrice = $productPriceViewModel->getPriceValueExclTax(FinalPrice::PRICE_CODE, $product);
+}
 ?>
 <?php if ($product->isSaleable()): ?>
     <div class="card flex w-full md:w-1/2 lg:w-2/3">
@@ -46,6 +50,9 @@ $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $prod
                         optionConfig: <?= /* @noEscape */ $block->getJsonConfig() ?>,
                         regularPriceKey: '<?= /* @noEscape */ $displayTax ? 'oldPrice' : 'baseOldPrice' ?>',
                         finalPriceKey: '<?= /* @noEscape */ $displayTax ? 'finalPrice' : 'basePrice' ?>',
+                        <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                        basePriceKey: 'basePrice',
+                        <?php endif; ?>
                         productFinalPrice: false,
                         activeSelectOptions: {},
                         selectedOptions: [],
@@ -100,58 +107,50 @@ $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $prod
                                     selectedOption
                                 );
                             }
+                            const gatherLowestPriceForOptionProduct = (accPrice, product) => {
+                                <?php /* Gather the lowest (normal price | tier price) for the option product/ */ ?>
+                                const lowestPrice = product.data.tierPrice.reduce((finalValue, tierPrice) => {
+                                    if (product.qty >= tierPrice.price_qty) {
+                                        return (tierPrice.prices[this.finalPriceKey].amount < finalValue[this.finalPriceKey].amount)
+                                            ? tierPrice.prices
+                                            : finalValue;
+                                    }
+                                    return finalValue;
+                                }, product.data.prices);
+
+                                // add the lowest price for qty
+                                return {
+                                    oldPrice: accPrice.oldPrice + (lowestPrice.oldPrice.amount * product.qty),
+                                    finalPrice: accPrice.finalPrice + (lowestPrice[this.finalPriceKey].amount * product.qty),
+                                    <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                                    basePrice: accPrice.basePrice + (lowestPrice.basePrice.amount * product.qty),
+                                    <?php endif; ?>
+                                };
+                            }
 
                             this.productFinalPrice = Object.values(selectedProductsPerOption)
                                 .reduce(
                                     (totalPrice, option) => {
-                                        let oldPrice = totalPrice.oldPrice;
-                                        let finalPrice = totalPrice.finalPrice;
-
-                                        const totalOptionPrice = Object.values(option).reduce(
-                                            (optionPrice, product) => {
-                                                let oldPrice = optionPrice.oldPrice;
-                                                let finalPrice = optionPrice.finalPrice;
-
-                                                let lowestPrice = product.data.prices;
-
-                                                lowestPrice = product.data.tierPrice.reduce((finalValue, tierPrice) => {
-                                                    if (product.qty >= tierPrice.price_qty) {
-                                                        return (
-                                                                tierPrice.prices[this.finalPriceKey].amount <
-                                                                lowestPrice[this.finalPriceKey].amount
-                                                            ) ?
-                                                            tierPrice.prices :
-                                                            finalValue;
-                                                    }
-                                                    return finalValue;
-                                                }, lowestPrice);
-
-                                                // check lowest price for qty
-                                                oldPrice = oldPrice + (
-                                                    lowestPrice.oldPrice.amount * product.qty
-                                                );
-                                                finalPrice = finalPrice + (
-                                                    lowestPrice[this.finalPriceKey].amount * product.qty
-                                                );
-
-                                                return {
-                                                    oldPrice,
-                                                    finalPrice
-                                                };
-                                            }, {
-                                                'oldPrice': 0,
-                                                'finalPrice': 0
-                                            }
-                                        );
-
+                                        <?php /* Sum all old, final and base prices for all simple products */ ?>
+                                        const totalOptionPrice = Object.values(option).reduce(gatherLowestPriceForOptionProduct, {
+                                            oldPrice: 0,
+                                            finalPrice: 0,
+                                            basePrice: 0,
+                                        });
                                         return {
-                                            oldPrice: oldPrice + totalOptionPrice.oldPrice,
-                                            finalPrice: finalPrice + totalOptionPrice.finalPrice
+                                            oldPrice: totalPrice.oldPrice + totalOptionPrice.oldPrice,
+                                            finalPrice: totalPrice.finalPrice + totalOptionPrice.finalPrice,
+                                            <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                                            basePrice: totalPrice.basePrice + totalOptionPrice.basePrice,
+                                            <?php endif; ?>
                                         }
 
                                     }, {
-                                        'oldPrice': <?= $escaper->escapeJs($regularPrice); ?>,
-                                        'finalPrice': <?= $escaper->escapeJs($finalPrice); ?>
+                                        oldPrice: 0,
+                                        finalPrice: 0,
+                                        <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
+                                        basePrice: 0,
+                                        <?php endif; ?>
                                     }
                                 );
 
@@ -171,22 +170,10 @@ $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $prod
                             this.dispatchOptionSelection();
                         },
                         dispatchFinalPrice() {
-                            window.dispatchEvent(
-                                new CustomEvent(
-                                    "update-bundle-option-prices", {
-                                        detail: this.productFinalPrice
-                                    }
-                                )
-                            );
+                            window.dispatchEvent(new CustomEvent("update-bundle-option-prices", {detail: this.productFinalPrice}));
                         },
                         dispatchOptionSelection() {
-                            window.dispatchEvent(
-                                new CustomEvent(
-                                    "update-bundle-option-selection", {
-                                        detail: this.selectedOptions
-                                    }
-                                )
-                            );
+                            window.dispatchEvent(new CustomEvent("update-bundle-option-selection", {detail: this.selectedOptions}));
                         },
                         getQtyValue(optionId) {
                             const selectionConfig = this.getSelectionOptionConfig(optionId);
@@ -237,13 +224,14 @@ $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $prod
                         dispatchOptionSelection();
                         $dispatch('set-selected-options', {});
                     })"
+                 x-defer="intersect"
                  class="w-full">
 
                 <fieldset class="fieldset fieldset-bundle-options min-w-48 mb-8" form="product_addtocart_form">
                     <legend id="customizeTitle" class="legend">
-                        <h3 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
+                        <h2 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
                             <?= $escaper->escapeHtml(__('Customize %1', $product->getName())) ?>
-                        </h3>
+                        </h2>
                     </legend>
                     <?= $block->getChildHtml('product_info_bundle_options_top') ?>
                     <?php foreach ($options as $option): ?>
@@ -252,8 +240,11 @@ $finalPrice = $productPriceViewModel->getPriceValue(BasePrice::PRICE_CODE, $prod
                             continue;
                         } ?>
                         <div class="my-2 pt-4 pb-2 w-full border-t border-container">
-                            <label class="label text-lg font-semibold">
-                                <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
+                            <label
+                                id="option-label-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+                                class="label text-lg font-semibold"
+                            >
+                                <?= $escaper->escapeHtml($option->getTitle()) ?>
                             </label>
                             <div class="control mt-2">
                                 <div class="nested options-list">

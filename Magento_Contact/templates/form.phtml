@@ -13,6 +13,7 @@ use Magento\Contact\Helper\Data as ContactHelper;
 use Magento\Framework\Escaper;
 use Hyva\Theme\ViewModel\ReCaptcha;
 
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 /** @var ContactForm $block */
@@ -27,7 +28,7 @@ $contactHelper = $this->helper(ContactHelper::class);
 // on the Magento_ReCaptchaContact module
 $recaptcha = $block->getData('viewModelRecaptcha');
 ?>
-<div class="flex-columns-wrapper justify-between py-8 gap-4">
+<div class="flex flex-col md:flex-row justify-between py-8 gap-4">
     <form class="form contact card lg:w-1/2 md:w-2/3"
           action="<?= $escaper->escapeUrl($block->getFormAction()) ?>"
           id="<?= $escaper->escapeHtmlAttr($formId) ?>"
@@ -46,9 +47,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             </div>
             <div class="flex flex-wrap -m-2">
                 <div class="field name required p-2 w-1/2 text-left">
-                    <label class="label text-gray-700" for="name"><span><?= $escaper->escapeHtml(
-                        __('Name')
-                    ) ?></span></label>
+                    <label class="label text-gray-700" for="name">
+                        <span><?= $escaper->escapeHtml(__('Name')) ?></span>
+                    </label>
                     <input name="name" id="name" required title="<?= $escaper->escapeHtmlAttr(__('Name')) ?>"
                            value="<?= $escaper->escapeHtmlAttr(
                                $contactHelper->getPostValue('name')
@@ -60,9 +61,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     />
                 </div>
                 <div class="field email required p-2 w-1/2 text-left">
-                    <label class="label text-gray-700" for="email"><span><?= $escaper->escapeHtml(
-                        __('Email')
-                    ) ?></span></label>
+                    <label class="label text-gray-700" for="email">
+                        <span><?= $escaper->escapeHtml(__('Email')) ?></span>
+                    </label>
                     <input name="email" id="email" required title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
                            value="<?= $escaper->escapeHtmlAttr(
                                $contactHelper->getPostValue('email')
@@ -73,9 +74,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                            type="email"/>
                 </div>
                 <div class="field telephone p-2 w-1/2 text-left">
-                    <label class="label text-gray-700" for="telephone"><span><?= $escaper->escapeHtml(
-                        __('Phone Number')
-                    ) ?></span></label>
+                    <label class="label text-gray-700" for="telephone">
+                        <span><?= $escaper->escapeHtml(__('Phone Number')) ?></span>
+                    </label>
                     <input name="telephone" id="telephone"
                            title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
                            value="<?= $escaper->escapeHtmlAttr(
@@ -86,9 +87,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                            type="text"/>
                 </div>
                 <div class="field comment required p-2 w-full text-left">
-                    <label class="label text-gray-700" for="comment"><span><?= $escaper->escapeHtml(
-                        __('What’s on your mind?')
-                    ) ?></span></label>
+                    <label class="label text-gray-700" for="comment">
+                        <span><?= $escaper->escapeHtml(__('What’s on your mind?')) ?></span>
+                    </label>
                     <textarea name="comment" id="comment" required
                               title="<?= $escaper->escapeHtmlAttr(__('What’s on your mind?')) ?>"
                               class="mt-2 input input-light w-full h-48" cols="5" rows="3"><?= $escaper->escapeHtml(
@@ -96,7 +97,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                               ) ?></textarea>
                 </div>
                 <?= $block->getChildHtml('form.additional.info') ?>
-                <?= $recaptcha ? $recaptcha->getInputHtml('contact') : '' ?>
+                <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_CONTACT) : '' ?>
             </div>
         </fieldset>
         <div class="w-full">
@@ -107,7 +108,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         </div>
         <div class="w-full">
             <?= $block->getChildHtml('form.additional.after') ?>
-            <?= $recaptcha ? $recaptcha->getLegalNoticeHtml('contact') : '' ?>
+            <?= $recaptcha ? $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_CONTACT) : '' ?>
         </div>
     </form>
     <script>
@@ -118,7 +119,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 submitForm() {
                     // Do not rename $form, the variable is expected to be declared in the recaptcha output
                     const $form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
-                    <?= $recaptcha ? $recaptcha->getValidationJsHtml('contact') : '' ?>
+                    <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_CONTACT) : '' ?>
 
                     if (this.errors === 0) {
                         $form.submit();
@@ -128,8 +129,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         }
     </script>
     <div class="card lg:w-1/2 md:w-1/3">
-        <h2 class="sm:text-2xl text-xl font-medium title-font mb-4 text-gray-900"><span><?= $escaper->escapeHtml(
-            __('Contact Details')
-        ) ?></span></h2>
-        <p>Contact info</p></div>
+        <?= $block->getChildHtml('contact.details') ?>
+    </div>
 </div>

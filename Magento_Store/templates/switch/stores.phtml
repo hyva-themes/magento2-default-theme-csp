@@ -1,7 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
  */
 
 declare(strict_types=1);
@@ -46,7 +48,7 @@ $currentStore = $storeSwitcherViewModel->getStore();
             <?php foreach ($storeSwitcherViewModel->getGroups() as $group): ?>
                 <?php if ($group->getId() == $storeSwitcherViewModel->getCurrentGroupId()): ?>
                 <button @click.prevent="open = !open"
-                        @click.away="open = false"
+                        @click.outside="open = false"
                         @keydown.window.escape="open=false"
                         type="button"
                         class="inline-flex justify-center w-full form-select px-4 py-2 bg-white focus:outline-none"

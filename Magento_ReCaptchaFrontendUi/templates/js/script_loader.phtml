@@ -19,9 +19,15 @@ use Magento\Framework\View\Element\Template;
 // This is the reCaptcha script loader (for v2 and v3)
 
 /** @var $storeConfig StoreConfig */
-$storeConfig = $viewModels->require(StoreConfig::class);
-$siteKeyV3   = (string) $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
+$storeConfig        = $viewModels->require(StoreConfig::class);
+$siteKeyV3          = (string) $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha_v3/public_key');
+$siteKeyV2checkbox  = (string) $storeConfig->getStoreConfig('recaptcha_frontend/type_recaptcha/public_key');
+$siteKeyV2invisible = (string) $storeConfig->getStoreConfig('recaptcha_frontend/type_invisible/public_key');
 
+if (!$siteKeyV2checkbox && !$siteKeyV2invisible && !$siteKeyV3) {
+    // No v2 or v3 google API credentials configured, skip rendering the loader
+    return;
+}
 ?>
 <script>
     'use strict';
@@ -43,21 +49,25 @@ $siteKeyV3   = (string) $storeConfig->getStoreConfig('recaptcha_frontend/type_re
             }
 
             const url = 'https://www.google.com/recaptcha/api.js?onload=executeRecaptchaLoadCallbacks';
-            const siteKey = '<?= $escaper->escapeJs($siteKeyV3) ?>';
+            const siteKey = '<?= $escaper->escapeJs($siteKeyV3) /* will be empty if only v2 is configured, which is okay */ ?>';
             const script = document.createElement('script');
             script.type = 'text/javascript';
             script.src = siteKey ? `${url}&render=${siteKey}` : `${url}&render=explicit`;
             script.async = true;
             document.head.appendChild(script);
+
+            script.addEventListener('load', () => {
+                Array.from(document.querySelectorAll('button[data-recaptcha-btn]:disabled')).forEach(btn => btn.removeAttribute('disabled'));
+            });
         }
 
-        window.forceLoadRecaptchaScript = () => {
-            loadRecaptchaScript({target: {form: 'dummy'}});
+        window.forceLoadRecaptchaScript = (form) => {
+            loadRecaptchaScript({target: {form: form || 'dummy'}});
             executeRecaptchaLoadCallbacks();
         };
 
-        document.body.addEventListener("input", loadRecaptchaScript, { once: true });
-        document.body.addEventListener("focus", loadRecaptchaScript, { once: true });
+        document.body.addEventListener('input', loadRecaptchaScript, { once: true });
+        document.body.addEventListener('focus', loadRecaptchaScript, { once: true });
 
     }());
 

@@ -1,0 +1,42 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+
+?>
+
+<div class="flex flex-col gap-6 w-full" :class="inSlideOut ? '' : 'md:flex-row'">
+    <div x-show="formBlockVisibility && hasActiveOptions" class="w-full order-1" :class="inSlideOut ? '' : 'md:flex-row'">
+        <?= $block->getChildHtml('additional-options') ?>
+    </div>
+    <template x-if="isGiftMsgEnabled">
+        <div x-show="formBlockVisibility" class="w-full order-2" :class="inSlideOut ? '' : 'md:flex-row'">
+            <?= $block->getChildHtml('gift-message') ?>
+        </div>
+    </template>
+</div>
+<div x-show="formBlockVisibility" class="gift-options-buttons w-full order-3">
+    <div class="actions-toolbar my-6">
+        <div class="primary">
+            <button type="button" class="action action-update btn btn-primary" @click.prevent="submitGiftOption()">
+                <span><?= $escaper->escapeHtml(__('Update')) ?></span>
+            </button>
+        </div>
+        <div class="secondary">
+            <button type="button" class="action action-cancel underline" @click="closeDialog">
+                <span><?= $escaper->escapeHtml(__('Cancel')) ?></span>
+            </button>
+        </div>
+    </div>
+</div>

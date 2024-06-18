@@ -10,19 +10,17 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
+    <update handle="hyva_form_validation"/>
     <body>
         <referenceContainer name="content">
             <block class="Magento\Customer\Block\Address\Edit" name="customer_address_edit"
                    template="Magento_Customer::address/edit.phtml" cacheable="false">
                 <arguments>
-                    <argument name="attribute_data"
-                              xsi:type="object">Magento\Customer\Block\DataProviders\AddressAttributeData
-                    </argument>
-                    <argument name="post_code_config"
-                              xsi:type="object">Magento\Customer\Block\DataProviders\PostCodesPatternsAttributeData
-                    </argument>
+                    <argument name="attribute_data" xsi:type="object">Magento\Customer\Block\DataProviders\AddressAttributeData</argument>
+                    <argument name="post_code_config" xsi:type="object">Magento\Customer\Block\DataProviders\PostCodesPatternsAttributeData</argument>
                     <argument name="view_model" xsi:type="object">Magento\Customer\ViewModel\Address</argument>
                 </arguments>
+                <container name="fieldset.address.info.additional" as="fieldset_address_info_additional"/>
             </block>
         </referenceContainer>
     </body>

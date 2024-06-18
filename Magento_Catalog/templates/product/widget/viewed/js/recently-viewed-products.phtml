@@ -11,15 +11,13 @@ declare(strict_types=1);
 use Hyva\GraphqlViewModel\ViewModel\GraphqlViewModel;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Currency;
+use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\RecentlyViewedProducts;
 use Hyva\Theme\ViewModel\Store;
-use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Catalog\Block\Product\Image;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
-
-// phpcs:disable Generic.Files.LineLength
 
 /**
  * These variables are automatically assigned to any template
@@ -114,6 +112,8 @@ $viewModelCurrency = $viewModels->require(Currency::class);
 
             fetchProducts(itemsToShow) {
                 const skusToFetch = itemsToShow.map(product => product.sku);
+                <?php /* It is not possible to query prices incl and excl tax from the GraphQL api */ ?>
+                <?php /* If display incl + excl is required, ensure catalog/recently_products/synchronize_with_backend is set to No */ ?>
                 const query = `<?= /** @noEscape */ $gqlViewModel->query(
                     "recently_viewed_products_query",
                     'query ($skus: [String!]!) {
@@ -198,7 +198,7 @@ $viewModelCurrency = $viewModels->require(Currency::class);
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "body": "form_key=" + formKey + "&product=" + productId + "&uenc=" + hyva.getUenc(),
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
@@ -245,7 +245,7 @@ $viewModelCurrency = $viewModels->require(Currency::class);
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    "body": "form_key="+ formKey + "&product="+productId+"&uenc="+btoa(window.location.href),
+                    "body": "form_key=" + formKey + "&product=" + productId + "&uenc=" + hyva.getUenc(),
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
@@ -266,7 +266,7 @@ $viewModelCurrency = $viewModels->require(Currency::class);
             // slider properties
             active: 0,
             getSlider() {
-                return this.$el.querySelector('.js_slides');
+                return this.$root.querySelector('.js_slides');
             },
             pageSize: 4,
             pageFillers: 0,

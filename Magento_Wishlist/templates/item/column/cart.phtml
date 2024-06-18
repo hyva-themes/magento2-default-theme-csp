@@ -44,7 +44,7 @@ $allowedQty = $viewModel->setItem($item)->getMinMaxQty();
                        class="form-input qty"
                        name="qty[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
                        value="<?= /* @noEscape */ $block->getAddToCartQty($item) * 1 ?>"
-                    <?= $product->isSaleable() ? '' : 'disabled="disabled"' ?>
+                    <?= $product->isSaleable() ? '' : 'disabled' ?>
                 >
             </div>
         </div>
@@ -56,8 +56,11 @@ $allowedQty = $viewModel->setItem($item)->getMinMaxQty();
                     data-role="tocart"
                     @click.prevent='addToCart("<?= $escaper->escapeHtmlAttr($item->getId()) ?>",
                         <?= /* @noEscape */ $block->getItemAddToCartParams($item) ?>)'
-                    title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
-                    class="action tocart primary btn btn-primary">
+                    title="<?= $escaper->escapeHtmlAttr(__('Add %1 to Cart', $product->getName())) ?>"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart %1', $product->getName())) ?>"
+                    class="action tocart primary btn btn-primary mt-2"
+                    data-addto="cart"
+            >
                 <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
             </button>
         </div>
