@@ -111,7 +111,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
     <?php /* Product Image */ ?>
     <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
         title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
-        class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:mr-5 md:shrink-0' ?>"
+        class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:pr-5 md:shrink-0' ?>"
         tabindex="-1"
     >
         <?= $block->getImage($product, $imageDisplayArea)
@@ -120,7 +120,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
             ->setProductId($productId)
             ->toHtml(); ?>
     </a>
-    <div class="product-info flex flex-col grow">
+    <div class="product-info flex flex-col grow <?= $viewIsGrid ? '' : 'md:w-4/6' ?>">
         <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <a
                 class="product-item-link"
