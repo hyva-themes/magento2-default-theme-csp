@@ -10,7 +10,7 @@ use Magento\Customer\Block\Widget\Dob;
 use Magento\Customer\ViewModel\Address as AddressViewModel;
 use Magento\Framework\Escaper;
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\Date;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
@@ -18,14 +18,15 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 /** @var Dob $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroIconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var Date $date */
+$date = $viewModels->require(Date::class);
 
 /** @var AddressViewModel $addressViewModel */
 $addressViewModel = $viewModels->require(AddressViewModel::class);
 
 $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
 ?>
+
 <div
     class="field date customer-dob <?= $block->isRequired() ? 'required' : '' ?>"
     x-data="initDatePicker()"
@@ -42,11 +43,11 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
             placeholder="<?= $escaper->escapeHtml($block->getDateFormat()) ?>"
             autocomplete="off"
             x-model="valuePicker"
-            :min="minDateValue"
-            :max="maxDateValue"
+            :min="getMinMaxDate(120)"
+            :max="getMinMaxDate()"
         >
         <input
-            type="hidden"
+            type="text"
             name="<?= $escaper->escapeHtmlAttr($block->getFieldName('dob')) ?>"
             x-model="value"
             <?php if ($block->isRequired()): ?>
@@ -60,23 +61,22 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
 </div>
 <script>
     function initDatePicker() {
-        const format = '<?= $escaper->escapeHtml($block->getDateFormat()) ?>';
-
         return {
-            value: '<?= $escaper->escapeHtml($block->getValue()) ?>',
+            value: '<?= $escaper->escapeJs($block->getValue()) ?>',
+            initValuePicker: '<?= $escaper->escapeJs($date->getDateInUtcFormat($block->getValue())) ?>',
             valuePicker: null,
+            locale: '<?= $escaper->escapeJs($date->getLocale()) ?>',
             init() {
-                this.valuePicker = this.convertDateToUTC(this.value) || new Date().toISOString().substr(0, 10);
-                this.$watch('valuePicker', value => {
-                    this.value = this.convertDateToLocale(value);
-                });
+                this.valuePicker = this.dateToInputDate(new Date(this.initValuePicker));
+                this.$watch('valuePicker', value => this.value = this.convertDateToLocale(value));
             },
-            maxDateValue() {
-                return this.dateToInputDate(new Date());
-            },
-            minDateValue() {
+            getMinMaxDate(subtractYears = 0) {
                 const today = new Date();
-                const utcDate = new Date(Date.UTC(today.getUTCFullYear() - 120, today.getMonth(), today.getDate()));
+                const utcDate = new Date(Date.UTC(
+                    today.getUTCFullYear() - subtractYears,
+                    today.getMonth(),
+                    today.getDate()
+                ));
                 return this.dateToInputDate(utcDate);
             },
             dateToInputDate(date) {
@@ -85,22 +85,10 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
                 const day = date.getDate();
                 return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
             },
-            convertDateToUTC(value) {
-                try {
-                    const dateObj = new Date(value);
-                    const utcDate = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate()));
-                    return this.dateToInputDate(utcDate);
-                } catch (err) {
-                    return null;
-                }
-            },
             convertDateToLocale(value) {
-                try {
-                    const date = new Date(value);
-                    return new Intl.DateTimeFormat('en-US').format(date);
-                } catch (err) {
-                    return '';
-                }
+                const date = new Date(value);
+                const formattedDate = new Intl.DateTimeFormat(this.locale).format(date);
+                return formattedDate;
             }
         }
     }
