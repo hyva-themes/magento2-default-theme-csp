@@ -11,15 +11,19 @@ declare(strict_types=1);
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Search\Helper\Data as SearchHelper;
+use Magento\Search\ViewModel\ConfigProvider as SearchConfig;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 /** @var Escaper $escaper */
 /** @var Template $block */
-/** @var SearchHelper $helper */
 
+/** @var SearchHelper $helper */
 $helper = $this->helper(SearchHelper::class);
+
+/** @var SearchConfig $searchConfig */
+$searchConfig = $viewModels->require(SearchConfig::class);
 ?>
 <script>
     'use strict';
@@ -27,8 +31,11 @@ $helper = $this->helper(SearchHelper::class);
     function initMiniSearch() {
         return {
             minSearchLength: <?= (int) $helper->getMinQueryLength() ?>,
+            suggestionsEnabled: <?= (int) $searchConfig->isSuggestionsAllowed() ?>,
             suggestions: [],
             suggest() {
+                if (!this.suggestionsEnabled) return;
+
                 const search = this.$refs.searchInput;
                 if (search.value.length >= this.minSearchLength) {
                     search.setCustomValidity('');
@@ -99,7 +106,7 @@ $helper = $this->helper(SearchHelper::class);
                     $el.select()
                "
         />
-         <template x-if="suggestions.length > 0">
+         <template x-if="suggestionsEnabled && suggestions.length > 0">
              <div class="w-full leading-normal transition appearance-none text-grey-800 flex flex-col mt-1">
                  <template x-for="suggestion in suggestions">
                      <div class="flex justify-between p-2 bg-container-lighter even:bg-container mb-1 cursor-pointer
@@ -119,9 +126,9 @@ $helper = $this->helper(SearchHelper::class);
              </div>
          </template>
         <button type="submit"
-                title="<?= $escaper->escapeHtml(__('Search')) ?>"
+                title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
                 class="action search sr-only"
-                aria-label="Search"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
         >
             <?= $escaper->escapeHtml(__('Search')) ?>
         </button>
