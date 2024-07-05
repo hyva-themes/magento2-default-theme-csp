@@ -11,6 +11,7 @@ use Magento\Customer\ViewModel\Address as AddressViewModel;
 use Magento\Framework\Escaper;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Date;
+use Hyva\Theme\ViewModel\Locale;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
@@ -20,6 +21,9 @@ use Hyva\Theme\ViewModel\Date;
 
 /** @var Date $date */
 $date = $viewModels->require(Date::class);
+
+/** @var Locale $locale */
+$locale = $viewModels->require(Locale::class);
 
 /** @var AddressViewModel $addressViewModel */
 $addressViewModel = $viewModels->require(AddressViewModel::class);
@@ -62,7 +66,7 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
             value: '<?= $escaper->escapeJs($block->getValue()) ?>',
             initValuePicker: '<?= $escaper->escapeJs($date->getDateYMD($block->getValue())) ?>',
             valuePicker: null,
-            locale: '<?= $escaper->escapeJs($date->getLocale()) ?>',
+            locale: '<?= $escaper->escapeJs($locale->getLocale()) ?>',
             init() {
                 this.valuePicker = this.value && this.dateToInputDate(new Date(this.initValuePicker));
                 this.$watch('valuePicker', value => this.value = this.convertDateToLocale(value));
