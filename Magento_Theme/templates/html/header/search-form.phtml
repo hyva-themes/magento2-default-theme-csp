@@ -31,7 +31,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
     function initMiniSearch() {
         return {
             minSearchLength: <?= (int) $helper->getMinQueryLength() ?>,
-            suggestionsEnabled: <?= (int) $searchConfig->isSuggestionsAllowed() ?>,
+            suggestionsEnabled: <?= $searchConfig->isSuggestionsAllowed() ? 'true' : 'false' ?>,
             suggestions: [],
             suggest() {
                 const search = this.$refs.searchInput;
@@ -127,9 +127,9 @@ $searchConfig = $viewModels->require(SearchConfig::class);
              </div>
          </template>
         <button type="submit"
-                title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+                title="<?= $escaper->escapeHtml(__('Search')) ?>"
                 class="action search sr-only"
-                aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+                aria-label="Search"
         >
             <?= $escaper->escapeHtml(__('Search')) ?>
         </button>
