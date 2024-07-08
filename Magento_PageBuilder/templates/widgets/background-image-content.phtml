@@ -15,11 +15,13 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+
+/*
+ * Lazy load page-builder background images when the content element intersects with the viewport.
+ */
 ?>
 <script>
     'use strict';
-
-    <?php /* Lazy load slider background images when the slider intersects the viewport */ ?>
 
     (() => {
         const lazyBackgrounds = document.querySelectorAll('[data-background-images]');
