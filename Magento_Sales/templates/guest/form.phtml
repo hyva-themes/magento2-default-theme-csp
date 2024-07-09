@@ -91,4 +91,5 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
             }
         }
     </script>
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 </div>

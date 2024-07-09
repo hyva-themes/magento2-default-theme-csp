@@ -73,6 +73,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div
      x-data="initTierPrices<?= (int)$product->getId() ?>()"
      x-bind="eventListeners"

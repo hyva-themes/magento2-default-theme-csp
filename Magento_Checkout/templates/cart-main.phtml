@@ -29,7 +29,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
     window.customerData = window.checkoutConfig.customerData;
     window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
 </script>
-
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <script>
     'use strict';
     (function( hyva, undefined ) {
@@ -81,7 +81,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
         }
     }( window.hyva = window.hyva || {} ));
 </script>
-
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <script>
 
     function initCartForm(){
@@ -148,6 +148,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div x-data="initCartForm()"
      class="cart-form clearfix"
      @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"

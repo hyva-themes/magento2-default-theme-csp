@@ -92,6 +92,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
         };
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <?php endif; ?>
 <legend class="text-gray-900 text-xl title-font font-medium mb-4">
     <span><?= $escaper->escapeHtml($block->getLinksTitle()) ?></span>

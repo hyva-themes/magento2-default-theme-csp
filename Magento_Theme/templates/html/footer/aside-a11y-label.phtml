@@ -39,3 +39,4 @@ foreach ($block->getData('label_targets') ?? [] as $selector => $containerName) 
       }
   }, {once: true})
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>

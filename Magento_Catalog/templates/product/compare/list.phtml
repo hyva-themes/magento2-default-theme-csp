@@ -121,6 +121,7 @@ function initCompareOnCompareList() {
     };
 }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <section>
     <div class="container">
         <button x-data="initPrint()"

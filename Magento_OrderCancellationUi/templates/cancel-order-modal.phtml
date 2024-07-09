@@ -89,6 +89,7 @@ END_OF_CONTENT
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <form
     x-data="Object.assign(hyva.modal(), hyva.formValidation($el), initOrderCancellationModal())"
     @submit.prevent="null"

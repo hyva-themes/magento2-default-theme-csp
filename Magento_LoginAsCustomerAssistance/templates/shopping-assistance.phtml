@@ -44,6 +44,7 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div class="field choice"
      x-data="initAllowShippingAssistence()"
 >

@@ -70,6 +70,7 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div id="cart-totals"
      class="cart-totals relative"
      x-data="initCartTotals()"

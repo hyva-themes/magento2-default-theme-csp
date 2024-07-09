@@ -100,7 +100,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
         }
 
     </script>
-
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
     <div x-data="initWishlistOnWishlistSidebar()"
          @private-content-loaded.window="receiveWishlistData($event.detail.data)"
          class="wishlist-widget"

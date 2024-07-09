@@ -300,6 +300,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
     }
 
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <section class="my-12 text-gray-700 body-font"
          x-data="initSliderComponent<?= /** @noEscape */ $uniqueId?>()"
          x-init="getProducts($nextTick);"

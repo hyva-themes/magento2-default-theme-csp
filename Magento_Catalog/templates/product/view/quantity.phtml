@@ -84,6 +84,7 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
             };
         }
     </script>
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
     <div x-data="initQtyField()"
         x-init="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
     >

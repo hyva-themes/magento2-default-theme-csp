@@ -87,7 +87,7 @@ $swatchData = $block->getSwatchData();
         }
     }
 </script>
-
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div class="swatch-attribute swatch-layered <?= $escaper->escapeHtmlAttr($swatchData['attribute_code']) ?>"
      x-data="initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>()"
 >

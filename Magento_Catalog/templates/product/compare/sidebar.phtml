@@ -115,7 +115,7 @@ function initCompareSidebarClear() {
     }
 }
 </script>
-
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div x-data="initCompareOnCompareSidebar()"
      @private-content-loaded.window="receiveCompareData($event.detail.data)"
      class="compare-widget"

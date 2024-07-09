@@ -218,6 +218,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                     }
                 }
             </script>
+        <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
             <div x-data="initBundleOptions()"
                  x-init="
                     calculateTotalPrice();

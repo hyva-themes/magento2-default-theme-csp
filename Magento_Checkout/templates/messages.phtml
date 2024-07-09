@@ -87,3 +87,4 @@ foreach ($block->getMessageTypes() as $type) {
 
     }( window.hyva = window.hyva || {} ));
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>

@@ -109,4 +109,5 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
             }
         }
     </script>
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <?php endif; ?>

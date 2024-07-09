@@ -578,4 +578,5 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
             });
         })
     </script>
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 </div>

@@ -178,6 +178,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div x-data="initPrice<?= (int)$product->getId() ?>()"
      x-bind="eventListeners"
      class="price-box price-final_price my-4"

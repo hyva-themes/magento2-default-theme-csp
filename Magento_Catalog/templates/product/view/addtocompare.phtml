@@ -67,7 +67,7 @@ if (!$product->getId() || !$compareViewModel->showOnProductPage()) {
         };
     }
 </script>
-
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <button x-data="initCompareOnProductView()"
         @click.prevent="addToCompare(<?= (int)$product->getId() ?>)"
         title="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"

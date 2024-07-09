@@ -90,4 +90,5 @@ $formId     = $block->getData('form_id') ?? '';
     }
     <?php if ($block->getData('render_script_tag')): ?>
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <?php endif; ?>

@@ -124,5 +124,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 }
             }
         </script>
+        <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
     </div>
 <?php endif; ?>

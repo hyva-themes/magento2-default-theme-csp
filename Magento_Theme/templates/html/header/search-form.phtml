@@ -83,6 +83,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div class="container py-2 mx-auto text-black" x-data="initMiniSearch()">
     <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search()"
           action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get" role="search">

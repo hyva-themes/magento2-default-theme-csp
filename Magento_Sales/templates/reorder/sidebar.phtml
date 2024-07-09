@@ -90,7 +90,7 @@ if (! $customer->customerLoggedIn()) {
     }
 
 </script>
-
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div x-data="initReorderSidebar()"
      @private-content-loaded.window="receiveReorderData($event.detail.data)"
      class="block-reorder mt-8 hidden"

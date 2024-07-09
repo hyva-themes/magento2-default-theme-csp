@@ -45,6 +45,7 @@ use Magento\Wishlist\Block\Customer\Sharing;
     }
 
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <form class="form wishlist share"
       x-data="initShareWishlist()"
       @submit="validateForm()"

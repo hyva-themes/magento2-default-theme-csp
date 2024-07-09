@@ -218,6 +218,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
         })
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div x-data="{isLoading: false}" x-cloak
      @gift-message-loading-start.window="isLoading = true"
      @gift-message-loading-end.window="isLoading = false"

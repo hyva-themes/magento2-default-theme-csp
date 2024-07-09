@@ -245,6 +245,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                     }
                 }
             </script>
+            <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
         </form>
     </div>
     <div id="send-friend-product" class="w-full lg:w-1/3">

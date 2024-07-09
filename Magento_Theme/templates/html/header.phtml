@@ -69,6 +69,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div id="header"
      class="relative z-30 w-full border-b shadow bg-container-lighter border-container-lighter"
      x-data="initHeader()"

@@ -26,6 +26,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
             );
         }
     </script>
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 
     <div x-data="initConfigurableDropdownOptions_<?= (int) $productId ?>()"
          @private-content-loaded.window="onGetCartData($event.detail.data)"

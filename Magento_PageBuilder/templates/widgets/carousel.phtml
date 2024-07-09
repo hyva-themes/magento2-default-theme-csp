@@ -8,11 +8,13 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 
 $gliderUrl = $block->getViewFileUrl('Magento_PageBuilder::js/glider.min.js');
 ?>
@@ -214,3 +216,4 @@ $gliderUrl = $block->getViewFileUrl('Magento_PageBuilder::js/glider.min.js');
         });
     })();
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>

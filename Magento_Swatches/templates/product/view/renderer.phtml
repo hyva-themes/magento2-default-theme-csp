@@ -52,7 +52,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
             );
         }
     </script>
-
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
     <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
          x-init="initShowSwatchesIntersect();"
          @private-content-loaded.window="onGetCartData($event.detail.data)"

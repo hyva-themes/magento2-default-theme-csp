@@ -123,5 +123,6 @@ $lazyLoadScript = $storeConfig->getStoreConfig('google/gtag/lazyload')
             }())
         }
     </script>
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
     <!-- END GOOGLE ADWORDS CODE -->
 <?php endif ?>

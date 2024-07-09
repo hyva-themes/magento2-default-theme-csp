@@ -113,6 +113,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <section id="authentication-popup"
          x-data="initAuthentication()"
          @private-content-loaded.window="onPrivateContentLoaded($event.detail.data)"

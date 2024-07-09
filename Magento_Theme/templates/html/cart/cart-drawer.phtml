@@ -140,6 +140,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <section x-cloak
          x-show="cart"
          id="cart-drawer"

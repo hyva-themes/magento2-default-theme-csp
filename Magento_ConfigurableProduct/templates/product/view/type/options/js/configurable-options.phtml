@@ -368,3 +368,5 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
     }
 
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
+

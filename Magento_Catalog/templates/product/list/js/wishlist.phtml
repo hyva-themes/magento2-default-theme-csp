@@ -69,4 +69,5 @@ $wishlistViewModel = $viewModels->require(Wishlist::class);
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <?php endif; ?>

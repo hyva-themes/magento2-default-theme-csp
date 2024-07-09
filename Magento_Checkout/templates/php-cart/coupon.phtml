@@ -51,6 +51,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div class="coupon-form pt-6"
      x-data="initCouponForm()"
 >

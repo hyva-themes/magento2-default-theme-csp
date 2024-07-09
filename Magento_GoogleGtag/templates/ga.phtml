@@ -100,5 +100,6 @@ $analyticsData = $block->getAnalyticsData();
             }
         }())
     </script>
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
     <!-- END GOOGLE ANALYTICS 4 CODE -->
 <?php endif; ?>

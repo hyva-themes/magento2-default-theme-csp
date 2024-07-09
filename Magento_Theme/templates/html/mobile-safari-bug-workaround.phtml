@@ -28,3 +28,4 @@ use Magento\Framework\View\Element\Template;
 <script>
     document.body.addEventListener('touchstart', () => {}, {passive: true})
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>

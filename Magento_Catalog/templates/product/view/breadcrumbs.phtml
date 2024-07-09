@@ -143,3 +143,4 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
         return {breadcrumbs};
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>

@@ -293,3 +293,5 @@ $viewModelCurrency = $viewModels->require(Currency::class);
     }
 
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
+

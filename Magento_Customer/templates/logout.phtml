@@ -24,3 +24,5 @@ declare(strict_types=1);
         location.href = "<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl())) ?>"
     }, 5000);
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
+

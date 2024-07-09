@@ -222,6 +222,7 @@ $options = $block->decorateArray($block->getOptions());
             }
         }
     </script>
+    <?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
     <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
         <?= $escaper->escapeHtml(__('Customizable Options')) ?>:
     </h2>

@@ -67,6 +67,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
 <div class="my-12" x-data="initGroupedOptions()">
 <?php if ($hasAssociatedProducts): ?>
     <h2 class="text-gray-900 text-xl title-font font-medium mb-2">

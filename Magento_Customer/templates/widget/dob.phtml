@@ -368,3 +368,4 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
         }
     }
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>

@@ -140,3 +140,4 @@ if (! $recentlyViewed->isRecentlyViewedProductsEnabled()) {
         addCurrentProductToRecentlyViewed()
     })()
 </script>
+<?php $viewModels->require(\Hyva\Theme\ViewModel\InlineScript::class)->registerWithCsp() ?>
