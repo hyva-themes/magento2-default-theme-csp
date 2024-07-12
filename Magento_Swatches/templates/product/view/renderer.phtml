@@ -119,12 +119,13 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                                     <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
                                 </option>
                                 <template
-                                    x-for="(item, index) in getAllowedAttributeOptions(<?= (int) $attribute->getAttributeId() ?>)"
+                                    x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
                                     :key="item.id"
                                 >
                                     <option
                                         :value="item.id"
                                         x-html="item.label"
+                                        :disabled="!optionIsActive(<?= (int) $attributeId ?>, item.id)"
                                         :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>] ===
                                 item.id">
                                     </option>
