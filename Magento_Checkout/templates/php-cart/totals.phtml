@@ -21,16 +21,18 @@ use Magento\Store\Model\ScopeInterface;
 $storeConfigViewModel = $viewModels->require(StoreConfig::class);
 
 $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
+$totalsItemClass = 'grid grid-cols-[1.5fr_1fr] gap-x-1 py-2 [&>dd]:justify-self-end';
 ?>
 <script>
     function initCartTotals() {
         return {
-            taxSummaryIsOpen: false,
             totalsData: window.checkoutConfig.totalsData,
             quoteData: window.checkoutConfig.quoteData,
             shippingMethod: window.checkoutConfig.selectedShippingMethod,
             totalsSort: <?= /** @noEscape */ json_encode($totalsSort) ?>,
             isLoading: false,
+            wrapperClass: '<?= $totalsItemClass ?> border-t border-container',
+            wrapperClassTotals: '<?= $totalsItemClass ?> [&>dt]:font-semibold pt-6 text-xl',
             getSortedSegments() {
                 const segments = this.totalsData.total_segments;
 
@@ -70,15 +72,16 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
         }
     }
 </script>
-<div id="cart-totals"
-     class="cart-totals relative"
-     x-data="initCartTotals()"
-     x-bind="eventListeners"
+<dl
+    id="cart-totals"
+    class="cart-totals relative"
+    x-data="initCartTotals()"
+    x-bind="eventListeners"
 >
     <?= $block->getBlockHtml('block-loader') ?>
     <template x-for="(segment, index) in getSortedSegments()" :key="index">
-        <div>
+        <div class="text-md lg:text-sm">
             <?= $block->getChildHtml(); ?>
         </div>
     </template>
-</div>
+</dl>
