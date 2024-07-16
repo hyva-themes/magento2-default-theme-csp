@@ -211,7 +211,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                         />
                                     </a>
                                 </template>
-                                <template x-if="!item.product_has_url && !item.is_visible_in_site_visibility">
+                                <template x-if="!item.product_has_url || !item.is_visible_in_site_visibility">
                                     <div class="w-1/4 !ml-0">
                                         <img
                                             :src="item.product_image.src"
