@@ -44,7 +44,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <div :class="wrapperClass">
                         <span>
                             <template x-for="(taxRate, index) in taxItem.rates">
-                                <div x-text="`${taxRate.title} (${taxRate.percent}%)`"></div>
+                                <span x-text="`${taxRate.title} (${taxRate.percent}%)`"></span>
                             </template>
                         </span>
                         <span x-text="hyva.formatPrice(taxItem.amount)" class="justify-self-end"></span>
