@@ -231,14 +231,14 @@ mutation createProductReviewMutation(
                            x-cloak
                            class="text-green flex items-center">
                             <span class="inline-block w-8 h-8 mr-3">
-                                <?= $heroicons->checkCircleHtml(); ?>
+                                <?= $heroicons->checkCircleHtml('', 24, 24, ['aria-hidden' => true]); ?>
                             </span>
                             <?= $escaper->escapeHtml(__('You submitted your review for moderation.')) ?>
                         </p>
                         <template x-if="displayErrorMessage">
                             <p class="text-red flex items-center">
                                 <span class="inline-block w-8 h-8 mr-3">
-                                    <?= $heroicons->exclamationCircleHtml(); ?>
+                                    <?= $heroicons->exclamationCircleHtml('', 24, 24, ['aria-hidden' => true]); ?>
                                 </span>
                                 <template x-for="errorMessage in errorMessages">
                                     <span x-html="errorMessage"></span>
