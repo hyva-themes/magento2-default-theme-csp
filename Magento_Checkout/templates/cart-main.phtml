@@ -45,7 +45,9 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
             if (!form.action) {
                 return;
             }
-            window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: true }));
+            window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
+                isLoading: true
+            }}));
             controller.abort();
             controller = new AbortController();
 
@@ -79,7 +81,9 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     );
                 }
             }).finally(() => {
-                window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: false }));
+                window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
+                    isLoading: false
+                }}));
             })
         }
     }( window.hyva = window.hyva || {} ));
@@ -160,7 +164,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
      class="cart-form clearfix"
      @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
      @storage.window="onStorageChange($event)"
-     @cart-is-loading.window="isLoading = $event.detail"
+     @cart-is-loading.window="isLoading = ($event.detail && $event.detail.isLoading) || false"
 >
     <?php if ($block->getItemsCount()): ?>
         <?= $block->getChildHtml('with-items') ?>
