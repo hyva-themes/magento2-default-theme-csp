@@ -290,7 +290,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             },
             getSortedCountries(){
                 return Object.keys(this.directoryData)
-                    .filter(countryKey => countryKey !== 'data_id' && this.directoryData[countryKey].name != null)
+                    .filter(countryKey => countryKey !== 'data_id' && this.directoryData[countryKey].name)
                     .sort((a,b) => {
                         if (this.directoryData[a].name < this.directoryData[b].name) {
                             return -1
