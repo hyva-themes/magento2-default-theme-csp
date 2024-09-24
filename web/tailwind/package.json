@@ -25,10 +25,7 @@
     "node": ">=16.0.0"
   },
   "browserslist": [
-    "last 3 version",
-    "> 0.5%",
-    "not dead",
-    "not op_mini all"
+    "> 0.2% and not dead"
   ],
   "author": "Hyvä Themes BV",
   "license": "proprietary",
