@@ -21,6 +21,7 @@
     "browser-sync": "browser-sync start --config ./browser-sync.config.js",
     "output-success": "echo \"\\033[0;32mDone!\\033[0m\""
   },
+  "engine-strict": true,
   "engines": {
     "node": ">=16.0.0"
   },
