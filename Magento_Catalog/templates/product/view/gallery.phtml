@@ -107,7 +107,7 @@ $productName = $block->getProduct()->getName();
                 <button
                     type="button"
                     class="absolute inset-0 w-full outline-offset-2"
-                    aria-label="<?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?>"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Click to view image in fullscreen')) ?>"
                     x-ref="galleryFullscreenBtn"
                     x-show="!fullscreen && images[active].type !== 'video'"
                     x-cloak
