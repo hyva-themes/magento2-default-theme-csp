@@ -24,8 +24,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
 ?>
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('initCouponForm', () => ({
+    function initCouponForm() {
+        return {
             showCouponForm: <?= $hasCouponCode ? 1 : 0 ?>,
             formData: {
                 coupon_code: '<?= $escaper->escapeJs($block->getCouponCode()) ?>',
@@ -42,12 +42,12 @@ $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
 
                 this.$nextTick(() => this.$refs.couponInput.select());
             }
-        }))
-    });
+        }
+    };
 </script>
 <details
     class="coupon-form group"
-    x-data="initCouponForm"
+    x-data="initCouponForm()"
     :open="showCouponForm"
 >
     <summary
