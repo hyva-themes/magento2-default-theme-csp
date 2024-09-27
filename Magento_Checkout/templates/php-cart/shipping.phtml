@@ -259,11 +259,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             saveToCustomerSectionData(){
                 const browserStorage = hyva.getBrowserStorage();
 
-                const sectionData = JSON.parse(browserStorage.getItem('mage-cache-storage'));
-
-                if (!sectionData) {
-                    sectionData = {};
-                }
+                const sectionData = JSON.parse(browserStorage.getItem('mage-cache-storage')) || {};
 
                 if (!sectionData['checkout-data']) {
                     sectionData['checkout-data'] = {};
