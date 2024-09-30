@@ -49,14 +49,10 @@ $isNav = $block->getIsNav() !== null ? $block->getIsNav() : false;
             x-ref="AccountNavigationMobileToggleIcon"
         >
             <?= $heroicons->chevronDownHtml(
-                'transition-transform duration-300 ease-in-out transform rotate-180',
+                'transition-transform duration-300 ease-in-out transform group-aria-expanded:rotate-180',
                 24,
                 24,
-                [
-                    ':class'      => "{ 'rotate-180': blockOpen }",
-                    'aria-hidden' => 'true',
-                    'focusable' => 'false'
-                ]
+                ['aria-hidden' => 'true']
             ); ?>
         </span>
     </button>
