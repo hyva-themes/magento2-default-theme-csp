@@ -80,7 +80,7 @@
 
                         <block class="Magento\Theme\Block\Html\Title" name="product.info.title" template="Magento_Theme::html/title.phtml">
                             <arguments>
-                                <argument name="maybe_purged_tailwind_section_classes" xsi:type="string">hidden mb-6 font-bold md:flex md:flex-row md:flex-wrap</argument>
+                                <argument name="maybe_purged_tailwind_section_classes" xsi:type="string">hidden mb-6 mt-8 font-bold md:flex md:flex-row md:flex-wrap</argument>
                                 <argument name="heading_tag" xsi:type="string">div</argument>
                                 <argument name="aria_hidden" xsi:type="boolean">true</argument>
                             </arguments>
