@@ -18,7 +18,7 @@
     "watch": "NODE_ENV=development npx tailwindcss --postcss -i tailwind-source.css -o ../css/styles.css  --watch --verbose",
     "build-dev": "echo DEVELOPMENT builds are NOT SUPPORTED by tailwind v3, please use the 'watch' or 'build-prod' commands instead. && exit 1",
     "build-prod": "npm run build && npm run output-success",
-    "browser-sync": "browser-sync start --config ./browser-sync.config.js",
+    "browser-sync": "npx browser-sync start --config ./browser-sync.config.js",
     "output-success": "echo \"\\033[0;32mDone!\\033[0m\""
   },
   "engines": {
