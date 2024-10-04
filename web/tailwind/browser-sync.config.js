@@ -26,7 +26,7 @@ const proxy = "http://my-magento.test";
 if (!hasProxyArg && proxy === "http://my-magento.test") {
     console.error(`
 To set an alternative proxy, use: 'npm run browser-sync -- --proxy http://hyva.test'.
-You can also use an HTTPS local address: 'npm run browser-sync -- --proxy https://hyva.test' --https.
+You can also use an HTTPS local address: 'npm run browser-sync -- --proxy https://hyva.test --https'.
 Alternatively, update the defaultProxy value in 'browser-sync.config.js'.
 `);
     process.exit(1);
