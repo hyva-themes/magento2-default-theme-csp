@@ -281,8 +281,9 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                 );
             },
             updatePrices() {
-                const value = this.productIndex ?
-                    this.optionConfig.optionPrices[this.productIndex] :
+                const cheapestProductIndex = this.findCheapestProductForPartialSelection(this.selectedValues)
+                const value = cheapestProductIndex ?
+                    this.optionConfig.optionPrices[cheapestProductIndex] :
                     this.optionConfig.prices;
                 window.dispatchEvent(
                     new CustomEvent(
