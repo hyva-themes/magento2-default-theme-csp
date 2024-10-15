@@ -21,7 +21,7 @@ $productId = $product ? $product->getId() : null;
     <?php if ($productId): ?>@update-prices-<?= (int)$productId ?>.window="updatePrice"<?php endif; ?>
     <?php if ($block->getPriceId()): ?>x-id="htmlPriceIdGroup" data-price-id="<?= $escaper->escapeHtmlAttr($block->getPriceId()) ?>"<?php endif; ?>
     class="price-container <?= $escaper->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>"
-        <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>
+        <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="https://schema.org/Offer"' : '' ?>
 >
     <?php if ($block->getDisplayLabel()): ?>
         <span class="price-label"><?= $escaper->escapeHtml($block->getDisplayLabel()) ?></span>
