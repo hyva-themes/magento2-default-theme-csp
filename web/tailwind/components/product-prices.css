@@ -2,7 +2,7 @@
     @apply text-sm;
 
     &:before {
-        content: attr(data-label) ": ";
+        content: attr(data-label) ': ';
     }
 }
 
@@ -31,9 +31,9 @@
 .price-container.price-tier_price > .price-including-tax + .price-excluding-tax,
 .price-container .weee {
     &:before {
-        content: "(" attr(data-label) ": ";
+        content: '(' attr(data-label) ': ';
     }
     &:after {
-        content: ")";
+        content: ')';
     }
 }
