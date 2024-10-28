@@ -8,11 +8,17 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\GoogleMapsApi;
 use Magento\Framework\Escaper;
-use Magento\PageBuilder\Block\GoogleMapsApi;
+use Magento\Framework\View\Element\Template;
 
 /** @var Escaper $escaper */
-/** @var GoogleMapsApi $block */
+/** @var Template $block */
+/** @var ViewModelRegistry $viewModels */
+
+$googleMapsApi = $viewModels->require(GoogleMapsApi::class);
+
 ?>
 <script>
     'use strict';
@@ -75,7 +81,7 @@ use Magento\PageBuilder\Block\GoogleMapsApi;
             };
 
             const getMapOptions = (disableDefaultUI, mapTypeControl) => {
-                const style = '<?= $escaper->escapeJs($block->getStyle()) ?>';
+                const style = '<?= $escaper->escapeJs($googleMapsApi->getStyle()) ?>';
                 return {
                     zoom: 8,
                     scrollwheel: false,
@@ -147,7 +153,7 @@ use Magento\PageBuilder\Block\GoogleMapsApi;
                     initMaps(mapElements);
                 });
 
-                script.src = '<?= $escaper->escapeJs($block->getLibraryUrl()) ?>';
+                script.src = '<?= $escaper->escapeJs($googleMapsApi->getLibraryUrl()) ?>';
                 document.head.appendChild(script);
             }
         });
