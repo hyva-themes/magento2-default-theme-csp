@@ -396,7 +396,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                         ?>
                         <select name="country_id"
                                 id="country"
-                                title="Country"
+                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('country_id') ?>"
                                 required
                                 class="form-select"
                                 x-ref="country_id"
