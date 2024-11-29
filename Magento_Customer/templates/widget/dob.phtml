@@ -26,7 +26,9 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
 ?>
 <div class="field date <?= $block->isRequired() ? 'required' : '' ?>"
      x-data="initDatePicker()"
-     x-init="[initDate(), recalcDaysGrid(), markCalendarWindow()]"
+<div
+    class="field date <?= $block->isRequired() ? 'required' : '' ?>"
+    x-data="initDatePicker()"
 >
     <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>" class="label">
         <span><?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?></span>
@@ -73,6 +75,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                     <select name="datepicker_month"
                         x-model="month"
                         class="text-sm rounded border-gray-300"
+                        @change="goToMonth(month)"
                     >
                         <template x-for="(monthName, index) in labels.monthNames">
                             <option :value="index" x-text="monthName"></option>
@@ -81,6 +84,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                     <select name="datepicker_year"
                         x-model="year"
                         class="text-sm rounded border-gray-300"
+                        @change="recalcDaysGrid()"
                     >
                         <template x-for="option in yearRange">
                             <option :value="option" x-text="option"></option>
@@ -168,12 +172,17 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                 this.calendarWindow = this.$root.querySelector('.calendar-window');
             },
 
-            initDate() {
+            init() {
                 const today = new Date();
-                this.month = today.getMonth();
-                this.year = today.getFullYear();
                 this.initYearsRange();
                 this.correctWeeks();
+
+                this.$nextTick(() => {
+                    this.month = today.getMonth();
+                    this.year = today.getFullYear();
+                    this.recalcDaysGrid();
+                    this.markCalendarWindow();
+                });
             },
 
             initYearsRange() {

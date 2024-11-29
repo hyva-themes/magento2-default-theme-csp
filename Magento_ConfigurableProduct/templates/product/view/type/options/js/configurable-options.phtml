@@ -49,6 +49,21 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                     }
                 });
             },
+            optionIsActive(attributeId, optionId) {
+                <?php /* return true if a product with this option is in stock */ ?>
+                return !!this.getAllowedAttributeOptions(attributeId).find(
+                    option => option.id === optionId
+                )
+            },
+            optionIsEnabled(attributeId, optionId) {
+                <?php /* return true if a product with this option is enabled */ ?>
+                for (const productId in this.optionConfig.index) {
+                    if (this.optionConfig.index[productId][attributeId] === optionId) {
+                        return true;
+                    }
+                }
+                return false;
+            },
             findSimpleIndex() {
                 <?php /* a better method name would be `updateSelectedSimpleIndex` but keeping for bc */ ?>
                 this.productIndex = this.calculateSimpleIndexForPartialSelection(this.selectedValues);
@@ -169,6 +184,12 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             },
             getAllowedAttributeOptions(attributeId) {
                 return this.allowedAttributeOptions[attributeId] || []
+            },
+            getAllAttributeOptions(attributeId) {
+                return (
+                    this.optionConfig.attributes[attributeId] &&
+                    this.optionConfig.attributes[attributeId].options
+                ) || []
             },
             getProductIdsForOption(option) {
                 const attributeId = this.findAttributeByOptionId(option.id);
