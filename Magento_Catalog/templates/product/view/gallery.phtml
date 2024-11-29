@@ -518,7 +518,7 @@ $productName = $block->getProduct()->getName();
             handleTouchStart(event) {
                 if (
                     this.images.length <= 1 ||
-                    event.touches.length > 1 ||
+                    (event.touches && event.touches.length > 1) ||
                     (window.visualViewport && window.visualViewport.scale > 1.01)
                 ) return;
                 const firstTouch = event.touches[0];
@@ -529,7 +529,7 @@ $productName = $block->getProduct()->getName();
             handleTouchMove(event) {
                 if (
                     this.images.length <= 1 ||
-                    event.touches.length > 1 ||
+                    (event.touches && event.touches.length > 1) ||
                     (window.visualViewport && window.visualViewport.scale > 1.01) ||
                     !touchXDown ||
                     !touchYDown
