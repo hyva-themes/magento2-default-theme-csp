@@ -54,7 +54,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
     </script>
 
     <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
-         x-init="init(); initShowSwatchesIntersect();"
+         x-init="initShowSwatchesIntersect();"
          @private-content-loaded.window="onGetCartData($event.detail.data)"
          class="relative mb-6"
          x-defer="intersect"
