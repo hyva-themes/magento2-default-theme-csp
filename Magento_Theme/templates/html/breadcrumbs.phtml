@@ -53,20 +53,20 @@ $skipLinkedDataJsonSchema = $block->getData('skip_ld_json_schema');
 
 <?php if (! $skipLinkedDataJsonSchema): ?>
     <?php
-        $schemaBreadcrumbs = [];
+    $schemaBreadcrumbs = [];
 
-        foreach ($crumbs as $crumbName => $crumbInfo) {
-            $schemaBreadcrumbs[] = [
-                "@type" => "ListItem",
-                "position" => $crumbsCount,
-                "item" => [
-                    "@id" => $crumbInfo['last'] ? $currentPageUrl : $crumbInfo['link'],
-                    "name" => $crumbInfo['label']
-                ]
-            ];
-        }
+    foreach ($crumbs as $crumbName => $crumbInfo) {
+        $schemaBreadcrumbs[] = [
+            "@type" => "ListItem",
+            "position" => $crumbsCount,
+            "item" => [
+                "@id" => $crumbInfo['last'] ? $currentPageUrl : $crumbInfo['link'],
+                "name" => $crumbInfo['label']
+            ]
+        ];
+    }
     ?>
     <script type="application/ld+json">
-        { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": <?= json_encode($schemaBreadcrumbs) ?> }
+        { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": <?= /* @noEscape */ json_encode($schemaBreadcrumbs) ?> }
     </script>
 <?php endif; ?>
