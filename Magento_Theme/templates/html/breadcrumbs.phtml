@@ -27,7 +27,6 @@ use Magento\Framework\Escaper;
                 <?php endif; ?>
                 <?php if ($crumbInfo['link']): ?>
                     <a href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
-                       class="no-underline"
                        title="<?= $escaper->escapeHtmlAttr($crumbInfo['title']) ?>"
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
                 <?php elseif ($crumbInfo['last']): ?>
