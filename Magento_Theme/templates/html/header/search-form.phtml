@@ -13,6 +13,7 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Search\Helper\Data as SearchHelper;
+use Magento\Search\ViewModel\ConfigProvider as SearchConfig;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
@@ -25,7 +26,11 @@ use Magento\Search\Helper\Data as SearchHelper;
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
 
+/** @var SearchHelper $helper */
 $helper = $this->helper(SearchHelper::class);
+
+/** @var SearchConfig $searchConfig */
+$searchConfig = $viewModels->require(SearchConfig::class);
 ?>
 <script>
     'use strict';
@@ -33,6 +38,7 @@ $helper = $this->helper(SearchHelper::class);
     function initMiniSearch() {
         return {
             minSearchLength: <?= (int) $helper->getMinQueryLength() ?>,
+            <?php if ($searchConfig->isSuggestionsAllowed()): ?>
             suggestions: [],
             suggest() {
                 const search = this.$refs.searchInput;
@@ -56,6 +62,7 @@ $helper = $this->helper(SearchHelper::class);
                 .then(response => response.json())
                 .then(result => this.suggestions = result);
             },
+            <?php endif ?>
             search(term) {
                 const search = this.$refs.searchInput;
                 term = term || search.value;
@@ -104,10 +111,12 @@ $helper = $this->helper(SearchHelper::class);
                 placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
                 maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
                 class="w-full text-lg lg:text-xl text-grey-800 focus:border-transparent focus:outline-none rounded-l"
-                @focus.once="suggest"
-                @input.debounce.300="suggest"
-                @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
                 @search-open.window.debounce.10="$el.focus(); $el.select()"
+                <?php if ($searchConfig->isSuggestionsAllowed()): ?>
+                    @focus.once="suggest"
+                    @input.debounce.300="suggest"
+                    @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
+                <?php endif ?>
             >
             <button
                 type="submit"
@@ -119,24 +128,26 @@ $helper = $this->helper(SearchHelper::class);
             </button>
         </form>
     </search>
-    <template x-if="suggestions.length > 0">
-        <nav
-            aria-label="<?= $escaper->escapeHtmlAttr(__('Search Suggestions')) ?>"
-            class="flex flex-col mt-1 text-grey-800 gap-1"
-        >
-            <template x-for="suggestion in suggestions">
-                <button
-                    type="button"
-                    class="flex justify-between p-2 bg-container-lighter even:bg-container border border-container hover:bg-container-darker"
-                    @click="search(suggestion.title)"
-                    @keydown.enter="search(suggestion.title)"
-                    @keydown.arrow-up.prevent="focusElement($event.target.previousElementSibling) || $refs.searchInput.focus()"
-                    @keydown.arrow-down.prevent="focusElement($event.target.nextElementSibling)"
-                >
-                    <span x-text="suggestion.title"></span>
-                    <span x-text="suggestion.num_results"></span>
-                </button>
-            </template>
-        </nav>
-    </template>
+    <?php if ($searchConfig->isSuggestionsAllowed()): ?>
+        <template x-if="suggestions.length > 0">
+            <nav
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Search Suggestions')) ?>"
+                class="flex flex-col mt-1 text-grey-800 gap-1"
+            >
+                <template x-for="suggestion in suggestions">
+                    <button
+                        type="button"
+                        class="flex justify-between p-2 bg-container-lighter even:bg-container border border-container hover:bg-container-darker"
+                        @click="search(suggestion.title)"
+                        @keydown.enter="search(suggestion.title)"
+                        @keydown.arrow-up.prevent="focusElement($event.target.previousElementSibling) || $refs.searchInput.focus()"
+                        @keydown.arrow-down.prevent="focusElement($event.target.nextElementSibling)"
+                    >
+                        <span x-text="suggestion.title"></span>
+                        <span x-text="suggestion.num_results"></span>
+                    </button>
+                </template>
+            </nav>
+        </template>
+    <?php endif ?>
 </div>
