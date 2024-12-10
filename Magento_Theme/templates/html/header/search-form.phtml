@@ -62,7 +62,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
             <?php endif ?>
             search(term) {
                 const search = this.$refs.searchInput;
-                term = term || search.value;
+                term = typeof(term) === 'String' ? term : search.value;
                 if (term.length < this.minSearchLength) {
                     search.setCustomValidity('<?= $escaper->escapeJs(
                         __('Minimum Search query length is %1', $helper->getMinQueryLength())
@@ -74,20 +74,38 @@ $searchConfig = $viewModels->require(SearchConfig::class);
                     this.$refs.form.submit();
                 }
             },
-            focusElement(element) {
+            searchSuggestion() {
+                this.search(this.suggestion.title)
+            },
+            focusElement() {
+                const element = this.$root.querySelector('[tabindex]');
                 if (element && element.nodeName === "DIV") {
                     element.focus();
                     return true;
                 } else {
                     return false;
                 }
+            },
+            focusArrowUp() {
+                focusElement(this.$event.target.previousElementSibling) || this.$refs.searchInput.focus()
+            },
+            focusArrowDown() {
+                focusElement(this.$event.target.nextElementSibling)
+            },
+            debounce() {
+                this.$el.focus()
+                this.$el.select()
             }
         }
     }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initMiniSearch', initMiniSearch)
+    })
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-<div class="container py-2 mx-auto text-black" x-data="initMiniSearch()">
-    <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search()"
+<div class="container py-2 mx-auto text-black" x-data="initMiniSearch">
+    <form class="form minisearch" id="search_mini_form" x-ref="form" @submit.prevent="search"
           action="<?= $escaper->escapeUrl($helper->getResultUrl()) ?>" method="get" role="search">
         <label class="hidden" for="search" data-role="minisearch-label">
             <span><?= $escaper->escapeHtml(__('Search')) ?></span>
@@ -102,29 +120,24 @@ $searchConfig = $viewModels->require(SearchConfig::class);
                maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
                class="w-full p-2 text-lg leading-normal transition appearance-none text-grey-800
                 focus:outline-none focus:border-transparent lg:text-xl"
-               @search-open.window.debounce.10="
-                    $el.focus()
-                    $el.select()
-               "
+               @search-open.window.debounce.10="debounce"
             <?php if ($searchConfig->isSuggestionsAllowed()): ?>
                @focus.once="suggest"
                @input.debounce.300="suggest"
-               @keydown.arrow-down.prevent="focusElement($root.querySelector('[tabindex]'))"
+               @keydown.arrow-down.prevent="focusElement"
             <?php endif ?>
         />
         <?php if ($searchConfig->isSuggestionsAllowed()): ?>
-        <template x-if="suggestions.length > 0">
+        <template x-if="suggestions.length">
             <div class="w-full leading-normal transition appearance-none text-grey-800 flex flex-col mt-1">
                 <template x-for="suggestion in suggestions">
                     <div class="flex justify-between p-2 bg-container-lighter even:bg-container mb-1 cursor-pointer
                                 border border-container hover:bg-container-darker"
                         tabindex="0"
-                        @click="search(suggestion.title)"
-                        @keydown.enter="search(suggestion.title)"
-                        @keydown.arrow-up.prevent="
-                            focusElement($event.target.previousElementSibling) || $refs.searchInput.focus()
-                        "
-                        @keydown.arrow-down.prevent="focusElement($event.target.nextElementSibling)"
+                        @click="searchSuggestion"
+                        @keydown.enter="searchSuggestion"
+                        @keydown.arrow-up.prevent="focusArrowUp"
+                        @keydown.arrow-down.prevent="focusArrowDown"
                     >
                         <span x-text="suggestion.title"></span>
                         <span x-text="suggestion.num_results"></span>
