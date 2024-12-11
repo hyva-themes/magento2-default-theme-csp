@@ -32,7 +32,12 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
     function initMessages() {
         "use strict";
         return {
-            messages: window.mageMessages || [],
+            messages: window.mageMessages || [
+                {
+                    type: 'error',
+                    text: "Hello World!"
+                }
+            ],
             isEmpty() {
                 return this.messages.reduce(
                     function (isEmpty, message) {
@@ -40,8 +45,11 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
                     }, true
                 )
             },
-            removeMessage(messageIndex) {
-                this.messages[messageIndex] = undefined;
+            hasMessages() {
+                return !this.isEmpty();
+            },
+            removeMessage() {
+                this.messages[this.index] = undefined;
             },
             addMessages(messages, hideAfter) {
                 messages.map((message) => {
@@ -76,32 +84,40 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
                 ['@clear-messages.window']() {
                     this.messages = [];
                 }
+            },
+            getMessageUiId() {
+                return 'message-' + this.message.type;
             }
         }
     }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initMessages', initMessages);
+    })
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <section id="messages"
-         x-data="initMessages()"
+         x-data="initMessages"
          x-bind="eventListeners"
          aria-live="assertive"
          role="alert"
 >
-    <template x-if="!isEmpty()">
+    <template x-if="hasMessages">
         <div class="w-full">
             <div class="messages container mx-auto py-3">
                 <template x-for="(message, index) in messages" :key="index">
                     <div>
                         <template x-if="message">
-                            <div class="message" :class="message.type"
-                                 :ui-id="'message-' + message.type"
+                            <div class="message"
+                                 :class="message.type"
+                                 :ui-id="getMessageUiId"
                             >
                                 <span x-html="message.text"></span>
                                 <button
                                     type="button"
                                     class="text-gray-600 hover:text-black"
                                     aria-label="<?= $escaper->escapeHtml(__('Close message')) ?>"
-                                    @click.prevent="removeMessage(index)"
+                                    @click.prevent="removeMessage"
                                 >
                                     <?= $heroicons->xHtml('stroke-current', 18, 18, ['aria-hidden' => 'true']); ?>
                                 </button>
