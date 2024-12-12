@@ -78,7 +78,8 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                 itemCount: 0,
                 wishlistCountLabel: null,
                 wishlistItems: {},
-                receiveWishlistData: function (data) {
+                receiveWishlistData: function () {
+                    const data = this.$event.detail.data
                     if (data['wishlist']) {
                         this.wishlistProducts = data['wishlist'];
                         this.wishlistCountLabel = '(' + this.wishlistProducts.counter + ')';
@@ -86,25 +87,33 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                         this.wishlistItems = this.wishlistProducts.items;
                     }
                 },
-                addToCart: function (json) {
-                    const obj = JSON.parse(json);
+                addToCart: function () {
+                    const obj = JSON.parse(this.product.add_to_cart_params);
                     const postUrl = obj.action;
                     const body = "form_key=" + hyva.getFormKey() + "&item=" + obj.data.item + "&qty=" + obj.data.qty + "&uenc=" + hyva.getUenc();
                     wishlistSidebarFetchHandler(body, postUrl, /* isRemoveAction */ false);
                 },
-                removeFromWishlist: function(json) {
-                    const obj = JSON.parse(json);
+                removeFromWishlist: function() {
+                    const obj = JSON.parse(this.product.delete_item_params);
                     const postUrl = obj.action;
                     const body = "form_key=" + hyva.getFormKey() + "&item=" + obj.data.item+"&uenc=" + hyva.getUenc();
                     wishlistSidebarFetchHandler(body, postUrl);
+                },
+                productAriaLabel() {
+                    return hyva.str(this.$el.dataset['translate'], this.product.product_name)
                 }
             }
         }
 
+        (() => {
+            const initFn = () => Alpine.data('initWishlistOnWishlistSidebar', initWishlistOnWishlistSidebar);
+            window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
+
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
-    <div x-data="initWishlistOnWishlistSidebar()"
-         @private-content-loaded.window="receiveWishlistData($event.detail.data)"
+    <div x-data="initWishlistOnWishlistSidebar"
+         @private-content-loaded.window="receiveWishlistData"
          class="wishlist-widget"
     >
         <template x-if="itemCount">
@@ -138,9 +147,10 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                                         <template x-if="!product.product_has_required_options">
                                             <button
                                                 type="button"
-                                                @click.prevent="addToCart(product.add_to_cart_params)"
+                                                @click.prevent="addToCart"
                                                 class="action tocart primary btn btn-primary text-sm"
-                                                :aria-label="hyva.str('<?= $escaper->escapeJs(__('Add to Cart %1'))  ?>', product.product_name)"
+                                                data-translate="<?= $escaper->escapeHtmlAttr(__('Add to Cart %1'))  ?>"
+                                                :aria-label="productAriaLabel"
                                                 data-addto="cart"
                                             >
                                                 <?= $escaper->escapeHtml(__('Add to Cart')) ?>
@@ -151,8 +161,9 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                             </div>
                             <button
                                 type="button"
-                                @click.prevent="removeFromWishlist(product.delete_item_params)"
-                                :aria-label="hyva.str('<?= $escaper->escapeJs(__('Remove product "%1" from My Wish List')) ?>', product.product_name)"
+                                @click.prevent="removeFromWishlist"
+                                data-translate="<?= $escaper->escapeHtmlAttr(__('Remove product "%1" from My Wish List'))  ?>"
+                                :aria-label="productAriaLabel"
                                 class="
                                     p-1 inline-flex shrink-0 items-center
                                     justify-center text-gray-500 hover:text-primary ml-auto
