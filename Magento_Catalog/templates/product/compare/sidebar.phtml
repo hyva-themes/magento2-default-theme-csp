@@ -66,14 +66,16 @@ function initCompareOnCompareSidebar() {
         compareProducts: null,
         itemCount: 0,
         compareItems: {},
-        receiveCompareData: function (data) {
+        receiveCompareData: function () {
+            const data = this.$event.detail.data;
             if (data['compare-products']) {
                 this.compareProducts = data['compare-products'];
                 this.itemCount = this.compareProducts.count;
                 this.compareItems = this.compareProducts.items;
             }
         },
-        removeFromCompare: function(productId) {
+        removeFromCompare: function() {
+            const productId = this.product.product_id;
             const formKey = hyva.getFormKey();
             const postUrl = BASE_URL + 'catalog/product_compare/remove/';
             const confirmMessage = "<?= $escaper
@@ -90,6 +92,9 @@ function initCompareOnCompareSidebar() {
             };
 
             compareSidebarFetchHandler(postUrl, postHeaders);
+        },
+        productAriaLabel() {
+            return hyva.str(this.$el.dataset['translate'], this.product.name)
         }
     }
 }
@@ -116,10 +121,18 @@ function initCompareSidebarClear() {
         }
     }
 }
+
+(() => {
+    const initFn = () => {
+        Alpine.data('initCompareOnCompareSidebar', initCompareOnCompareSidebar)
+        Alpine.data('initCompareSidebarClear', initCompareSidebarClear)
+    }
+    window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
+})()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-<div x-data="initCompareOnCompareSidebar()"
-     @private-content-loaded.window="receiveCompareData($event.detail.data)"
+<div x-data="initCompareOnCompareSidebar"
+     @private-content-loaded.window="receiveCompareData"
      class="compare-widget"
 >
     <template x-if="itemCount">
@@ -149,8 +162,9 @@ function initCompareSidebarClear() {
                         </strong>
                         <button
                             type="button"
-                            @click.prevent="removeFromCompare(product.id)"
-                            :aria-label="hyva.str('<?= $escaper->escapeJs(__('Remove product "%1" from the comparison')) ?>', product.name)"
+                            @click.prevent="removeFromCompare"
+                            data-translate="<?= $escaper->escapeHtmlAttr(__('Remove product "%1" from the comparison')) ?>"
+                            :aria-label="productAriaLabel"
                             class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500
                                    hover:text-primary ml-auto"
                         >
@@ -165,8 +179,8 @@ function initCompareSidebarClear() {
                     class="btn btn-secondary px-4 text-sm">
                     <span><?= $escaper->escapeHtml(__('Compare')); ?></span>
                 </a>
-                <button x-data="initCompareSidebarClear()"
-                    @click.prevent="clearCompare()"
+                <button x-data="initCompareSidebarClear"
+                    @click.prevent="clearCompare"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Remove all Products')) ?>"
                     class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-primary ml-auto">
                     <span><?= $escaper->escapeHtml(__('Clear all')); ?></span>
