@@ -33,6 +33,9 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
         return {
             searchOpen: false,
             cart: {},
+            summary_count() {
+                return this.cart.summary_count ?? 0;
+            },
             isCartOpen: false,
             getData() {
                 const data = this.$event.detail.data;
@@ -41,13 +44,13 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             ariaLabel() {
                 return '<?= $escaper->escapeJs($showMiniCart ? __('Toggle minicart') : __('View cart')) ?>, ' +
                     (this.isCartEmpty() ? '<?= $escaper->escapeJs(__('Cart is empty')) ?>' : (
-                        Math.abs(this.cart.summary_count) > 1 ?
-                            hyva.str('<?= $escaper->escapeJs(__('%1 items')) ?>', this.cart.summary_count) :
-                            hyva.str('<?= $escaper->escapeJs(__('%1 item')) ?>', this.cart.summary_count)
+                        Math.abs(this.summary_count()) > 1 ?
+                            hyva.str('<?= $escaper->escapeJs(__('%1 items')) ?>', this.summary_count()) :
+                            hyva.str('<?= $escaper->escapeJs(__('%1 item')) ?>', this.summary_count())
                     ))
             },
             isCartEmpty() {
-                return !this.cart.summary_count
+                return !this.summary_count()
             },
             openCart() {
                 this.$dispatch('toggle-cart', {
@@ -89,6 +92,21 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
         return {
             compareProducts: null,
             itemCount: 0,
+
+            linkClass() {
+                return {
+                    'hidden': this.itemCount < 1
+                }
+            },
+            linkAriaLabel() {
+                return '<?= $escaper->escapeJs(__('Compare Products')) ?>' +
+                    (
+                        this.itemCount > 1
+                        ? hyva.str('<?= $escaper->escapeJs(__('%1 Items')) ?>', this.itemCount)
+                        : hyva.str('<?= $escaper->escapeJs(__('%1 Item')) ?>', this.itemCount)
+                    )
+            },
+
             receiveCompareData() {
                 const data = this.$event.detail.data;
                 if (data['compare-products']) {
@@ -124,17 +142,12 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             <!--Compare Icon-->
             <a id="compare-link"
                class="relative inline-block rounded p-1 hover:bg-primary/10 outline-offset-2 invisible"
-               :class="{ 'invisible': isCartEmpty }"
+               :class="linkClass"
                href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
                title="<?= $escaper->escapeHtmlAttr(__('Compare Products')) ?>"
                x-data="initCompareHeader"
                @private-content-loaded.window="receiveCompareData"
-               :aria-label="`
-                    <?= $escaper->escapeHtmlAttr(__('Compare Products')) ?>,
-                    ${itemCount > 1
-                        ? hyva.str('<?= $escaper->escapeJs(__('%1 Items')) ?>', itemCount)
-                        : hyva.str('<?= $escaper->escapeJs(__('%1 Item')) ?>', itemCount)
-                    }`"
+               :aria-label="linkAriaLabel"
             >
                 <?= $heroicons->scaleHtml("md:h-6 md:w-6", 28, 28, ["aria-hidden" => "true"]) ?>
                 <span
@@ -187,7 +200,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             >
                 <?= $heroicons->shoppingCartHtml("md:h-6 md:w-6", 28, 28, ["aria-hidden" => "true"]) ?>
                 <span
-                    x-text="cart.summary_count"
+                    x-text="summary_count"
                     x-show="isCartEmpty"
                     x-cloak
                     class="absolute -top-1.5 -right-1.5 h-5 px-2 py-1 rounded-full bg-primary text-white
