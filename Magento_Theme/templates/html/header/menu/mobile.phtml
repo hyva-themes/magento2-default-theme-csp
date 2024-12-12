@@ -32,9 +32,9 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
 ?>
 <nav
-    x-data="initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>()"
-    @load.window="setActiveMenu($root)"
-    @keydown.window.escape="closeMenu()"
+    x-data="initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>"
+    @load.window="setActiveMenu"
+    @keydown.window.escape="closeMenu"
     class="z-20 order-2 sm:order-1 lg:order-2 navigation lg:hidden w-12 h-12"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation')) ?>"
     role="navigation"
@@ -42,15 +42,15 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
     <!-- mobile -->
     <button
         x-ref="mobileMenuTrigger"
-        @click="openMenu()"
-        :class="{'overflow-x-hidden overflow-y-auto fixed top-0 left-0 w-full' : open}"
+        @click="openMenu"
+        :class="triggerButtonClass"
         type="button"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Open menu')) ?>"
         aria-haspopup="menu"
         :aria-expanded="open"
         :hidden="open"
     >
-        <?= $heroicons->menuHtml('p-3', 48, 48, [":class" => "{ 'hidden' : open, 'block': !open }", "aria-hidden" => "true"]) ?>
+        <?= $heroicons->menuHtml('p-3', 48, 48, [":class" => "triggerSvgClass", "aria-hidden" => "true"]) ?>
     </button>
     <div
         x-ref="mobileMenuNavLinks"
@@ -59,8 +59,8 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             flex-col border-t border-container bg-container-lighter
             overflow-y-auto overflow-x-hidden
         "
-        :class="{ 'flex': open, 'hidden': !open }"
-        :aria-hidden="open ? 'false' : 'true'"
+        :class="mobileMenuNavLinksClass"
+        :aria-hidden="closed"
         role="dialog"
         aria-modal="true"
     >
@@ -75,10 +75,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                 >
                     <div
                         class="flex items-center transition-transform duration-150 ease-in-out transform"
-                        :class="{
-                            '-translate-x-full' : mobilePanelActiveId,
-                            'translate-x-0' : !mobilePanelActiveId
-                        }"
+                        :class="level0TranslateClass"
                     >
                         <a
                             class="flex items-center w-full px-8 py-4 border-b cursor-pointer
@@ -91,12 +88,13 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                         </a>
                         <?php if (!empty($menuItem['childData'])): ?>
                             <button
-                                @click="openSubcategory('<?= /* @noEscape */ $index ?>')"
+                                data-index="<?= $escaper->escapeHtmlAttr($index) ?>"
+                                @click="openSubcategory"
                                 class="absolute right-0 flex items-center justify-center w-11 h-11 mr-8 cursor-pointer
                                 bg-container-lighter border-container"
                                 aria-label="<?= $escaper->escapeHtmlAttr(__('Open %1 subcategories', $menuItem['name'])) ?>"
                                 aria-haspopup="true"
-                                :aria-expanded="mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>'"
+                                :aria-expanded="mobilePanelActiveIdMatchesIndex"
                             >
                                 <div class="w-8 h-8 border rounded">
                                     <?= $heroicons->chevronRightHtml('w-full h-full p-1', 24, 24, ["aria-hidden" => "true"]) ?>
@@ -106,25 +104,23 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                     </div>
                     <?php if (!empty($menuItem['childData'])): ?>
                         <div
+                            data-index="<?= $escaper->escapeHtmLAttr($index) ?>"
                             data-child-id="<?= $escaper->escapeHtmLAttr($index) ?>"
                             class="absolute top-0 right-0 z-10 flex flex-col gap-1 w-full h-full p-1 bg-container-lighter"
-                            :class="{
-                                'hidden': mobilePanelActiveId !== '<?= /* @noEscape */ (string) $index ?>'
-                            }"
+                            :class="childMenuClass"
                         >
                             <ul
                                 class="mt-16 transition-transform duration-200 ease-in-out translate-x-full transform"
-                                :class="{
-                                    'translate-x-full' : mobilePanelActiveId !== '<?= /* @noEscape */ (string) $index ?>',
-                                    'translate-x-0' : mobilePanelActiveId === '<?= /* @noEscape */ (string) $index ?>',
-                                }"
+                                data-index="<?= $escaper->escapeHtmLAttr($index) ?>"
+                                :class="level1TranslateClass"
                                 aria-label="<?= $escaper->escapeHtmlAttr(__('Subcategories')) ?>"
                             >
                                 <li>
                                     <button
                                         type="button"
                                         class="flex items-center px-8 py-4 border-b cursor-pointer bg-container border-container w-full border-t"
-                                        @click="backToMainCategories('<?= /* @noEscape */ $index ?>-main')"
+                                        data-index="'<?= $escaper->escapeHtmlAttr($index) ?>-main'"
+                                        @click="backToMainCategories"
                                         aria-label="<?= $escaper->escapeHtmlAttr(__('Back to main categories')) ?>"
                                     >
                                         <?= $heroicons->chevronLeftHtml('', 24, 24, ["aria-hidden" => "true"]); ?>
@@ -163,11 +159,11 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                                 <?php endforeach; ?>
                             </ul>
                             <button
-                                @click="closeMenu()"
+                                @click="closeMenu"
                                 class="absolute flex justify-end w-16 self-end mb-1 transition-none"
                                 aria-label="<?= $escaper->escapeHtmlAttr(__('Close menu')) ?>"
                             >
-                                <?= $heroicons->xHtml('hidden p-4', 64, 64, [":class" => "{ 'hidden' : !open, 'block': open }", "aria-hidden" => "true"]) ?>
+                                <?= $heroicons->xHtml('hidden p-4', 64, 64, [":class" => "{ 'hidden' : closed, 'block': open }", "aria-hidden" => "true"]) ?>
                             </button>
                         </div>
                     <?php endif; ?>
@@ -175,12 +171,12 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             <?php endforeach; ?>
         </ul>
         <button
-            @click="closeMenu()"
+            @click="closeMenu"
             class="absolute flex justify-end w-16 self-end mb-1"
             aria-label="<?= $escaper->escapeHtmlAttr(__('Close menu')) ?>"
             type="button"
         >
-            <?= $heroicons->xHtml('hidden p-4', 64, 64, [":class" => "{ 'hidden' : !open, 'block': open }", "aria-hidden" => "true"]) ?>
+            <?= $heroicons->xHtml('hidden p-4', 64, 64, [":class" => "{ 'hidden' : closed, 'block': open }", "aria-hidden" => "true"]) ?>
         </button>
     </div>
 </nav>
@@ -190,24 +186,71 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
     const initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?> = () => {
         return {
             mobilePanelActiveId: null,
+
             open: false,
-            setActiveMenu(menuNode) {
+            closed() {
+                return !this.open
+            },
+
+            triggerButtonClass() {
+                return {
+                    'overflow-x-hidden overflow-y-auto fixed top-0 left-0 w-full' : !open
+                }
+            },
+            triggerSvgClass() {
+                return {
+                    'hidden' : this.open,
+                    'block': !this.open
+                }
+            },
+            mobileMenuNavLinksClass() {
+                return {
+                    'flex': this.open,
+                    'hidden': !this.open
+                }
+            },
+            level0TranslateClass() {
+                return {
+                    '-translate-x-full' : this.mobilePanelActiveId,
+                    'translate-x-0' : !this.mobilePanelActiveId
+                }
+            },
+            level1TranslateClass() {
+                return {
+                    'translate-x-full' : !this.mobilePanelActiveIdMatchesIndex(),
+                    'translate-x-0' : this.mobilePanelActiveIdMatchesIndex(),
+                }
+            },
+            childMenuClass() {
+                return {
+                    'hidden': !this.mobilePanelActiveIdMatchesIndex()
+                }
+            },
+
+            mobilePanelActiveIdMatchesIndex() {
+                return this.mobilePanelActiveId === this.$el.dataset['index']
+            },
+
+            setActiveMenu() {
+                const menuNode = this.$root
+
                 Array.from(menuNode.querySelectorAll('a')).filter(link => {
-                    return link.href === window.location.href.split('?')[0];
+                    return link.href === window.location.href.split('?')[0]
                 }).map(item => {
-                    item.classList.add('underline');
+                    item.classList.add('underline')
+
                     item.closest('li.level-0') &&
-                    item.closest('li.level-0').querySelector('a.level-0').classList.add('underline');
-                });
+                    item.closest('li.level-0').querySelector('a.level-0').classList.add('underline')
+                })
             },
             openMenu() {
                 this.open = true
-                this.$nextTick(() => hyva.trapFocus(this.$refs['mobileMenuNavLinks']));
+                this.$nextTick(() => hyva.trapFocus(this.$refs['mobileMenuNavLinks']))
                 // Prevent from body scrolling while mobile menu opened
-                document.body.style.overflow = 'hidden';
+                document.body.style.overflow = 'hidden'
             },
             closeMenu() {
-                document.body.style.overflow = '';
+                document.body.style.overflow = ''
 
                 if (this.open) {
                     this.$nextTick(() => this.$refs['mobileMenuTrigger'].focus() || hyva.releaseFocus());
@@ -216,13 +259,19 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                 this.open = false
                 this.mobilePanelActiveId = null
             },
-            openSubcategory(index) {
-                const menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
+            openSubcategory() {
+                const
+                    index = this.$el.dataset['index'],
+                    menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
+
                 this.mobilePanelActiveId = this.mobilePanelActiveId === index ? 0 : index
                 this.$nextTick(() => hyva.trapFocus(menuNodeRef))
             },
-            backToMainCategories(index) {
-                const menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
+            backToMainCategories() {
+                const
+                    index = this.$el.dataset['index'],
+                    menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
+
                 this.mobilePanelActiveId = 0
                 this.$nextTick(() => {
                     hyva.trapFocus(this.$refs['mobileMenuNavLinks'])
@@ -231,5 +280,10 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             }
         }
     }
+
+    (() => {
+        const initFn = () => Alpine.data('initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>', initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>);
+        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
