@@ -201,7 +201,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                 <?= $heroicons->shoppingCartHtml("md:h-6 md:w-6", 28, 28, ["aria-hidden" => "true"]) ?>
                 <span
                     x-text="summary_count"
-                    x-show="isCartEmpty"
+                    x-show="summary_count"
                     x-cloak
                     class="absolute -top-1.5 -right-1.5 h-5 px-2 py-1 rounded-full bg-primary text-white
                         text-xs font-semibold leading-none text-center uppercase tabular-nums"
