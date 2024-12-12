@@ -39,7 +39,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
     function initAuthentication() {
         return {
             open: false,
-            close: function() {
+            close() {
                 this.open = false;
             },
             forceAuthentication: false,
@@ -48,11 +48,11 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
             hasCaptchaToken: 0,
             displayErrorMessage: false,
             errorMessages: [],
-            setErrorMessages: function setErrorMessages(messages) {
+            setErrorMessages(messages) {
                 this.errorMessages = [messages];
                 this.displayErrorMessage = !!this.errorMessages.length;
             },
-            submitForm: function () {
+            submitForm() {
                 // Do not rename $form, the variable is expected to be declared in the recaptcha output
                 const $form = document.querySelector('#login-form');
                 <?= $recaptcha ? $recaptcha->getValidationJsHtml('customer_login', 'auth-popup') : '' ?>
@@ -61,14 +61,14 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                     this.dispatchLoginRequest($form);
                 }
             },
-            onPrivateContentLoaded: function () {
+            onPrivateContentLoaded() {
                 const data = this.$event.detail.data;
                 const isLoggedIn = data.customer && data.customer.firstname;
                 if (data.cart && !isLoggedIn) {
                     this.forceAuthentication = !data.cart.isGuestCheckoutAllowed;
                 }
             },
-            redirectIfAuthenticated: function () {
+            redirectIfAuthenticated() {
                 const event = this.$event;
                 this.open = this.forceAuthentication;
 
@@ -79,7 +79,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                     window.location.href = this.checkoutUrl;
                 }
             },
-            dispatchLoginRequest: function(form) {
+            dispatchLoginRequest(form) {
                 this.isLoading = true;
                 const username = this.$refs['customer-email'].value;
                 const password = this.$refs['customer-password'].value;
