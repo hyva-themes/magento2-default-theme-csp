@@ -24,15 +24,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 /** @var Navigation $viewModelNavigation */
 $viewModelNavigation = $viewModels->require(Navigation::class, $block);
 
-$uniqueId = '_' . uniqid();
-
 // Order is important here: 1. build the menu data, 2. then set the cache tags from the view model identities
 $menuItems = $viewModelNavigation->getNavigation(4);
 $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
 ?>
 <nav
-    x-data="initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>"
+    x-data="initMenuMobile"
     @load.window="setActiveMenu"
     @keydown.window.escape="closeMenu"
     class="z-20 order-2 sm:order-1 lg:order-2 navigation lg:hidden w-12 h-12"
@@ -183,7 +181,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 <script>
     'use strict';
 
-    const initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?> = () => {
+    const initMenuMobile = () => {
         return {
             mobilePanelActiveId: null,
 
@@ -194,18 +192,18 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
             triggerButtonClass() {
                 return {
-                    'overflow-x-hidden overflow-y-auto fixed top-0 left-0 w-full' : !open
+                    'overflow-x-hidden overflow-y-auto fixed top-0 left-0 w-full': this.open
                 }
             },
             triggerSvgClass() {
                 return {
-                    'hidden' : this.open,
+                    'hidden': this.open,
                     'block': !this.open
                 }
             },
             triggerCloseSvgClass() {
                 return {
-                    'hidden' : !this.open,
+                    'hidden': !this.open,
                     'block': this.open
                 }
             },
@@ -217,14 +215,14 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             },
             level0TranslateClass() {
                 return {
-                    '-translate-x-full' : this.mobilePanelActiveId,
-                    'translate-x-0' : !this.mobilePanelActiveId
+                    '-translate-x-full': this.mobilePanelActiveId,
+                    'translate-x-0': !this.mobilePanelActiveId
                 }
             },
             level1TranslateClass() {
                 return {
-                    'translate-x-full' : !this.mobilePanelActiveIdMatchesIndex(),
-                    'translate-x-0' : this.mobilePanelActiveIdMatchesIndex(),
+                    'translate-x-full': !this.mobilePanelActiveIdMatchesIndex(),
+                    'translate-x-0': this.mobilePanelActiveIdMatchesIndex(),
                 }
             },
             childMenuClass() {
@@ -288,7 +286,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
     }
 
     (() => {
-        const initFn = () => Alpine.data('initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>', initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>);
+        const initFn = () => Alpine.data('initMenuMobile', initMenuMobile);
         window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
     })()
 </script>

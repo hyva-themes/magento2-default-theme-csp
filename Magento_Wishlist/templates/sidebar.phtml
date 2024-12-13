@@ -44,13 +44,13 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                     "headers": {
                         "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                     },
-                    body: body,
+                    "body": body,
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "include"
                 };
 
-                return fetch(postUrl, postHeaders).then(function (response) {
+                return fetch(postUrl, postHeaders).then((response) => {
                     if (response.redirected) {
                         window.location.href = response.url;
                     } else if (response.ok) {
@@ -59,7 +59,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                         const message = { type: "warning", text: messages.warning };
                         window.dispatchMessages && window.dispatchMessages([message], 5000);
                     }
-                }).then(function (response) {
+                }).then((response) => {
                     if (!response) return;
                     const message = {
                         type: (response.success) ? "success" : "error",
@@ -67,7 +67,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                     }
                     window.dispatchMessages && window.dispatchMessages([message], 5000);
                     window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
-                }).catch(function (error) {
+                }).catch((error) => {
                     const message = { type: "error", text: error };
                     window.dispatchMessages && window.dispatchMessages([message], 5000);
                 });
@@ -78,7 +78,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                 itemCount: 0,
                 wishlistCountLabel: null,
                 wishlistItems: {},
-                receiveWishlistData: function () {
+                receiveWishlistData() {
                     const data = this.$event.detail.data
                     if (data['wishlist']) {
                         this.wishlistProducts = data['wishlist'];
@@ -87,20 +87,20 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                         this.wishlistItems = this.wishlistProducts.items;
                     }
                 },
-                addToCart: function () {
+                addToCart() {
                     const obj = JSON.parse(this.product.add_to_cart_params);
                     const postUrl = obj.action;
                     const body = "form_key=" + hyva.getFormKey() + "&item=" + obj.data.item + "&qty=" + obj.data.qty + "&uenc=" + hyva.getUenc();
                     wishlistSidebarFetchHandler(body, postUrl, /* isRemoveAction */ false);
                 },
-                removeFromWishlist: function() {
+                removeFromWishlist() {
                     const obj = JSON.parse(this.product.delete_item_params);
                     const postUrl = obj.action;
                     const body = "form_key=" + hyva.getFormKey() + "&item=" + obj.data.item+"&uenc=" + hyva.getUenc();
                     wishlistSidebarFetchHandler(body, postUrl);
                 },
                 productAriaLabel() {
-                    return hyva.str(this.$el.dataset['translate'], this.product.product_name)
+                    return hyva.str(this.$el.dataset['aria-label'], this.product.product_name)
                 }
             }
         }
@@ -149,7 +149,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                                                 type="button"
                                                 @click.prevent="addToCart"
                                                 class="action tocart primary btn btn-primary text-sm"
-                                                data-translate="<?= $escaper->escapeHtmlAttr(__('Add to Cart %1'))  ?>"
+                                                data-aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart %1'))  ?>"
                                                 :aria-label="productAriaLabel"
                                                 data-addto="cart"
                                             >
@@ -162,7 +162,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                             <button
                                 type="button"
                                 @click.prevent="removeFromWishlist"
-                                data-translate="<?= $escaper->escapeHtmlAttr(__('Remove product "%1" from My Wish List'))  ?>"
+                                data-aria-label="<?= $escaper->escapeHtmlAttr(__('Remove product "%1" from My Wish List'))  ?>"
                                 :aria-label="productAriaLabel"
                                 class="
                                     p-1 inline-flex shrink-0 items-center

@@ -34,7 +34,7 @@ function compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = true) {
             : "<?= $escaper->escapeHtml(__('Could not remove all item from compare.')) ?>",
     }
 
-    return fetch(postUrl, postHeaders).then(function (response) {
+    return fetch(postUrl, postHeaders).then((response) => {
         if (response.redirected) {
             window.location.href = response.url;
         } else if (response.ok) {
@@ -44,7 +44,7 @@ function compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = true) {
                 [{ type: "warning", text: messages.warning }], 5000
             );
         }
-    }).then(function (response) {
+    }).then((response) => {
         if (!response) return;
         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
             [{
@@ -54,7 +54,7 @@ function compareSidebarFetchHandler(postUrl, postHeaders, isSingleItem = true) {
         );
         let reloadCustomerDataEvent = new CustomEvent("reload-customer-section-data");
         window.dispatchEvent(reloadCustomerDataEvent);
-    }).catch(function (error) {
+    }).catch((error) => {
         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
             [{ type: "error", text: error }], 5000
         );
@@ -66,7 +66,7 @@ function initCompareOnCompareSidebar() {
         compareProducts: null,
         itemCount: 0,
         compareItems: {},
-        receiveCompareData: function () {
+        receiveCompareData() {
             const data = this.$event.detail.data;
             if (data['compare-products']) {
                 this.compareProducts = data['compare-products'];
@@ -74,12 +74,11 @@ function initCompareOnCompareSidebar() {
                 this.compareItems = this.compareProducts.items;
             }
         },
-        removeFromCompare: function() {
+        removeFromCompare() {
             const productId = this.product.product_id;
             const formKey = hyva.getFormKey();
             const postUrl = BASE_URL + 'catalog/product_compare/remove/';
-            const confirmMessage = "<?= $escaper
-                ->escapeHtml(__('Are you sure you want to remove this item from your Compare Products list?')) ?>";
+            const confirmMessage = "<?= $escaper->escapeJs(__('Are you sure you want to remove this item from your Compare Products list?')) ?>";
             if (!window.confirm(confirmMessage)) return;
             const postHeaders = {
                 "headers": {
@@ -94,18 +93,17 @@ function initCompareOnCompareSidebar() {
             compareSidebarFetchHandler(postUrl, postHeaders);
         },
         productAriaLabel() {
-            return hyva.str(this.$el.dataset['translate'], this.product.name)
+            return hyva.str(this.$el.dataset['aria-label'], this.product.name)
         }
     }
 }
 
 function initCompareSidebarClear() {
     return {
-        clearCompare: function() {
+        clearCompare() {
             const formKey = hyva.getFormKey();
             const postUrl = BASE_URL + 'catalog/product_compare/clear/';
-            const confirmMessage = "<?= $escaper
-                ->escapeHtml(__('Are you sure you want to remove all items from your Compare Products list?')) ?>";
+            const confirmMessage = "<?= $escaper->escapeJs(__('Are you sure you want to remove all items from your Compare Products list?')) ?>";
             if (!window.confirm(confirmMessage)) return;
             const postHeaders = {
                 "headers": {
@@ -163,7 +161,7 @@ function initCompareSidebarClear() {
                         <button
                             type="button"
                             @click.prevent="removeFromCompare"
-                            data-translate="<?= $escaper->escapeHtmlAttr(__('Remove product "%1" from the comparison')) ?>"
+                            data-aria-label="<?= $escaper->escapeHtmlAttr(__('Remove product "%1" from the comparison')) ?>"
                             :aria-label="productAriaLabel"
                             class="p-1 inline-flex shrink-0 items-center justify-center text-gray-500
                                    hover:text-primary ml-auto"

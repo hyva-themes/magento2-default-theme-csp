@@ -54,7 +54,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             getItemCountTitle() {
                 return hyva.strf('<?= $escaper->escapeJs(__('%0 of %1 products in cart displayed')) ?>', this.maxItemsToDisplay, this.itemsCount)
             },
-            showItemCount() {
+            shouldShowItemCount() {
                 return this.maxItemsToDisplay && this.maxItemsToDisplay < this.itemsCount;
             },
             setCartItems() {
@@ -166,7 +166,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 return this.item.product_type !== 'grouped' && this.item.is_visible_in_site_visibility
             },
             productAriaLabel() {
-                return hyva.strf(this.$el.dataset['translate'], this.item.product_name)
+                return hyva.strf(this.$el.dataset['aria-label'], this.item.product_name)
             },
             proceedToCheckout() {
                 this.closeCartDrawer()
@@ -180,7 +180,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             }
         }
     }
-    
+
     (() => {
         const initFn = () => Alpine.data('initCartDrawer', initCartDrawer);
         window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
@@ -231,7 +231,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <p id="cart-drawer-title" class="text-lg font-medium leading-7 text-gray-900">
                         <strong><?= $escaper->escapeHtml(__('My Cart')) ?></strong>
                         <span class="items-total text-xs"
-                              x-show="showItemCount"
+                              x-show="shouldShowItemCount"
                               x-text="getItemCountTitle">
                         </span>
                     </p>
@@ -252,7 +252,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 <template x-if="productIsVisibleInSite">
                                     <a :href="item.product_url"
                                        class="w-1/4 !ml-0"
-                                       data-translate="<?= $escaper->escapeHtmlAttr(__('Product "%0"')) ?>"
+                                       data-aria-label="<?= $escaper->escapeHtmlAttr(__('Product "%0"')) ?>"
                                        :aria-label="productAriaLabel"
                                     >
                                         <img
@@ -293,7 +293,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                         <a :href="item.configure_url"
                                            x-show="productIsNotGroupedAndVisibleInSite"
                                            class="inline-flex p-2 mr-2 btn btn-primary"
-                                           data-translate="<?= $escaper->escapeHtmlAttr(__('Edit product "%0"')) ?>"
+                                           data-aria-label="<?= $escaper->escapeHtmlAttr(__('Edit product "%0"')) ?>"
                                            :aria-label="productAriaLabel"
                                         >
                                             <?= $heroicons->pencilHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
@@ -301,7 +301,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                         <button type="button"
                                                 class="inline-flex p-2 btn btn-primary"
                                                 @click="deleteItemFromCart"
-                                                data-translate="<?= $escaper->escapeHtmlAttr(__('Remove product "%0" from cart')) ?>"
+                                                data-aria-label="<?= $escaper->escapeHtmlAttr(__('Remove product "%0" from cart')) ?>"
                                                 :aria-label="productAriaLabel"
                                         >
                                             <?= $heroicons->trashHtml('', 20, 20, ['aria-hidden' => 'true']); ?>

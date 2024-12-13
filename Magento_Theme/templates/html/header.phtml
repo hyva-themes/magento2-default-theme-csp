@@ -33,8 +33,8 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
         return {
             searchOpen: false,
             cart: {},
-            summary_count() {
-                return this.cart.summary_count ?? 0;
+            summaryCount() {
+                return this.cart.summary_count || 0;
             },
             isCartOpen: false,
             getData() {
@@ -44,13 +44,13 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             ariaLabel() {
                 return '<?= $escaper->escapeJs($showMiniCart ? __('Toggle minicart') : __('View cart')) ?>, ' +
                     (this.isCartEmpty() ? '<?= $escaper->escapeJs(__('Cart is empty')) ?>' : (
-                        Math.abs(this.summary_count()) > 1 ?
-                            hyva.str('<?= $escaper->escapeJs(__('%1 items')) ?>', this.summary_count()) :
-                            hyva.str('<?= $escaper->escapeJs(__('%1 item')) ?>', this.summary_count())
+                        Math.abs(this.summaryCount()) > 1 ?
+                            hyva.str('<?= $escaper->escapeJs(__('%1 items')) ?>', this.summaryCount()) :
+                            hyva.str('<?= $escaper->escapeJs(__('%1 item')) ?>', this.summaryCount())
                     ))
             },
             isCartEmpty() {
-                return !this.summary_count()
+                return !this.summaryCount()
             },
             openCart() {
                 this.$dispatch('toggle-cart', {
@@ -93,7 +93,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             compareProducts: null,
             itemCount: 0,
 
-            linkClass() {
+            hiddenIfEmpty() {
                 return {
                     'hidden': this.itemCount < 1
                 }
@@ -142,7 +142,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             <!--Compare Icon-->
             <a id="compare-link"
                class="relative inline-block rounded p-1 hover:bg-primary/10 outline-offset-2 invisible"
-               :class="linkClass"
+               :class="hiddenIfEmpty"
                href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
                title="<?= $escaper->escapeHtmlAttr(__('Compare Products')) ?>"
                x-data="initCompareHeader"
@@ -175,7 +175,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             <?= $block->getChildHtml('additional') ?>
 
             <!--Customer Icon & Dropdown-->
-<!--            --><?php //= $block->getChildHtml('customer') ?>
+            <?= $block->getChildHtml('customer') ?>
 
             <!--Cart Icon-->
             <?php if ($showMiniCart): ?>
@@ -200,8 +200,8 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             >
                 <?= $heroicons->shoppingCartHtml("md:h-6 md:w-6", 28, 28, ["aria-hidden" => "true"]) ?>
                 <span
-                    x-text="summary_count"
-                    x-show="summary_count"
+                    x-text="summaryCount"
+                    x-show="summaryCount"
                     x-cloak
                     class="absolute -top-1.5 -right-1.5 h-5 px-2 py-1 rounded-full bg-primary text-white
                         text-xs font-semibold leading-none text-center uppercase tabular-nums"

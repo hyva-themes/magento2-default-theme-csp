@@ -62,11 +62,9 @@ $searchConfig = $viewModels->require(SearchConfig::class);
             <?php endif ?>
             search(term) {
                 const search = this.$refs.searchInput;
-                term = typeof(term) === 'String' ? term : search.value;
+                term = term || search.value;
                 if (term.length < this.minSearchLength) {
-                    search.setCustomValidity('<?= $escaper->escapeJs(
-                        __('Minimum Search query length is %1', $helper->getMinQueryLength())
-                    ) ?>');
+                    search.setCustomValidity('<?= $escaper->escapeJs(__('Minimum Search query length is %1', $helper->getMinQueryLength())) ?>');
                     search.reportValidity();
                 } else {
                     search.setCustomValidity('');
@@ -77,8 +75,10 @@ $searchConfig = $viewModels->require(SearchConfig::class);
             searchSuggestion() {
                 this.search(this.suggestion.title)
             },
-            focusElement() {
-                const element = this.$root.querySelector('[tabindex]');
+            focusElement(element) {
+                if (element instanceof Event) {
+                    element = this.$root.querySelector('[tabindex]');
+                }
                 if (element && element.nodeName === "DIV") {
                     element.focus();
                     return true;
@@ -92,7 +92,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
             focusArrowDown() {
                 focusElement(this.$event.target.nextElementSibling)
             },
-            debounce() {
+            focusAfterOpen() {
                 this.$el.focus()
                 this.$el.select()
             }
@@ -121,7 +121,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
                maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
                class="w-full p-2 text-lg leading-normal transition appearance-none text-grey-800
                 focus:outline-none focus:border-transparent lg:text-xl"
-               @search-open.window.debounce.10="debounce"
+               @search-open.window.debounce.10="focusAfterOpen"
             <?php if ($searchConfig->isSuggestionsAllowed()): ?>
                @focus.once="suggest"
                @input.debounce.300="suggest"

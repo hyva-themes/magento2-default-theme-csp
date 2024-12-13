@@ -24,14 +24,12 @@ $viewModelNavigation = $viewModels->require(Navigation::class, $block);
 /** @var HeroiconsSolid $heroiconsSolid */
 $heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
 
-$uniqueId = '_' . uniqid();
-
 // Order is important here: 1. build the menu data, 2. then set the cache tags from the view model identities
 $menuItems = $viewModelNavigation->getNavigation(4);
 $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
 ?>
-<div x-data="initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>"
+<div x-data="initMenuDesktop"
      class="z-20 order-2 sm:order-1 lg:order-2 navigation hidden lg:flex"
 >
     <!-- desktop -->
@@ -105,7 +103,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 <script>
     'use strict';
 
-    const initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?> = () => {
+    const initMenuDesktop = () => {
         return {
             hoverPanelActiveId: null,
 
@@ -117,7 +115,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                 this.hoverPanelActiveId = this.$el.dataset['index']
             },
             leaveHoverPanel() {
-                this.hoverPanelActiveId = null
+                this.hoverPanelActiveId = 0
             },
 
             childMenuItemKeyUpEscape() {
@@ -126,8 +124,8 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
             childMenuClass() {
                 return {
-                    'hidden' : !this.hoverPanelIsIndex(),
-                    'block' : this.hoverPanelIsIndex()
+                    'hidden': !this.hoverPanelIsIndex(),
+                    'block': this.hoverPanelIsIndex()
                 }
             },
 
@@ -142,14 +140,15 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                 })
             },
             openMenuOnClick() {
-                !this.hoverPanelIsIndex() && this.enterHoverPanel()
-                this.hoverPanelIsIndex() && this.leaveHoverPanel()
+                this.hoverPanelIsIndex()
+                    ? this.leaveHoverPanel()
+                    : this.enterHoverPanel()
             }
         }
     }
 
     (() => {
-        const initFn = () => Alpine.data('initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>', initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?>);
+        const initFn = () => Alpine.data('initMenuDesktop', initMenuDesktop);
         window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
     })()
 </script>
