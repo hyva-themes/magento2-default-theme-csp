@@ -159,9 +159,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             productIsVisibleInSite() {
                 return this.item.product_has_url && this.item.is_visible_in_site_visibility
             },
-            productIsNotVisibleInSite() {
-                return !this.productIsVisibleInSite()
-            },
             productIsNotGroupedAndVisibleInSite() {
                 return this.item.product_type !== 'grouped' && this.item.is_visible_in_site_visibility
             },
@@ -180,11 +177,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             }
         }
     }
-
-    (() => {
-        const initFn = () => Alpine.data('initCartDrawer', initCartDrawer);
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <section x-cloak
@@ -264,7 +256,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                         />
                                     </a>
                                 </template>
-                                <template x-if="productIsNotVisibleInSite">
+                                <template x-if="!productIsVisibleInSite">
                                     <div class="w-1/4 !ml-0">
                                         <img
                                             :src="item.product_image.src"
