@@ -47,13 +47,14 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
             const swatchOptionsComponent = initSwatchOptions(
                 <?= /* @noEscape */ $block->getJsonSwatchConfig() ?>
             );
+            const configurableOptionsComponentInit = configurableOptionsComponent.init;
 
             return Object.assign(
                 configurableOptionsComponent,
                 swatchOptionsComponent,
                 {
                     init() {
-                        configurableOptionsComponent.init.call(this);
+                        configurableOptionsComponentInit.call(this);
                         this.initShowSwatchesIntersect();
                     }
                 }
@@ -67,10 +68,11 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
         })()
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
-    <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
+    <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>"
          @private-content-loaded.window="onGetCartData"
          class="relative mb-6"
          x-defer="intersect"
+         data-product-id="<?= (int) $productId ?>"
     >
         <h2 class="mb-4 text-xl font-medium text-gray-900 title-font">
             <?= $escaper->escapeHtml(__('Product Options:')) ?>

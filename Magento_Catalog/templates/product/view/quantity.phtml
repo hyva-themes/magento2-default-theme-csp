@@ -70,6 +70,9 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                 qty: <?= /** @noEscape */ $defaultQty ?>,
                 itemId: (new URLSearchParams(window.location.search)).get('id') || findPathParam('id'),
                 productId: '<?= (int)$product->getId() ?>',
+                init() {
+                    this.$dispatch('update-qty-<?= (int)$product->getId() ?>', this.qty);
+                },
                 <?php /* populate the qty when editing a product from the cart */ ?>
                 onGetCartData: function onGetCartData() {
                     const data = this.$event.detail.data;
@@ -83,14 +86,22 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                             this.$dispatch('update-qty-' + this.productId, this.qty);
                         }
                     }
+                },
+                onInput() {
+                    this.$dispatch('update-qty-<?= (int)$product->getId() ?>', this.qty);
                 }
             };
         }
+        (() => {
+            const initFn = () => Alpine.data('initQtyField', initQtyField);
+            window.Alpine
+                ? initFn()
+                : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
+
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
-    <div x-data="initQtyField()"
-        x-init="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
-    >
+    <div x-data="initQtyField">
         <?php if ($product->isSaleable()): ?>
             <div class="mr-2">
                 <label for="qty[<?= (int)$product->getId() ?>]"
@@ -118,7 +129,7 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                     value="<?= $block->getProductDefaultQty() * 1 ?>"
                     class="form-input px-2 py-2 w-20 text-center invalid:ring-2 invalid:ring-red-500"
                     x-model.number="qty"
-                    @input="$dispatch('update-qty-<?= (int)$product->getId() ?>', qty)"
+                    @input="onInput"
                 />
             </div>
         <?php endif; ?>

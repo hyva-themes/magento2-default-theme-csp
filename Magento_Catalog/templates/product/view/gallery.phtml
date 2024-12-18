@@ -56,15 +56,15 @@ $productName = $block->getProduct()->getName();
 ?>
 
 <div id="gallery"
-     x-data="initGallery()"
+     x-data="initGallery"
      x-bind="eventListeners"
      class="w-full pt-6 md:pt-0 md:h-auto md:row-start-1 md:row-span-2 md:col-start-1"
     >
     <div
-        :class="{'w-full h-full fixed top-0 left-0 bg-white z-50 flex': fullscreen}"
-        :role="fullscreen ? 'dialog' : false"
+        :class="galleryClasses"
+        :role="galleryRole"
         :aria-modal="fullscreen"
-        :aria-label="fullscreen ? '<?= $escaper->escapeJs(__('Gallery modal fullscreen')) ?>' : false"
+        :aria-label="galleryAriaLabel"
     >
         <div class="relative self-center w-full"
              @touchstart.passive="handleTouchStart"
@@ -87,7 +87,7 @@ $productName = $block->getProduct()->getName();
                     alt="<?= $mainImage ? $escaper->escapeHtmlAttr($mainImage->getData('label')) : '' ?>"
                     title="<?= $mainImage ? $escaper->escapeHtmlAttr($mainImage->getData('label')) : '' ?>"
                     class="object-contain object-center w-full h-auto"
-                    :class="fullscreen ? 'invisible max-h-screen-75' : 'invisible'"
+                    :class="firstImageClasses"
                     src="<?= /* @noEscape */ $mainImageData ?>"
                     width="<?= /* @noEscape */ $mediumWidth ?>"
                     height="<?= /* @noEscape */ $mediumHeight ?>"
@@ -95,16 +95,16 @@ $productName = $block->getProduct()->getName();
                 />
                 <template x-for="(image, index) in images" :key="index">
                     <img
-                        :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
-                        :title="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
+                        :alt="imageAlt"
+                        :title="imageTitle"
                         class="absolute inset-0 object-contain object-center w-full m-auto"
-                        :class="{ 'max-h-screen-75': fullscreen }"
+                        :class="imageClasses"
                         width="<?= /* @noEscape */ $mediumWidth ?>"
                         height="<?= /* @noEscape */ $mediumHeight ?>"
-                        :loading="active !== index ? 'lazy' : 'eager'"
-                        :src="fullscreen ? image.full : image.img"
+                        :loading="imageLoading"
+                        :src="imageSource"
                         x-transition.opacity.duration.500ms
-                        x-show="active === index"
+                        x-show="isActiveImage"
                     />
                 </template>
                 <button
@@ -112,19 +112,19 @@ $productName = $block->getProduct()->getName();
                     class="absolute inset-0 w-full outline-offset-2"
                     aria-label="<?= $escaper->escapeHtml(__('Click to view image in fullscreen')) ?>"
                     x-ref="galleryFullscreenBtn"
-                    x-show="!fullscreen && images[active].type !== 'video'"
+                    x-show="showFullscreenButton"
                     x-cloak
-                    @click="openFullscreen()"
-                    @keydown.enter="openFullscreen()"
+                    @click="openFullscreen"
+                    @keydown.enter="openFullscreen"
                 ></button>
                 <button
                     type="button"
                     class="group absolute inset-0 outline-offset-2 grid place-items-center"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Play video')) ?>"
-                    x-show="images[active].type === 'video' && !activeVideoType"
+                    x-show="isActiveImageVideo"
                     x-cloak
-                    @click="activateVideo()"
-                    @keydown.enter="activateVideo()"
+                    @click="activateVideo"
+                    @keydown.enter="activateVideo"
                 >
                     <?= $heroiconsSolid->playHtml(
                         'stroke-white/75 fill-black/20 transition ease-in group-hover:scale-110 md:w-24 md:h-24',
@@ -134,29 +134,29 @@ $productName = $block->getProduct()->getName();
                     ); ?>
                 </button>
                 <div class="absolute inset-0 hidden w-full h-full bg-white nonmobile"
-                     :class="{ 'hidden': activeVideoType !== 'youtube' }"
+                     :class="youtubeVideoClasses"
                      x-transition.opacity.duration.500ms
-                     x-show="images[active].type === 'video' && activeVideoType === 'youtube'"
+                     x-show="isYoutubeVideo"
                 >
                     <div id="youtube-player" class="w-full h-full"></div>
                 </div>
                 <div class="absolute inset-0 hidden w-full h-full bg-white"
-                     :class="{ 'hidden': activeVideoType !== 'vimeo' }"
+                     :class="vimeoVideoClasses"
                      x-transition.opacity.duration.500ms
-                     x-show="images[active].type === 'video' && activeVideoType === 'vimeo'"
+                     x-show="isVimeoVideo"
                 >
                     <div id="vimeo-player" class="w-full h-full"></div>
                 </div>
             </div>
         </div>
 
-        <div @resize.window.debounce="calcPageSize(); $nextTick(() => calcActive())">
+        <div @resize.window.debounce="onResize">
             <div
                 id="thumbs"
                 class="flex items-center gap-4"
-                :class="{ 'fixed justify-center bottom-0 left-0 right-0': fullscreen, 'mx-6' : fullscreen && !isSlider}"
+                :class="thumbsWrapperClasses"
                 style="min-height: 100px;"
-                x-show="images.length > 1"
+                x-show="hasMultipleImages"
                 x-cloak
             >
                 <button
@@ -164,36 +164,36 @@ $productName = $block->getProduct()->getName();
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>"
                     tabindex="-1"
                     class="p-2.5 flex items-center justify-center self-stretch text-black outline-none focus:outline-none flex-none"
-                    :class="{ 'opacity-25 pointer-events-none' : isSliderStart, 'hidden' : !isSlider }"
+                    :class="prevButtonClasses"
                     @click="scrollPrevious"
                 >
                     <?= $heroicons->chevronLeftHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
                 </button>
                 <div class="js_thumbs_slides thumbs-wrapper relative flex flex-nowrap w-full overflow-auto js_slides snap"
                      x-ref="jsThumbSlides"
-                     @scroll.debounce="calcPageSize(); calcActive(); calcScrollStartEnd()"
+                     @scroll.debounce="onScroll"
                 >
                     <template x-for="(image, index) in images" :key="index">
                         <div class="js_thumbs_slide flex shrink-0 mb-2 mr-2 lg:mr-4 last:mr-0">
                             <button
                                 type="button"
-                                @click.prevent="setActive(index);"
+                                @click.prevent="onClickThumbnail"
                                 class="relative block border border-gray-300 hover:border-primary focus:border-primary"
-                                :class="{'border-primary': active === index}"
+                                :class="thumbnailClasses"
                             >
                                 <span class="sr-only">
                                     <?= $escaper->escapeHtml('View larger image') ?>
                                 </span>
                                 <img
                                     :src="image.thumb"
-                                    :alt="image.caption || '<?= $escaper->escapeJs(__("%1 thumbnail", $productName)) ?>'"
-                                    :title="image.caption || '<?= $escaper->escapeJs(__("%1 thumbnail", $productName)) ?>'"
+                                    :alt="thumbnailAlt"
+                                    :title="thumbnailTitle"
                                     width="<?= /* @noEscape */ $smallWidth ?>"
                                     height="<?= /* @noEscape */ $smallHeight ?>"
                                 />
                                 <span
                                     class="absolute inset-0 grid place-items-center"
-                                    x-show="image.type === 'video'"
+                                    x-show="isVideoThumbnail"
                                 >
                                     <?= $heroicons->videoCameraHtml('stroke-white/75 fill-black/20', 44, 44, ['aria-hidden' => 'true']); ?>
                                 </span>
@@ -203,12 +203,12 @@ $productName = $block->getProduct()->getName();
                 </div>
                 <button
                     type="button"
-                    x-show="images.length > 1"
+                    x-show="hasMultipleImages"
                     x-cloak
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Next')) ?>"
                     tabindex="-1"
                     class="p-2.5 flex items-center justify-center self-stretch text-black outline-none focus:outline-none flex-none"
-                    :class="{ 'opacity-25 pointer-events-none' : isSliderEnd, 'hidden' : !isSlider }"
+                    :class="nextButtonClasses"
                     @click="scrollNext"
                 >
                     <?= $heroicons->chevronRightHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
@@ -216,11 +216,11 @@ $productName = $block->getProduct()->getName();
             </div>
         </div>
         <div class="absolute top-0 right-0 pt-4 pr-4">
-            <button @click="closeFullScreen()"
+            <button @click="closeFullScreen"
                     type="button"
                     class="hidden text-gray-500 p-3 hover:text-gray-600 focus:text-gray-600
                         transition ease-in-out duration-150"
-                    :class="{ 'hidden': !fullscreen, 'block': fullscreen }"
+                    :class="closeFullScreenButtonClasses"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Close fullscreen')) ?>"
             >
                 <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
@@ -233,27 +233,27 @@ $productName = $block->getProduct()->getName();
         let touchXDown, touchYDown;
 
         return {
-            "active": 0,
-            "videoData": {},
-            "activeVideoType": false,
-            "autoplayVideo": false,
-            "loopVideo": <?= $galleryOptionVideoLoop ? 'true' : 'false' ?>,
-            "relatedVideos": <?= $galleryOptionShowRelated ? 'true' : 'false' ?>,
-            "vimeoPlayer": null,
-            "fullscreen": false,
-            "isSlider": false,
-            "initialImages": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
-            "images": <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
-            "appendOnReceiveImages": <?=
+            active: 0,
+            videoData: {},
+            activeVideoType: false,
+            autoplayVideo: false,
+            loopVideo: <?= $galleryOptionVideoLoop ? 'true' : 'false' ?>,
+            relatedVideos: <?= $galleryOptionShowRelated ? 'true' : 'false' ?>,
+            vimeoPlayer: null,
+            fullscreen: false,
+            isSlider: false,
+            initialImages: <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
+            images: <?= /* @noEscape */ $block->getGalleryImagesJson() ?>,
+            appendOnReceiveImages: <?=
                 $block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct') === 'append' ? 'true' : 'false'
             ?>,
-            "activeSlide": 0,
-            "isSliderStart": true,
-            "isSliderEnd": false,
-            "itemCount": 0,
-            "pageSize": 4,
-            "pageFillers": 0,
-            "focusTrapListener": null,
+            activeSlide: 0,
+            isSliderStart: true,
+            isSliderEnd: false,
+            itemCount: 0,
+            pageSize: 4,
+            pageFillers: 0,
+            focusTrapListener: null,
             init() {
                 this.initActive();
                 this.$nextTick(() => {
@@ -563,7 +563,122 @@ $productName = $block->getProduct()->getName();
                 if ((this.active + 1) === this.itemCount) return;
                 this.setActiveAndScrollTo(this.active + 1);
             },
+            galleryClasses() {
+                return {
+                    'w-full h-full fixed top-0 left-0 bg-white z-50 flex': this.fullscreen
+                }
+            },
+            galleryRole() {
+                return this.fullscreen ? 'dialog' : false;
+            },
+            galleryAriaLabel() {
+                return this.fullscreen ? '<?= $escaper->escapeJs(__('Gallery modal fullscreen')) ?>' : false;
+            },
+            firstImageClasses() {
+                return this.fullscreen ? 'invisible max-h-screen-75' : 'invisible';
+            },
+            imageAlt() {
+                return this.image.caption || '<?= $escaper->escapeJs($productName) ?>';
+            },
+            imageTitle() {
+                return this.imageAlt();
+            },
+            imageClasses() {
+                return {
+                    'max-h-screen-75': this.fullscreen
+                }
+            },
+            imageLoading() {
+                return this.active !== this.index ? 'lazy' : 'eager';
+            },
+            imageSource() {
+                return this.fullscreen ? this.image.full : this.image.img
+            },
+            isActiveImage() {
+                return this.active === this.index;
+            },
+            showFullscreenButton() {
+                return !this.fullscreen && this.images[this.active].type !== 'video';
+            },
+            isActiveImageVideo() {
+                return this.images[this.active].type === 'video' && !this.activeVideoType;
+            },
+            youtubeVideoClasses() {
+                return {
+                    'hidden': this.activeVideoType !== 'youtube'
+                }
+            },
+            vimeoVideoClasses() {
+                return {
+                    'hidden': this.activeVideoType !== 'vimeo'
+                }
+            },
+            isYoutubeVideo() {
+                return this.images[this.active].type === 'video' && this.activeVideoType === 'youtube';
+            },
+            isVimeoVideo() {
+                return this.images[this.active].type === 'video' && this.activeVideoType === 'vimeo';
+            },
+            onResize() {
+                this.calcPageSize();
+                this.$nextTick(() => this.calcActive())
+            },
+            onScroll() {
+                this.calcPageSize();
+                this.calcActive();
+                this.calcScrollStartEnd();
+            },
+            thumbsWrapperClasses() {
+                return {
+                    'fixed justify-center bottom-0 left-0 right-0': this.fullscreen,
+                    'mx-6' : this.fullscreen && !this.isSlider
+                }
+            },
+            hasMultipleImages() {
+                return this.images.length > 1;
+            },
+            prevButtonClasses() {
+                return  {
+                    'opacity-25 pointer-events-none': this.isSliderStart,
+                    'hidden': !this.isSlider
+                }
+            },
+            nextButtonClasses() {
+                return  {
+                    'opacity-25 pointer-events-none': this.isSliderEnd,
+                    'hidden' : !this.isSlider }
+            },
+            onClickThumbnail() {
+                this.setActive(this.index);
+            },
+            thumbnailClasses() {
+                return {
+                    'border-primary': this.active === this.index
+                };
+            },
+            thumbnailAlt() {
+                return this.image.caption || '<?= $escaper->escapeJs(__("%1 thumbnail", $productName)) ?>';
+            },
+            thumbnailTitle() {
+                return this.thumbnailAlt();
+            },
+            isVideoThumbnail() {
+                return this.image.type === 'video';
+            },
+            closeFullScreenButtonClasses() {
+                return {
+                    'hidden': !this.fullscreen,
+                    'block': this.fullscreen
+                }
+            }
         }
      }
+    (() => {
+        const initFn = () => Alpine.data('initGallery', initGallery);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

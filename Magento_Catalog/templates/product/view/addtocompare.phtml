@@ -41,7 +41,8 @@ if (!$product->getId() || !$compareViewModel->showOnProductPage()) {
 <script>
     function initCompareOnProductView() {
         return {
-            addToCompare: function (productId) {
+            addToCompare: function () {
+                const productId = <?= (int)$product->getId() ?>;
                 const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'catalog/product_compare/add/';
 
@@ -68,10 +69,17 @@ if (!$product->getId() || !$compareViewModel->showOnProductPage()) {
             }
         };
     }
+    (() => {
+        const initFn = () => Alpine.data('initCompareOnProductView', initCompareOnProductView);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-<button x-data="initCompareOnProductView()"
-        @click.prevent="addToCompare(<?= (int)$product->getId() ?>)"
+<button x-data="initCompareOnProductView"
+        @click.prevent="addToCompare"
         title="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare')) ?>"
         id="add-to-compare"
