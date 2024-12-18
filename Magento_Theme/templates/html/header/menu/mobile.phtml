@@ -232,7 +232,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             },
 
             mobilePanelActiveIdMatchesIndex() {
-                return this.mobilePanelActiveId === this.$el.dataset['index']
+                return this.mobilePanelActiveId === this.$el.dataset.index
             },
 
             setActiveMenu() {
@@ -265,7 +265,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             },
             openSubcategory() {
                 const
-                    index = this.$el.dataset['index'],
+                    index = this.$el.dataset.index,
                     menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
 
                 this.mobilePanelActiveId = this.mobilePanelActiveId === index ? 0 : index
@@ -273,7 +273,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             },
             backToMainCategories() {
                 const
-                    index = this.$el.dataset['index'],
+                    index = this.$el.dataset.index,
                     menuNodeRef = document.querySelector('[data-child-id=' + index + ']')
 
                 this.mobilePanelActiveId = 0

@@ -186,9 +186,10 @@ function initCompareOnCompareList() {
                                     <?php endif; ?>
                                     <?php if ($wishlistViewModel->isEnabled()): ?>
                                     <?php /* The initWishlist() function is rendered as a block JS dependency */ ?>
-                                        <button x-data="initWishlist()"
+                                        <button x-data="initWishlist"
                                             x-defer="intersect"
-                                            @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
+                                            data-product-id="<?= (int) $product->getId() ?>"
+                                            @click.prevent="addToWishlist"
                                             aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List')) ?> <?= $escaper->escapeHtmlAttr($product->getName()) ?>"
                                             class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex
                                             shrink-0 items-center justify-center text-gray-500 hover:text-red-600
@@ -201,6 +202,7 @@ function initCompareOnCompareList() {
                                     <button x-data="initCompareOnCompareList()"
                                         @click.prevent="removeFromCompare(<?= (int)$product->getId() ?>, '<?= $escaper
                                             ->escapeJs($product->getName()) ?>')"
+                                        data-product-id="<?= (int) $product->getId() ?>"
                                         aria-label="<?= $escaper->escapeHtmlAttr(__('Remove Product')) ?> <?= $escaper->escapeHtmlAttr($product->getName()) ?>"
                                         class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0
                                         items-center justify-center text-gray-500 hover:text-black ml-2"

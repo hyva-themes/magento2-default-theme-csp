@@ -10,11 +10,13 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\LayeredNavigation\Block\Navigation\State;
 
 /** @var State $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
 /** @var HeroiconsOutline $heroicons */
@@ -23,17 +25,16 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <?php $filters = $block->getActiveFilters() ?>
 <?php if (!empty($filters)): ?>
 <div
-    x-data="{ open: true }"
+    x-data="initLayeredNavigationState"
     class="filter-current bg-container-lighter border border-container p-4 md:px-8 md:mt-4"
 >
     <h3 id="active-filtering-heading">
         <button
             type="button"
-            @click="open = !open"
+            @click="toggle"
             class="w-full filter-options-title flex justify-between items-center text-start cursor-pointer"
             aria-controls="active-filtering-content"
             :aria-expanded="open"
-            x-init="$nextTick(() => $el.focus())"
         >
             <strong><?= $escaper->escapeHtml(__('Active filtering')) ?></strong>
             <span class="py-1 px-1 rounded border border-container">
@@ -42,7 +43,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     24,
                     24,
                     [
-                        ":class" => "{ 'rotate-180': open }",
+                        ":class" => "activeFilterIconClasses",
                         "aria-hidden" => "true",
                         "focusable" => "false"
                     ]
@@ -86,4 +87,29 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         </div>
     <?php endif; ?>
 </div>
+<script>
+    function initLayeredNavigationState() {
+        return {
+            open: true,
+            toggle() {
+                this.open = !this.open;
+            },
+            init() {
+                this.$nextTick(() => this.$el.focus());
+            },
+            activeFilterIconClasses() {
+                return {
+                    'rotate-180': this.open
+                }
+            }
+        }
+    }
+    (() => {
+        const initFn = () => Alpine.data('initLayeredNavigationState', initLayeredNavigationState);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

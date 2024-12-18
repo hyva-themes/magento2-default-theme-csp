@@ -40,11 +40,18 @@ $swatchItemBlock->setData('product_id', $productId);
             );
             const swatchOptionsComponent = initSwatchOptions(<?= /* @noEscape */ $block->getJsonSwatchConfig() ?>);
 
+            const configurableOptionsComponentInit = configurableOptionsComponent.init;
+
             return Object.assign(
                 configurableOptionsComponent,
                 swatchOptionsComponent,
                 {
                     mediaCallback: "<?= $escaper->escapeJs($escaper->escapeUrl($block->getMediaCallback())) ?>",
+                    init() {
+                        configurableOptionsComponentInit.call(this);
+                        this.findAllowedAttributeOptions();
+                        this.initShowSwatchesIntersect();
+                    },
                     changeOption(optionId, value, skipUpdateGallery) {
                         if (value === '') {
                             this.selectedValues = this.removeAttrFromSelection(this.selectedValues, optionId)
@@ -162,15 +169,21 @@ $swatchItemBlock->setData('product_id', $productId);
                 }
             );
         }
+        (() => {
+            const initFn = () => Alpine.data('initConfigurableSwatchOptions_<?= (int) $productId ?>', initConfigurableSwatchOptions_<?= (int) $productId ?>);
+            window.Alpine
+                ? initFn()
+                : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
 
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
-<div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
+<div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>"
      x-defer="intersect"
-     x-init="findAllowedAttributeOptions(); initShowSwatchesIntersect();"
-     @private-content-loaded.window="onGetCartData($event.detail.data)"
-     @resize.window="resizeEvent()"
+     @private-content-loaded.window="onGetCartData"
+     @resize.window="resizeEvent"
      class="mb-2 relative"
+     data-product-id="<?= $escaper->escapeHtmlAttr($productId) ?>"
 >
     <div>
         <?php foreach ($attributes as $attribute): ?>
@@ -182,6 +195,7 @@ $swatchItemBlock->setData('product_id', $productId);
             } ?>
         <div class="swatch-attribute border-t last:border-b border-container
             <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
+             data-attribute-id="<?= (int) $attributeId ?>"
         >
             <div class="w-full overflow-x-hidden swatch-attribute-options min-h-14">
                 <template x-if="showSwatches">
@@ -191,7 +205,7 @@ $swatchItemBlock->setData('product_id', $productId);
                         x-bind="scrollEvents"
                         aria-label="<?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>"
                     >
-                        <template x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
+                        <template x-for="(item, index) in getAllAttributeOptions"
                                   :key="item.id"
                         >
                             <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>

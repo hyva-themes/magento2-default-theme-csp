@@ -24,7 +24,7 @@
             <block
                 name="slider-1"
                 template="Magento_Catalog::product/slider/product-slider.phtml"
-                ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content"
+                ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content_off"
             >
                 <arguments>
                     <argument name="title" xsi:type="string" translate="true">Watches</argument>
@@ -38,7 +38,7 @@
             <block
                 name="slider-2"
                 template="Magento_Catalog::product/slider/product-slider.phtml"
-                ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content"
+                ifconfig="hyva_theme_general/demo_content/show_homepage_demo_content_off"
             >
                 <arguments>
                     <!-- <argument name="product_skus" xsi:type="string"/> -->

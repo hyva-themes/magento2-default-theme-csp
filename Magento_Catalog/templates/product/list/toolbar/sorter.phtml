@@ -26,11 +26,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <select data-role="sorter"
                 class="form-select sorter-options"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Sort By')) ?>"
-                @change="changeUrl(
-                    'product_list_order',
-                    $event.currentTarget.options[$event.currentTarget.selectedIndex].value,
-                    options.orderDefault
-                )">
+                @change="changeSortBy">
             <?php foreach ($block->getAvailableOrders() as $orderCode => $orderLabel):?>
                 <option value="<?= $escaper->escapeHtmlAttr($orderCode) ?>"
                     <?php if ($block->isOrderCurrent($orderCode)): ?>
@@ -46,7 +42,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <a title="<?= $escaper->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
            href="#"
            class="action sorter-action sort-desc"
-           @click.prevent="changeUrl('product_list_dir', 'asc', options.directionDefault)"
+           @click.prevent="sortAscending"
         >
             <?= $heroicons->sortAscendingHtml(); ?>
         </a>
@@ -54,7 +50,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <a title="<?= $escaper->escapeHtmlAttr(__('Set Descending Direction')) ?>"
            href="#"
            class="action sorter-action sort-asc"
-           @click.prevent="changeUrl('product_list_dir', 'desc', options.directionDefault)"
+           @click.prevent="sortDescending"
         >
             <?= $heroicons->sortDescendingHtml(); ?>
         </a>

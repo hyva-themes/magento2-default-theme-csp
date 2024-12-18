@@ -34,9 +34,10 @@ $productName = $productAttribute->getValue($product, 'name');
 
 ?>
 
-<button x-data="initWishlist()"
+<button x-data="initWishlist"
         x-defer="intersect"
-        @click.prevent="addToWishlist(<?= (int) $productId ?>)"
+        data-product-id="<?= (int) $productId ?>"
+        @click.prevent="addToWishlist"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Wish List') . ' ' . $productName) ?>"
         type="button"
         class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-red-600"

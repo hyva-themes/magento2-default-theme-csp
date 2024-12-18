@@ -22,7 +22,8 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
 <script>
     function initCompareOnProductList() {
         return {
-            addToCompare(productId) {
+            addToCompare() {
+                const productId = this.$el.dataset.productId;
                 const formKey = hyva.getFormKey();
                 const postUrl = BASE_URL + 'catalog/product_compare/add/';
 
@@ -49,6 +50,12 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
             }
         };
     }
+    (() => {
+        const initFn = () => Alpine.data('initCompareOnProductList', initCompareOnProductList);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

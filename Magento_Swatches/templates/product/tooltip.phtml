@@ -17,22 +17,22 @@ use Magento\Framework\View\Element\Template;
 /** @var ViewModelRegistry $viewModels */
 
 ?>
-<template x-if="isTooltipVisible()">
+<template x-if="isTooltipVisible">
     <div class="absolute pointer-events-none select-none"
-         :style="getTooltipPosition()"
+         :style="getTooltipPosition"
     >
         <div class="shadow-lg">
             <div class="absolute top-0 left-0 z-10 min-w-20 p-2 -mt-6 text-sm leading-tight text-black
                     transform -translate-x-1/2 -translate-y-full bg-white rounded-lg shadow-lg text-center"
-                 :class="{'-translate-x-5' : isFirstItemCol()}"
+                 :class="getTooltipWrapperClasses"
             >
-            <template x-if="isVisualSwatch(activeTooltipItem.attribute, activeTooltipItem.item)">
+            <template x-if="isVisualSwatch">
                 <div class="inline-block border shadow-sm border-container"
-                     :style="getTooltipImageStyle(activeTooltipItem.attribute, activeTooltipItem.item)"
+                     :style="getTooltipImageStyle"
                 ></div>
             </template>
                 <span class="mx-2 text-lg font-semibold whitespace-nowrap subtitle"
-                      x-html="getTooltipLabel()"
+                      x-html="getTooltipLabel"
                 ></span>
             </div>
             <svg class="absolute z-10 w-8 h-8 text-white transform -translate-x-1/5

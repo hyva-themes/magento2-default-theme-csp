@@ -27,11 +27,17 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                 <?= /* @noEscape */ $block->getJsonConfig() ?>
             );
         }
+        (() => {
+            const initFn = () => Alpine.data('initConfigurableDropdownOptions_<?= (int) $productId ?>', initConfigurableDropdownOptions_<?= (int) $productId ?>);
+            window.Alpine
+                ? initFn()
+                : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 
     <div x-data="initConfigurableDropdownOptions_<?= (int) $productId ?>()"
-         @private-content-loaded.window="onGetCartData($event.detail.data)"
+         @private-content-loaded.window="onGetCartData"
          class="mb-6"
     >
         <h2 class="text-gray-900 text-xl title-font font-medium mb-4">
@@ -40,7 +46,9 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
 
         <?php foreach ($attributes as $attribute): ?>
             <?php $attributeId = $attribute->getAttributeId(); ?>
-        <div class="flex flex-col sm:flex-row border-t last:border-b border-gray-300 py-2 w-full items-center">
+        <div class="flex flex-col sm:flex-row border-t last:border-b border-gray-300 py-2 w-full items-center"
+             data-attribute-id="<?= $escaper->escapeHtmlAttr($attributeId) ?>"
+        >
 
             <label class="w-full sm:w-1/2 text-left text-gray-700 label"
                    for="attribute<?= $escaper->escapeHtmlAttr($attributeId) ?>"
@@ -53,20 +61,20 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                 <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attributeId) ?>]"
                         id="attribute<?= $escaper->escapeHtmlAttr($attributeId) ?>"
                         class="form-select super-attribute-select max-w-full"
-                        x-on:change="changeOption(<?= (int) $attributeId ?>, event.target.value)"
+                        @change="onChangeOption"
                         required>
                     <option value="">
                         <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
                     </option>
                     <template
-                        x-for="(item, index) in getAllAttributeOptions(<?= (int) $attributeId ?>)"
+                        x-for="(item, index) in getAllAttributeOptions"
                         :key="item.id"
                     >
-                        <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id)">
+                        <template x-if="optionIsEnabled">
                         <option
                             :value="item.id"
                             x-html="getAttributeOptionLabel(item)"
-                            :disabled="!optionIsActive(<?= (int) $attributeId ?>, item.id)"
+                            :disabled="!optionIsActive()"
                             :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attributeId) ?>] === item.id">
                         </option>
                         </template>

@@ -121,6 +121,9 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                 this.scrollTo(this.active + this.pageSize);
             },
             scrollTo(idx) {
+                if (idx instanceof Event) {
+                    idx = this.$el.dataset.index;
+                }
                 const slider = this.getSlider();
                 if (slider) {
                     const slideWidth = slider.scrollWidth / (this.itemCount + this.pageFillers);
@@ -128,28 +131,101 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                     this.active = idx;
                 }
             },
-            skipCarouselToNavigation(navSelector) {
-                const element = document.getElementById(navSelector)
+            skipCarouselToNavigation() {
+                const element = document.getElementById(this.sliderNavId())
                 if (element) {
                     element.scrollIntoView({behavior: 'smooth', block: 'end'});
                     const button = element.querySelector('button:not([disabled])');
                     this.$nextTick(() => button && button.focus({preventScroll: true}))
                 }
+            },
+            getIdPrefixes() {
+                return ['slider-nav', 'slider-desc', 'slider-id'];
+            },
+            onResize() {
+                this.calcPageSize();
+                this.$nextTick(() => this.calcActive());
+            },
+            sliderAriaDescribedById() {
+                return this.$id('slider-desc');
+            },
+            sliderNavId() {
+                return this.$id('slider-nav');
+            },
+            isItemCountGtPageSize() {
+                return this.itemCount > this.pageSize;
+            },
+            sliderItemAriaHidden() {
+                const sliderIndex = this.$el.dataset.sliderIndex;
+                return sliderIndex > this.active && sliderIndex <= (this.active + this.pageSize) ? 'false' : 'true';
+            },
+            sliderItemAriaDescribedById() {
+                const productId = this.$el.dataset.productId;
+                return `slide-desc-${productId}-${this.$id('slider-id')}`
+            },
+            dummySliderItemClasses() {
+                const index = this.$el.dataset.index;
+                return {
+                    'js_dummy_slide w-full flex-none <?= $escaper->escapeJs($slideItemClasses) ?>': this.pageFillers > index
+                };
+            },
+            isPreviousSlideButtonDisabled() {
+              return this.active === 0;
+            },
+            previousSlideButtonClasses() {
+                return {
+                    'opacity-25 pointer-events-none': this.active === 0
+                }
+            },
+            scrollToSlideButtonClasses() {
+                const index = this.$el.dataset.index;
+                return {
+                    'hidden': (this.pageSize !== 1 && !!(index % this.pageSize))
+                };
+            },
+            scrollToSlideButtonAriaCurrent() {
+                return this.active === this.$el.dataset.index;
+            },
+            scrollToSlideButtonAriaLabel() {
+                return hyva.str('<?= $escaper->escapeJs(__('Display slide %1')) ?>', (this.$el.dataset.index / this.pageSize) + 1);
+            },
+            bulletClasses() {
+                const index = this.$el.closest('[data-index]').dataset.index;
+                return {
+                    'bg-opacity-100': this.active === index,
+                    'bg-opacity-25': this.active !== index,
+                    'hidden': (this.pageSize !== 1 && !!(index % this.pageSize))
+                };
+            },
+            isNextSlideButtonDisabled() {
+                return this.active >= this.itemCount - this.pageSize;
+            },
+            nextSlideButtonClasses() {
+                return {
+                    'opacity-25 pointer-events-none': this.isNextSlideButtonDisabled()
+                }
             }
         }
     }
+
+    (() => {
+        const initFn = () => Alpine.data('initSliderComponent', initSliderComponent);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <section
     class="<?= $escaper->escapeHtmlAttr($sliderSectionClasses) ?>"
-    x-data="initSliderComponent()"
-    x-init="calcPageSize();"
-    x-id="['slider-nav', 'slider-desc', 'slider-id']"
-    @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
+    x-data="initSliderComponent"
+    x-init="calcPageSize"
+    x-id="getIdPrefixes"
+    @resize.window.debounce="onResize"
     role="group"
     aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Carousel %1', $title)) ?>"
-    :aria-describedby="$id('slider-desc')"
+    :aria-describedby="sliderAriaDescribedById"
     x-defer="intersect"
 >
     <?php if ($items): ?>
@@ -164,7 +240,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
             <?php endif; ?>
             <span
                 class="sr-only"
-                :id="$id('slider-desc')"
+                :id="sliderAriaDescribedById"
                 tabindex="-1"
             >
                 <?= $escaper->escapeHtml(__('Navigating through the elements of the carousel is possible using the tab key. You can skip the carousel or go straight to carousel navigation using the skip links.')) ?>
@@ -177,10 +253,10 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                 <?= $escaper->escapeHtml(__('Press to skip carousel')) ?>
             </a>
             <button
-                x-show="itemCount > pageSize"
+                x-show="isItemCountGtPageSize"
                 type="button"
                 class="action skip sr-only focus:not-sr-only focus:absolute focus:z-30 focus:bg-white"
-                @click.prevent="skipCarouselToNavigation($id('slider-nav'))"
+                @click.prevent="skipCarouselToNavigation"
             >
                 <?= $escaper->escapeHtml(__('Press to go to carousel navigation')) ?>
             </button>
@@ -190,10 +266,12 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                 >
                     <?php foreach ($items as $product): ?>
                         <div class="js_slide flex flex-col shrink-0 w-full <?= $escaper->escapeHtmlAttr($slideItemClasses) ?>"
+                             data-slider-index="<?= (int) $sliderIndex ?>"
+                             data-product-id="<?= $escaper->escapeHtmlAttr($product->getId()) ?>"
                              role="group"
-                             :aria-hidden="<?= (int) $sliderIndex ?> > active && <?= (int) $sliderIndex ?> <= (active + pageSize) ? 'false' : 'true'"
+                             :aria-hidden="sliderItemAriaHidden"
                              aria-label="<?= $escaper->escapeHtmlAttr(__('Item %1', $sliderIndex++)) ?>"
-                             :aria-describedby="`slide-desc-<?= $escaper->escapeHtmlAttr($product->getId()) ?>-${$id('slider-id')}`"
+                             :aria-describedby="sliderItemAriaDescribedById"
                         >
                             <?= /** @noEscape */ $productListItemViewModel->getItemHtmlWithRenderer(
                                 $sliderItemRenderer,
@@ -207,24 +285,24 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                         </div>
                     <?php endforeach; ?>
                     <?php for ($i = 0; $i < $maxVisibleSlides; $i++): /* Add empty filler slides in case the number of items is not dividable by the pagesize */ ?>
-                        <div :class="{
-                        'js_dummy_slide w-full flex-none <?= $escaper->escapeJs($slideItemClasses) ?>' : pageFillers > <?= (int) $i ?>
-                        }"></div>
+                        <div
+                            data-index="<?= (int) $i ?>"
+                            :class="dummySliderItemClasses"></div>
                     <?php endfor; ?>
                 </div>
             </div>
             <div style="min-height: 76px">
-            <template x-if="itemCount > pageSize">
+            <template x-if="isItemCountGtPageSize">
                 <div
                     class="flex items-center justify-center py-4"
-                    :id="$id('slider-nav')"
+                    :id="sliderNavId"
                 >
                     <button
                         type="button"
                         aria-label="<?= $escaper->escapeHtmlAttr(__('Previous slide')) ?>"
-                        :disabled="active === 0"
+                        :disabled="isPreviousSlideButtonDisabled"
                         class="text-black flex-none p-3"
-                        :class="{ 'opacity-25 pointer-events-none' : active === 0 }"
+                        :class="previousSlideButtonClasses"
                         @click="scrollPrevious"
                     >
                         <?= $heroicons->chevronLeftHtml("w-5 h-5", 25, 25, ['aria-hidden' => 'true']) ?>
@@ -233,30 +311,25 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                     <?php for ($i=0; $i < $itemCount; $i++): ?>
                         <button
                             type="button"
-                            :class="{
-                                    'hidden': (pageSize !== 1 && !!(<?= (int) $i ?> % pageSize))
-                                }"
-                            :aria-current="active === <?= (int) $i ?>"
-                            :aria-label="hyva.str('<?= $escaper->escapeJs(__('Display slide %1')) ?>', (<?= (int) $i ?> / pageSize) + 1)"
-                            @click="scrollTo(<?= (int) $i ?>)"
+                            data-index="<?= (int) $i ?>"
+                            :class="scrollToSlideButtonClasses"
+                            :aria-current="scrollToSlideButtonAriaCurrent"
+                            :aria-label="scrollToSlideButtonAriaLabel"
+                            @click="scrollTo"
                         >
                             <span
                                 class="shrink-0 block w-3 h-3 m-4 bg-black bg-opacity-25 rounded-full shadow cursor-pointer"
-                                :class="{
-                                    'bg-opacity-100': active === <?= (int) $i ?>,
-                                    'bg-opacity-25': active !== <?= (int) $i ?>,
-                                    'hidden': (pageSize !== 1 && !!(<?= (int) $i ?> % pageSize))
-                                }"
-                                @click="scrollTo(<?= (int) $i ?>)"
+                                :class="bulletClasses"
+                                @click="scrollTo"
                             ></span>
                         </button>
                     <?php endfor; ?>
                     </div>
                     <button
                         aria-label="<?= $escaper->escapeHtmlAttr(__('Next slide')) ?>"
-                        :disabled="active >= itemCount-pageSize"
+                        :disabled="isNextSlideButtonDisabled"
                         class="text-black flex-none p-3"
-                        :class="{ 'opacity-25 pointer-events-none' : active >= itemCount-pageSize }"
+                        :class="nextSlideButtonClasses"
                         @click="scrollNext"
                      >
                         <?= $heroicons->chevronRightHtml("w-5 h-5", 25, 25, ['aria-hidden' => 'true']) ?>

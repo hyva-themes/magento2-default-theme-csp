@@ -26,10 +26,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 <?php if ($block->canShowBlock()): ?>
     <div
-        x-data="initLayeredNavigation()"
-        x-init="checkIsMobileResolution()"
-        @resize.window.debounce="checkIsMobileResolution()"
-        @visibilitychange.window.debounce="checkIsMobileResolution()"
+        x-data="initLayeredNavigation"
+        x-init="checkIsMobileResolution"
+        @resize.window.debounce="checkIsMobileResolution"
+        @visibilitychange.window.debounce="checkIsMobileResolution"
         class="block border border-container bg-container-darker p-4 md:border-0 md:bg-transparent md:py-0 md:px-0 my-6"
         role="region"
         aria-label="<?= $escaper->escapeHtmlAttr(__('Product filters')) ?>"
@@ -40,12 +40,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         >
             <button
                 type="button"
-                @click="blockOpen = !blockOpen"
+                @click="toggle"
                 class="block-title flex items-center justify-between w-full text-start"
                 aria-controls="filters-content"
                 :aria-expanded="blockOpen"
-                :aria-disabled="!isMobile"
-                :disabled="!isMobile ? '' : null"
+                :aria-disabled="isNotMobile"
+                :disabled="isDisabled"
             >
                 <span class="text-primary text-md md:text-3xl font-medium uppercase">
                     <?= $escaper->escapeHtml(__('Shop By')) ?>
@@ -59,7 +59,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         24,
                         24,
                         [
-                            ":class" => "{ 'rotate-180': blockOpen }",
+                            ":class" => "filtersMobileIconClasses",
                             "aria-hidden" => "true",
                             "focusable" => "false"
                         ]
@@ -70,7 +70,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <div
             id="filters-content"
             class="block-content filter-content hidden md:block pt-4"
-            :class="{ 'hidden': !blockOpen }"
+            :class="filtersContentClasses"
         >
             <?= $block->getChildHtml('state') ?>
             <a
@@ -82,20 +82,17 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             <?php foreach ($block->getFilters() as $filter): ?>
                 <?php if ($filter->getItemsCount()): ?>
                     <div
-                        x-data="{
-                            open: false,
-                            id: $id('filter-option')
-                        }"
+                        x-data="initFilterOption"
                         x-defer="intersect"
                         class="filter-option card my-4"
                     >
-                        <h3 :id="`${id}-title`">
+                        <h3 :id="titleId">
                             <button
                                 type="button"
-                                @click="open = !open"
+                                @click="toggle"
                                 class="filter-options-title flex justify-between items-center cursor-pointer text-start hover:text-secondary-darker border-container w-full"
-                                :class="{ 'border-b pb-4': open }"
-                                :aria-controls="`${id}-content`"
+                                :class="filterOptionClasses"
+                                :aria-controls="contentId"
                                 :aria-expanded="open"
                             >
                                 <span class="title text-md md:text-lg font-semibold">
@@ -108,7 +105,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                         24,
                                         24,
                                         [
-                                            ":class" => "{ 'rotate-180': open }",
+                                            ":class" => "filterIconClasses",
                                             "aria-hidden" => "true",
                                             "focusable" => "false"
                                         ]
@@ -118,7 +115,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         </h3>
                         <template x-if="open">
                             <div
-                                :id="`${id}-content`"
+                                :id="contentId"
                                 class="filter-options-content pt-3"
                             >
                                 <?= /* @noEscape */ $block->getChildBlock('renderer')->setFilterTitle($filter->getName())->render($filter); ?>
@@ -139,9 +136,62 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     this.isMobile = mobileElement
                         ? getComputedStyle(mobileElement).display !== "none"
                         : window.matchMedia('(max-width: 767px)').matches; // Fallback to `md` breakpoint
+                },
+                toggle() {
+                    this.blockOpen = !this.blockOpen;
+                },
+                isNotMobile() {
+                    return !this.isMobile;
+                },
+                isDisabled() {
+                    return !this.isMobile ? '' : null
+                },
+                filtersContentClasses() {
+                    return {
+                        'hidden': !this.blockOpen
+                    }
+                },
+                filtersMobileIconClasses() {
+                    return {
+                        'rotate-180': this.blockOpen
+                    }
                 }
             }
         }
+        function initFilterOption() {
+            return {
+                open: false,
+                id: this.$id('filter-option'),
+                titleId() {
+                    return `${this.id}-title`;
+                },
+                contentId() {
+                    return `${this.id}-content`;
+                },
+                toggle() {
+                    this.open = !this.open;
+                },
+                filterOptionClasses() {
+                    return {
+                        'border-b pb-4': this.open
+                    }
+                },
+                filterIconClasses() {
+                    return {
+                        'rotate-180': this.open
+                    }
+                }
+            };
+        }
+        (() => {
+            const initFn = () => {
+                Alpine.data('initLayeredNavigation', initLayeredNavigation);
+                Alpine.data('initFilterOption', initFilterOption);
+            };
+            window.Alpine
+                ? initFn()
+                : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

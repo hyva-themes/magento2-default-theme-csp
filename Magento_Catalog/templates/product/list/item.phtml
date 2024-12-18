@@ -129,7 +129,8 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
             <a
                 class="product-item-link"
                 href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
-                :id="`slide-desc-<?= $escaper->escapeHtmlAttr($product->getId()) ?>-${$id('slider-id')}`"
+                data-product-id="<?= $escaper->escapeHtmlAttr($product->getId()) ?>"
+                :id="sliderItemAriaDescribedById"
             >
                 <?= /* @noEscape */ $productName ?>
             </a>
@@ -158,9 +159,9 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
         <?php endif; ?>
 
         <div class="pt-1 text-gray-900"
-             x-data="initPriceBox()"
+             x-data="initPriceBox"
              x-defer="intersect"
-             @update-prices-<?= (int)$productId ?>.window="updatePrice($event.detail);"
+             @update-prices-<?= (int)$productId ?>.window="updatePrice"
         >
             <?= /* @noEscape */ $productListItemViewModel->getProductPriceHtml($product) ?>
         </div>
@@ -204,9 +205,10 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                     <?= $block->getChildBlock('wishlist')->setData('product', $product)->toHtml() ?>
                 <?php endif; ?>
                 <?php if ($showAddToCompare): ?>
-                <button x-data="initCompareOnProductList()"
+                <button x-data="initCompareOnProductList"
                         x-defer="intersect"
-                        @click.prevent="addToCompare(<?= (int)$productId ?>)"
+                        data-product-id="<?= (int) $productId ?>"
+                        @click.prevent="addToCompare"
                         aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Compare') . ' ' . $productName) ?>"
                         type="button"
                         class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-yellow-500"

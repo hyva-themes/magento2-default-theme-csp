@@ -69,17 +69,20 @@ use Magento\Framework\View\Element\Template;
                     "empty";
                 return type === 'visual' ? this.getVisualSwatchType(attributeId, optionId) : type;
             },
-            isTextSwatch(attributeId, optionId) {
-                return this.getSwatchType(attributeId, optionId) === 'text';
+            isTextSwatch() {
+                const attributeId = this.getDataAttributeId(this.$el);
+                return this.getSwatchType(attributeId, this.item.id) === 'text';
             },
-            isVisualSwatch(attributeId, optionId) {
-                const type = this.getSwatchType(attributeId, optionId);
+            isVisualSwatch() {
+                const attributeId = this.activeTooltipItem.attribute;
+                const type = this.getSwatchType(attributeId, this.activeTooltipItem.item);
 
                 return ['image', 'color'].includes(type);
             },
-            getSwatchBackgroundStyle(attributeId, optionId) {
-                const config = this.getSwatchConfig(attributeId, optionId);
-                const type = this.getSwatchType(attributeId, optionId);
+            getSwatchBackgroundStyle() {
+                const attributeId = this.getDataAttributeId(this.$el);
+                const config = this.getSwatchConfig(attributeId, this.item.id);
+                const type = this.getSwatchType(attributeId, this.item.id);
 
                 if (type === "color") {
                         return 'background-color:' + config.value;
@@ -89,7 +92,9 @@ use Magento\Framework\View\Element\Template;
                     return '';
                 }
             },
-            getSwatchText(attributeId, optionId) {
+            getSwatchText() {
+                const attributeId = this.getDataAttributeId(this.$el);
+                const optionId = this.$el.dataset.optionId || this.selectedValues[attributeId];
                 const config = this.getSwatchConfig(attributeId, optionId);
                 return config.label || config.value || this.getOptionLabelFromOptionConfig(attributeId, optionId);
             },
@@ -116,7 +121,9 @@ use Magento\Framework\View\Element\Template;
             isFirstItemCol() {
                 return this.activeTooltipItem.index === 0;
             },
-            getTooltipImageStyle(attributeId, optionId) {
+            getTooltipImageStyle() {
+                const attributeId = this.activeTooltipItem.attribute;
+                const optionId = this.activeTooltipItem.item;
                 const config = this.getSwatchConfig(attributeId, optionId);
                 const type = this.getSwatchType(attributeId, optionId);
 
@@ -127,6 +134,11 @@ use Magento\Framework\View\Element\Template;
                         "') center center no-repeat; width: 110px; height: 90px;";
                 } else {
                     return 'display:none';
+                }
+            },
+            getTooltipWrapperClasses() {
+                return {
+                    '-translate-x-5': this.isFirstItemCol()
                 }
             },
             getTooltipPosition() {
@@ -167,6 +179,57 @@ use Magento\Framework\View\Element\Template;
                 } else {
                     this.showSwatches = true
                 }
+            },
+            getSwatchOptionHtmlId() {
+                const productId = this.$el.closest('[data-product-id]').dataset.productId;
+                return this.$id(`attribute-option-${productId}-${this.item.id}`)
+            },
+            getSwatchOptionHtmlIdGroup() {
+                const productId = this.$el.closest('[data-product-id]').dataset.productId;
+                return [`attribute-option-${productId}-${this.item.id}`];
+            },
+            swatchOptionClasses() {
+                const attributeId = this.getDataAttributeId(this.$el);
+                return {
+                    'border-container-lighter ring ring-primary/50': (this.selectedValues[attributeId] === this.item.id),
+                    'border-container-darker': (this.selectedValues[attributeId] !== this.item.id),
+                    'w-6 h-6': !this.isTextSwatch(),
+                    'border-container-lighter ring ring-primary/75': this.focusedLabel === this.item.id,
+                }
+            },
+            outOfStockSwatchWrapperClasses() {
+                return {
+                    'w-6 h-6': !this.isTextSwatch(),
+                }
+            },
+            outOfStockSwatchContentClasses() {
+                return {
+                    'sr-only': !this.isTextSwatch()
+                };
+            },
+            setActiveTooltipItem() {
+                this.activeTooltipItem = {
+                    attribute: this.getDataAttributeId(this.$el),
+                    item: this.item.id,
+                    index: this.index
+                };
+                this.tooltipPositionElement = this.$event.target;
+            },
+            unsetActiveTooltipItem() {
+                this.activeTooltipItem = false;
+            },
+            onFocusSwatchItem() {
+                this.focusLabel(this.item.id);
+            },
+            isSwatchRequired() {
+                const attributeId = this.getDataAttributeId(this.$el);
+                return this.getAllowedAttributeOptions(attributeId)
+                    .filter(attributeOption => this.selectedValues[attributeOption])
+                    .length === 0
+            },
+            modelBinding() {
+                const attributeId = this.getDataAttributeId(this.$el);
+                return this.selectedValues[attributeId];
             }
         }
     }

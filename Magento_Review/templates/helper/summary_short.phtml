@@ -23,25 +23,23 @@ $yellowHex = '#f6e05e';
 $greyHex = '#cbd5e0';
 $productName = $block->getProduct()->getName();
 $productId = $block->getProduct()->getId();
-$uniqueId = $productId . uniqid();
 ?>
 <?php if ($block->isReviewEnabled()): ?>
     <div
-        x-data="initRating<?= /* @noEscape */ $uniqueId ?>()"
+        x-data="initRating"
         x-defer="intersect"
-        @keyup.enter="scrollToRatings()"
-        @click="scrollToRatings()"
+        @keyup.enter="scrollToRatings"
+        @click="scrollToRatings"
         class="rating-summary flex"
-        :class="{'cursor-pointer' : reviewsSection}"
+        :class="scrollToRatingsClasses"
         <?php if (!$rating): ?>
             title="<?= $escaper->escapeHtmlAttr(__('Be the first to review this product')) ?>"
         <?php endif; ?>
-        :tabindex="reviewsSection ? '0' : '-1'"
-        :aria-label="reviewsSection
-            ? '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars. Click to go to reviews.', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
-            : '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
-        "
-        :role="reviewsSection ? 'button' : 'img'"
+        data-arial-label-review-section="<?= $escaper->escapeHtmlAttr(__('%1 rating. %2 out of %3 stars. Click to go to reviews.', $productName, $starsFilled + $starFragment, $ratingSteps)) ?>"
+        data-aria-label-no-review-section="<?= $escaper->escapeHtmlAttr(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps)) ?>"
+        :tabindex="scrollToRatingsTabIndex"
+        :aria-label="scrollToRatingsAriaLabel"
+        :role="elementRole"
     >
         <?php if ($rating): ?>
             <?php $i = 0; ?>
@@ -129,11 +127,28 @@ $uniqueId = $productId . uniqid();
     <script>
         'use strict';
 
-        function initRating<?= /* @noEscape */ $uniqueId ?>() {
+        function initRating() {
             return {
                 reviewsSection: document.getElementById('customer-review-list')
                     || document.getElementById('customer-reviews')
                     || document.getElementById('review-form'),
+                scrollToRatingsClasses() {
+                    return {
+                        'cursor-pointer': this.reviewsSection
+                    }
+                },
+                scrollToRatingsTabIndex() {
+                    return this.reviewsSection ? '0' : '-1';
+                },
+                scrollToRatingsAriaLabel() {
+                    return this.reviewsSection
+                        ? this.$el.dataset.ariaLabelReviewSection
+                        : this.$el.dataset.ariaLabelNoReviewSection
+
+                },
+                elementRole() {
+                    return this.reviewsSection ? 'button' : 'img';
+                },
                 scrollToRatings() {
                     let scrollTimeout = null
 
@@ -155,6 +170,12 @@ $uniqueId = $productId . uniqid();
                 }
             }
         }
+        (() => {
+            const initFn = () => Alpine.data('initRating', initRating);
+            window.Alpine
+                ? initFn()
+                : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

@@ -13,14 +13,14 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 ?>
 <span
-    <?php if ($block->getPriceId()): ?>x-data x-id="['<?= $escaper->escapeJs($block->getPriceId()) ?>']"<?php endif; ?>
+    <?php if ($block->getPriceId()): ?>x-id="htmlPriceIdGroup" data-price-id="<?= $escaper->escapeHtmlAttr($block->getPriceId()) ?>"<?php endif; ?>
     class="price-container <?= $escaper->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>"
         <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>
 >
     <?php if ($block->getDisplayLabel()): ?>
         <span class="price-label"><?= $escaper->escapeHtml($block->getDisplayLabel()) ?></span>
     <?php endif; ?>
-    <span <?php if ($block->getPriceId()): ?> :id="$id('<?= $escaper->escapeJs($block->getPriceId()) ?>')"<?php endif; ?>
+    <span <?php if ($block->getPriceId()): ?> :id="htmlPriceId"<?php endif; ?>
         <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $escaper->escapeHtmlAttr($block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes()) . '"' : '' ?>
         data-price-amount="<?= $escaper->escapeHtmlAttr($block->getDisplayValue()) ?>"
         data-price-type="<?= $escaper->escapeHtmlAttr($block->getPriceType()) ?>"

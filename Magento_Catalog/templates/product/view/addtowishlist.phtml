@@ -47,8 +47,8 @@ $uniqueId = '_' . uniqid();
 <script>
     function initWishlist<?= /** @noEscape */ $uniqueId ?>() {
         return {
-            addToWishlist(productId) {
-
+            addToWishlist() {
+                const productId = this.$el.dataset.productId;
                 const postParams = <?php if ($updateParams): ?>
                     <?= /* @noEscape */ $updateParams ?>
                 <?php else: ?>
@@ -134,11 +134,19 @@ $uniqueId = '_' . uniqid();
             }
         }
     }
+    (() => {
+        const initFn = () => Alpine.data('initWishlist<?= /** @noEscape */ $uniqueId ?>', initWishlist<?= /** @noEscape */ $uniqueId ?>);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <button x-data="initWishlist<?= /** @noEscape */ $uniqueId ?>()"
         x-defer="intersect"
-        @click.prevent="addToWishlist(<?= (int)$product->getId() ?>)"
+        data-product-id="<?= (int) $product->getId() ?>"
+        @click.prevent="addToWishlist"
         title="<?= $escaper->escapeHtmlAttr(
             ($updateParams) ? __('Update Wish List') : __('Add to Wish List')
         ) ?>"

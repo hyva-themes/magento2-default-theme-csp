@@ -93,7 +93,7 @@ function initCompareOnCompareSidebar() {
             compareSidebarFetchHandler(postUrl, postHeaders);
         },
         productAriaLabel() {
-            return hyva.str(this.$el.dataset['aria-label'], this.product.name)
+            return hyva.str(this.$el.dataset.ariaLabel, this.product.name)
         }
     }
 }

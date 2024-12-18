@@ -50,14 +50,25 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
 
             return Object.assign(
                 configurableOptionsComponent,
-                swatchOptionsComponent
+                swatchOptionsComponent,
+                {
+                    init() {
+                        configurableOptionsComponent.init.call(this);
+                        this.initShowSwatchesIntersect();
+                    }
+                }
             );
         }
+        (() => {
+            const initFn = () => Alpine.data('initConfigurableSwatchOptions_<?= (int) $productId ?>', initConfigurableSwatchOptions_<?= (int) $productId ?>);
+            window.Alpine
+                ? initFn()
+                : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
     <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>()"
-         x-init="initShowSwatchesIntersect();"
-         @private-content-loaded.window="onGetCartData($event.detail.data)"
+         @private-content-loaded.window="onGetCartData"
          class="relative mb-6"
          x-defer="intersect"
     >
@@ -70,7 +81,9 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                 <?php $productAttribute = $attribute->getProductAttribute();  ?>
                 <?php if ($swatchRendererViewModel->isSwatchAttribute($productAttribute)): ?>
                     <div class="swatch-attribute border-t last:border-b border-container min-h-14
-                            <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>">
+                            <?= $escaper->escapeHtmlAttr($productAttribute->getAttributeCode()) ?>"
+                         data-attribute-id="<?= (int) $attributeId ?>"
+                    >
                         <template x-if="showSwatches">
                             <div class="flex flex-col sm:flex-row items-center py-4 sm:py-1 w-full border-gray-300">
 
@@ -82,7 +95,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                                     <span><?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?></span>
                                     <span
                                         class="text-gray-900 ml-2 font-bold"
-                                        x-text="getSwatchText(<?= (int) $attributeId ?>, selectedValues[<?= (int) $attributeId ?>])"
+                                        x-text="getSwatchText"
                                     ></span>
                                 </label>
                                 <div class="w-full sm:ml-2 sm:w-1/2 text-left text-gray-900 product-option-values">
@@ -92,7 +105,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                                          aria-label="<?= $escaper->escapeHtmlAttr($productAttribute->getStoreLabel()) ?>"
                                     >
                                         <template
-                                            x-for="(item, index) in optionConfig.attributes[<?= (int) $attributeId ?>].options"
+                                            x-for="(item, index) in getAllAttributeOptions"
                                             :key="item.id"
                                         >
                                             <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
@@ -115,19 +128,19 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                             <select name="super_attribute[<?= $escaper->escapeHtmlAttr($attribute->getAttributeId()) ?>]"
                                     id="attribute<?= $escaper->escapeHtmlAttr($attributeId) ?>"
                                     class="form-select super-attribute-select max-w-full"
-                                    x-on:change="changeOption(<?= (int) $attributeId ?>, event.target.value)"
+                                    @change="onChangeOption"
                                     required>
                                 <option value="">
                                     <?= $escaper->escapeHtml(__('Choose an Option...')) ?>
                                 </option>
                                 <template
-                                    x-for="(item, index) in getAllAttributeOptions(<?= (int) $attributeId ?>)"
+                                    x-for="(item, index) in getAllAttributeOptions"
                                     :key="item.id"
                                 >
                                     <option
                                         :value="item.id"
                                         x-html="item.label"
-                                        :disabled="!optionIsActive(<?= (int) $attributeId ?>, item.id)"
+                                        :disabled="!optionIsActive()"
                                         :selected="selectedValues[<?= $escaper->escapeHtmlAttr($attributeId) ?>] === item.id">
                                     </option>
                                 </template>

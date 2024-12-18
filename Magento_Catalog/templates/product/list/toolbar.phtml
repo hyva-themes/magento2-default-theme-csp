@@ -45,6 +45,23 @@ $additionalOptions = ['page' => 'p'];
             getCurrentPage: function () {
                 return this.getUrlParams()[this.options.page] || 1;
             },
+            changeLimit() {
+                const limit = this.$event.currentTarget.options[this.$event.currentTarget.selectedIndex].value;
+                this.changeUrl('product_list_limit', limit, this.options.limitDefault);
+            },
+            changeSortBy() {
+                const sortBy = this.$event.currentTarget.options[this.$event.currentTarget.selectedIndex].value;
+                this.changeUrl('product_list_order', sortBy, this.options.orderDefault);
+            },
+            sortAscending() {
+                this.changeUrl('product_list_dir', 'asc', this.options.directionDefault);
+            },
+            sortDescending() {
+                this.changeUrl('product_list_dir', 'desc', this.options.directionDefault);
+            },
+            changeListMode() {
+                this.changeUrl('product_list_mode', this.$el.dataset.listMode, this.options.modeDefault)
+            },
             changeUrl(paramName, paramValue, defaultValue) {
                 let urlPaths = this.options.url.split('?'),
                     baseUrl = urlPaths[0],
@@ -82,10 +99,16 @@ $additionalOptions = ['page' => 'p'];
             }
         }
     }
+    (() => {
+        const initFn = () => Alpine.data('initToolbar<?= /** @noEscape */  $uniqueId ?>', initToolbar<?= /** @noEscape */  $uniqueId ?>);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <?php if ($block->getCollection()->getSize()): ?>
-    <div x-data="initToolbar<?= /** @noEscape */ $uniqueId ?>()"
+    <div x-data="initToolbar<?= /** @noEscape */ $uniqueId ?>"
          class="toolbar toolbar-products grid grid-cols-4 sm:grid-cols-8 md:grid-cols-4
             lg:grid-cols-8  grid-flow-row gap-2 items-center">
         <?php if ($block->getIsBottom()): ?>

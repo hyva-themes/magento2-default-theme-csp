@@ -29,11 +29,7 @@ $availableLimitOptions = $block->getAvailableLimit();
                 <select
                     data-role="limiter"
                     class="form-select limiter-options"
-                    @change="changeUrl(
-                        'product_list_limit',
-                        $event.currentTarget.options[$event.currentTarget.selectedIndex].value,
-                        options.limitDefault
-                    )"
+                    @change="changeLimit"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Show items per page')) ?>"
                 >
                 <?php foreach ($block->getAvailableLimit() as $key => $limit): ?>

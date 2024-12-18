@@ -22,7 +22,8 @@ use Magento\Framework\View\Element\Template;
     function initPriceBox()
     {
         return {
-            updatePrice(priceData) {
+            updatePrice() {
+                const priceData = this.$event.detail;
                 const regularPriceLabel = this.$root.querySelector('.normal-price .price-label');
                 const regularPriceElement = this.$root.querySelector('.normal-price [data-price-type=finalPrice].price-wrapper .price');
                 const basePriceElement = this.$root.querySelector('.normal-price [data-price-type=basePrice].price-wrapper .price');
@@ -33,8 +34,20 @@ use Magento\Framework\View\Element\Template;
                 }
                 regularPriceElement && (regularPriceElement.innerText = hyva.formatPrice(priceData.finalPrice.amount));
                 basePriceElement && (basePriceElement.innerText = hyva.formatPrice(priceData.basePrice.amount));
+            },
+            htmlPriceIdGroup() {
+                return [this.$el.dataset.priceId];
+            },
+            htmlPriceId() {
+                return this.$id(this.$el.closest('[data-price-id]').dataset.priceId);
             }
         }
     }
+    (() => {
+        const initFn = () => Alpine.data('initPriceBox', initPriceBox);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

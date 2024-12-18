@@ -100,7 +100,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                     wishlistSidebarFetchHandler(body, postUrl);
                 },
                 productAriaLabel() {
-                    return hyva.str(this.$el.dataset['aria-label'], this.product.product_name)
+                    return hyva.str(this.$el.dataset.ariaLabel, this.product.product_name)
                 }
             }
         }

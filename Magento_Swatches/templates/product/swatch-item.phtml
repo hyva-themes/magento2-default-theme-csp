@@ -30,50 +30,38 @@ if (!$productId || !$attributeId) {
 }
 ?>
 
-<div x-id="['attribute-option-<?= (int) $productId ?>-'+item.id]">
-    <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && optionIsActive(<?= (int) $attributeId ?>, item.id)">
+<div x-id="getSwatchOptionHtmlIdGroup">
+    <template x-if="isOptionEnabledAndInStock">
         <label
-            :for="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
+            :for="getSwatchOptionHtmlId"
             class="swatch-option relative shadow-sm cursor-pointer select-none bg-container-lighter product-option-value-label"
-            :class="{
-                'border-container-lighter ring ring-primary/50':
-                    (selectedValues[<?= (int)$attributeId ?>] === item.id),
-                'border-container-darker':
-                    (selectedValues[<?= (int)$attributeId ?>] !== item.id),
-                'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
-                'border-container-lighter ring ring-primary/75' : focusedLabel === item.id
-            }"
-            :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
+            :class="swatchOptionClasses"
+            :style="getSwatchBackgroundStyle"
             <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
-                @mouseenter.self="activeTooltipItem = {
-                    attribute: '<?= (int) $attributeId ?>',
-                    item: item.id,
-                    index
-                }; tooltipPositionElement = $event.target;"
-                @mouseleave.self="activeTooltipItem = false"
+                @mouseenter.self="setActiveTooltipItem"
+                @mouseleave.self="unsetActiveTooltipItem"
             <?php endif; ?>
         >
             <input
-                :id="$id('attribute-option-<?= (int) $productId ?>-'+item.id)"
+                :id="getSwatchOptionHtmlId"
                 :value="item.id"
                 name="super_attribute[<?= (int) $attributeId ?>]"
                 type="radio"
                 class="inline-block absolute p-0 border-0 focus:border-0 focus:ring-0 product-option-value-input"
                 style="z-index:-1"
-                x-on:focus="focusLabel(item.id)"
-                x-on:blur="blurLabel()"
-                x-on:change="changeOption(<?= (int) $attributeId ?>, $event.target.value)"
-                x-on:click="clearOptionIfActive(<?= (int) $attributeId ?>, item.id)"
-                x-model="selectedValues[<?= (int) $attributeId ?>]"
-                :required="getAllowedAttributeOptions(<?= (int) $attributeId ?>).filter(
-                    attributeOption => selectedValues[attributeOption]
-                ).length === 0"
-                :aria-label="getSwatchText(<?= $escaper->escapeHtmlAttr($attributeId) ?>, item.id)"
+                @focus="onFocusSwatchItem"
+                @blur="blurLabel"
+                @change="onChangeOption"
+                @click="clearOptionIfActive"
+                :required="isSwatchRequired"
+                :data-option-id="item.id"
+                :aria-label="getSwatchText"
                 aria-describedby="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
             >
-            <template x-if="isTextSwatch(<?= (int) $attributeId ?>, item.id)">
+            <template x-if="isTextSwatch">
                 <div
-                    x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
+                    :data-option-id="item.id"
+                    x-html="getSwatchText"
                     class="pointer-events-none select-none whitespace-nowrap"
                     aria-hidden="true"
                 ></div>
@@ -81,17 +69,16 @@ if (!$productId || !$attributeId) {
         </label>
     </template>
 
-    <template x-if="optionIsEnabled(<?= (int) $attributeId ?>, item.id) && !optionIsActive(<?= (int) $attributeId ?>, item.id)">
+    <template x-if="isOptionEnabledAndOutOfStock">
         <div
             class="relative border-2 shadow-sm opacity-50 cursor-pointer select-none border-container-darker swatch-option bg-container-lighter"
-            :class="{
-                                                        'w-6 h-6' : !isTextSwatch(<?= (int) $attributeId ?>, item.id),
-                                                    }"
-            :style="getSwatchBackgroundStyle('<?= (int) $attributeId ?>',item.id)"
+            :class="outOfStockSwatchWrapperClasses"
+            :style="getSwatchBackgroundStyle"
         >
-            <div x-html="getSwatchText(<?= (int) $attributeId ?>, item.id)"
+            <div x-html="getSwatchText"
+                 :data-option-id="item.id"
                  class="whitespace-nowrap"
-                 :class="{ 'sr-only' : !isTextSwatch(<?= (int) $attributeId ?>, item.id) }"
+                 :class="outOfStockSwatchContentClasses"
             ></div>
             <svg class="absolute inset-0 w-full h-full text-gray-500 bg-white/25">
                 <line x1="0" y1="100%" x2="100%" y2="0" class="stroke-current stroke-1"></line>

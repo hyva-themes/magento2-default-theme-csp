@@ -85,22 +85,57 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                 this.scrollTo(this.active + this.pageSize);
             },
             scrollTo(idx) {
+                if (idx instanceof Event) {
+                    idx = this.$el.dataset.index;
+                }
                 const slider = this.getSlider();
                 if (slider) {
                     const slideWidth = slider.scrollWidth / (this.itemCount + this.pageFillers);
                     slider.scrollLeft = Math.floor(slideWidth) * idx;
                     this.active = idx;
                 }
+            },
+            onResize() {
+                this.calcPageSize();
+                this.$nextTick(() => this.calcActive())
+            },
+            sliderItemClasses() {
+                return {
+                    'js_dummy_slide flex-none w-full <?= $escaper->escapeJs($slideItemClasses) ?>' : pageFillers > <?= (int) $i ?>
+                }
+            },
+            isItemCountGtPageSize() {
+                return this.itemCount > this.pageSize;
+            },
+            buttonClasses() {
+                return {
+                    'opacity-25 pointer-events-none' : active === 0
+                };
+            },
+            bulletClasses() {
+                const index = this.$el.dataset.index;
+                return {
+                    'bg-opacity-100': this.active === index,
+                    'bg-opacity-25': this.active !== index,
+                    'hidden': (this.pageSize !== 1 && !!(index % this.pageSize))
+                };
             }
         }
     }
+
+    (() => {
+        const initFn = () => Alpine.data('initSliderComponent', initSliderComponent);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <section class="<?= $escaper->escapeHtmlAttr($sliderSectionClasses) ?>"
-         x-data="initSliderComponent()"
+         x-data="initSliderComponent"
          x-defer="intersect"
-         x-init="calcPageSize();"
-         @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
+         x-init="calcPageSize"
+         @resize.window.debounce="onResize"
          role="group"
          aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
          <?php if ($title): ?>
@@ -129,32 +164,27 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                         </div>
                     <?php endforeach; ?>
                     <?php for ($i = 0; $i < $maxVisibleSlides; $i++): /* Add empty filler slides in case the number of items is not dividable by the pagesize */ ?>
-                    <div :class="{
-                        'js_dummy_slide flex-none w-full <?= $escaper->escapeJs($slideItemClasses) ?>' : pageFillers > <?= (int) $i ?>
-                        }"></div>
+                    <div :class="sliderItemClasses"></div>
                     <?php endfor; ?>
                 </div>
             </div>
             <div style="min-height: 76px">
-            <template x-if="itemCount > pageSize">
+            <template x-if="isItemCountGtPageSize">
                 <div class="flex items-center justify-center py-4">
                     <button
                         aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
                         tabindex="-1"
                         class="mr-4 text-black rounded-full outline-none focus:outline-none flex-none"
-                        :class="{ 'opacity-25 pointer-events-none' : active === 0 }"
+                        :class="buttonClasses"
                         @click="scrollPrevious">
                         <?= $heroicons->chevronLeftHtml("w-5 h-5", 25, 25) ?>
                     </button>
                     <div class="flex flex-wrap w-full md:w-auto justify-center">
                     <?php for ($i=0; $i < $itemCount; $i++): ?>
                         <span class="shrink-0 block w-3 h-3 m-1 bg-black bg-opacity-25 rounded-full shadow cursor-pointer"
-                                :class="{
-                                    'bg-opacity-100': active === <?= (int) $i ?>,
-                                    'bg-opacity-25': active !== <?= (int) $i ?>,
-                                    'hidden': (pageSize !== 1 && !!(<?= (int) $i ?> % pageSize))
-                                    }"
-                                @click="scrollTo(<?= (int) $i ?>)">
+                              data-index="<?= (int) $i ?>"
+                              :class="bulletClasses"
+                              @click="scrollTo">
                         </span>
                     <?php endfor; ?>
                     </div>

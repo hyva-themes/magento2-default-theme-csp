@@ -163,7 +163,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 return this.item.product_type !== 'grouped' && this.item.is_visible_in_site_visibility
             },
             productAriaLabel() {
-                return hyva.strf(this.$el.dataset['aria-label'], this.item.product_name)
+                return hyva.strf(this.$el.dataset.ariaLabel, this.item.product_name)
             },
             proceedToCheckout() {
                 this.closeCartDrawer()

@@ -55,20 +55,29 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             },
             productIndex: 0,
             productIndexForPrice: 0,
-            optionIsActive(attributeId, optionId) {
+            optionIsActive() {
                 <?php /* return true if a product with this option is in stock */ ?>
+                const attributeId = this.getDataAttributeId(this.$el);
                 return !!this.getAllowedAttributeOptions(attributeId).find(
-                    option => option.id === optionId
+                    option => option.id === this.item.id
                 )
             },
-            optionIsEnabled(attributeId, optionId) {
-                <?php /* return true if a product with this option is enabled */ ?>
+            optionIsEnabled() {
+                <?php /* return true if a product with the option id === this.item.id is enabled */ ?>
+                const attributeId = this.getDataAttributeId(this.$el);
+
                 for (const productId in this.optionConfig.index) {
-                    if (this.optionConfig.index[productId][attributeId] === optionId) {
+                    if (this.optionConfig.index[productId][attributeId] === this.item.id) {
                         return true;
                     }
                 }
                 return false;
+            },
+            isOptionEnabledAndInStock() {
+                return this.optionIsEnabled() && this.optionIsActive();
+            },
+            isOptionEnabledAndOutOfStock() {
+                return this.optionIsEnabled() && ! this.optionIsActive();
             },
             findSimpleIndex() {
                 <?php /* a better method name would be `updateSelectedSimpleIndex` but keeping for bc */ ?>
@@ -178,7 +187,16 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             getAllowedAttributeOptions(attributeId) {
                 return this.allowedAttributeOptions[attributeId] || []
             },
+            getDataAttributeId(el) {
+                return el.closest('[data-attribute-id]').dataset.attributeId;
+            },
+            getDataOptionId(el) {
+                return el.closest('[data-option-id]').dataset.optionId;
+            },
             getAllAttributeOptions(attributeId) {
+                if (attributeId === undefined) {
+                    attributeId = this.getDataAttributeId(this.$el);
+                }
                 return (
                     this.optionConfig.attributes[attributeId] &&
                     this.optionConfig.attributes[attributeId].options
@@ -243,10 +261,11 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                 }
                 return this.optionConfig.prices.finalPrice.amount; // default price if no option selection
             },
-            clearOptionIfActive(optionId, value) {
-                if (this.selectedValues[optionId] === value) {
+            clearOptionIfActive() {
+                const attributeId = this.getDataAttributeId(this.$el);
+                if (this.selectedValues[attributeId] === this.item.id) {
                     this.blurLabel()
-                    this.changeOption(optionId, '')
+                    this.changeOption(attributeId, '')
                 }
             },
             removeAttrFromSelection(selectedValues, attributeId) {
@@ -258,6 +277,11 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                     }
                     return newSelection;
                 }, []);
+            },
+            onChangeOption() {
+                const attributeId = this.getDataAttributeId(this.$event.target);
+                const optionId = this.$event.target.value;
+                this.changeOption(attributeId, optionId)
             },
             changeOption(attributeId, value) {
                 if (value === '') {
@@ -326,7 +350,8 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                     return x.position === y.position ? 0 : (parseInt(x.position) > parseInt(y.position) ? 1 : -1)
                 });
             },
-            onGetCartData(data) {
+            onGetCartData() {
+                const data = this.$event.detail.data;
                 <?php if ($currentProduct->exists()): /* Only preconfigure the main product on product detail pages */ ?>
                 if (this.productId === '<?= (int) $currentProduct->get()->getEntityId() ?>') {
                     this.preselectCartItems(data);
@@ -368,6 +393,12 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             }
         }
     }
+    (() => {
+        const initFn = () => Alpine.data('initConfigurableOptions', initConfigurableOptions);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

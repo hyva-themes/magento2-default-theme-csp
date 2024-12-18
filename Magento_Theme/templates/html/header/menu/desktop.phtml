@@ -108,18 +108,18 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
             hoverPanelActiveId: null,
 
             hoverPanelIsIndex() {
-                return this.hoverPanelActiveId === this.$el.dataset['index']
+                return this.hoverPanelActiveId === this.$el.dataset.index
             },
 
             enterHoverPanel() {
-                this.hoverPanelActiveId = this.$el.dataset['index']
+                this.hoverPanelActiveId = this.$el.dataset.index
             },
             leaveHoverPanel() {
                 this.hoverPanelActiveId = 0
             },
 
             childMenuItemKeyUpEscape() {
-                this.$nextTick(() => document.querySelector('[data-sr-button-id=' + this.$el.dataset['index'] + ']').focus())
+                this.$nextTick(() => document.querySelector('[data-sr-button-id=' + this.$el.dataset.index + ']').focus())
             },
 
             childMenuClass() {

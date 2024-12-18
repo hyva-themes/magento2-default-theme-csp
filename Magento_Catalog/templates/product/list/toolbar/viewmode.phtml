@@ -44,12 +44,9 @@ use Magento\Framework\Escaper;
                     <?php if ($block->isModeActive($code)): ?>
                         disabled
                     <?php else: ?>
-                        @click.prevent="changeUrl(
-                            'product_list_mode',
-                            '<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>',
-                            options.modeDefault
-                        )"
+                        @click.prevent="changeListMode"
                     <?php endif; ?>
+                    data-list-mode="<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
                     data-role="mode-switcher"
                     data-value="<?= $escaper->escapeHtmlAttr(strtolower($code)) ?>"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Products view mode - %1', $label)) ?>"
