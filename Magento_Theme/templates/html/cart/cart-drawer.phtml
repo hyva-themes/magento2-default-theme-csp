@@ -252,8 +252,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                 <template x-if="productIsVisibleInSite">
                                     <a :href="item.product_url"
                                        class="w-1/4 !ml-0"
-                                       x-phrases:label.item.product_name="<?= $escaper->escapeHtmlAttr(__('Product "%0"')) ?>"
-                                       :aria-label="phrases.label"
+                                       data-aria-label="<?= $escaper->escapeHtmlAttr(__('Product "%0"')) ?>"
+                                       :aria-label="productAriaLabel"
                                     >
                                         <img
                                             :src="item.product_image.src"
@@ -293,16 +293,16 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                                         <a :href="item.configure_url"
                                            x-show="productIsNotGroupedAndVisibleInSite"
                                            class="inline-flex p-2 mr-2 btn btn-primary"
-                                           x-phrases:label.item.product_name="<?= $escaper->escapeHtmlAttr(__('Edit product "%0"')) ?>"
-                                           :aria-label="phrases.label"
+                                           data-aria-label="<?= $escaper->escapeHtmlAttr(__('Edit product "%0"')) ?>"
+                                           :aria-label="productAriaLabel"
                                         >
                                             <?= $heroicons->pencilHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                                         </a>
                                         <button type="button"
                                                 class="inline-flex p-2 btn btn-primary"
                                                 @click="deleteItemFromCart"
-                                                x-phrases:label.item.product_name="<?= $escaper->escapeHtmlAttr(__('Remove product "%0" from cart')) ?>"
-                                                :aria-label="phrases.label"
+                                                data-aria-label="<?= $escaper->escapeHtmlAttr(__('Remove product "%0" from cart')) ?>"
+                                                :aria-label="productAriaLabel"
                                         >
                                             <?= $heroicons->trashHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                                         </button>
