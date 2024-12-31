@@ -115,7 +115,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
 
                 <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_LOGIN) : '' ?>
                 <?= $block->getChildHtml('form_additional_info') ?>
-                <div class="actions-toolbar flex justify-between pt-6 pb-2 items-center">
+                <div class="actions-toolbar pt-6 pb-2">
                         <button type="submit" class="btn btn-primary disabled:opacity-75" name="send"
                             <?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
                         >

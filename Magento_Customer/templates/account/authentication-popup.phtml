@@ -226,7 +226,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                 </div>
 
                                 <input name="context" type="hidden" value="checkout" />
-                                <div class="actions-toolbar flex justify-between pt-6 pb-2 items-center">
+                                <div class="actions-toolbar pt-6 pb-2">
                                     <button type="submit"<?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
                                             class="inline-flex btn btn-primary disabled:opacity-75"
                                     >
@@ -259,7 +259,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                 <li> <?= $escaper->escapeHtml(__('Track order history')) ?></li>
                                 <li> <?= $escaper->escapeHtml(__('Check out faster')) ?></li>
                             </ul>
-                            <div class="actions-toolbar flex justify-between mt-6 mb-2 items-center">
+                            <div class="actions-toolbar mt-6 mb-2">
                                 <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account/create')) ?>"
                                    class="inline-flex btn btn-primary">
                                     <?= $escaper->escapeHtml(__('Create an Account')) ?>
