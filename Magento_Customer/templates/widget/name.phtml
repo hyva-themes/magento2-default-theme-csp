@@ -78,7 +78,7 @@ $suffix = $block->showSuffix();
                    value="<?= $escaper->escapeHtmlAttr($block->getObject()->getFirstname()) ?>"
                    required
                    title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('firstname')) ?>"
-                   class="form-input <?= $escaper->escapeHtmlAttr(
+                   class="form-input w-full <?= $escaper->escapeHtmlAttr(
                        $block->getAttributeValidationClass('firstname')
                    ) ?>"
                    @input.debounce="onChange"
@@ -119,7 +119,7 @@ $suffix = $block->showSuffix();
                    required
                    value="<?= $escaper->escapeHtmlAttr($block->getObject()->getLastname()) ?>"
                    title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('lastname')) ?>"
-                   class="form-input <?= $escaper->escapeHtmlAttr(
+                   class="form-input w-full <?= $escaper->escapeHtmlAttr(
                        $block->getAttributeValidationClass('lastname')
                    ) ?>"
                    @input.debounce="onChange"
