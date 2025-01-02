@@ -181,7 +181,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
             >
                 <?= $escaper->escapeHtml(__('Press to go to carousel navigation')) ?>
             </button>
-            <div class="flex-none relative w-full overflow-x-hidden focus-within:ring-2 ring-offset-2 active:ring-0 ring-blue-500/50">
+            <div class="flex-none relative w-full overflow-x-hidden">
                 <div class="relative flex flex-nowrap w-full overflow-auto js_slides snap md:px-1 xl:px-2"
                      @scroll.debounce="calcActive"
                 >
