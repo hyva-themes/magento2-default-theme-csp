@@ -122,14 +122,15 @@ mutation createProductReviewMutation(
                                                 </label>
                                                 <div
                                                     class="flex flex-row grow-0 focus-within:ring-4 ring-primary ring-opacity-50"
-                                                    x-data="{ clickedRatingId: 0 }"
+                                                    x-data="initReviewFormRatingOptions"
                                                 >
                                                     <?php $options = $rating->getOptions(); ?>
                                                     <?php $iterator = 1;
                                                     foreach ($options as $option): ?>
                                                         <div
                                                             class="relative"
-                                                            @click="clickedRatingId = <?= (int)$iterator ?> || 0"
+                                                            data-iterator="<?= (int)$iterator ?>"
+                                                            @click="updateRatingOption"
                                                         >
                                                             <label
                                                                 class="rating-<?= (int)$iterator ?> m-0 cursor-pointer text-gray-400"
@@ -142,9 +143,9 @@ mutation createProductReviewMutation(
                                                                         $rating->getRatingCode() . '_' . $option->getValue()
                                                                     ) ?>_label"
                                                             >
-                                                                <span :class="<?= (int)$iterator ?> <= clickedRatingId
-                                                                    ? 'text-yellow-400'
-                                                                    : 'text-gray-400'"
+                                                                <span
+                                                                        data-iterator="<?= (int)$iterator ?>"
+                                                                        :class="classesForRatingOption"
                                                                 >
                                                                     <?= $heroiconsSolid->starHtml('', 32, 32, ["aria-hidden" => "true"]); ?>
                                                                 </span>
@@ -215,7 +216,7 @@ mutation createProductReviewMutation(
                 </fieldset>
                 <div class="my-3">
                     <div>
-                        <button x-show="!displaySuccessMessage" type="submit"
+                        <button x-show="dontDisplaySuccessMessage" type="submit"
                                 class="btn btn-primary">
                             <span>
                                 <?= $escaper->escapeHtml(__('Submit Review')) ?>
@@ -260,6 +261,9 @@ mutation createProductReviewMutation(
                         isLoading: false,
                         displayNickname: false,
                         displaySuccessMessage: false,
+                        dontDisplaySuccessMessage() {
+                            return !this.displaySuccessMessage
+                        },
                         displayErrorMessage: false,
                         errorMessages: [],
                         errors: 0,
@@ -366,6 +370,26 @@ mutation createProductReviewMutation(
                 }
                 (() => {
                     const initFn = () => Alpine.data('initReviewForm', initReviewForm);
+                    window.Alpine
+                        ? initFn()
+                        : window.addEventListener('alpine:init', initFn, {once: true})
+                })()
+
+                function initReviewFormRatingOptions() {
+                    return  {
+                        clickedRatingId: 0,
+                        updateRatingOption() {
+                            this.clickedRatingId = this.$el.dataset.iterator || 0;
+                        },
+                        classesForRatingOption() {
+                            return this.$el.dataset.iterator <= this.clickedRatingId
+                                ? 'text-yellow-400'
+                                : 'text-gray-400'
+                        }
+                    }
+                }
+                (() => {
+                    const initFn = () => Alpine.data('initReviewFormRatingOptions', initReviewFormRatingOptions);
                     window.Alpine
                         ? initFn()
                         : window.addEventListener('alpine:init', initFn, {once: true})
