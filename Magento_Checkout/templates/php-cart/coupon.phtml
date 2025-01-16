@@ -28,6 +28,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             errors: 0,
             hasCaptchaToken: 0,
             showCouponForm: <?= $hasCouponCode ? 1 : 0 ?>,
+            hideCouponForm() {
+                return ! this.showCouponForm;
+            },
             formData: {
                 coupon_code: '<?= $escaper->escapeJs($block->getCouponCode()) ?>',
                 remove: '<?= (int) $hasCouponCode ?>'
@@ -52,15 +55,21 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             }
         }
     }
+    (() => {
+        const initFn = () => Alpine.data('initCouponForm', initCouponForm);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div class="coupon-form pt-6"
-     x-data="initCouponForm()"
+     x-data="initCouponForm"
 >
     <div class="mx-auto md:mx-0">
         <div class="text-left">
             <button
-                @click="toggleShowCoupon()"
+                @click="toggleShowCoupon"
                 class="inline-block cursor-pointer text-primary-lighter select-none whitespace-nowrap"
                 id="discount-form-toggle"
                 :aria-expanded="showCouponForm"
@@ -78,7 +87,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     role="presentation"
                     focusable="false"
                 >
-                    <path x-show="!showCouponForm" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    <path x-show="hideCouponForm" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M19 9l-7 7-7-7"/>
                     <path
                         x-show="showCouponForm" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -93,7 +102,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                   x-cloak
                   action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
                   method="post"
-                  @submit.prevent="submitForm()"
+                  @submit.prevent="submitForm"
             >
                 <?= $block->getBlockHtml('formkey') ?>
 

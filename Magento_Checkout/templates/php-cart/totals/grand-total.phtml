@@ -1,10 +1,45 @@
-<template x-if="segment.code === 'grand_total'">
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
+ */
+?>
+<script>
+    function initGrandTotalSegment() {
+        return {
+            isGrandTotal() {
+                return this.segment.code === 'grand_total';
+            }
+        };
+    }
+    (() => {
+        const initFn = () => Alpine.data('initGrandTotalSegment', initGrandTotalSegment);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+<div x-data="initGrandTotalSegment">
+<template x-if="isGrandTotal">
     <div class="flex py-2 pt-6 my-2 mx-auto mb-12 text-2xl md:grid md:grid-cols-2 md:w-full">
         <h3 class="w-7/12 font-semibold text-left md:w-auto"
-            x-html="segment.title"
+            x-html="formatTotalLabel"
         ></h3>
         <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(segment.value)"
+             :data-amount="segment.value"
+             x-text=formatPrice"
         ></div>
     </div>
 </template>
+</div>

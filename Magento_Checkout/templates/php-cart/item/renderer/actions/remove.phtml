@@ -10,11 +10,13 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove;
 use Magento\Framework\Escaper;
 
 /** @var Remove $block */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 /** @var Escaper $escaper */
 
 /** @var HeroiconsSolid $heroicons */
@@ -30,19 +32,14 @@ if ($item->getProductType() === 'configurable') {
 ?>
 <button
     class="flex action action-delete"
-    x-data="{}"
-    @click.prevent='
-        hyva.postForm(<?= /* @noEscape */ $block->getDeletePostJson() ?>);
-        $dispatch(
-            "cart-item-removed",
-            [{
-                "product_sku": "<?= $escaper->escapeJs($item->getSku()); ?>",
-                "product_name": "<?= $escaper->escapeJs($item->getName()); ?>",
-                "product_price_value": "<?= $escaper->escapeJs($item->getPrice()); ?>",
-                "quantity": "<?= $escaper->escapeJs($item->getQty()); ?>",
-            }]
-        );
-    '
+    data-delete-post-json="<?= $escaper->escapeHtmlAttr($block->getDeletePostJson()) ?>"
+    data-cart-item-removed-payload="<?= $escaper->escapeHtml(json_encode([
+        'product_sku' => $item->getSku(),
+        'product_name' => $item->getName(),
+        'product_price_value' => $item->getPrice(),
+        'quantity' => $item->getQty()
+    ])) ?>"
+    @click.prevent="removeItem"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Remove %1', $productName)) ?>"
     type="button"
 >

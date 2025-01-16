@@ -6,53 +6,91 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
 /**
  * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
  */
 ?>
+<script>
+    function initSubtotalSegment() {
+        return {
+            isSubtotalSegmentAndDisplayBoth() {
+                return this.segment.code === 'subtotal' && 'both' === checkoutConfig.reviewTotalsDisplayMode;
+            },
+            isSubtotalSegmentAndDisplayExcl() {
+                return this.segment.code === 'subtotal' && 'excluding' === checkoutConfig.reviewTotalsDisplayMode
+            },
+            isSubtotalSegmentAndDisplayIncl() {
+                return this.segment.code === 'subtotal' && 'including' === checkoutConfig.reviewTotalsDisplayMode
+            },
+            formatTotalLabelExclTax() {
+                return `${this.segment.title} (${this.excludingTaxMessage}) `;
+            },
+            formatTotalLabelInclTax() {
+                return `${this.segment.title} (${this.includingTaxMessage}) `;
+            },
+        };
+    }
+    (() => {
+        const initFn = () => Alpine.data('initSubtotalSegment', initSubtotalSegment);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
 <!-- display subtotal including and excluding tax -->
-<template x-if="segment.code === 'subtotal' && 'both' === checkoutConfig.reviewTotalsDisplayMode">
+<div x-data="initSubtotalSegment">
+<template x-if="isSubtotalSegmentAndDisplayBoth">
     <div>
         <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
             <div class="w-7/12 text-left md:w-auto"
-                 x-html="`${segment.title} (${excludingTaxMessage})` "
+                 x-html="formatTotalLabelExclTax"
             ></div>
             <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.subtotal)"
+                 :data-amount="totalsData.subtotal"
+                 x-text="formatPrice"
             ></div>
         </div>
 
         <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
             <div class="w-7/12 text-left md:w-auto"
-                 x-html="`${segment.title} (${includingTaxMessage})` "
+                 x-html="formatTotalLabelInclTax "
             ></div>
             <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)"
+                 :data-amount="totalsData.subtotal_incl_tax";
+                 x-text="formatPrice"
             ></div>
         </div>
     </div>
 </template>
 
 <!-- display subtotal excluding tax -->
-<template x-if="segment.code === 'subtotal' && 'excluding' === checkoutConfig.reviewTotalsDisplayMode">
+<template x-if="isSubtotalSegmentAndDisplayExcl">
     <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
         <div class="w-7/12 text-left md:w-auto"
-             x-html="`${segment.title}` "
+             x-html="formatTotalLabel"
         ></div>
         <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(totalsData.subtotal)"
+             :data-amount="totalsData.subtotal"
+             x-text="formatPrice"
         ></div>
     </div>
 </template>
 
 <!-- display subtotal including tax -->
-<template x-if="segment.code === 'subtotal' && 'including' === checkoutConfig.reviewTotalsDisplayMode">
+<template x-if="isSubtotalSegmentAndDisplayIncl">
     <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
         <div class="w-7/12 text-left md:w-auto"
-             x-html="`${segment.title}`"
+             x-html="formatTotalLabel"
         ></div>
         <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(totalsData.subtotal_incl_tax)"
+             :data-amount="totalsData.subtotal_incl_tax"
+             x-text="formatPrice"
         ></div>
     </div>
 </template>
+</div>

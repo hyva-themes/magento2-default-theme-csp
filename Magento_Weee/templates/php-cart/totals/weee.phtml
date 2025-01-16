@@ -1,10 +1,45 @@
-<template x-if="segment.code === 'weee_tax'">
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
+ */
+?>
+<script>
+    function initFixedProductTaxTotalSegment() {
+        return {
+            isFptSegment() {
+                return this.segment.code === 'weee_tax';
+            },
+        };
+    }
+    (() => {
+        const initFn = () => Alpine.data('initFixedProductTaxTotalSegment', initFixedProductTaxTotalSegment);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+<div x-data="initFixedProductTaxTotalSegment">
+<template x-if="isFptSegment">
     <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
         <div class="w-7/12 text-left md:w-auto"
-             x-html="segment.title"
+             x-html="formatTotalLabel"
         ></div>
         <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(segment.value)"
+             :data-amount="segment.value"
+             x-text="formatPrice"
         ></div>
     </div>
 </template>
+</div>

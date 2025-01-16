@@ -31,12 +31,32 @@ $modalViewModel = $viewModels->require(Modal::class);
 
 /** @var ItemOutput $cartItemOutputViewModel */
 $cartItemOutputViewModel = $viewModels->require(ItemOutput::class);
+$mergedCells = ($cartItemOutputViewModel->isItemPriceDisplayBoth() ? 2 : 1)
 ?>
-<?php $mergedCells = ($cartItemOutputViewModel->isItemPriceDisplayBoth() ? 2 : 1); ?>
+<script>
+    function initCartForm() {
+        return {
+            postCart() {
+                hyva.postCart(this.$event.target)
+            },
+            removeItem() {
+                hyva.postForm(JSON.parse(this.$el.dataset.deletePostJson));
+                this.$dispatch('cart-item-removed', [JSON.parse(this.$el.dataset.cartItemRemovedPayload)]);
+            }
+        }
+    }
+    (() => {
+        const initFn = () => Alpine.data('initCartForm', initCartForm);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
 <?= $block->getChildHtml('form_before') ?>
 <form action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>"
-      x-data="{}"
-      @submit.prevent="hyva.postCart($event.target)"
+      x-data="initCartForm"
+      @submit.prevent="postCart"
       method="post"
       id="form-validate"
       class="form form-cart w-full float-left"

@@ -45,6 +45,7 @@ if (!$productId || !$attributeId) {
             <input
                 :id="getSwatchOptionHtmlId"
                 :value="item.id"
+                :checked="isSelected"
                 name="super_attribute[<?= (int) $attributeId ?>]"
                 type="radio"
                 class="inline-block absolute p-0 border-0 focus:border-0 focus:ring-0 product-option-value-input"

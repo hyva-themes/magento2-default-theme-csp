@@ -6,33 +6,72 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
 /**
  * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
  */
 ?>
-<template x-if="segment.code === 'tax' && (segment.value > 0 || checkoutConfig.isZeroTaxDisplayed)">
+<script>
+    function initTaxSegment() {
+        return {
+            taxSummaryIsOpen: false,
+            isTaxSegmentVisible() {
+                return this.segment.code === 'tax' && (this.segment.value > 0 || checkoutConfig.isZeroTaxDisplayed);
+            },
+            isTaxSummaryVisible() {
+                return this.segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed;
+            },
+            toggle() {
+                this.taxSummaryIsOpen = ! this.taxSummaryIsOpen;
+            },
+            summaryCssClasses() {
+                return {
+                    'rotate-180': this.taxSummaryIsOpen
+                };
+            },
+            formatTaxRateLabel() {
+                return `${this.taxRate.title} (${this.taxRate.percent}%)`;
+            }
+        };
+    }
+    (() => {
+        const initFn = () => Alpine.data('initTaxSegment', initTaxSegment);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+<div x-data="initTaxSegment">
+<template x-if="isTaxSegmentVisible">
     <div>
         <template x-if="!(segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed)">
             <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
                 <div class="w-7/12 text-left md:w-auto"
-                     x-html="segment.title"
+                     x-html="formatTotalLabel"
                 ></div>
                 <div class="w-5/12 text-right md:w-auto"
-                     x-text="hyva.formatPrice(segment.value)"
+                     :data-amount="segment.value"
+                     x-text="formatPrice"
                 ></div>
             </div>
         </template>
 
-        <template x-if="segment.value > 0 && checkoutConfig.isFullTaxSummaryDisplayed">
+        <template x-if="isTaxSummaryVisible">
             <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container cursor-pointer"
-                @click="taxSummaryIsOpen = !taxSummaryIsOpen">
+                @click="toggle">
                 <div class="w-7/12 text-left md:w-auto items-center"
-                     x-html="segment.title"
+                     x-html="formatTotalLabel"
                 ></div>
                 <div class="w-5/12 text-right justify-end items-center md:w-auto flex">
-                    <span x-text="hyva.formatPrice(segment.value)"></span>
+                    <span
+                        :data-amount="segment.value"
+                        x-text="formatPrice"></span>
 
-                    <span :class="{ 'rotate-180' : taxSummaryIsOpen}" class="block transform rotate-180">
+                    <span :class="summaryCssClasses" class="block transform rotate-180">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" width="25" height="25">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
@@ -44,11 +83,12 @@
                         <div class="flex px-2 py-2 my-2 border-t border-b last:border-b-0 last:pb-0 text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
                             <div class="w-7/12 text-left md:w-auto">
                                 <template x-for="(taxRate, index) in taxItem.rates">
-                                    <div x-html="`${taxRate.title} (${taxRate.percent}%)`"></div>
+                                    <div x-html="formatTaxRateLabel"></div>
                                 </template>
                             </div>
                             <div class="w-5/12 text-right md:w-auto"
-                                 x-text="hyva.formatPrice(taxItem.amount)"
+                                 :data-amount="taxItem.amount"
+                                 x-text="formatPrice"
                             ></div>
                         </div>
                     </template>
@@ -56,5 +96,5 @@
             </div>
         </template>
     </div>
-
 </template>
+</div>

@@ -26,7 +26,6 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
 <script>
     function initCartTotals() {
         return {
-            taxSummaryIsOpen: false,
             totalsData: window.checkoutConfig.totalsData,
             quoteData: window.checkoutConfig.quoteData,
             shippingMethod: window.checkoutConfig.selectedShippingMethod,
@@ -67,18 +66,40 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
                 ['@update-totals-end.window']() {
                     this.isLoading = false;
                 }
-            }
+            },
+            isMatchingTotal() {
+                return this.$el.dataset.totalCode === this.segment.code;
+            },
+            formatTotalLabel() {
+                return `${this.segment.title} `;
+            },
+            formatTotalLabelInclTax() {
+                return `${this.segment.title} ${this.includingTaxMessage} `;
+            },
+            formatTotalLabelExclTax() {
+                return `${this.segment.title} ${this.excludingTaxMessage} `;
+            },
+            formatPrice() {
+                return hyva.formatPrice(this.$el.dataset.amount);
+            },
         }
     }
+    (() => {
+        const initFn = () => Alpine.data('initCartTotals', initCartTotals);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div id="cart-totals"
      class="cart-totals relative"
-     x-data="initCartTotals()"
+     x-data="initCartTotals"
      x-bind="eventListeners"
 >
     <?= $block->getBlockHtml('block-loader') ?>
-    <template x-for="(segment, index) in getSortedSegments()" :key="index">
+    <template x-for="(segment, index) in getSortedSegments" :key="index">
         <div>
             <?= $block->getChildHtml(); ?>
         </div>

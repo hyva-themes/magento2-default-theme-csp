@@ -6,44 +6,70 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
 /**
  * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
  */
 ?>
+<script>
+    function initGrandTotalSegment() {
+        return {
+            isGrandTotalAndIncl() {
+                return this.segment.code === 'grand_total' && checkoutConfig.includeTaxInGrandTotal;
+            },
+            isGrandTotalAndExcl() {
+                return this.segment.code === 'grand_total' && !checkoutConfig.includeTaxInGrandTotal;
+            }
+        };
+    }
+    (() => {
+        const initFn = () => Alpine.data('initGrandTotalSegment', initGrandTotalSegment);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
 <!-- display subtotal excluding tax -->
-<template x-if="segment.code === 'grand_total' && checkoutConfig.includeTaxInGrandTotal">
+<div x-data="initGrandTotalSegment">
+<template x-if="isGrandTotalAndIncl">
     <div>
         <div class="flex py-2 pt-6 my-2 mx-auto text-xl md:grid md:grid-cols-2 md:w-full border-b border-container">
             <div class="w-7/12 font-semibold text-left md:w-auto"
-                 x-html="`${segment.title} ${includingTaxMessage}` "
+                 x-html="formatTotalLabelInclTax"
             ></div>
             <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(segment.value)"
+                 :data-amount="segment.value"
+                 x-text=formatPrice"
             ></div>
         </div>
 
         <div class="flex py-2 my-2 mx-auto mb-12 text-md md:grid md:grid-cols-2 md:w-full">
             <div class="w-7/12 font-semibold text-left md:w-auto"
-                 x-html="`${segment.title} ${excludingTaxMessage}` "
+                 x-html="formatTotalLabelExclTax"
             ></div>
             <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.grand_total)"
+                 :data-amount="totalsData.grand_total"
+                 x-text="formatPrice"
             ></div>
         </div>
     </div>
 </template>
 
 <!-- display subtotal including tax -->
-<template x-if="segment.code === 'grand_total' && !checkoutConfig.includeTaxInGrandTotal">
+<template x-if="isGrandTotalAndExcl">
     <div class="flex py-2 pt-6 my-2 mx-auto mb-12 text-2xl md:grid md:grid-cols-2 md:w-full">
 
         <div class="w-7/12 font-semibold text-left md:w-auto"
-             x-html="`${segment.title}`"
+             x-html="formatTotalLabel"
         ></div>
         <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(segment.value)"
+             :data-amount="segment.value"
+             x-text="formatPrice"
         ></div>
-
-
     </div>
 </template>
+</div>

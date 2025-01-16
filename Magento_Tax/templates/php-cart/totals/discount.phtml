@@ -6,17 +6,40 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
 /**
  * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
  */
 ?>
-<template x-if="segment.code === 'discount'">
+<script>
+    function initDiscountTotalSegment() {
+        return {
+            isDiscountSegment() {
+                return this.segment.code === 'discount';
+            },
+        };
+    }
+    (() => {
+        const initFn = () => Alpine.data('initDiscountTotalSegment', initDiscountTotalSegment);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+<div x-data="initDiscountTotalSegment">
+<template x-if="isMatchingTotal" data-total-code="discount">
     <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
         <div class="w-7/12 text-left md:w-auto"
-             x-html="segment.title"
+             x-html="formatTotalLabel"
         ></div>
         <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(segment.value)"
+             data-amount="segment.value"
+             x-text="formatPrice"
         ></div>
     </div>
 </template>
+</div>

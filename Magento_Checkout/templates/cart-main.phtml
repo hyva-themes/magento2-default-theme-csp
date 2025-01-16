@@ -82,15 +82,12 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
             })
         }
     }( window.hyva = window.hyva || {} ));
-</script>
-<?php $hyvaCsp->registerInlineScript() ?>
-<script>
 
-    function initCartForm(){
+    function initCartForm() {
         return {
             cartIsEmpty: !!window.checkoutConfig,
-            checkCartShouldUpdate(data) {
-                const cart = data.cart;
+            checkCartShouldUpdate() {
+                const cart = this.$event.detail.data.cart;
 
                 if (this.cartIsEmpty !== !!window.checkoutConfig) {
                     this.cartIsEmpty = !!window.checkoutConfig;
@@ -142,19 +139,25 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     window.location.reload()
                 })
             },
-            onStorageChange(event) {
-                if (event.key === 'private_content_version') {
+            onStorageChange() {
+                if (this.$event.key === 'private_content_version') {
                     window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
                 }
             }
         }
     }
+    (() => {
+        const initFn = () => Alpine.data('initCartForm', initCartForm);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-<div x-data="initCartForm()"
+<div x-data="initCartForm"
      class="cart-form clearfix"
-     @private-content-loaded.window="checkCartShouldUpdate($event.detail.data)"
-     @storage.window="onStorageChange($event)"
+     @private-content-loaded.window="checkCartShouldUpdate"
+     @storage.window="onStorageChange"
 >
     <?php if ($block->getItemsCount()): ?>
         <?= $block->getChildHtml('with-items') ?>

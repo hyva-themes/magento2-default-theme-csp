@@ -6,53 +6,85 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
 /**
  * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
  */
 ?>
+<script>
+    function initShippingTotalSegment() {
+        return {
+            isShippingSegmentAndDisplayBoth() {
+                return this.segment.code === 'shipping' && this.quoteData.is_virtual === 0 && !!this.shippingMethod && 'both' === checkoutConfig.reviewShippingDisplayMode;
+            },
+            isShippingSegmentAndDisplayExcl() {
+                return this.segment.code === 'shipping' && this.quoteData.is_virtual === 0 && !!this.shippingMethod && 'excluding' === checkoutConfig.reviewShippingDisplayMode;
+            },
+            isShippingSegmentAndDisplayIncl() {
+                return this.segment.code === 'shipping' && this.quoteData.is_virtual === 0 && !!this.shippingMethod && 'including' === checkoutConfig.reviewShippingDisplayMode;
+            }
+        };
+    }
+    (() => {
+        const initFn = () => Alpine.data('initShippingTotalSegment', initShippingTotalSegment);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
+<div x-data="initShippingTotalSegment">
 <!-- display shipping including and excluding tax -->
-<template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'both' === checkoutConfig.reviewShippingDisplayMode">
+<template x-if="isShippingSegmentAndDisplayBoth">
     <div>
         <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
             <div class="w-7/12 text-left md:w-auto"
-                 x-html="`${segment.title} ${excludingTaxMessage}` "
+                 x-html="formatTotalLabelExclTax"
             ></div>
             <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.shipping_amount)"
+                 :data-amount="totalsData.shipping_amount"
+                 x-text="formatPrice"
             ></div>
         </div>
 
         <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
             <div class="w-7/12 text-left md:w-auto"
-                 x-html="`${segment.title} ${includingTaxMessage}` "
+                 x-html="formatTotalLabelInclTax"
             ></div>
             <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.shipping_incl_tax)"
+                 :data-amount="totalsData.shipping_incl_tax"
+                 x-text="formatPrice"
             ></div>
         </div>
     </div>
 </template>
 
 <!-- display shipping excluding tax -->
-<template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'excluding' === checkoutConfig.reviewShippingDisplayMode">
+<template x-if="isShippingSegmentAndDisplayExcl">
     <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
         <div class="w-7/12 text-left md:w-auto"
-             x-html="`${segment.title}` "
+             x-html="formatTotalLabel"
         ></div>
         <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(segment.value)"
+             :data-amount="segment.value"
+             x-text="formatPrice"
         ></div>
     </div>
 </template>
 
 <!-- display shipping including tax -->
-<template x-if="segment.code === 'shipping' && quoteData.is_virtual === 0 && !!shippingMethod && 'including' === checkoutConfig.reviewShippingDisplayMode">
+<template x-if="isShippingSegmentAndDisplayIncl">
     <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
         <div class="w-7/12 text-left md:w-auto"
-             x-html="`${segment.title}`"
+             x-html="formatTotalLabel"
         ></div>
         <div class="w-5/12 text-right md:w-auto"
-             x-text="hyva.formatPrice(totalsData.shipping_incl_tax)"
+             :data-amount="totalsData.shipping_incl_tax"
+             x-text="formatPrice"
         ></div>
     </div>
 </template>
+</div>

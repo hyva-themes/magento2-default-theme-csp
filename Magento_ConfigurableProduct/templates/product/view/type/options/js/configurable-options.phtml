@@ -43,8 +43,6 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             selectedValues: [],
             init() {
                 this.findAllowedAttributeOptions();
-                this.$dispatch('reload-customer-section-data');
-                console.log('reload-customer-section-data in configurable-options.phtml')
                 this.$nextTick(() => {
                     if (typeof this.optionConfig.defaultValues === 'object') {
                         for (const [attributeId, value] of Object.entries(this.optionConfig.defaultValues)) {
@@ -263,6 +261,10 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                 }
                 return this.optionConfig.prices.finalPrice.amount; // default price if no option selection
             },
+            isSelected() {
+                const attributeId = this.getDataAttributeId(this.$el);
+                return this.selectedValues[attributeId] === this.item.id;
+            },
             clearOptionIfActive() {
                 const attributeId = this.getDataAttributeId(this.$el);
                 if (this.selectedValues[attributeId] === this.item.id) {
@@ -353,7 +355,6 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                 });
             },
             onGetCartData() {
-                console.log('onGetCartData in configurable-options.phtml');
                 const data = this.$event.detail.data;
                 <?php if ($currentProduct->exists()): /* Only preconfigure the main product on product detail pages */ ?>
                 if (this.productId === '<?= (int) $currentProduct->get()->getEntityId() ?>') {

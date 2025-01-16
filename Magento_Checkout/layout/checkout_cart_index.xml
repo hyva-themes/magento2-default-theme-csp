@@ -22,6 +22,14 @@
             />
         </referenceContainer>
 
+        <referenceBlock name="topmenu_generic">
+            <!-- Disable block_html caching on the un-cached cart page, because the top menu is shared with cached pages. -->
+            <!-- Othwerwise the script tags will be used on FPC pages with (wrong) nonce attribute values, while they should be enabled through shas there. -->
+            <arguments>
+                <argument name="cache_lifetime" xsi:type="string">0</argument>
+            </arguments>
+        </referenceBlock>
+
         <referenceContainer name="content">
             <block class="Magento\Checkout\Block\Cart" name="checkout.cart" template="Magento_Checkout::cart-main.phtml" cacheable="false">
 

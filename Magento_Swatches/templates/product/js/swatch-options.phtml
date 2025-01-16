@@ -223,9 +223,6 @@ use Magento\Framework\View\Element\Template;
             },
             isSwatchRequired() {
                 const attributeId = this.getDataAttributeId(this.$el);
-                console.log('isSwatchRequired', attributeId, this.getAllowedAttributeOptions(attributeId)
-                    .filter(attributeOption => this.selectedValues[attributeOption])
-                    .length === 0)
                 return this.getAllowedAttributeOptions(attributeId)
                     .filter(attributeOption => this.selectedValues[attributeOption])
                     .length === 0
