@@ -73,18 +73,18 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         />
                     </div>
                 </div>
-                <div class="field password required">
+                <div class="field password required" x-data="textualPassword">
                     <label for="pass" class="label">
                         <span><?= $escaper->escapeHtml(__('Password')) ?></span>
                     </label>
                     <div class="control flex items-center">
                         <div class="sr-only" aria-live="polite">
-                            <template x-if="passwordHidden">
+                            <template x-if="hidden">
                                 <span>
                                     <?= $escaper->escapeHtml(__('Password hidden')) ?>
                                 </span>
                             </template>
-                            <template x-if="passwordVisible">
+                            <template x-if="visible">
                                 <span>
                                     <?= $escaper->escapeHtml(__('Password shown')) ?>
                                 </span>
@@ -93,22 +93,22 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         <input name="login[password]"
                             class="form-input"
                             required
-                            :type="inputTypePasswordOrText"
+                            :type="passwordOrText"
                             autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'current-password' ?>"
                             id="pass"
                             title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
                         />
                         <button
                             type="button"
-                            x-on:click="togglePasswordVisibility"
-                            :aria-pressed="buttonAriaPressed"
-                            :aria-label="buttonAriaLabel"
+                            x-on:click="toggle"
+                            :aria-pressed="visible"
+                            :aria-label="ariaLabel"
                             class="px-4 py-3"
                         >
-                            <template x-if="passwordHidden">
+                            <template x-if="hidden">
                                 <?= $heroiconssolid->eyeHtml('w-5 h-5'); ?>
                             </template>
-                            <template x-if="passwordVisible">
+                            <template x-if="visible">
                                 <?= $heroiconssolid->eyeOffHtml('w-5 h-5'); ?>
                             </template>
                         </button>
@@ -149,9 +149,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         (() => {
             function initCustomerLoginForm() {
                 return {
+                    form: this.$el,
                     errors: 0,
                     hasCaptchaToken: 0,
-                    showPassword: false,
                     displayErrorMessage: false,
                     errorMessages: [],
                     setErrorMessages(messages) {
@@ -160,36 +160,24 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     },
                     submitForm() {
                         // do not rename $form, the variable is the expected name in the recaptcha output
-                        const $form = document.querySelector('#customer-login-form');
+                        const $form = this.form;
                         <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_LOGIN) : '' ?>
 
                         if (this.errors === 0) {
                             $form.submit();
                         }
                     },
-                    inputTypePasswordOrText() {
-                        return this.showPassword ? 'text' : 'password'
-                    },
-                    togglePasswordVisibility() {
-                        this.showPassword = !this.showPassword
-                    },
-                    buttonAriaPressed() {
-                        return this.showPassword ? 'true' : 'false'
-                    },
-                    buttonAriaLabel() {
-                        return this.showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'
-                    },
-                    get passwordHidden() {
-                        return !this.showPassword
-                    },
-                    get passwordVisible() {
-                        return this.showPassword
-                    }
-
                 }
             }
 
-            const initFn = () => Alpine.data('initCustomerLoginForm', initCustomerLoginForm);
+            const initFn = () => {
+                Alpine.data('initCustomerLoginForm', initCustomerLoginForm)
+                Alpine.data('textualPassword', () => hyva.createBooleanValue(false, {
+                    passwordOrText() {return this.visible() ? 'text': 'password'},
+                    ariaLabel() {return this.visible() ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'}
+                }))
+
+            }
             window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
         })()
     </script>
