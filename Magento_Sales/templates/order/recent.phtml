@@ -40,14 +40,14 @@ if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-ex
 ?>
 <div
     class="block block-dashboard-orders card mt-4"
-    x-data="{ tabIndex: -1 }"
+    x-data="recentOrdersTabIndex"
 >
     <div class="block-title order my-4 flex justify-between items-center">
         <h2
             id="recentOrders"
             class="text-2xl block"
-            @focus="tabIndex = 0;"
-            @blur="tabIndex = -1"
+            @focus="setTrue"
+            @blur="setFalse"
             :tabindex="tabIndex"
         ><?= $escaper->escapeHtml(__('Recent Orders')) ?></h2>
         <?php if ($count > 0): ?>
@@ -185,3 +185,12 @@ if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-ex
         <?php endif; ?>
     </div>
 </div>
+<script>
+    (() => {
+        const initFn = () => Alpine.data('recentOrdersTabIndex', () => hyva.createBooleanObject('visible', false, {
+            tabIndex() {return this.visible() ? 0 : -1}
+        }));
+        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

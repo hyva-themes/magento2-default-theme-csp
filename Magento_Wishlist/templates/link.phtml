@@ -23,11 +23,28 @@ $urlPath = $block->getData('path') ?? 'wishlist';
     class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100 relative"
     href="<?= $escaper->escapeUrl($block->getUrl($urlPath)) ?>"
     title="<?= $escaper->escapeHtmlAttr($label) ?>"
-    x-data="{ itemCount: 0 }"
-    @private-content-loaded.window="itemCount = parseInt($event.detail.data.wishlist.counter)"
+    x-data="wishlistItemCount"
+    @private-content-loaded.window="updateItemCount"
 >
     <?= $escaper->escapeHtml($label) ?>
     <template x-if="itemCount">
-        <span class="tabular-nums" x-text="`(${itemCount})`"></span>
+        <span class="tabular-nums" x-text="itemCountText"></span>
     </template>
 </a>
+
+<script>
+    "use strict";
+    (() => {
+        const initFn = () => Alpine.data('wishlistItemCount', () => ({
+            itemCount: 0,
+            updateItemCount() {
+                this.itemCount = parseInt(this.$event.detail.data.wishlist.counter)
+            },
+            itemCountText() {
+                return `(${this.itemCount})`
+            }
+        }));
+        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

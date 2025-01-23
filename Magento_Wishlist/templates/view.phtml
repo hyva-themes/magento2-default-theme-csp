@@ -26,7 +26,7 @@ $wishlistHelper = $this->helper(WishlistHelper::class);
     <?= ($block->getChildHtml('wishlist.rss.link')) ?>
     <form class="form-wishlist-items mt-4"
           id="wishlist-view-form"
-          x-data="initMyWishList()"
+          x-data="initMyWishList"
           action="
           <?= $escaper->escapeUrl(
               $block->getUrl(
@@ -64,29 +64,34 @@ $wishlistHelper = $this->helper(WishlistHelper::class);
     </div>
 
     <script>
-        function initMyWishList() {
-            return {
-                addToCart(productId, postParams) {
+        (() => {
+            const initFn = () => Alpine.data('initMyWishList', function initMyWishList() {
+                return {
+                    addToCart() {
+                        const productId = this.$el.dataset.itemId,
+                            postParams = JSON.parse(this.$el.dataset.addToCartParams)
 
-                    const qty = this.$refs['product-qty-'+productId] && this.$refs['product-qty-'+productId].value;
+                        const qty = this.$refs['product-qty-'+productId] && this.$refs['product-qty-'+productId].value;
 
-                    postParams.data.qty = qty || postParams.data.qty;
+                        postParams.data.qty = qty || postParams.data.qty;
 
-                    hyva.postForm(postParams);
+                        hyva.postForm(postParams);
 
-                },
-                addAllItemsToCart() {
-                    const urlParams = <?= /* @noEscape */ $block->getAddAllToCartParams() ?>;
-                    let separator = urlParams.action.indexOf('?') >= 0 ? '&' : '?';
+                    },
+                    addAllItemsToCart() {
+                        const urlParams = <?= /* @noEscape */ $block->getAddAllToCartParams() ?>;
+                        let separator = urlParams.action.indexOf('?') >= 0 ? '&' : '?';
 
-                    Array.from(document.querySelectorAll('input[name^=qty]')).map(qty => {
-                        urlParams.action += separator + qty.name + '=' + encodeURIComponent(qty.value);
-                        separator = '&';
-                    });
-                    hyva.postForm(urlParams);
+                        Array.from(document.querySelectorAll('input[name^=qty]')).map(qty => {
+                            urlParams.action += separator + qty.name + '=' + encodeURIComponent(qty.value);
+                            separator = '&';
+                        });
+                        hyva.postForm(urlParams);
+                    }
                 }
-            }
-        }
+            });
+            window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif ?>

@@ -15,7 +15,7 @@ use Magento\Wishlist\Block\Customer\Wishlist\Button;
 
 <?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->isSalable()): ?>
     <button type="button"
-            @click.prevent="addAllItemsToCart()"
+            @click.prevent="addAllItemsToCart"
             data-role="all-tocart"
             title="<?= $escaper->escapeHtmlAttr(__('Add All to Cart')) ?>"
             class="action tocart btn btn-primary">

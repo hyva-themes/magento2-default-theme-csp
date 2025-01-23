@@ -23,11 +23,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 ?>
 
 <div class="block <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?> card filter-option py-4 px-8 mb-6"
-     x-data="initAccountNavigation()"
-     x-init="checkIsMobileResolution()"
-     @resize.window.debounce="checkIsMobileResolution()"
-     @visibilitychange.window.debounce="checkIsMobileResolution()"
-
+     x-data="initAccountNavigation"
+     x-init="checkIsMobileResolution"
+     @resize.window.debounce="checkIsMobileResolution"
+     @visibilitychange.window.debounce="checkIsMobileResolution"
 >
     <button
         type="button"
@@ -36,12 +35,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             flex justify-between
             items-center hover:text-secondary-darker w-full
         "
-        @click="blockOpen = !blockOpen"
-        :aria-expanded="blockOpen"
-        :aria-disabled="!isMobile"
-        :disabled="!isMobile ? '' : null"
+        @click="toggle"
+        :aria-expanded="visible"
+        :aria-disabled="isDesktop"
+        :disabled="isDesktop"
     >
-
         <span class="text-lg title">
             <?= $escaper->escapeHtml(__($block->getData('block_title'))) ?>
         </span>
@@ -54,33 +52,36 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 24,
                 24,
                 [
-                    ':class'      => "{ 'rotate-180': blockOpen }",
+                    ':class'      => "rotateIfVisible",
                     'aria-hidden' => 'true',
                     'focusable' => 'false'
                 ]
             ); ?>
         </span>
     </button>
-    <div :class="{ 'hidden': !blockOpen }" class="delimiter border-b border-container w-full mt-4 mb-3 hidden md:block"></div>
+    <div :class="hiddenIfOpen" class="delimiter border-b border-container w-full mt-4 mb-3 hidden md:block"></div>
     <div class="content <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-content hidden md:block"
-         :class="{ 'hidden': !blockOpen }"
+         :class="hiddenIfOpen"
          id="<?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>"
     >
         <?= $block->getChildHtml() ?>
     </div>
 </div>
 <script>
-    function initAccountNavigation() {
-        return {
+    (() => {
+        const initFn = () => Alpine.data('initAccountNavigation', () => hyva.createBooleanObject('visible', false, {
             isMobile: false,
-            blockOpen: false,
+            isDesktop() {return !this.isMobile},
             checkIsMobileResolution() {
-                const mobileElement = this.$refs.AccountNavigationMobileToggleIcon;
+                const mobileElement = this.$refs.AccountNavigationMobileToggleIcon
                 this.isMobile = mobileElement
                     ? getComputedStyle(mobileElement).display !== 'none'
                     : window.matchMedia('(max-width: 767px)').matches; // Fallback to `md` breakpoint
-            }
-        }
-    }
+            },
+            rotateIfVisible() {return {'rotate-180': this.visible()}},
+            hiddenIfOpen() {return {'hidden': this.visible()}}
+        }));
+        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

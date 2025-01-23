@@ -18,40 +18,45 @@ use Magento\Wishlist\Block\Customer\Sharing;
 
 ?>
 <script>
-    function initShareWishlist() {
-        return {
-            isValid: true,
-            validateEmailsRegex: /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i,
-            validateForm() {
-                const emailField = this.$refs['emails'];
-                const emails = emailField.value.split(/[\s\n\,]+/g);
+    (() => {
+        function initShareWishlist() {
+            return {
+                isValid: true,
+                validateEmailsRegex: /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i,
+                validateForm() {
+                    const emailField = this.$refs['emails'];
+                    const emails = emailField.value.split(/[\s\n\,]+/g);
 
-                for (i = 0; i < emails.length; i++) {
-                    if (!this.validateEmailsRegex.test(emails[i].trim())) {
-                        this.isValid = false;
-                        emailField.setCustomValidity("<?= $escaper->escapeJs(__('Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com.')) ?>");
+                    for (let i = 0; i < emails.length; i++) {
+                        if (!this.validateEmailsRegex.test(emails[i].trim())) {
+                            this.isValid = false;
+                            emailField.setCustomValidity("<?= $escaper->escapeJs(__('Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com.')) ?>");
+                            return false;
+                        }
+                    }
+
+                    if (emails.length > <?= (int) $block->getEmailSharingLimit() ?>) {
+                        emailField.setCustomValidity("<?= $escaper->escapeJs(__('Maximum of %1 emails can be sent.', $block->getEmailSharingLimit())) ?>");
                         return false;
                     }
-                }
 
-                if (emails.length > <?= (int) $block->getEmailSharingLimit() ?>) {
-                    emailField.setCustomValidity("<?= $escaper->escapeJs(__('Maximum of %1 emails can be sent.', $block->getEmailSharingLimit())) ?>");
-                    return false;
-                }
+                    this.isValid = true;
+                    emailField.setCustomValidity("");
+                    return true;
+                },
+                emailsContainsErrors() {return { 'border-red-500 focus:border-red-500 focus:ring-red-500': !this.isValid }}
 
-                this.isValid = true;
-                emailField.setCustomValidity("");
-                return true;
             }
-
         }
-    }
 
+        const initFn = () => Alpine.data('initShareWishlist', initShareWishlist);
+        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <form class="form wishlist share"
-      x-data="initShareWishlist()"
-      @submit="validateForm()"
+      x-data="initShareWishlist"
+      @submit="validateForm"
       action="<?= $escaper->escapeUrl($block->getSendUrl()) ?>"
       id="form-validate"
       method="post"
@@ -73,11 +78,11 @@ use Magento\Wishlist\Block\Customer\Sharing;
             <div class="control max-w-xl">
                 <textarea name="emails"
                           class="w-full"
-                          :class=" { 'border-red-500 focus:border-red-500 focus:ring-red-500': !isValid }"
+                          :class="emailsContainsErrors"
                           rows="5"
                           id="email_address"
-                          @blur="validateForm()"
-                          @input.debounce="validateForm()"
+                          @blur="validateForm"
+                          @input.debounce="validateForm"
                           x-ref="emails"
                           required
                 ><?= /* @noEscape */ $block->getEnteredData('emails') ?></textarea>

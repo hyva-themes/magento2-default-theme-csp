@@ -54,8 +54,9 @@ $allowedQty = $viewModel->setItem($item)->getMinMaxQty();
         <div class="actions-primary">
             <button type="button"
                     data-role="tocart"
-                    @click.prevent='addToCart("<?= $escaper->escapeHtmlAttr($item->getId()) ?>",
-                        <?= /* @noEscape */ $block->getItemAddToCartParams($item) ?>)'
+                    data-item-id="<?= $escaper->escapeHtmlAttr($item->getId()) ?>"
+                    data-add-to-cart-params="<?= $escaper->escapeHtmlAttr($block->getItemAddToCartParams($item)) ?>"
+                    @click.prevent='addToCart'
                     title="<?= $escaper->escapeHtmlAttr(__('Add %1 to Cart', $product->getName())) ?>"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart %1', $product->getName())) ?>"
                     class="action tocart primary btn btn-primary mt-2"
