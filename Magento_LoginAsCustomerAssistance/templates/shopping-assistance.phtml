@@ -76,11 +76,11 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
     <div class="inline-flex px-4">
         <button
             type="button"
-            @mouseover.prevent.stop="setTrue"
-            @mouseleave.prevent.stop="setFalse"
-            @focus="setTrue"
-            @focusout="setFalse"
-            @keydown.escape="setFalse"
+            @mouseover.prevent.stop="visibleTrue"
+            @mouseleave.prevent.stop="visibleFalse"
+            @focus="visibleTrue"
+            @focusout="visibleFalse"
+            @keydown.escape="visibleFalse"
             aria-labelledby="assistance_allowed_checkbox_tooltip"
             aria-disabled="true"
         >

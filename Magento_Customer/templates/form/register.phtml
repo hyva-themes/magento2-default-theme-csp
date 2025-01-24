@@ -165,7 +165,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                             <button
                                 type="button"
                                 :aria-pressed="visible"
-                                x-on:click="toggle"
+                                x-on:click="visibleToggle"
                                 class="px-4 py-3"
                                 :aria-label="ariaLabel"
                             >
@@ -224,7 +224,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                         >
                         <button
                             type="button"
-                            x-on:click="toggle"
+                            x-on:click="visibleToggle"
                             :aria-pressed="visible"
                             class="px-4 py-3"
                             :aria-label="ariaLabel"

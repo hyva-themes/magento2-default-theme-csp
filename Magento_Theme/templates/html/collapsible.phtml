@@ -35,7 +35,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             flex justify-between
             items-center hover:text-secondary-darker w-full
         "
-        @click="toggle"
+        @click="visibleToggle"
         :aria-expanded="visible"
         :aria-disabled="isDesktop"
         :disabled="isDesktop"
