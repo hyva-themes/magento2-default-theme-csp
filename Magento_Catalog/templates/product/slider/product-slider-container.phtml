@@ -135,7 +135,11 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
     x-init="calcPageSize();"
     @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
     aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
-    aria-label="<?= $escaper->escapeHtmlAttr($title ?: $name) ?>"
+    <?php if ($title): ?>
+        aria-labelledby="<?= $escaper->escapeHtmlAttr($name) ?>-slider-title"
+    <?php else: ?>
+        aria-label="<?= $escaper->escapeHtmlAttr($name) ?>"
+    <?php endif; ?>
     x-defer="intersect"
 >
     <?php if ($items): ?>
@@ -143,7 +147,10 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
             <?php if ($title): ?>
                 <div class="container flex flex-col items-center pt-6 pb-3 mx-auto mb-6 border-b-2
                     border-gray-300 md:flex-row">
-                    <<?= /* @noEscape */ $headingTag ?> class="text-2xl font-medium text-gray-900 title-font">
+                    <<?= /* @noEscape */ $headingTag ?>
+                        id="<?= $escaper->escapeHtmlAttr($name) ?>-slider-title"
+                        class="text-2xl font-medium text-gray-900 title-font"
+                    >
                         <?= $escaper->escapeHtml($title); ?>
                     </<?= /* @noEscape */ $headingTag ?>>
                 </div>
