@@ -37,8 +37,8 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
     <?= $escaper->escapeHtml(__('Customer Address')) ?>
 </div>
 <form class="form-address-edit"
-      x-data="Object.assign(initCustomerAddressEdit(), hyva.formValidation($root))"
-      @private-content-loaded.window="onPrivateContentLoaded($event.detail.data)"
+      x-data="initCustomerAddressEdit"
+      @private-content-loaded.window="onPrivateContentLoaded"
       @submit="onSubmit"
       action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>"
       method="post"
@@ -130,7 +130,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                     </div>
                 </div>
             <?php endif; ?>
-            <div class="field field-reserved zip w-full" :class="{ 'required': isZipRequired }">
+            <div class="field field-reserved zip w-full" :class="zipFieldClasses">
                 <label class="label" for="zip">
                     <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?></span>
                 </label>
@@ -199,36 +199,35 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
             <div
                 class="field field-reserved region w-full"
                 x-cloak
-                x-show="(hasAvailableRegions() && isRegionRequired) || showOptionalRegions"
-                :class="{ 'required': isRegionRequired }"
+                x-show="showRegionFieldLabel"
+                :class="regionFieldClasses"
             >
                 <label class="label" for="region_id">
                     <span><?= /* @noEscape */ $regionLabel ?></span>
                 </label>
                 <div class="control">
-                    <template x-if="hasAvailableRegions() && (isRegionRequired || showOptionalRegions)">
+                    <template x-if="showRegionField">
                         <select id="region_id" name="region_id"
                                 title="<?= /* @noEscape */ $regionLabel ?>"
                                 class="form-select validate-select region_id"
                                 x-ref="region_id"
-                                x-model="selectedRegion"
                                 :required="isRegionRequired"
                                 @input.debounce="onRegionIdChange"
                         >
                             <option value=""><?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?></option>
-                            <template x-for="regionId in Object.keys(availableRegions)">
+                            <template x-for="regionId in getAvailableRegionIds">
                                 <?php /* in alpine v3, if the bound props update, the template body gets evaluated before the template condition */ ?>
                                 <?php /* because of this it is required to check if availableRegions[regionId] is set */ ?>
                                 <option :value="regionId"
-                                        :name="availableRegions[regionId] && availableRegions[regionId].name"
-                                        x-text="availableRegions[regionId] && availableRegions[regionId].name"
-                                        :selected="selectedRegion === regionId"
+                                        :name="regionName"
+                                        x-text="regionName"
+                                        :selected="isRegionSelected"
                                 >
                                 </option>
                             </template>
                         </select>
                     </template>
-                    <input :type="hasAvailableRegions() && (isRegionRequired || showOptionalRegions) ? 'hidden' : 'text'"
+                    <input :type="regionFieldInputType"
                            id="region"
                            name="region"
                            x-ref="region"
@@ -236,7 +235,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            title="<?= /* @noEscape */ $regionLabel ?>"
                            class="form-input"
                            aria-label="<?= /* @noEscape */ $regionLabel ?>"
-                           :required="!hasAvailableRegions() && !showOptionalRegions ? isRegionRequired : false"
+                           :required="isRegionInputRequired"
                            @input.debounce="onChange"
                     />
                 </div>
@@ -295,86 +294,127 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
 
 <script>
 function initCustomerAddressEdit() {
-    return {
-        directoryData: {},
-        availableRegions: {},
-        messageTime: 5000,
-        fieldsNames: [],
-        selectedRegion: '<?= $escaper->escapeJs($block->getRegion() ?: 0) ?>',
-        isZipRequired: true,
-        isRegionRequired: true,
-        showOptionalRegions: <?= $showOptionalRegions ? 'true' : 'false' ?>,
-        onPrivateContentLoaded(data) {
-            this.directoryData = data['directory-data'] || {};
+    return Object.assign(
+        {
+            directoryData: {},
+            availableRegions: {},
+            messageTime: 5000,
+            fieldsNames: [],
+            selectedRegion: '<?= $escaper->escapeJs($block->getRegion() ?: 0) ?>',
+            isZipRequired: true,
+            isRegionRequired: true,
+            showOptionalRegions: <?= $showOptionalRegions ? 'true' : 'false' ?>,
+            onPrivateContentLoaded() {
+                const data = this.$event.detail.data;
+                this.directoryData = data['directory-data'] || {};
 
-            <?php if ($block->getCountryId()): ?>
-                this.setCountry(this.$refs['country_id'], '<?= $escaper->escapeJs($block->getRegion()) ?>');
-            <?php endif; ?>
+                <?php if ($block->getCountryId()): ?>
+                    this.setCountry(this.$refs['country_id'], '<?= $escaper->escapeJs($block->getRegion()) ?>');
+                <?php endif; ?>
 
-        },
-        setRegionInputValue(regionName) {
-            this.$nextTick(() => {
-                const regionInputElement = this.$refs['region'];
-                if (regionInputElement) {
-                    regionInputElement.value = regionName;
+            },
+            setRegionInputValue(regionName) {
+                this.$nextTick(() => {
+                    const regionInputElement = this.$refs['region'];
+                    if (regionInputElement) {
+                        regionInputElement.value = regionName;
+                    }
+                })
+            },
+            setCountry(countrySelectElement, initialRegion) {
+                const selectedOption = countrySelectElement.options[countrySelectElement.selectedIndex];
+                const countryCode = countrySelectElement.value;
+                const countryData = this.directoryData[countryCode] || false;
+
+                if (!countryData) {
+                    this.setRegionInputValue('');
+                    return;
                 }
-            })
-        },
-        setCountry(countrySelectElement, initialRegion) {
-            const selectedOption = countrySelectElement.options[countrySelectElement.selectedIndex];
-            const countryCode = countrySelectElement.value;
-            const countryData = this.directoryData[countryCode] || false;
 
-            if (!countryData) {
-                this.setRegionInputValue('');
-                return;
+                this.isZipRequired = selectedOption.dataset.isZipRequired === '1';
+                this.isRegionRequired = selectedOption.dataset.isRegionRequired === '1';
+
+                this.availableRegions = countryData.regions || {};
+
+                const initialRegionId = Object.keys(this.availableRegions).filter(regionId => this.availableRegions[regionId].name === initialRegion)[0];
+                this.selectedRegion = initialRegionId || '0';
+                this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
+
+            },
+            changeCountry(event, initialRegion) {
+                this.setCountry(event.target, initialRegion);
+                this.validateCountryDependentFields();
+                this.onChange(event);
+            },
+            validateCountryDependentFields() {
+                this.$nextTick(() => {
+                    <?php /* Reinitialize validation rules for fields that depend on the country */ ?>
+                    this.fields['postcode'] && this.removeMessages(this.fields['postcode'])
+                    this.fields['region'] && this.removeMessages(this.fields['region'])
+                    delete this.fields['postcode'];
+                    delete this.fields['region'];
+                    <?php /* Initialize country_id, too, because the postcode validation depends on it */ ?>
+                    this.setupField(this.$refs['country_id']);
+                    this.setupField(this.$refs['postcode']);
+                    this.setupField(this.$refs['region']);
+                    this.setupField(this.$refs['region_id']);
+
+                    this.fields['postcode'] && this.validateField(this.fields['postcode']);
+                    this.fields['region'] && this.validateField(this.fields['region']);
+                    this.fields['region_id'] && this.validateField(this.fields['region_id']);
+                })
+            },
+            getAvailableRegionIds() {
+                return Object.keys(this.availableRegions);
+            },
+            hasAvailableRegions() {
+                return Object.keys(this.availableRegions).length > 0;
+            },
+            showRegionFieldLabel() {
+                return (this.hasAvailableRegions() && this.isRegionRequired) || this.showOptionalRegions;
+            },
+            showRegionField() {
+                return this.hasAvailableRegions() && (this.isRegionRequired || this.showOptionalRegions);
+            },
+            onRegionIdChange() {
+                this.selectedRegion = this.$el.value;
+                this.$refs.region.value = this.selectedRegion.length > 0 ?
+                    this.availableRegions[this.selectedRegion].name :
+                    ''
+                this.onChange(this.$event)
+                this.validateField(this.fields['region'])
+            },
+            regionName() {
+                return this.availableRegions[this.regionId] && this.availableRegions[this.regionId].name;
+            },
+            isRegionSelected() {
+                return this.selectedRegion === this.regionId;
+            },
+            isRegionInputRequired() {
+                return !this.hasAvailableRegions() && !this.showOptionalRegions ? this.isRegionRequired : false;
+            },
+            zipFieldClasses() {
+                return {
+                    required: this.isZipRequired
+                }
+            },
+            regionFieldClasses() {
+                return {
+                    required: this.isRegionRequired
+                }
+            },
+            regionFieldInputType() {
+                return this.hasAvailableRegions() && (this.isRegionRequired || this.showOptionalRegions) ? 'hidden' : 'text';
             }
-
-            this.isZipRequired = selectedOption.dataset.isZipRequired === '1';
-            this.isRegionRequired = selectedOption.dataset.isRegionRequired === '1';
-
-            this.availableRegions = countryData.regions || {};
-
-            const initialRegionId = Object.keys(this.availableRegions).filter(regionId => this.availableRegions[regionId].name === initialRegion)[0];
-            this.selectedRegion = initialRegionId || '0';
-            this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
-
         },
-        changeCountry(event, initialRegion) {
-            this.setCountry(event.target, initialRegion);
-            this.validateCountryDependentFields();
-            this.onChange(event);
-        },
-        validateCountryDependentFields() {
-            this.$nextTick(() => {
-                <?php /* Reinitialize validation rules for fields that depend on the country */ ?>
-                this.fields['postcode'] && this.removeMessages(this.fields['postcode'])
-                this.fields['region'] && this.removeMessages(this.fields['region'])
-                delete this.fields['postcode'];
-                delete this.fields['region'];
-                <?php /* Initialize country_id, too, because the postcode validation depends on it */ ?>
-                this.setupField(this.$refs['country_id']);
-                this.setupField(this.$refs['postcode']);
-                this.setupField(this.$refs['region']);
-                this.setupField(this.$refs['region_id']);
-
-                this.fields['postcode'] && this.validateField(this.fields['postcode']);
-                this.fields['region'] && this.validateField(this.fields['region']);
-                this.fields['region_id'] && this.validateField(this.fields['region_id']);
-            })
-        },
-        hasAvailableRegions() {
-            return Object.keys(this.availableRegions).length > 0;
-        },
-        onRegionIdChange(event) {
-            this.$refs.region.value = this.selectedRegion.length > 0 ?
-                this.availableRegions[this.selectedRegion].name :
-                ''
-            this.onChange(event)
-            this.validateField(this.fields['region'])
-        }
-    }
+        hyva.formValidation(document.getElementById('form-validate'))
+    )
 }
+
+(() => {
+    const initFn = () => Alpine.data('initCustomerAddressEdit', initCustomerAddressEdit);
+    window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
+})()
 
 window.addEventListener('DOMContentLoaded', () => {
 
