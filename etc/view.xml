@@ -199,8 +199,8 @@
         <var name="product_zoom_image_size">370</var>           <!-- New Product image size used for zooming -->
 
         <var name="category_page_category_image">
-<!--            <var name="width">580</var>-->
-<!--            <var name="height">372</var>-->
+            <!-- <var name="width">580</var> -->
+            <!-- <var name="height">372</var> -->
         </var>
 
         <var name="product_image_white_borders">1</var>
