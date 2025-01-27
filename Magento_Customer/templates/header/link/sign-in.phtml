@@ -9,22 +9,34 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Block\SortableItem;
-use Magento\Framework\Escaper;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Customer\Model\Account\Redirect;
+use Magento\Framework\Escaper;
 
 /** @var SortableItem $block */
 /** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+
 
 $label = $block->getLabel() ? $block->getLabel() : __('Sign In');
 ?>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('<?= $escaper->escapeJs($block->getNameInLayout()) ?>').addEventListener('click', () => {
+            if (hyva.setCookie) {
+                hyva.setCookie(
+                    '<?= $escaper->escapeJs(Redirect::LOGIN_REDIRECT_URL) ?>',
+                    window.location.href,
+                    1
+                );
+            }
+        });
+    });
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
 <a id="<?= $escaper->escapeHtmlAttr($block->getNameInLayout()) ?>"
    class="block px-4 py-2 lg:px-5 lg:py-2 hover:bg-gray-100"
-   onclick="hyva.setCookie && hyva.setCookie(
-       '<?= $escaper->escapeJs(Redirect::LOGIN_REDIRECT_URL) ?>',
-       window.location.href,
-       1
-   )"
    href="<?= $escaper->escapeUrl($block->getUrl('customer/account/index')) ?>"
    title="<?= $escaper->escapeHtmlAttr($label) ?>"
 >
