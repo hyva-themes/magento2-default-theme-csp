@@ -144,7 +144,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
     x-id="['slider-nav', 'slider-desc', 'slider-id']"
     @resize.window.debounce="calcPageSize(); $nextTick( function() { calcActive() })"
     aria-roledescription="<?= $escaper->escapeHtmlAttr(__('Carousel')) ?>"
-    aria-label="<?= $escaper->escapeHtmlAttr($title) ?>"
+    aria-label="<?= $escaper->escapeHtmlAttr($title ?: $name) ?>"
     :aria-describedby="$id('slider-desc')"
     x-defer="intersect"
 >
