@@ -26,14 +26,14 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <div
     class="relative inline-block"
     x-data="initCustomerMenu"
-    @keyup.escape="close"
-    @click.outside="close"
+    @keyup.escape="setOpenFalse"
+    @click.outside="setOpenFalse"
 >
     <button
         type="button"
         id="customer-menu"
         class="block rounded p-1 hover:bg-primary/10 outline-offset-2"
-        @click="toggle"
+        @click="toggleOpen"
         :aria-expanded="ariaExpanded"
         aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
         aria-haspopup="true"
@@ -58,18 +58,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 </div>
 <script>
     function initCustomerMenu() {
-        return {
-            open: false,
-            toggle() {
-                this.open = !this.open;
-            },
-            close() {
-                this.open = false;
-            },
+        return hyva.createBooleanObject('open', false, {
             ariaExpanded() {
-                return this.open ? 'true' : 'false';
+                return this.open() ? 'true' : 'false';
             }
-        }
+        })
     }
     (() => {
         const initFn = () => Alpine.data('initCustomerMenu', initCustomerMenu);

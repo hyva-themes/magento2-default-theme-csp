@@ -49,9 +49,9 @@ $currentStore = $storeSwitcherViewModel->getStore();
             <div>
             <?php foreach ($storeSwitcherViewModel->getGroups() as $group): ?>
                 <?php if ($group->getId() == $storeSwitcherViewModel->getCurrentGroupId()): ?>
-                <button @click.prevent="toggle"
-                        @click.outside="close"
-                        @keydown.window.escape="close"
+                <button @click.prevent="toggleOpen"
+                        @click.outside="setOpenFalse"
+                        @keydown.window.escape="setOpenFalse"
                         type="button"
                         class="inline-flex justify-center w-full form-select px-4 py-2 bg-white focus:outline-none"
                         aria-haspopup="true"
@@ -82,15 +82,7 @@ $currentStore = $storeSwitcherViewModel->getStore();
     </div>
     <script>
         function initStoreSwitcher() {
-            return {
-                open: false,
-                toggle() {
-                    this.open = !this.open;
-                },
-                close() {
-                    this.open = false;
-                }
-            }
+            return hyva.createBooleanObject('open')
         }
         (() => {
             const initFn = () => Alpine.data('initStoreSwitcher', initStoreSwitcher);

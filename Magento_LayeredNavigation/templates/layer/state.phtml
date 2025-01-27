@@ -31,7 +31,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     <h3 id="active-filtering-heading">
         <button
             type="button"
-            @click="toggle"
+            @click="toggleOpen"
             class="w-full filter-options-title flex justify-between items-center text-start cursor-pointer"
             aria-controls="active-filtering-content"
             :aria-expanded="open"
@@ -89,20 +89,15 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 </div>
 <script>
     function initLayeredNavigationState() {
-        return {
-            open: true,
-            toggle() {
-                this.open = !this.open;
-            },
+        return hyva.createBooleanObject('open', true, {
             init() {
                 this.$nextTick(() => this.$el.focus());
             },
             activeFilterIconClasses() {
                 return {
-                    'rotate-180': this.open
+                    'rotate-180': this.open()
                 }
-            }
-        }
+        }});
     }
     (() => {
         const initFn = () => Alpine.data('initLayeredNavigationState', initLayeredNavigationState);

@@ -42,9 +42,9 @@ $currencyViewModel = $viewModels->require(Currency::class);
         </h2>
         <div class="relative inline-block text-left">
             <div>
-                <button @click.prevent="toggle"
-                        @click.outside="close"
-                        @keydown.window.escape="close"
+                <button @click.prevent="toggleOpen"
+                        @click.outside="setOpenFalse"
+                        @keydown.window.escape="setOpenFalse"
                         type="button"
                         class="inline-flex justify-center w-full form-select px-4 py-2 bg-white focus:outline-none"
                         aria-haspopup="true"
@@ -82,21 +82,14 @@ $currencyViewModel = $viewModels->require(Currency::class);
     </div>
     <script>
         function initCurrencySwitcher() {
-            return {
-                open: false,
-                toggle() {
-                    this.open = !this.open;
-                },
-                close() {
-                    this.open = false;
-                },
+            return hyva.createBooleanObject('open', false, {
                 ariaExpanded() {
-                    return this.open ? 'true' : 'false';
+                    return this.open() ? 'true' : 'false';
                 },
                 switchCurrency() {
                     hyva.postForm(this.$el.dataset.currencyData)
                 }
-            }
+            });
         }
         (() => {
             const initFn = () => Alpine.data('initCurrencySwitcher', initCurrencySwitcher);

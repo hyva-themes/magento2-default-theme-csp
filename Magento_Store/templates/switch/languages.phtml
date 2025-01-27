@@ -47,9 +47,9 @@ $currentStore = $storeSwitcherViewModel->getStore();
         </div>
         <div class="relative inline-block text-left">
             <div>
-                <button @click.prevent="toggle"
-                        @click.outside="close"
-                        @keydown.window.escape="close"
+                <button @click.prevent="toggleOpen"
+                        @click.outside="setOpenFalse"
+                        @keydown.window.escape="setOpenFalse"
                         type="button"
                         class="inline-flex justify-center w-full form-select px-4 py-2 bg-white focus:outline-none"
                         aria-haspopup="true"
@@ -78,15 +78,7 @@ $currentStore = $storeSwitcherViewModel->getStore();
     </div>
     <script>
         function initLanguageSwitcher() {
-            return {
-                open: false,
-                toggle() {
-                    this.open = !this.open;
-                },
-                close() {
-                    this.open = false;
-                }
-            }
+            return hyva.createBooleanObject('open')
         }
         (() => {
             const initFn = () => Alpine.data('initLanguageSwitcher', initLanguageSwitcher);
