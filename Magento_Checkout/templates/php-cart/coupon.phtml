@@ -92,9 +92,10 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     x-model="formData.coupon_code"
                     x-ref="couponInput"
                     placeholder="<?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>"
-                    required
                     <?php if ($hasCouponCode): ?>
                         disabled
+                    <?php else: ?>
+                        required
                     <?php endif; ?>
                 >
             </div>
