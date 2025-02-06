@@ -70,55 +70,49 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         <span><?= $escaper->escapeHtml(__('Apply Discount Code')) ?></span>
         <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
     </summary>
-    <div>
-        <div>
-            <form
-                id="discount-coupon-form"
-                class="card my-4"
-                action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
-                method="post"
-                @submit.prevent="submitForm()"
-            >
-                <?= $block->getBlockHtml('formkey') ?>
-                <?php if (!$hasCouponCode): ?>
-                    <input type="hidden" name="remove" id="remove-coupon" value="1">
-                <?php endif ?>
-                <label for="coupon_code" class="label sr-only">
-                    <?= $escaper->escapeHtml(__('Enter discount code')) ?>
-                </label>
-                <div class="fieldset coupon space-y-2">
-                    <div class="control">
-                        <input
-                            type="text"
-                            class="form-input w-full disabled:opacity-75 disabled:bg-gray-100 disabled:cursor-not-allowed"
-                            id="coupon_code"
-                            name="coupon_code"
-                            value="<?= $escaper->escapeHtmlAttr($block->getCouponCode()) ?>"
-                            x-model="formData.coupon_code"
-                            x-ref="couponInput"
-                            placeholder="<?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>"
-                            required
-                            <?php if ($hasCouponCode): ?>
-                                disabled
-                            <?php endif; ?>
-                        >
-                    </div>
-                    <?php if (!$hasCouponCode): ?>
-                        <button type="submit" class="btn btn-primary w-full" value="<?= $escaper->escapeHtmlAttr(__('Apply Discount')) ?>">
-                            <?= $escaper->escapeHtml(__('Apply Discount')) ?>
-                        </button>
-                    <?php else: ?>
-                        <button type="submit" class="btn btn-primary w-full" value="<?= $escaper->escapeHtmlAttr(__('Cancel Coupon')) ?>">
-                            <?= $escaper->escapeHtml(__('Cancel Coupon')) ?>
-                        </button>
+    <form
+        id="discount-coupon-form"
+        class="card my-4"
+        action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
+        method="post"
+        @submit.prevent="submitForm()"
+    >
+        <?= $block->getBlockHtml('formkey') ?>
+        <label for="coupon_code" class="label sr-only">
+            <?= $escaper->escapeHtml(__('Enter discount code')) ?>
+        </label>
+        <div class="fieldset coupon space-y-2">
+            <div class="control">
+                <input
+                    type="text"
+                    class="form-input w-full disabled:opacity-75 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    id="coupon_code"
+                    name="coupon_code"
+                    value="<?= $escaper->escapeHtmlAttr($block->getCouponCode()) ?>"
+                    x-model="formData.coupon_code"
+                    x-ref="couponInput"
+                    placeholder="<?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>"
+                    required
+                    <?php if ($hasCouponCode): ?>
+                        disabled
                     <?php endif; ?>
-                    <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) : '' ?>
-                    <?php if ($recaptcha && $legalNoticeHtml = $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE)): ?>
-                        <?= $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) ?>
-                    <?php endif; ?>
-                </div>
-            </form>
+                >
+            </div>
+            <?php if (!$hasCouponCode): ?>
+                <button type="submit" class="btn btn-primary w-full" value="<?= $escaper->escapeHtmlAttr(__('Apply Discount')) ?>">
+                    <?= $escaper->escapeHtml(__('Apply Discount')) ?>
+                </button>
+            <?php else: ?>
+                <input type="hidden" name="remove" id="remove-coupon" value="1">
+                <button type="submit" class="btn btn-primary w-full" value="<?= $escaper->escapeHtmlAttr(__('Cancel Coupon')) ?>">
+                    <?= $escaper->escapeHtml(__('Cancel Coupon')) ?>
+                </button>
+            <?php endif; ?>
+            <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) : '' ?>
+            <?php if ($recaptcha && $legalNoticeHtml = $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE)): ?>
+                <?= $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) ?>
+            <?php endif; ?>
         </div>
-    </div>
+    </form>
 </details>
 
