@@ -24,9 +24,10 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
 ?>
 <?php $cartBlock = $block->getLayout()->getBlock('checkout.cart'); ?>
 <?php if ($block->getData('placement') !== 'cart' || is_object($cartBlock) && $cartBlock->getItemsCount()): ?>
-    <div x-intersect.once="checkAndInitializeButtons()"
-         x-data="paypalPaylater(<?= $escaper->escapeHtmlAttr($widgetConfigJson) ?>)"
-         @private-content-loaded.window="getData($event.detail.data)"
+    <div x-intersect.once="checkAndInitializeButtons"
+         x-data="paypalPaylater"
+         data-widget-config="<?= $escaper->escapeHtmlAttr($widgetConfigJson) ?>"
+         @private-content-loaded.window="getData"
          class="px-6 md:px-0 my-3 min-h-[20px] order-last">
         <div x-ref="ppMessage"
              class="paypal checkout paypal-logo <?= $escaper->escapeHtmlAttr($block->getContainerId()) ?>-container"
@@ -34,11 +35,13 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
         </div>
     </div>
     <script>
-        function paypalPaylater(config) {
+        function paypalPaylater() {
+            const config = JSON.parse(this.$root.dataset.widgetConfig);
             return {
                 cartSection: false,
                 alreadyLoaded: false,
-                getData(data) {
+                getData() {
+                    const data = this.$event.detail.data;
                     if (data.cart) {
                         this.cartSection = data.cart;
                         this.checkAndInitializeButtons();
@@ -110,6 +113,13 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
                 }
             }
         }
+        (() => {
+            const initFn = () => Alpine.data('paypalPaylater', paypalPaylater);
+            window.Alpine
+                ? initFn()
+                : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
+
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

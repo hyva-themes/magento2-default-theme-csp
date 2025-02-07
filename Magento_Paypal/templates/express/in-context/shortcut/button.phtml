@@ -8,13 +8,11 @@
 
 declare(strict_types=1);
 
-use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
 
 /** @var SmartButton $block */
 /** @var Escaper $escaper */
-/** @var HyvaCsp $hyvaCsp */
 
 /*
  * This template renders the PayPal in-context shortcut button for the mini-cart and the cart.
@@ -32,162 +30,18 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/button']['
 $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
 
 ?>
-<div x-data="initPayPalInContextButton(
-        '<?= $escaper->escapeJs($renderTargetElementId) ?>',
-        <?= $escaper->escapeHtmlAttr($clientConfig) ?>,
-        <?= (int) $isMinicart ?>
-      )"
+<div x-data="initPayPalInContextButton"
+     data-render-target-id="<?= $escaper->escapeHtmlAttr($renderTargetElementId) ?>"
+     data-client-config="<?= $escaper->escapeHtmlAttr($clientConfig) ?>"
+     data-is-mini-cart="<?= (int) $isMinicart ?>"
      id="<?= $escaper->escapeHtmlAttr($renderTargetElementId) ?>"
-    <?php if ($isMinicart): ?>
-     x-init="cartSection = cart"
-     x-intersect="checkAndInitializeButtons()"
-    <?php endif; ?>
      class="paypal checkout paypal-logo min-h-a11y cart-extra-actions-container isolate"
+    <?php if ($isMinicart): ?>
+     x-init="initMiniCartButtons"
+     x-intersect="checkAndInitializeButtons"
+    <?php endif; ?>
     <?php if ($isCartPage): ?>
-     @private-content-loaded.window="getData($event.detail.data); checkAndInitializeButtons()"
+     @private-content-loaded.window="initCartPageButtons"
     <?php endif; ?>
 >
 </div>
-<script>
-    function initPayPalInContextButton(renderTargetId, config, isMinicart) {
-        return {
-            cartSection: false,
-            actions: {},
-            paypalButtons: null,
-            getData(sectionData) {
-                this.cartSection = sectionData.cart;
-            },
-            initializePayPalScript() {
-                if (!window.paypalScriptPromise) {
-                    window.paypalScriptPromise = new Promise((resolve, reject) => {
-                        const scriptId = 'paypal-script';
-
-                        const paypalScript = document.getElementById(scriptId);
-                        if (paypalScript) {
-                            if (window.paypal) {
-                                return resolve(window.paypal);
-                            }
-                        }
-
-                        const script = document.createElement('script');
-                        script.src = config.sdkUrl;
-                        script.id = scriptId;
-                        script.setAttribute('data-partner-attribution-id', config.dataAttributes['data-partner-attribution-id']);
-                        script.onload = () => resolve(window.paypal);
-                        script.onerror = () => reject(new Error('<?= $escaper->escapeJs('PayPal SDK could not be loaded') ?>'));
-                        document.body.appendChild(script);
-                    });
-                }
-
-                return window.paypalScriptPromise;
-            },
-            async initializeButtons() {
-                try {
-                    const paypal = await this.initializePayPalScript();
-                    return paypal && paypal.Buttons({
-                        style: Object.assign({}, config.styles, {
-                            height: 44, // Sets the style.height option to a value from 25 to 55.
-                            disableMaxWidth: false, // The button has a default maximum width of 750px, but you can make the button larger with true and set container size
-                            tagline: false // Set the style.layout to horizontal for taglines.
-                        }),
-                        onInit: (data, actions) => {
-                            this.actions = actions || this.actions;
-                        },
-                        onClick: async (data, actions) => {
-                            this.actions = actions || this.actions;
-                        },
-                        createOrder() {
-                            const params = 'quote_id=' + config.quoteId +
-                                '&customer_id=' + (config.customerId || '') +
-                                '&form_key=' + hyva.getFormKey() +
-                                '&button=' + config.button;
-
-                            return window.fetch(config.getTokenUrl, {
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                },
-                                body: params,
-                                method: 'POST',
-                                mode: 'cors',
-                                credentials: 'include'
-                            })
-                                .then(response => response.json())
-                                .then(result => result.token)
-                                .catch(console.error);
-                        },
-
-                        onApprove(data, actions) {
-                            const params = 'paymentToken=' + (data.orderID || '') +
-                                '&payerId=' + (data.payerID || '') +
-                                '&quoteId=' + (config.quoteId || '') +
-                                '&customerId=' + (config.customerId || '') +
-                                '&form_key=' + hyva.getFormKey();
-
-                            return window.fetch(config.onAuthorizeUrl, {
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                },
-                                body: params,
-                                method: 'POST',
-                                mode: 'cors',
-                                credentials: 'include'
-                            })
-                                .then(response => response.json())
-                                .then(result => {
-                                    if (result.success) {
-                                        return actions.redirect(result.redirectUrl);
-                                    }
-
-                                    throw new Error(result['error_message']);
-                                })
-                                .catch(console.error).finally(() => {
-                                    window.dispatchEvent(new Event('reload-customer-section-data'));
-                                });
-                        },
-                        onCancel(data, actions) {
-                            window.dispatchEvent(new Event('reload-customer-section-data'));
-
-                            if (isMinicart) {
-                                window.dispatchEvent(new CustomEvent('toggle-cart', {detail: {isOpen: false}}));
-                            }
-
-                            return window.dispatchMessages([{
-                                type: 'error',
-                                text: '<?= $escaper->escapeJs(__('Express Checkout has been canceled.')) ?>'
-                            }]);
-                        },
-                        onError(err) {
-                            window.dispatchEvent(new Event('reload-customer-section-data'));
-
-                            // Alternative: forward to cart
-                            //window.location.href = config.onCancelUrl;
-
-                            if (isMinicart) {
-                                window.dispatchEvent(new CustomEvent('toggle-cart', {detail: {isOpen: false}}));
-                            }
-
-                            return window.dispatchMessages([{
-                                type: 'error',
-                                text: '<?= $escaper->escapeJs(__('Error initializing Express Checkout, please try again later or choose a different checkout method.')) ?>'
-                            }]);
-                        }
-                    })
-                } catch (error) {
-                    document.getElementById(renderTargetId).innerHTML = '';
-                    console.error('Error loading PayPal SDK', error);
-                }
-            },
-            async checkAndInitializeButtons() {
-                if (this.cartSection.items && this.cartSection.items.length) {
-                    if (! this.paypalButtons) {
-                        this.paypalButtons = await this.initializeButtons();
-                        this.paypalButtons && this.paypalButtons.render(document.getElementById(renderTargetId));
-                    }
-                }
-            }
-        }
-    }
-</script>
-<?php $hyvaCsp->registerInlineScript() ?>

@@ -10,46 +10,46 @@ declare(strict_types=1);
 
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
-use Magento\Paypal\Block\Express\InContext\SmartButton;
+use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
 
 /** @var SmartButton $block */
 /** @var Escaper $escaper */
 /** @var HyvaCsp $hyvaCsp */
 
 /*
- * This template renders the PayPal in-context shortcut button on product detail pages.
+ * This template renders the JS for the PayPal in-context shortcut button for the mini-cart and the cart.
  */
 
-
-$widgetData = json_decode($block->getJsInitParams(), true);
-$clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-express-checkout']['clientConfig']);
+for ($candidate = $block, $isCartPage = false; $candidate && ! $isCartPage; $candidate = $candidate->getParentBlock()) {
+    $isCartPage = $candidate->getNameInLayout() === 'checkout.cart.shortcut.buttons';
+}
+$isMinicart = ! $isCartPage;
 
 ?>
-<div x-data="initPayPalInContext"
-     class="min-h-a11y"
-     x-intersect="checkAndInitializeButtons"
-     @private-content-loaded.window="getData"
-     data-client-config="<?= $escaper->escapeHtmlAttr($clientConfig) ?>"
-     data-render-target-id="paypalInContextPDP"
->
-    <div id="paypalInContextPDP" class="paypal checkout paypal-logo product-shortcuts-container isolate">
-    </div>
-</div>
 <script>
-    function initPayPalInContext() {
+    function initPayPalInContextButton() {
         const renderTargetId = this.$root.dataset.renderTargetId;
         const config = JSON.parse(this.$root.dataset.clientConfig);
+        const isMinicart = parseInt(this.$root.dataset.isMiniCart);
+
         return {
-            cart: false,
+            cartSection: false,
             actions: {},
-            alreadyLoaded: false,
-            cartDataUpdated: false,
-            getData() {
-                const data = this.$event.detail.data;
-                if (data.cart) {
-                    this.cart = data.cart;
-                }
+            paypalButtons: null,
+            getData(sectionData) {
+                this.cartSection = sectionData.cart;
             },
+            <?php if ($isMinicart): ?>
+            initMiniCartButtons() {
+                this.cartSection = this.cart;
+            },
+            <?php endif; ?>
+            <?php if ($isCartPage): ?>
+            initCartPageButtons() {
+                this.getData(this.$event.detail.data);
+                this.checkAndInitializeButtons()
+            },
+            <?php endif; ?>
             initializePayPalScript() {
                 if (!window.paypalScriptPromise) {
                     window.paypalScriptPromise = new Promise((resolve, reject) => {
@@ -68,6 +68,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                         script.setAttribute('data-partner-attribution-id', config.dataAttributes['data-partner-attribution-id']);
                         script.onload = () => resolve(window.paypal);
                         script.onerror = () => reject(new Error('<?= $escaper->escapeJs('PayPal SDK could not be loaded') ?>'));
+                        console.log('Adding paypal script tag');
                         document.body.appendChild(script);
                     });
                 }
@@ -77,9 +78,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
             async initializeButtons() {
                 try {
                     const paypal = await this.initializePayPalScript();
-                    const cart = this.cart;
-
-                    paypal && paypal.Buttons({
+                    return paypal && paypal.Buttons({
                         style: Object.assign({}, config.styles, {
                             height: 44, // Sets the style.height option to a value from 25 to 55.
                             disableMaxWidth: false, // The button has a default maximum width of 750px, but you can make the button larger with true and set container size
@@ -88,34 +87,11 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                         onInit: (data, actions) => {
                             this.actions = actions || this.actions;
                         },
-                        onClick(data, actions) {
-                            const postUrl = `${BASE_URL}checkout/cart/add/`;
-
-                            const form = document.forms.product_addtocart_form;
-                            if (!form || !form.reportValidity()) {
-                                return;
-                            }
-
-                            const formData = new FormData(form);
-                            formData.append('form_key', hyva.getFormKey());
-
-                            return window.fetch(postUrl, {
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                },
-                                body: formData,
-                                method: 'POST',
-                                mode: 'cors',
-                                credentials: 'include'
-                            })
-                                .catch(console.error)
-                                .finally(() => {
-                                    window.dispatchEvent(new Event('reload-customer-section-data'));
-                                });
+                        onClick: async (data, actions) => {
+                            this.actions = actions || this.actions;
                         },
                         createOrder() {
-                            const params = 'quote_id=' + cart.cartId +
+                            const params = 'quote_id=' + config.quoteId +
                                 '&customer_id=' + (config.customerId || '') +
                                 '&form_key=' + hyva.getFormKey() +
                                 '&button=' + config.button;
@@ -130,14 +106,15 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                                 mode: 'cors',
                                 credentials: 'include'
                             })
-                                .then(result => result.json())
-                                .then(data => data.token)
+                                .then(response => response.json())
+                                .then(result => result.token)
                                 .catch(console.error);
                         },
+
                         onApprove(data, actions) {
                             const params = 'paymentToken=' + (data.orderID || '') +
                                 '&payerId=' + (data.payerID || '') +
-                                '&quoteId=' + (cart.quoteId || '') +
+                                '&quoteId=' + (config.quoteId || '') +
                                 '&customerId=' + (config.customerId || '') +
                                 '&form_key=' + hyva.getFormKey();
 
@@ -151,23 +128,24 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                                 mode: 'cors',
                                 credentials: 'include'
                             })
-                                .then(data => data.json())
-                                .then(response => {
-                                    if (response.success) {
-                                        return actions.redirect(response.redirectUrl);
+                                .then(response => response.json())
+                                .then(result => {
+                                    if (result.success) {
+                                        return actions.redirect(result.redirectUrl);
                                     }
 
-                                    throw new Error(response['error_message']);
+                                    throw new Error(result['error_message']);
                                 })
-                                .catch(console.error)
-                                .finally(() => {
+                                .catch(console.error).finally(() => {
                                     window.dispatchEvent(new Event('reload-customer-section-data'));
                                 });
                         },
-
                         onCancel(data, actions) {
-                            // reload data because of add to cart
                             window.dispatchEvent(new Event('reload-customer-section-data'));
+
+                            if (isMinicart) {
+                                window.dispatchEvent(new CustomEvent('toggle-cart', {detail: {isOpen: false}}));
+                            }
 
                             return window.dispatchMessages([{
                                 type: 'error',
@@ -175,35 +153,41 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                             }]);
                         },
                         onError(err) {
+                            window.dispatchEvent(new Event('reload-customer-section-data'));
+
+                            // Alternative: forward to cart
+                            //window.location.href = config.onCancelUrl;
+
+                            if (isMinicart) {
+                                window.dispatchEvent(new CustomEvent('toggle-cart', {detail: {isOpen: false}}));
+                            }
+
                             return window.dispatchMessages([{
                                 type: 'error',
-                                text: '<?= $escaper->escapeJs(__('We can\'t initialize Express Checkout.')) ?>'
+                                text: '<?= $escaper->escapeJs(__('Error initializing Express Checkout, please try again later or choose a different checkout method.')) ?>'
                             }]);
                         }
-                    }).render(document.getElementById(renderTargetId));
+                    })
                 } catch (error) {
                     document.getElementById(renderTargetId).innerHTML = '';
                     console.error('Error loading PayPal SDK', error);
                 }
             },
-            checkAndInitializeButtons() {
-                const form = document.forms.product_addtocart_form;
-                if (!form) {
-                    return;
-                }
-                if (this.cart && !this.alreadyLoaded) {
-                    this.alreadyLoaded = true;
-                    this.initializeButtons();
+            async checkAndInitializeButtons() {
+                if (this.cartSection.items && this.cartSection.items.length) {
+                    if (! this.paypalButtons) {
+                        this.paypalButtons = await this.initializeButtons();
+                        this.paypalButtons && this.paypalButtons.render(document.getElementById(renderTargetId));
+                    }
                 }
             }
         }
     }
     (() => {
-        const initFn = () => Alpine.data('initPayPalInContext', initPayPalInContext);
+        const initFn = () => Alpine.data('initPayPalInContextButton', initPayPalInContextButton);
         window.Alpine
             ? initFn()
             : window.addEventListener('alpine:init', initFn, {once: true})
     })()
-
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
