@@ -40,7 +40,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
 <nav class="breadcrumbs bg-container-lighter shadow-sm" aria-label="Breadcrumb">
     <div class="container">
         <ol
-            x-data="initBreadcrumbsProduct()"
+            x-data="initBreadcrumbsProduct"
             class="items list-reset -mx-3 py-4 rounded flex flex-nowrap text-grey text-sm overflow-x-auto relative"
         >
             <li
@@ -49,13 +49,13 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
             >&ZeroWidthSpace;</li>
             <template x-for="item in breadcrumbs">
                 <li class="item inline-flex whitespace-nowrap">
-                    <template x-if="item.name !== 'home'">
+                    <template x-if="isNotHomeLink">
                         <span aria-hidden="true" class="separator text-primary-lighter px-2">/</span>
                     </template>
-                    <template x-if="item.name === 'product'">
+                    <template x-if="isProductLink">
                         <span class="text-primary-lighter" x-text="item.label"></span>
                     </template>
-                    <template x-if="item.name !== 'product'">
+                    <template x-if="isNotProductLink">
                         <a :href="item.link" class="no-underline" x-text="item.label"></a>
                     </template>
                 </li>
@@ -142,7 +142,25 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
         addJsonBreadcrumbsHead(breadcrumbs);
         <?php endif; ?>
 
-        return {breadcrumbs};
+        return {
+            breadcrumbs,
+            isNotHomeLink() {
+                return this.item.name !== 'home';
+            },
+            isProductLink() {
+                return this.item.name === 'product';
+            },
+            isNotProductLink() {
+                return this.item.name !== 'product';
+            }
+        };
     }
+    (() => {
+        const initFn = () => Alpine.data('initBreadcrumbsProduct', initBreadcrumbsProduct);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
