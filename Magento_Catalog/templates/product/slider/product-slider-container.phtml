@@ -186,9 +186,12 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                         <?php $sliderIndex++ ?>
                     <?php endforeach; ?>
                     <?php for ($i = 0; $i < $maxVisibleSlides; $i++): /* Add empty filler slides in case the number of items is not dividable by the pagesize */ ?>
-                        <div :class="{
-                        'js_dummy_slide w-full flex-none <?= $escaper->escapeJs($slideItemClasses) ?>' : pageFillers > <?= (int) $i ?>
-                        }"></div>
+                        <div
+                            class="js_dummy_slide w-full shrink-0 <?= $escaper->escapeHtmlAttr($slideItemClasses) ?>"
+                            aria-hidden="true"
+                            x-show="pageFillers > <?= (int) $i ?>"
+                            x-cloak
+                        ></div>
                     <?php endfor; ?>
                 </div>
             </div>
