@@ -92,24 +92,20 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
         return {
             compareProducts: null,
             itemCount: 0,
-
             hiddenIfEmpty() {
                 return {
                     'hidden': this.itemCount < 1
                 }
             },
             linkAriaLabel() {
-                return '<?= $escaper->escapeJs(__('Compare Products')) ?>' +
-                    (
-                        this.itemCount > 1
-                        ? hyva.str('<?= $escaper->escapeJs(__('%1 Items')) ?>', this.itemCount)
-                        : hyva.str('<?= $escaper->escapeJs(__('%1 Item')) ?>', this.itemCount)
-                    )
+                const countLabel = this.itemCount > 1
+                    ? hyva.str('<?= $escaper->escapeJs(__('%1 Items')) ?>', this.itemCount)
+                    : hyva.str('<?= $escaper->escapeJs(__('%1 Item')) ?>', this.itemCount);
+                return `<?= $escaper->escapeJs(__('Compare Products')) ?> (${countLabel})`;
             },
-
             receiveCompareData() {
                 const data = this.$event.detail.data;
-                if (data['compare-products']) {
+                if (data['compare-products'] && data['compare-products'].count) {
                     this.compareProducts = data['compare-products'];
                     this.itemCount = this.compareProducts.count;
                 }
@@ -141,7 +137,7 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
         <div class="flex items-center gap-2 md:gap-1 order-3 md:-mr-1">
             <!--Compare Icon-->
             <a id="compare-link"
-               class="relative inline-block rounded p-1 hover:bg-primary/10 outline-offset-2 invisible"
+               class="relative inline-block rounded p-1 hover:bg-primary/10 outline-offset-2 hidden"
                :class="hiddenIfEmpty"
                href="<?= $escaper->escapeUrl($block->getUrl('catalog/product_compare/index')) ?>"
                title="<?= $escaper->escapeHtmlAttr(__('Compare Products')) ?>"
