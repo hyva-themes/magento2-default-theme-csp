@@ -102,32 +102,40 @@ $mergedCells = ($cartItemOutputViewModel->isItemPriceDisplayBoth() ? 2 : 1)
     </div>
     <div class="cart actions flex flex-col sm:flex-row justify-end gap-4 items-center my-4">
         <?php if ($cartViewModel->isClearShoppingCartEnabled()): ?>
-        <script>
-            function initClearShoppingCartModal() {
-                return Object.assign(
-                    hyva.modal(),
-                    {
-                        postData: {
-                            action: '<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>',
-                            data: {update_cart_action: 'empty_cart'}
-                        }
-                    }
-                );
-            }
-        </script>
-        <?php $hyvaCsp->registerInlineScript() ?>
-            <div x-data="initClearShoppingCartModal()">
+            <div x-data="initClearShoppingCartModal">
                 <?= /** @noEscape */ ($confirmation = $modalViewModel
                     ->confirm(__('Are you sure?'))
                     ->withDetails(__('Are you sure you want to remove all items from your shopping cart?'))
                 ) ?>
-                <button @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(result => result && hyva.postForm(postData))"
+                <button @click="showDialog"
                         type="button" title="<?= $escaper->escapeHtmlAttr(__('Clear Shopping Cart')) ?>"
-                        class="action clear" id="empty_cart_button">
+                        class="action clear btn" id="empty_cart_button">
                     <span><?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?></span>
                 </button>
             </div>
-
+            <script>
+                function initClearShoppingCartModal() {
+                    return Object.assign(
+                        hyva.modal.call(this),
+                        {
+                            showDialog() {
+                                <?= /** @noEscape */ $confirmation->getShowJs() ?>.then(result => result && hyva.postForm(this.postData))
+                            },
+                            postData: {
+                                action: '<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>',
+                                data: {update_cart_action: 'empty_cart'}
+                            }
+                        }
+                    );
+                }
+                (() => {
+                    const initFn = () => Alpine.data('initClearShoppingCartModal', initClearShoppingCartModal);
+                    window.Alpine
+                        ? initFn()
+                        : window.addEventListener('alpine:init', initFn, {once: true})
+                })()
+            </script>
+            <?php $hyvaCsp->registerInlineScript() ?>
         <?php endif ?>
         <button type="submit"
                 name="update_cart_action"
