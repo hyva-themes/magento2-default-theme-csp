@@ -18,5 +18,12 @@
                        template="Magento_Wishlist::shared-add-to-button.phtml"/>
             </block>
         </referenceContainer>
+        <referenceBlock name="topmenu_generic">
+            <!-- Disable block_html caching on the un-cached wishlist pages, because the top menu is shared with cached pages. -->
+            <!-- Otherwise the script tags will be used on FPC pages with (wrong) nonce attribute values, while they should be enabled through shas there. -->
+            <arguments>
+                <argument name="cache_lifetime" xsi:type="boolean">false</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

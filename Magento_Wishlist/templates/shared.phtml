@@ -6,21 +6,41 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\Pricing\Render;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Wishlist\Block\Share\Wishlist;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var Wishlist $block */
 /** @var Escaper $escaper */
-/** @var SecureHtmlRenderer $secureRenderer */
+/** @var HyvaCsp $hyvaCsp */
 
 ?>
+<script>
+    function initSharedWishlist() {
+        return {
+            addItemToCart() {
+                hyva.postForm(JSON.parse(this.$el.dataset.itemAddToCartUrl));
+            },
+            addAllSharedToCart() {
+                hyva.postForm(<?= /* @noEscape */ $block->getSharedAddAllToCartUrl() ?>);
+            }
+        }
+    }
+    (() => {
+        const initFn = () => Alpine.data('initSharedWishlist', initSharedWishlist);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+
+</script>
+<?php $hyvaCsp->registerInlineScript(); ?>
 <div class="container">
     <?php if ($block->hasWishlistItems()): ?>
-        <form x-data=""
+        <form x-data="initSharedWishlist"
               class="form shared wishlist card mb-4"
               action="<?= $escaper->escapeUrl($block->getUrl('wishlist/index/update')) ?>"
               method="post">
@@ -82,9 +102,9 @@ use Magento\Wishlist\Block\Share\Wishlist;
                                 <?php if ($isVisibleProduct): ?>
                                     <button type="button"
                                             title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
-                                            @click.prevent='hyva.postForm(<?= /* @noEscape */
-                                                $block->getSharedItemAddToCartUrl($item) ?>)'
+                                            @click.prevent="addItemToCart"
                                             class="inline-flex btn btn-primary"
+                                            data-item-add-to-cart-url="<?= $escaper->escapeHtmlAttr($block->getSharedItemAddToCartUrl($item)) ?>"
                                             data-addto="cart"
                                     >
                                         <?= $escaper->escapeHtml(__('Add to Cart')) ?>
@@ -101,8 +121,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                     <div class="primary">
                         <button type="button"
                                 title="<?= $escaper->escapeHtmlAttr(__('Add All to Cart')) ?>"
-                                @click.prevent='hyva.postForm(<?= $escaper
-                                    ->escapeUrl($block->getSharedAddAllToCartUrl()) ?>)'
+                                @click.prevent="addAllSharedToCart"
                                 class="action tocart primary">
                             <span><?= $escaper->escapeHtml(__('Add All to Cart')) ?></span>
                         </button>
