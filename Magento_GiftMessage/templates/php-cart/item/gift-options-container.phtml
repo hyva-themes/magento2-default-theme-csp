@@ -36,8 +36,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 $slideOutDrawer = (bool) $block->getSlideOutDrawer();
 ?>
-<div x-data="initGiftItemOptions({itemId: '<?= (int) $block->getItem()->getId() ?>'})" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
-    <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || isGiftWrapEnabled || hasActiveOptions">
+<div
+    x-data="initGiftItemOptions"
+    data-item-id="<?= (int) $block->getItem()->getId() ?>"
+    x-cloak
+    class="gift-options-component w-full flex flex-wrap my-6"
+>
+    <div class="text-left gift-options-title w-full order-first" x-show="showGiftOptions">
         <button
             type="button"
             x-ref="giftOptionsTrigger"
@@ -63,7 +68,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
             aria-modal="true"
             @keydown.window.escape="closeDialog"
             class="fixed inset-y-0 right-0 z-30 flex max-w-full"
-            x-init="hyva.trapFocus($refs['giftOptionsDialog'])"
+            x-init="trapFocusSlideOutDrawer"
             :aria-hidden="!formBlockVisibility"
         >
             <div
@@ -108,7 +113,7 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
     <?php else: ?>
         <?= $block->getChildHtml('gift-options-body') ?>
     <?php endif ?>
-    <div x-show="(resultBlockVisibility && !formBlockVisibility) || (resultBlockVisibility && inSlideOut)" class="gift-summary pt-2" @click="formBlockVisibility = true">
+    <div x-show="showAdditionalGiftOptionsSummary" class="gift-summary pt-2" @click="setFormBlockVisibilityTrue">
         <div class="additional-options-summary"></div>
         <div x-show="savedFormMessage.message">
             <span><?= $escaper->escapeHtml(__('Message:')) ?></span> <span x-text="savedFormMessage.message"></span>

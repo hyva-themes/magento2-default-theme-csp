@@ -23,7 +23,7 @@ use Magento\Framework\View\Element\Template;
     </div>
     <div class="gift-options-content">
         <fieldset class="fieldset">
-            <div class="field field-to" x-id="['recipient']">
+            <div class="field field-to" x-id="getIdPrefixRecipient">
                 <label
                     :for="getIdRecipient"
                     class="label"
@@ -33,9 +33,10 @@ use Magento\Framework\View\Element\Template;
                 <div class="control">
                     <input
                         :id="getIdRecipient"
+                        :value="formMessage.recipient"
                         type="text"
-                        @input="onInputRicepient"
-                        @keydown.enter.prevent="submitGiftOption()"
+                        @input="onInputRecipient"
+                        @keydown.enter.prevent="submitGiftOption"
                         class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
                     >
                 </div>
@@ -51,9 +52,10 @@ use Magento\Framework\View\Element\Template;
                 <div class="control">
                     <input
                         :id="getIdSender"
+                        :value="formMessage.sender"
                         type="text"
                         @input="onInputSender"
-                        @keydown.enter.prevent="submitGiftOption()"
+                        @keydown.enter.prevent="submitGiftOption"
                         class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
                     >
                 </div>
@@ -68,7 +70,9 @@ use Magento\Framework\View\Element\Template;
                         @input="onInputMessage"
                         class="input-text w-full form-input disabled:opacity-75 disabled:bg-gray-100 disabled:pointer-events-none"
                         rows="5"
-                        cols="10">
+                        cols="10"
+                        x-text="formMessage.message"
+                    >
                     </textarea>
                 </div>
             </div>

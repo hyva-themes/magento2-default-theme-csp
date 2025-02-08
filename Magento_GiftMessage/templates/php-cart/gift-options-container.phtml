@@ -47,6 +47,9 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
         return {
             inSlideOut: <?= $slideOutDrawer ? 'true' : 'false' ?>,
             formBlockVisibility: false,
+            ['!formBlockVisibility']() {
+                return ! this.formBlockVisibility;
+            },
             resultBlockVisibility: false,
             hasActiveOptions: false,
             itemId: 'orderLevel',
@@ -67,6 +70,15 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 alreadyAdded: null,
             },
             extensionAttributes: {},
+            showGiftOptions() {
+                return this.isGiftMsgEnabled || this.isGiftWrapEnabled || this.hasActiveOptions;
+            },
+            showAdditionalGiftOptionsSummary() {
+                return (this.resultBlockVisibility && !this.formBlockVisibility) || (this.resultBlockVisibility && this.inSlideOut);
+            },
+            setFormBlockVisibilityTrue() {
+                this.formBlockVisibility = true;
+            },
             getMessage() {
                 return window.giftOptionsConfig.giftMessage.hasOwnProperty(this.itemId)
                     ? window.giftOptionsConfig.giftMessage[this.itemId]
@@ -187,21 +199,26 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 this.$nextTick(() => hyva.trapFocus(this.$refs['giftOptionsDialog']));
             },
             closeDialog() {
-                if (this.formBlockVisibility) {
-                    this.$nextTick(() => {
+                this.$nextTick(() => {
+                    if (this.formBlockVisibility) {
                         hyva.releaseFocus(this.$refs['giftOptionsDialog'])
                         this.$refs['giftOptionsTrigger'].focus()
-                    });
-                }
-
-                this.formBlockVisibility = false
+                        this.formBlockVisibility = false;
+                    }
+                });
+            },
+            inSlideOutClasses() {
+                return this.inSlideOut ? '' : 'md:flex-row'
+            },
+            showAdditionalOptions() {
+                return this.formBlockVisibility && this.hasActiveOptions;
             }
         }
     }
 
-    function initGiftItemOptions(options) {
+    function initGiftItemOptions() {
         'use strict';
-        const itemId = options.itemId;
+        const itemId = this.$el.dataset.itemId;
         return Object.assign({}, initGiftOptions(), {
             itemId: itemId,
 
@@ -243,14 +260,34 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
                 return window.giftOptionsConfig.isCustomerLoggedIn
                     ? restBaseUrl + 'carts/mine/gift-message/' + itemId
                     : restBaseUrl + 'guest-carts/' + window.checkoutConfig.quoteData.entity_id + '/gift-message/' + itemId;
+            },
+
+            trapFocusSlideOutDrawer() {
+                hyva.trapFocus(this.$refs['giftOptionsDialog'])
             }
         })
     }
+
+    function initGiftOptionsLoader() {
+        return hyva.createBooleanObject('isLoading');
+    }
+
+    (() => {
+        const initFn = () => {
+            Alpine.data('initGiftOptions', initGiftOptions);
+            Alpine.data('initGiftItemOptions', initGiftItemOptions);
+            Alpine.data('initGiftOptionsLoader', initGiftOptionsLoader);
+        };
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-<div x-data="{isLoading: false}" x-cloak
-     @gift-message-loading-start.window="isLoading = true"
-     @gift-message-loading-end.window="isLoading = false"
+<div x-data="initGiftOptionsLoader" x-cloak
+     @gift-message-loading-start.window="setIsLoadingTrue"
+     @gift-message-loading-end.window="setIsLoadingFalse"
 >
     <?= $block->getChildHtml('loading') ?>
 </div>
@@ -261,8 +298,8 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
 }
 // Only render the DOM elements for order level gift options if either or both gift messages or gift wrapping are enabled
 ?>
-<div x-data="initGiftOptions()" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
-    <div class="text-left gift-options-title w-full order-first" x-show="isGiftMsgEnabled || isGiftWrapEnabled || hasActiveOptions">
+<div x-data="initGiftOptions" class="gift-options-component w-full flex flex-wrap my-6" :data-item-id="itemId" x-cloak>
+    <div class="text-left gift-options-title w-full order-first" x-show="showGiftOptions">
         <button
             type="button"
             x-ref="giftOptionsTrigger"
@@ -326,7 +363,7 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
     <?php else: ?>
         <?= $block->getChildHtml('gift-options-body') ?>
     <?php endif ?>
-    <div x-show="(resultBlockVisibility && !formBlockVisibility) || (resultBlockVisibility && inSlideOut)" class="gift-summary pt-2" @click="formBlockVisibility = true">
+    <div x-show="showAdditionalGiftOptionsSummary" class="gift-summary pt-2" @click="setFormBlockVisibilityTrue">
         <div class="additional-options-summary"></div>
         <div x-show="savedFormMessage.message">
             <span><?= $escaper->escapeHtml(__('Message:')) ?></span> <span x-text="savedFormMessage.message"></span>
