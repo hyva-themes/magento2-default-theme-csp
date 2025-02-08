@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\Modal;
 use Magento\Framework\Escaper;
 use PayPal\Braintree\Block\Customer\PayPal\VaultTokenRenderer;
@@ -16,6 +17,7 @@ use PayPal\Braintree\Block\Customer\PayPal\VaultTokenRenderer;
 /** @var VaultTokenRenderer $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 $modalViewModel = $viewModels->require(Modal::class);
 
@@ -33,7 +35,7 @@ $block->getParentBlock()->setData('tokens_row_number', $i);
         <span><?= $escaper->escapeHtml($block->getPayerEmail()) ?></span>
     </div>
 </div>
-<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"  x-data="hyva.modal()">
+<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>"  x-data="initVaultToken">
     <div class="text-sm">
         <form class="form"
               action="<?= $escaper->escapeUrl($block->getUrl('vault/cards/deleteaction')) ?>"
@@ -50,10 +52,27 @@ $block->getParentBlock()->setData('tokens_row_number', $i);
 <div class="mt-4 text-lg">{$block->getPayerEmail()}</div>
 EOHTML) ?>
         <button type="button"
-                @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok && $refs.form.submit())">
+                @click="confirmAndSubmit">
             <?= $escaper->escapeHtml(__('Delete')) ?>
         </button>
         <?= /** @noEscape */ $confirmation ?>
         </form>
     </div>
 </div>
+<script>
+    function initVaultToken() {
+        return Object.assign(hyva.modal.call(this), {
+            confirmAndSubmit() {
+                <?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok && this.$refs.form.submit())
+            }
+        });
+    }
+
+    (() => {
+        const initFn = () => Alpine.data('initVaultToken', initVaultToken);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
