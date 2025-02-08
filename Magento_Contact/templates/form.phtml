@@ -35,8 +35,8 @@ $recaptcha = $block->getData('viewModelRecaptcha');
           action="<?= $escaper->escapeUrl($block->getFormAction()) ?>"
           id="<?= $escaper->escapeHtmlAttr($formId) ?>"
           method="post"
-          x-data="initContactForm()"
-          @submit.prevent="submitForm()"
+          x-data="initContactForm"
+          @submit.prevent="submitForm"
     >
         <fieldset class="">
             <div class="flex flex-col text-center w-full mb-12">
@@ -81,9 +81,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     </label>
                     <input name="telephone" id="telephone"
                            title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
-                           value="<?= $escaper->escapeHtmlAttr(
-                               $contactHelper->getPostValue('telephone')
-                           ) ?>"
+                           value="<?= $escaper->escapeHtmlAttr($contactHelper->getPostValue('telephone')) ?>"
                            class="mt-2 input input-light w-full"
                            placeholder="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
                            type="text"/>
@@ -129,6 +127,13 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 }
             }
         }
+        (() => {
+            const initFn = () => Alpine.data('initContactForm', initContactForm);
+            window.Alpine
+                ? initFn()
+                : window.addEventListener('alpine:init', initFn, {once: true})
+        })()
+
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
     <div class="card lg:w-1/2 md:w-1/3">
