@@ -9,6 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\Modal;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -18,6 +19,7 @@ use Magento\Vault\Block\CardRendererInterface;
 /** @var CardRendererInterface|Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 $modalViewModel = $viewModels->require(Modal::class);
 
@@ -45,7 +47,7 @@ $block->getParentBlock()->setData('cards_row_number', $i);
         />
     </div>
 </div>
-<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>" x-data="hyva.modal()">
+<div class="p-2 flex items-center <?= $i % 2 === 0 ? '' : ' bg-container-darker' ?>" x-data="initVaultCCToken">
     <div class="text-sm">
     <form class="form"
           action="<?= $escaper->escapeUrl($block->getUrl('vault/cards/deleteaction')) ?>"
@@ -60,10 +62,27 @@ $block->getParentBlock()->setData('cards_row_number', $i);
         <?php $message = $escaper->escapeHtml(__('Are you sure you want to delete this card: %1?', $ccNumberView)) ?>
         <?php $confirmation = $modalViewModel->confirm($message) ?>
         <button type="button"
-                @click="<?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok && $refs.form.submit())">
+                @click="confirmAndSubmit">
             <?= $escaper->escapeHtml(__('Delete')) ?>
         </button>
         <?= /** @noEscape */ $confirmation ?>
     </form>
     </div>
 </div>
+<script>
+    function initVaultCCToken() {
+        return Object.assign(hyva.modal.call(this), {
+            confirmAndSubmit() {
+                <?= /** @noEscape */ $confirmation->getShowJs() ?>.then(ok => ok && this.$refs.form.submit());
+            }
+        });
+    }
+    (() => {
+        const initFn = () => Alpine.data('initVaultCCToken', initVaultCCToken);
+        window.Alpine
+            ? initFn()
+            : window.addEventListener('alpine:init', initFn, {once: true})
+    })()
+
+</script>
+<?php $hyvaCsp->registerInlineScript(); ?>
