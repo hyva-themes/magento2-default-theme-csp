@@ -47,9 +47,9 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                <?php if ($block->isRequired()): ?>
                    required
                <?php endif; ?>
-               x-model="value"
                @click="toggleShowDatepicker"
                @keydown="onInputKeydown"
+               :value="value"
                @paste="$event.preventDefault"
                autocomplete="off"
                class="form-input <?= $validationClass ?: '' ?>"
@@ -210,7 +210,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
             setDate(date) {
                 const selectedDate = new Date(this.year, this.month, date);
                 this.value = this.dateFormatter.format(selectedDate);
-                this.showDatepicker = false;
+                this.setShowDatepickerFalse();
             },
 
             recalcDaysGrid() {
@@ -235,7 +235,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                 return '';
             },
 
-            selectDayIfPossible() {
+            selectDateIfPossible() {
                 if (this.canSelectDate(this.date)) {
                     this.setDate(this.date)
                 }
@@ -335,7 +335,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                 const keyCode = this.$event.code;
 
                 if (keyCode === "Escape") {
-                    this.showDatepicker = false;
+                    this.setShowDatepickerFalse();
                 }
 
                 if (keyCode === "Tab") {
@@ -344,7 +344,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
 
                 if (keyCode === "Enter") {
                     this.$event.preventDefault();
-                    this.showDatepicker = true;
+                    this.setShowDatepickerTrue();
                     hyva.trapFocus(this.calendarWindow);
                 }
 
@@ -357,7 +357,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
 
                 if (keyCode === "Escape") {
                     hyva.releaseFocus(this.calendarWindow);
-                    this.showDatepicker = false;
+                    this.setShowDatepickerFalse()
                 }
             }
         })
