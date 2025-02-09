@@ -79,6 +79,9 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                     window.location.href = this.checkoutUrl;
                 }
             },
+            resetErrors() {
+                this.errors = 0;
+            },
             dispatchLoginRequest(form) {
                 this.isLoading = true;
                 const username = this.$refs['customer-email'].value;
@@ -215,7 +218,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                         <input name="username"
                                                id="form-login-username"
                                                x-ref="customer-email"
-                                               @change="errors = 0"
+                                               @change="resetErrors"
                                                type="email"
                                                required
                                                autocomplete="<?= $isAutocompleteEnabled ? 'username' : 'off' ?>"
@@ -235,7 +238,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                                required
                                                x-ref="customer-password"
                                                autocomplete="<?= $isAutocompleteEnabled ? 'current-password' : 'off' ?>"
-                                               @change="errors = 0"
+                                               @change="resetErrors"
                                         >
                                     </div>
                                 </div>
