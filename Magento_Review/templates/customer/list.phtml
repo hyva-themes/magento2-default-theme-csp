@@ -310,11 +310,6 @@ $ratingSteps = 5;
             },
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initReviewList', initReviewList);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initReviewList', initReviewList), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

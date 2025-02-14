@@ -34,7 +34,7 @@ $fieldName = $recaptcha->getResultTokenFieldName($formId);
 <?php /* render_script_tag is never set, it is present to force editors to see the code as JavaScript */ ?>
 <?php if ($block->getData('render_script_tag')): ?>
 <script>
-    <?php endif; ?>
+<?php endif; ?>
     this.hasCaptchaToken = $form['<?= $escaper->escapeJs($fieldName) ?>'] &&
         $form['<?= $escaper->escapeJs($fieldName) ?>'].value.length > 0;
     this.errors = this.hasCaptchaToken ? 0 : 1;
@@ -48,7 +48,7 @@ $fieldName = $recaptcha->getResultTokenFieldName($formId);
         );
     }
 
-    <?php if ($block->getData('render_script_tag')): ?>
+<?php if ($block->getData('render_script_tag')): ?>
 </script>
-<?php $hyvaCsp->registerInlineScript() ?>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

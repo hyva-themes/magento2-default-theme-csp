@@ -363,12 +363,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
         })
     }
 
-    (() => {
-        const initFn = () => Alpine.data('initDatePicker', initDatePicker);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initDatePicker', initDatePicker), {once: true})
 
     function DateFormatter(template) {
         return {

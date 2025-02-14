@@ -281,16 +281,10 @@ $recipients = $formData->getRecipientData() ?? '[]';
                     }
                 }
 
-                (() => {
-                    const initFn = () => {
-                        Alpine.data('initSendFriendForm', initSendFriendForm)
-                        Alpine.data('rowHandler', rowHandler)
-                    };
-                    window.Alpine
-                        ? initFn()
-                        : window.addEventListener('alpine:init', initFn, {once: true})
-                })()
-
+                window.addEventListener('alpine:init', () => {
+                    Alpine.data('initSendFriendForm', initSendFriendForm);
+                    Alpine.data('rowHandler', rowHandler);
+                }, {once: true})
             </script>
             <?php $hyvaCsp->registerInlineScript() ?>
         </form>

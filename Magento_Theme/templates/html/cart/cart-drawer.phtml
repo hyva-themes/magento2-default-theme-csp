@@ -184,10 +184,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         }
     }
 
-    (() => {
-        const initFn = () => Alpine.data('initCartDrawer', initCartDrawer);
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initCartDrawer', initCartDrawer), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <section x-cloak

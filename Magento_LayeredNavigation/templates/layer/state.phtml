@@ -99,12 +99,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 }
         }});
     }
-    (() => {
-        const initFn = () => Alpine.data('initLayeredNavigationState', initLayeredNavigationState);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initLayeredNavigationState', initLayeredNavigationState), {once: true})
 </script>
-<?php $hyvaCsp->registerInlineScript() ?>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

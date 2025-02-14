@@ -272,17 +272,11 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
         return hyva.createBooleanObject('isLoading');
     }
 
-    (() => {
-        const initFn = () => {
-            Alpine.data('initGiftOptions', initGiftOptions);
-            Alpine.data('initGiftItemOptions', initGiftItemOptions);
-            Alpine.data('initGiftOptionsLoader', initGiftOptionsLoader);
-        };
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initGiftOptions', initGiftOptions);
+        Alpine.data('initGiftItemOptions', initGiftItemOptions);
+        Alpine.data('initGiftOptionsLoader', initGiftOptionsLoader);
+    }, {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div x-data="initGiftOptionsLoader" x-cloak

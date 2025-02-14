@@ -150,10 +150,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initCartMainForm', initCartMainForm);
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initCartMainForm', initCartMainForm), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div x-data="initCartMainForm"

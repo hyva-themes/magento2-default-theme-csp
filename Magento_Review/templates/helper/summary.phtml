@@ -178,13 +178,7 @@ $uniqueId = $productId . uniqid();
                 }
             }
         }
-        (() => {
-            const initFn = () => Alpine.data('initRating<?= /* @noEscape */ $uniqueId ?>', initRating<?= /* @noEscape */ $uniqueId ?>);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
-
+        window.addEventListener('alpine:init', () => Alpine.data('initRating<?= /* @noEscape */ $uniqueId ?>', initRating<?= /* @noEscape */ $uniqueId ?>), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

@@ -68,11 +68,6 @@ EOHTML) ?>
         });
     }
 
-    (() => {
-        const initFn = () => Alpine.data('initVaultToken', initVaultToken);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initVaultToken', initVaultToken), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

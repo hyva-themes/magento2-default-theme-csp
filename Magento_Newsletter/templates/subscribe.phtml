@@ -99,11 +99,8 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 }
             }
         }
-        
-        (() => {
-            const initFn = () => Alpine.data('initNewsletterForm', initNewsletterForm);
-            window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
+
+        window.addEventListener('alpine:init', () => Alpine.data('initNewsletterForm', initNewsletterForm), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 </div>

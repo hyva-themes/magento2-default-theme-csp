@@ -100,13 +100,7 @@ use Magento\Framework\Escaper;
                 }
             }
         }
-        (() => {
-            const initFn = () => Alpine.data('initForm', initForm);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
-
+        window.addEventListener('alpine:init', () => Alpine.data('initForm', initForm), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 </div>

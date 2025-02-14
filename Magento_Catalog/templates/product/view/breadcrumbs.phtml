@@ -155,12 +155,6 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
             }
         };
     }
-    (() => {
-        const initFn = () => Alpine.data('initBreadcrumbsProduct', initBreadcrumbsProduct);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initBreadcrumbsProduct', initBreadcrumbsProduct), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

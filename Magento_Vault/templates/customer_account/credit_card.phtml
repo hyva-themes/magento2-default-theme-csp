@@ -77,12 +77,6 @@ $block->getParentBlock()->setData('cards_row_number', $i);
             }
         });
     }
-    (() => {
-        const initFn = () => Alpine.data('initVaultCCToken', initVaultCCToken);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initVaultCCToken', initVaultCCToken), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript(); ?>

@@ -27,94 +27,90 @@ if (! $customer->customerLoggedIn()) {
 ?>
 
 <script>
-    (() => {
-        function initReorderSidebar() {
-            function reorderSidebarFetchHandler(body, postUrl) {
-                const postHeaders = {
-                    "headers": {
-                        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-                    },
-                    body: body,
-                    "method": "POST",
-                    "mode": "cors",
-                    "credentials": "include"
-                };
-
-                return fetch(postUrl, postHeaders).then(response => {
-                    if (response.redirected) {
-                        <?php // This is the regular path, regardless if the items could be reordered or not ?>
-                        window.location.href = response.url;
-                    } else if (response.ok) {
-                        return response.json();
-                    } else {
-                        const messageText = "<?= $escaper->escapeJs(__("Cannot add product to cart")) ?>";
-                        window.dispatchMessages && window.dispatchMessages([{type: "warning", text: messageText}], 5000);
-                    }
-                }).then(result => {
-                    if (!result) return;
-                    if (result.error_message) {
-                        const message = {type: "error", text: result.error_message};
-                        window.dispatchMessages && window.dispatchMessages([message], 5000);
-                    }
-                    window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
-                }).catch(error => {
-                    const message = { type: "error", text: error };
-                    window.dispatchMessages && window.dispatchMessages([message], 5000);
-                });
-            }
-
-
-            return {
-                reorderProducts: null,
-
-                itemCount: 0,
-                hasItems() {return this.itemCount > 0},
-                isEmpty() {return this.itemCount <= 0},
-                hideIfEmptyClasses() {return { 'hidden': this.isEmpty()}},
-
-                reorderItems: {},
-                isShowAddToCart: false,
-                checkboxId: 'reorder-item-',
-                getProductItemId() {return this.checkboxId + this.product.id},
-                productIsSalable() {
-                    return this.product.is_saleable
+    function initReorderSidebar() {
+        function reorderSidebarFetchHandler(body, postUrl) {
+            const postHeaders = {
+                "headers": {
+                    "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                 },
-                productNotIsSalable() {
-                    return !this.productIsSalable()
-                },
-                productAriaLabel() {
-                    return this.productIsSalable()
-                        ? hyva.str('<?= $escaper->escapeJs(__('Select product "%1" to reorder')) ?>', this.product.name)
-                        : hyva.str('<?= $escaper->escapeJs(__('Product "%1" is not salable')) ?>', this.product.name)
-                },
+                body: body,
+                "method": "POST",
+                "mode": "cors",
+                "credentials": "include"
+            };
 
-                receiveReorderData: function () {
-                    const data = this.$event.detail.data
-                    if (data['last-ordered-items']) {
-                        this.reorderProducts = data['last-ordered-items'];
-                        this.itemCount = this.reorderProducts.items.length;
-                        this.reorderItems = this.reorderProducts.items;
-                        this.isShowAddToCart = this.reorderItems.some(product => product.is_saleable === true);
-                    }
-                },
-                addToCart() {
-                    const postUrl = this.$el.dataset.formActionUrl
-                    let params = '';
-                    const checkboxes = document.getElementsByName('order_items[]');
-                    for (let i=0; i<checkboxes.length; i++) {
-                        if (checkboxes[i].checked) {
-                            params += '&order_items[]=' + checkboxes[i].value;
-                        }
-                    }
-                    params = "form_key="+ hyva.getFormKey() + params;
-                    reorderSidebarFetchHandler(params, postUrl);
+            return fetch(postUrl, postHeaders).then(response => {
+                if (response.redirected) {
+                    <?php // This is the regular path, regardless if the items could be reordered or not ?>
+                    window.location.href = response.url;
+                } else if (response.ok) {
+                    return response.json();
+                } else {
+                    const messageText = "<?= $escaper->escapeJs(__("Cannot add product to cart")) ?>";
+                    window.dispatchMessages && window.dispatchMessages([{type: "warning", text: messageText}], 5000);
                 }
-            }
+            }).then(result => {
+                if (!result) return;
+                if (result.error_message) {
+                    const message = {type: "error", text: result.error_message};
+                    window.dispatchMessages && window.dispatchMessages([message], 5000);
+                }
+                window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
+            }).catch(error => {
+                const message = { type: "error", text: error };
+                window.dispatchMessages && window.dispatchMessages([message], 5000);
+            });
         }
 
-        const initFn = () => Alpine.data('initReorderSidebar', initReorderSidebar);
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+
+        return {
+            reorderProducts: null,
+
+            itemCount: 0,
+            hasItems() {return this.itemCount > 0},
+            isEmpty() {return this.itemCount <= 0},
+            hideIfEmptyClasses() {return { 'hidden': this.isEmpty()}},
+
+            reorderItems: {},
+            isShowAddToCart: false,
+            checkboxId: 'reorder-item-',
+            getProductItemId() {return this.checkboxId + this.product.id},
+            productIsSalable() {
+                return this.product.is_saleable
+            },
+            productNotIsSalable() {
+                return !this.productIsSalable()
+            },
+            productAriaLabel() {
+                return this.productIsSalable()
+                    ? hyva.str('<?= $escaper->escapeJs(__('Select product "%1" to reorder')) ?>', this.product.name)
+                    : hyva.str('<?= $escaper->escapeJs(__('Product "%1" is not salable')) ?>', this.product.name)
+            },
+
+            receiveReorderData: function () {
+                const data = this.$event.detail.data
+                if (data['last-ordered-items']) {
+                    this.reorderProducts = data['last-ordered-items'];
+                    this.itemCount = this.reorderProducts.items.length;
+                    this.reorderItems = this.reorderProducts.items;
+                    this.isShowAddToCart = this.reorderItems.some(product => product.is_saleable === true);
+                }
+            },
+            addToCart() {
+                const postUrl = this.$el.dataset.formActionUrl
+                let params = '';
+                const checkboxes = document.getElementsByName('order_items[]');
+                for (let i=0; i<checkboxes.length; i++) {
+                    if (checkboxes[i].checked) {
+                        params += '&order_items[]=' + checkboxes[i].value;
+                    }
+                }
+                params = "form_key="+ hyva.getFormKey() + params;
+                reorderSidebarFetchHandler(params, postUrl);
+            }
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initReorderSidebar', initReorderSidebar), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div x-data="initReorderSidebar"

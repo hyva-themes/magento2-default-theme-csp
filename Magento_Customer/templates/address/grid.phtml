@@ -110,10 +110,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     }
                 }
             }
-            (() => {
-                const initFn = () => Alpine.data('initAddresses', initAddresses);
-                window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-            })()
+            window.addEventListener('alpine:init', () => Alpine.data('initAddresses', initAddresses), {once: true})
         </script>
         <?php $hyvaCsp->registerInlineScript() ?>
     </div>

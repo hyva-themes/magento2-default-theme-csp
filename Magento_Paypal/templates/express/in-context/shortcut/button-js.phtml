@@ -183,11 +183,6 @@ $isMinicart = ! $isCartPage;
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initPayPalInContextButton', initPayPalInContextButton);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initPayPalInContextButton', initPayPalInContextButton), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

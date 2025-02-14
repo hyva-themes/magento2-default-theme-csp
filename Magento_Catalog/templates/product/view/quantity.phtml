@@ -93,13 +93,7 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                 }
             };
         }
-        (() => {
-            const initFn = () => Alpine.data('initQtyField', initQtyField);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
-
+        window.addEventListener('alpine:init', () => Alpine.data('initQtyField', initQtyField), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
     <div x-data="initQtyField">

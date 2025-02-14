@@ -36,7 +36,7 @@ $grecaptchaInstanceId = "grecaptchaInstance$instanceSuffix";
 <?php /* render_script_tag is never set, it is present to force editors to see the code as JavaScript */ ?>
 <?php if ($block->getData('render_script_tag')): ?>
 <script>
-    <?php endif; ?>
+<?php endif; ?>
     if (!this.hasCaptchaToken) {
         window.googleRecaptchaCallback<?= /** @noEscape */ $instanceSuffix ?> = (token) => {
             this.hasCaptchaToken = token.length > 0;
@@ -58,7 +58,7 @@ $grecaptchaInstanceId = "grecaptchaInstance$instanceSuffix";
         grecaptcha.execute(window.<?= /** @noEscape */ $grecaptchaInstanceId ?>);
     }
 
-    <?php if ($block->getData('render_script_tag')): ?>
+<?php if ($block->getData('render_script_tag')): ?>
 </script>
-<?php $hyvaCsp->registerInlineScript() ?>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

@@ -64,37 +64,35 @@ $wishlistHelper = $this->helper(WishlistHelper::class);
     </div>
 
     <script>
-        (() => {
-            const initFn = () => Alpine.data('initMyWishList', function initMyWishList() {
-                return {
-                    addToCart() {
-                        const productId = this.$el.dataset.itemId,
-                            postParams = JSON.parse(this.$el.dataset.addToCartParams)
+        function initMyWishList() {
+            return {
+                addToCart() {
+                    const productId = this.$el.dataset.itemId,
+                        postParams = JSON.parse(this.$el.dataset.addToCartParams)
 
-                        const qty = this.$refs['product-qty-'+productId] && this.$refs['product-qty-'+productId].value;
+                    const qty = this.$refs['product-qty-'+productId] && this.$refs['product-qty-'+productId].value;
 
-                        postParams.data.qty = qty || postParams.data.qty;
+                    postParams.data.qty = qty || postParams.data.qty;
 
-                        hyva.postForm(postParams);
+                    hyva.postForm(postParams);
 
-                    },
-                    addAllItemsToCart() {
-                        const urlParams = <?= /* @noEscape */ $block->getAddAllToCartParams() ?>;
-                        let separator = urlParams.action.indexOf('?') >= 0 ? '&' : '?';
+                },
+                addAllItemsToCart() {
+                    const urlParams = <?= /* @noEscape */ $block->getAddAllToCartParams() ?>;
+                    let separator = urlParams.action.indexOf('?') >= 0 ? '&' : '?';
 
-                        Array.from(document.querySelectorAll('input[name^=qty]')).map(qty => {
-                            urlParams.action += separator + qty.name + '=' + encodeURIComponent(qty.value);
-                            separator = '&';
-                        });
-                        hyva.postForm(urlParams);
-                    },
-                    removeItem() {
-                        hyva.postForm(JSON.parse(this.$el.dataset.removeItemParams));
-                    }
+                    Array.from(document.querySelectorAll('input[name^=qty]')).map(qty => {
+                        urlParams.action += separator + qty.name + '=' + encodeURIComponent(qty.value);
+                        separator = '&';
+                    });
+                    hyva.postForm(urlParams);
+                },
+                removeItem() {
+                    hyva.postForm(JSON.parse(this.$el.dataset.removeItemParams));
                 }
-            });
-            window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
+            }
+        }
+        window.addEventListener('alpine:init', () => Alpine.data('initMyWishList', initMyWishList), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif ?>

@@ -8,6 +8,7 @@
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Escaper;
 use Magento\Sales\Block\Order\Recent;
@@ -20,6 +21,7 @@ use Magento\Sales\Model\Order;
 /** @var Escaper $escaper */
 /** @var Recent $block */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
@@ -186,11 +188,11 @@ if ($extraActionTitleBlocks = $block->getLayout()->getChildBlocks('order-list-ex
     </div>
 </div>
 <script>
-    (() => {
-        const initFn = () => Alpine.data('recentOrdersTabIndex', () => hyva.createBooleanObject('visible', false, {
+    function recentOrdersTabIndex() {
+        return hyva.createBooleanObject('visible', false, {
             tabIndex() {return this.visible() ? 0 : -1}
-        }));
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+        })
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('recentOrdersTabIndex', recentOrdersTabIndex), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

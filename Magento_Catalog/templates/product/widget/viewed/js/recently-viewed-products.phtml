@@ -342,12 +342,11 @@ $viewModelCurrency = $viewModels->require(Currency::class);
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initRecentlyViewedProductsComponent<?= /** @noEscape */ $uniqueId ?>', initRecentlyViewedProductsComponent<?= /** @noEscape */ $uniqueId ?>);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener(
+        'alpine:init',
+        () => Alpine.data('initRecentlyViewedProductsComponent<?= /** @noEscape */ $uniqueId ?>', initRecentlyViewedProductsComponent<?= /** @noEscape */ $uniqueId ?>),
+        {once: true}
+    )
 </script>
-<?php $hyvaCsp->registerInlineScript() ?>
+    <?php $hyvaCsp->registerInlineScript() ?>
 

@@ -27,13 +27,7 @@ if (! $options) {
             }
         })
     }
-    (() => {
-        const initFn = () => Alpine.data('initWishlistItemOptions', initWishlistItemOptions);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initWishlistItemOptions', initWishlistItemOptions), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript(); ?>
     <div class="items-center justify-start flex tooltip my-2">

@@ -42,12 +42,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         <?php endforeach; ?>
         </div>
     </div>
-<?php if ($block->getIsOpenInNewWindow()): ?>
+    <?php if ($block->getIsOpenInNewWindow()): ?>
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('a.samples-item-link[download]').forEach(link => link.target = '_blank');
     });
 </script>
-<?php $hyvaCsp->registerInlineScript();
-endif;
+        <?php $hyvaCsp->registerInlineScript();
+    endif;
 endif;

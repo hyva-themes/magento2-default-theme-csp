@@ -50,12 +50,7 @@ $compareViewModel = $viewModels->require(ProductCompare::class);
             }
         };
     }
-    (() => {
-        const initFn = () => Alpine.data('initCompareOnProductList', initCompareOnProductList);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initCompareOnProductList', initCompareOnProductList), {once: true});
 </script>
-<?php $hyvaCsp->registerInlineScript() ?>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

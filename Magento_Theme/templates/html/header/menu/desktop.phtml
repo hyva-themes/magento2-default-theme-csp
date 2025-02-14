@@ -147,9 +147,6 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
         }
     }
 
-    (() => {
-        const initFn = () => Alpine.data('initMenuDesktop', initMenuDesktop);
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initMenuDesktop', initMenuDesktop), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

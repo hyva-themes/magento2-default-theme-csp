@@ -125,15 +125,10 @@ function initCompareOnCompareList() {
     };
 }
 
-(() => {
-    const initFn = () => {
-        Alpine.data('initCompareOnCompareList', initCompareOnCompareList);
-        Alpine.data('initPrint', initPrint);
-    };
-    window.Alpine
-        ? initFn()
-        : window.addEventListener('alpine:init', initFn, {once: true})
-})()
+window.addEventListener('alpine:init', () => {
+    Alpine.data('initCompareOnCompareList', initCompareOnCompareList);
+    Alpine.data('initPrint', initPrint);
+}, {once: true});
 
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

@@ -352,13 +352,7 @@ $graphqlQuery = $gqlViewModel->query("slider_products_query", $query ?: "
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initSliderComponent<?= /** @noEscape */ $uniqueId ?>', initSliderComponent<?= /** @noEscape */ $uniqueId ?>);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initSliderComponent<?= /** @noEscape */ $uniqueId ?>', initSliderComponent<?= /** @noEscape */ $uniqueId ?>), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <section class="my-12 text-gray-700 body-font"

@@ -25,12 +25,7 @@ use Hyva\Theme\ViewModel\HyvaCsp;
             }
         };
     }
-    (() => {
-        const initFn = () => Alpine.data('initGrandTotalSegment', initGrandTotalSegment);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initGrandTotalSegment', initGrandTotalSegment), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div x-data="initGrandTotalSegment">

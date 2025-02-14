@@ -673,12 +673,6 @@ $productName = $block->getProduct()->getName();
             }
         }
      }
-    (() => {
-        const initFn = () => Alpine.data('initGallery', initGallery);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initGallery', initGallery), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

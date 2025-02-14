@@ -71,13 +71,7 @@ $wishlistViewModel = $viewModels->require(Wishlist::class);
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initWishlist', initWishlist);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initWishlist', initWishlist), {once: true})
 </script>
-<?php $hyvaCsp->registerInlineScript() ?>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

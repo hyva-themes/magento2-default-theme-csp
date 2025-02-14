@@ -141,13 +141,7 @@ $htmlInputTypes = [
                     }
                 }
             }
-            (() => {
-                const initFn = () => Alpine.data('initValidateDate', initValidateDate);
-                window.Alpine
-                    ? initFn()
-                    : window.addEventListener('alpine:init', initFn, {once: true})
-            })()
-
+            window.addEventListener('alpine:init', () => Alpine.data('initValidateDate', initValidateDate), {once: true})
         </script>
         <?php $hyvaCsp->registerInlineScript() ?>
     </div>

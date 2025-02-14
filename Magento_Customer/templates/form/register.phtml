@@ -446,193 +446,188 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
     </form>
 
     <script>
-        (() => {
-            function initCustomerCreateForm() {
-                return Object.assign(
-                    hyva.formValidation(this.$el),
-                    {
-                        errors: 0,
-                        hasCaptchaToken: 0,
-                        showPassword: false,
-                        showPasswordConfirm: false,
-                        submitForm() {
-                            this.validate()
-                                .then(() => {
-                                    // Do not rename $form, the variable is expected to be declared in the recaptcha output
-                                    const $form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
-                                    <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_CREATE) : '' ?>
+        function initCustomerCreateForm() {
+            return Object.assign(
+                hyva.formValidation(this.$el),
+                {
+                    errors: 0,
+                    hasCaptchaToken: 0,
+                    showPassword: false,
+                    showPasswordConfirm: false,
+                    submitForm() {
+                        this.validate()
+                            .then(() => {
+                                // Do not rename $form, the variable is expected to be declared in the recaptcha output
+                                const $form = document.querySelector('#<?= $escaper->escapeJs($formId) ?>');
+                                <?= $recaptcha ? $recaptcha->getValidationJsHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_CREATE) : '' ?>
 
-                                    if (this.errors === 0) {
-                                        $form.submit();
-                                    }
-                                })
-                                .catch((invalid) => {
-                                    if (invalid.length > 0) {
-                                        invalid[0].focus();
-                                    }
-                                });
-                        },
-                        <?php if ($block->getShowAddressFields()): ?>
-                        directoryData: {},
-                        availableRegions: {},
-                        <?php /* $block->getRegion() returns an ID or a region name. The selectedRegion is used only for selects, so it must be an int. String names result in 0 when cast to int. */ ?>
-                        selectedRegion: <?= (int) $block->getRegion() ?>,
-                        isZipRequired: true,
-                        isRegionRequired: true,
-                        showOptionalRegions: <?= $showOptionalRegions ? 'true' : 'false' ?>,
-                        onPrivateContentLoaded() {
-                            const data = this.$event.detail.data
-                            this.directoryData = data['directory-data'] || {};
-
-                            <?php if ($block->getCountryId()): ?>
-                            this.setCountry(this.$refs['country_id'], '<?= $escaper->escapeJs($block->getCountryId()) ?>');
-                            <?php endif; ?>
-
-                        },
-                        setRegionInputValue(regionName) {
-                            this.$nextTick(() => {
-                                const regionInputElement = this.$refs['region'];
-                                if (regionInputElement) {
-                                    regionInputElement.value = regionName;
+                                if (this.errors === 0) {
+                                    $form.submit();
                                 }
                             })
-                        },
-                        setCountry(countrySelectElement, initialRegion) {
-                            const selectedOption = countrySelectElement.options[countrySelectElement.selectedIndex];
-                            const countryCode = countrySelectElement.value;
-                            const countryData = this.directoryData[countryCode] || false;
-
-                            if (!countryData) {
-                                this.setRegionInputValue('');
-                                return;
-                            }
-
-                            this.isZipRequired = selectedOption.dataset.isZipRequired === '1';
-                            this.isRegionRequired = selectedOption.dataset.isRegionRequired === '1';
-
-                            this.availableRegions = countryData.regions || {};
-
-                            const initialRegionId = Object.keys(this.availableRegions).filter(regionId => this.availableRegions[regionId].name === initialRegion)[0];
-                            this.selectedRegion = initialRegionId || '0';
-                            this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
-
-                        },
-                        changeCountry(initialRegion) {
-                            const countrySelectElement = this.$event.target
-                            this.setCountry(countrySelectElement, initialRegion);
-
-                            this.validateCountryDependentFields();
-                        },
-                        validateCountryDependentFields() {
-                            this.$nextTick(() => {
-                                <?php /* Reinitialize validation rules for fields that depend on the country */ ?>
-                                this.fields['postcode'] && this.removeMessages(this.fields['postcode'])
-                                this.fields['region'] && this.removeMessages(this.fields['region'])
-                                delete this.fields['postcode'];
-                                delete this.fields['region'];
-                                <?php /* Initialize country_id, too, because the postcode validation depends on it */ ?>
-                                this.setupField(this.$refs['country_id']);
-                                this.setupField(this.$refs['postcode']);
-                                this.setupField(this.$refs['region']);
-
-                                this.fields['postcode'] && this.validateField(this.fields['postcode']);
-                                this.fields['region'] && this.validateField(this.fields['region']);
-                            })
-                        },
-                        hasAvailableRegions() {
-                            return Object.keys(this.availableRegions).length > 0;
-                        },
-                        hasAvailableRegionsAndIsRegionRequiredOrshowOptionalRegionsOuter() {
-                            return (this.hasAvailableRegions() && this.isRegionRequired) || this.showOptionalRegions
-                        },
-                        hasAvailableRegionsAndIsRegionRequiredOrshowOptionalRegions() {
-                            return this.hasAvailableRegions() && (this.isRegionRequired || this.showOptionalRegions)
-                        },
-                        hasAvailableRegionsAndIsRegionRequiredOrshowOptionalRegionsInputType() {
-                            return this.hasAvailableRegionsAndIsRegionRequiredOrshowOptionalRegions() ? 'hidden' : 'text'
-                        },
-                        isRegionRequiredClasses() {
-                            return {
-                                'required': this.isRegionRequired
-                            }
-                        },
-                        changeRegionValue() {
-                            this.selectedRegion = this.$el.options[this.$el.selectedIndex].value
-                            this.$refs.region.value = this.availableRegions[this.selectedRegion].name
-                        },
-                        getRegionIdsFromAvailableRegions() {
-                            return Object.keys(this.availableRegions)
-                        },
-                        getRegionNameForActiveRegion() {
-                            return this.availableRegions[this.regionId] && this.availableRegions[this.regionId].name
-                        },
-                        isRegionIdSelected() {
-                            return this.regionId === this.selectedRegion
-                        },
-                        isZipRequiredClasses() {
-                            return {
-                                'required': this.isZipRequired
-                            }
-                        }
-                    <?php endif; ?>
-                    }
-                )
-            }
-
-            /**
-             * Add validation rules
-             */
-            window.addEventListener('DOMContentLoaded', () => {
-
-                hyva.formValidation.addRule('telephone', (value, options) => {
-                    const phoneNumber = value.trim().replace(' ', '');
-                    if (phoneNumber && phoneNumber.length < (options.minlength || 3)) {
-                        return '<?= $escaper->escapeJs(__('The telephone number is too short.')) ?>';
-                    }
-
-                    return true;
-                });
-
-                const postCodeSpecs = <?= /* @noEscape */ $block->getPostCodeConfig()->getSerializedPostCodes() ?>;
-
-                hyva.formValidation.addRule('postcode', (postCode, options, field, context) => {
-                    context.removeMessages(field, 'postcode-warning')
-                    const countryId = (context.fields['country_id'] && context.fields['country_id'].element.value),
-                        validatedPostCodeExamples = [],
-                        countryPostCodeSpecs = countryId && postCodeSpecs ? postCodeSpecs[countryId] : false;
-
-                    if (! postCode || ! countryPostCodeSpecs) return true;
-
-                    for (const postCodeSpec of Object.values(countryPostCodeSpecs)) {
-                        if (new RegExp(postCodeSpec.pattern).test(postCode)) return true;
-                        validatedPostCodeExamples.push(postCodeSpec.example);
-                    }
-                    if (validatedPostCodeExamples) {
-                        context.addMessages(field, 'postcode-warning', [
-                            '<?= $escaper->escapeJs(__('Provided Zip/Postal Code seems to be invalid.')) ?>',
-                            '<?= $escaper->escapeJs(__(' Example: ')) ?>' + validatedPostCodeExamples.join('; ') + '. ',
-                            '<?= $escaper->escapeJs(__('If you believe it is the right one you can ignore this notice.')) ?>'
-                        ]);
-                    }
-
-                    return true;
-                });
-            })
-
-            const initFn = () => {
-                Alpine.data('textOrPassword', () => hyva.createBooleanObject('visible', false, {
-                    textOrPassword() {
-                        return this.visible() ? 'text' : 'password'
+                            .catch((invalid) => {
+                                if (invalid.length > 0) {
+                                    invalid[0].focus();
+                                }
+                            });
                     },
-                    ariaLabel() {
-                        return this.visible() ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'
-                    }
-                }));
-                Alpine.data('initCustomerCreateForm', initCustomerCreateForm);
-            }
-            window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
+                    <?php if ($block->getShowAddressFields()): ?>
+                    directoryData: {},
+                    availableRegions: {},
+                        <?php /* $block->getRegion() returns an ID or a region name. The selectedRegion is used only for selects, so it must be an int. String names result in 0 when cast to int. */ ?>
+                    selectedRegion: <?= (int) $block->getRegion() ?>,
+                    isZipRequired: true,
+                    isRegionRequired: true,
+                    showOptionalRegions: <?= $showOptionalRegions ? 'true' : 'false' ?>,
+                    onPrivateContentLoaded() {
+                        const data = this.$event.detail.data
+                        this.directoryData = data['directory-data'] || {};
 
+                        <?php if ($block->getCountryId()): ?>
+                        this.setCountry(this.$refs['country_id'], '<?= $escaper->escapeJs($block->getCountryId()) ?>');
+                        <?php endif; ?>
+
+                    },
+                    setRegionInputValue(regionName) {
+                        this.$nextTick(() => {
+                            const regionInputElement = this.$refs['region'];
+                            if (regionInputElement) {
+                                regionInputElement.value = regionName;
+                            }
+                        })
+                    },
+                    setCountry(countrySelectElement, initialRegion) {
+                        const selectedOption = countrySelectElement.options[countrySelectElement.selectedIndex];
+                        const countryCode = countrySelectElement.value;
+                        const countryData = this.directoryData[countryCode] || false;
+
+                        if (!countryData) {
+                            this.setRegionInputValue('');
+                            return;
+                        }
+
+                        this.isZipRequired = selectedOption.dataset.isZipRequired === '1';
+                        this.isRegionRequired = selectedOption.dataset.isRegionRequired === '1';
+
+                        this.availableRegions = countryData.regions || {};
+
+                        const initialRegionId = Object.keys(this.availableRegions).filter(regionId => this.availableRegions[regionId].name === initialRegion)[0];
+                        this.selectedRegion = initialRegionId || '0';
+                        this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
+
+                    },
+                    changeCountry(initialRegion) {
+                        const countrySelectElement = this.$event.target
+                        this.setCountry(countrySelectElement, initialRegion);
+
+                        this.validateCountryDependentFields();
+                    },
+                    validateCountryDependentFields() {
+                        this.$nextTick(() => {
+                            <?php /* Reinitialize validation rules for fields that depend on the country */ ?>
+                            this.fields['postcode'] && this.removeMessages(this.fields['postcode'])
+                            this.fields['region'] && this.removeMessages(this.fields['region'])
+                            delete this.fields['postcode'];
+                            delete this.fields['region'];
+                            <?php /* Initialize country_id, too, because the postcode validation depends on it */ ?>
+                            this.setupField(this.$refs['country_id']);
+                            this.setupField(this.$refs['postcode']);
+                            this.setupField(this.$refs['region']);
+
+                            this.fields['postcode'] && this.validateField(this.fields['postcode']);
+                            this.fields['region'] && this.validateField(this.fields['region']);
+                        })
+                    },
+                    hasAvailableRegions() {
+                        return Object.keys(this.availableRegions).length > 0;
+                    },
+                    hasAvailableRegionsAndIsRegionRequiredOrshowOptionalRegionsOuter() {
+                        return (this.hasAvailableRegions() && this.isRegionRequired) || this.showOptionalRegions
+                    },
+                    hasAvailableRegionsAndIsRegionRequiredOrshowOptionalRegions() {
+                        return this.hasAvailableRegions() && (this.isRegionRequired || this.showOptionalRegions)
+                    },
+                    hasAvailableRegionsAndIsRegionRequiredOrshowOptionalRegionsInputType() {
+                        return this.hasAvailableRegionsAndIsRegionRequiredOrshowOptionalRegions() ? 'hidden' : 'text'
+                    },
+                    isRegionRequiredClasses() {
+                        return {
+                            'required': this.isRegionRequired
+                        }
+                    },
+                    changeRegionValue() {
+                        this.selectedRegion = this.$el.options[this.$el.selectedIndex].value
+                        this.$refs.region.value = this.availableRegions[this.selectedRegion].name
+                    },
+                    getRegionIdsFromAvailableRegions() {
+                        return Object.keys(this.availableRegions)
+                    },
+                    getRegionNameForActiveRegion() {
+                        return this.availableRegions[this.regionId] && this.availableRegions[this.regionId].name
+                    },
+                    isRegionIdSelected() {
+                        return this.regionId === this.selectedRegion
+                    },
+                    isZipRequiredClasses() {
+                        return {
+                            'required': this.isZipRequired
+                        }
+                    }
+                    <?php endif; ?>
+                }
+            )
+        }
+        /**
+         * Add validation rules
+         */
+        window.addEventListener('DOMContentLoaded', () => {
+
+            hyva.formValidation.addRule('telephone', (value, options) => {
+                const phoneNumber = value.trim().replace(' ', '');
+                if (phoneNumber && phoneNumber.length < (options.minlength || 3)) {
+                    return '<?= $escaper->escapeJs(__('The telephone number is too short.')) ?>';
+                }
+
+                return true;
+            });
+
+            const postCodeSpecs = <?= /* @noEscape */ $block->getPostCodeConfig()->getSerializedPostCodes() ?>;
+
+            hyva.formValidation.addRule('postcode', (postCode, options, field, context) => {
+                context.removeMessages(field, 'postcode-warning')
+                const countryId = (context.fields['country_id'] && context.fields['country_id'].element.value),
+                    validatedPostCodeExamples = [],
+                    countryPostCodeSpecs = countryId && postCodeSpecs ? postCodeSpecs[countryId] : false;
+
+                if (! postCode || ! countryPostCodeSpecs) return true;
+
+                for (const postCodeSpec of Object.values(countryPostCodeSpecs)) {
+                    if (new RegExp(postCodeSpec.pattern).test(postCode)) return true;
+                    validatedPostCodeExamples.push(postCodeSpec.example);
+                }
+                if (validatedPostCodeExamples) {
+                    context.addMessages(field, 'postcode-warning', [
+                        '<?= $escaper->escapeJs(__('Provided Zip/Postal Code seems to be invalid.')) ?>',
+                        '<?= $escaper->escapeJs(__(' Example: ')) ?>' + validatedPostCodeExamples.join('; ') + '. ',
+                        '<?= $escaper->escapeJs(__('If you believe it is the right one you can ignore this notice.')) ?>'
+                    ]);
+                }
+
+                return true;
+            });
+        });
+
+        window.addEventListener('alpine:init', () => {
+            Alpine.data('textOrPassword', () => hyva.createBooleanObject('visible', false, {
+                textOrPassword() {
+                    return this.visible() ? 'text' : 'password'
+                },
+                ariaLabel() {
+                    return this.visible() ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'
+                }
+            }));
+            Alpine.data('initCustomerCreateForm', initCustomerCreateForm);
+        }, {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 </div>

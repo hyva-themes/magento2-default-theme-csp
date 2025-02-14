@@ -73,15 +73,9 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initCookieBanner', initCookieBanner);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initCookieBanner', initCookieBanner), {once: true})
 </script>
-<?php $hyvaCsp->registerInlineScript() ?>
+    <?php $hyvaCsp->registerInlineScript() ?>
 <section id="notice-cookie-block"
          aria-label="<?= $escaper->escapeHtmlAttr(__('We use cookies to make your experience better.')) ?>"
          x-data="initCookieBanner"

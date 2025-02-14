@@ -115,13 +115,7 @@ $swatchData = $block->getSwatchData();
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>', initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>', initLayeredSwatch_<?= $escaper->escapeJs($swatchData['attribute_code']) ?>), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div class="swatch-attribute swatch-layered <?= $escaper->escapeHtmlAttr($swatchData['attribute_code']) ?>"

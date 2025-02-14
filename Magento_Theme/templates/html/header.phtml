@@ -113,13 +113,10 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
         }
     }
 
-    (() => {
-        const initFn = () => {
-            Alpine.data('initHeader', initHeader);
-            Alpine.data('initCompareHeader', initCompareHeader);
-        }
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initHeader', initHeader);
+        Alpine.data('initCompareHeader', initCompareHeader);
+    }, {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div id="header"

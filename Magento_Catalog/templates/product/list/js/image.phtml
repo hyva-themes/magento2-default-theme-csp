@@ -22,11 +22,6 @@ use Magento\Framework\Escaper;
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initProductItemImage', initProductItemImage);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initProductItemImage', initProductItemImage), {once: true});
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

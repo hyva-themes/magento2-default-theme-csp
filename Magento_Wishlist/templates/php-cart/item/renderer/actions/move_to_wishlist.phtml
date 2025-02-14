@@ -8,12 +8,14 @@
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 
 /** @var MoveToWishlist $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var HeroiconsSolid $heroicons */
 $heroicons = $viewModels->require(HeroiconsSolid::class);
@@ -31,14 +33,14 @@ $heroicons = $viewModels->require(HeroiconsSolid::class);
         <?= $heroicons->heartHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
     </button>
     <script>
-        (() => {
-            const initFn = () => Alpine.data('moveToWishlist', () => ({
+        function moveToWishlist() {
+            return {
                 click() {
                     hyva.postForm(JSON.parse(this.$el.dataset.postForm))
                 }
-            }));
-            window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
+            }
+        }
+        window.addEventListener('alpine:init', () => Alpine.data('moveToWishlist', moveToWishlist), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif ?>

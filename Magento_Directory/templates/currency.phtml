@@ -91,12 +91,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
                 }
             });
         }
-        (() => {
-            const initFn = () => Alpine.data('initCurrencySwitcher', initCurrencySwitcher);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
+        window.addEventListener('alpine:init', () => Alpine.data('initCurrencySwitcher', initCurrencySwitcher), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

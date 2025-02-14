@@ -60,12 +60,7 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                 }
             );
         }
-        (() => {
-            const initFn = () => Alpine.data('initConfigurableSwatchOptions_<?= (int) $productId ?>', initConfigurableSwatchOptions_<?= (int) $productId ?>);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
+        window.addEventListener('alpine:init', () => Alpine.data('initConfigurableSwatchOptions_<?= (int) $productId ?>', initConfigurableSwatchOptions_<?= (int) $productId ?>), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
     <div x-data="initConfigurableSwatchOptions_<?= (int) $productId ?>"

@@ -134,13 +134,7 @@ $uniqueId = '_' . uniqid();
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initWishlist<?= /** @noEscape */ $uniqueId ?>', initWishlist<?= /** @noEscape */ $uniqueId ?>);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initWishlist<?= /** @noEscape */ $uniqueId ?>', initWishlist<?= /** @noEscape */ $uniqueId ?>), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <button x-data="initWishlist<?= /** @noEscape */ $uniqueId ?>"

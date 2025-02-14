@@ -198,12 +198,6 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initPayPalInContext', initPayPalInContext);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initPayPalInContext', initPayPalInContext), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

@@ -265,12 +265,7 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initPrice<?= (int)$product->getId() ?>', initPrice<?= (int)$product->getId() ?>);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initPrice<?= (int)$product->getId() ?>', initPrice<?= (int)$product->getId() ?>), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div x-data="initPrice<?= (int)$product->getId() ?>"

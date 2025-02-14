@@ -88,13 +88,7 @@ $product = $block->getProduct();
                     }
                 }
             }
-            (() => {
-                const initFn = () => Alpine.data('initBundleSummary', initBundleSummary);
-                window.Alpine
-                    ? initFn()
-                    : window.addEventListener('alpine:init', initFn, {once: true})
-            })()
-
+            window.addEventListener('alpine:init', () => Alpine.data('initBundleSummary', initBundleSummary), {once: true});
         </script>
         <?php $hyvaCsp->registerInlineScript() ?>
     </div>

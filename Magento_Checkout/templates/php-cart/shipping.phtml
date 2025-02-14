@@ -394,13 +394,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initShippingEstimation', initShippingEstimation);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initShippingEstimation', initShippingEstimation), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div id="block-shipping"

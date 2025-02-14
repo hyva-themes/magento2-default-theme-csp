@@ -31,22 +31,20 @@ if (!$shoppingAssistanceViewModel->isLoginAsCustomerEnabled()) {
 }
 ?>
 <script>
-    (() => {
-        const initFn = () => Alpine.data('initAllowShippingAssistance', () => hyva.createBooleanObject('visible', false, {
+    function initAllowShippingAssistance() {
+        return hyva.createBooleanObject('visible', false, {
             isAllowed: <?= $shoppingAssistanceViewModel->isAssistanceAllowed() ? 'true' : 'false' ?>,
-
             onChange() {
-                const value = this.$event.target.checked
-                /**
-                 * assistance_allowed accepts 2 for "allowed" and 1 for "not allowed"
-                 * if assistance_allowed_checkbox is set to false, we cast it to 0 and add 1 === "1"
-                 * if assistance_allowed_checkbox is set to true, we cast it to 1 and add 1 === "2"
-                 */
-                this.$refs['assistance-input'].value = Number(value) + 1;
+                <?php
+                // assistance_allowed accepts 2 for "allowed" and 1 for "not allowed"
+                // if assistance_allowed_checkbox is set to false, we cast it to 0 and add 1 === "1"
+                // if assistance_allowed_checkbox is set to true, we cast it to 1 and add 1 === "2"
+                ?>
+                this.$refs['assistance-input'].value = Number(this.$event.target.checked) + 1;
             }
-        }));
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+        })
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initAllowShippingAssistance', initAllowShippingAssistance), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div class="field choice"

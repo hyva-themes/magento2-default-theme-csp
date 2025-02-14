@@ -83,13 +83,7 @@ $totalsSort = $storeConfigViewModel->getStoreConfig('sales/totals_sort');
             },
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initCartTotals', initCartTotals);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initCartTotals', initCartTotals), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div id="cart-totals"

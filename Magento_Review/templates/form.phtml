@@ -374,15 +374,6 @@ mutation createProductReviewMutation(
                         }
                     };
                 }
-                (() => {
-                    const initFn = () => {
-                        Alpine.data('initReviewForm', initReviewForm)
-                        Alpine.data('initReview', initReview)
-                    };
-                    window.Alpine
-                        ? initFn()
-                        : window.addEventListener('alpine:init', initFn, {once: true})
-                })()
 
                 function initReviewFormRatingOptions() {
                     return  {
@@ -397,15 +388,14 @@ mutation createProductReviewMutation(
                         }
                     }
                 }
-                (() => {
-                    const initFn = () => Alpine.data('initReviewFormRatingOptions', initReviewFormRatingOptions);
-                    window.Alpine
-                        ? initFn()
-                        : window.addEventListener('alpine:init', initFn, {once: true})
-                })()
 
+                window.addEventListener('alpine:init', () => {
+                    Alpine.data('initReviewForm', initReviewForm);
+                    Alpine.data('initReview', initReview);
+                    Alpine.data('initReviewFormRatingOptions', initReviewFormRatingOptions);
+                }, {once: true})
             </script>
-        <?php $hyvaCsp->registerInlineScript() ?>
+            <?php $hyvaCsp->registerInlineScript() ?>
         <?php else: ?>
             <div
                 id="review-form"

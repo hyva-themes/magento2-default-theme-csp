@@ -285,9 +285,6 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
         }
     }
 
-    (() => {
-        const initFn = () => Alpine.data('initMenuMobile', initMenuMobile);
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initMenuMobile', initMenuMobile), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

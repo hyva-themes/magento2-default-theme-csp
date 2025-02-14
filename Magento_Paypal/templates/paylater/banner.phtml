@@ -113,13 +113,7 @@ $widgetConfigJson = json_encode($widgetData['components']['payLater']['config'])
                 }
             }
         }
-        (() => {
-            const initFn = () => Alpine.data('paypalPaylater', paypalPaylater);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
-
+        window.addEventListener('alpine:init', () => Alpine.data('paypalPaylater', paypalPaylater), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

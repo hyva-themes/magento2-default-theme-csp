@@ -99,12 +99,7 @@ $additionalOptions = ['page' => 'p'];
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initToolbar<?= /** @noEscape */  $uniqueId ?>', initToolbar<?= /** @noEscape */  $uniqueId ?>);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initToolbar<?= /** @noEscape */  $uniqueId ?>', initToolbar<?= /** @noEscape */  $uniqueId ?>), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <?php if ($block->getCollection()->getSize()): ?>

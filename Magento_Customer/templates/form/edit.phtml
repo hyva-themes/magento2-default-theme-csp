@@ -330,12 +330,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
             }
         )
     }
-    (() => {
-        const initFn = () => Alpine.data('initForm', initForm);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initForm', initForm), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 

@@ -84,12 +84,7 @@ $currentStore = $storeSwitcherViewModel->getStore();
         function initStoreSwitcher() {
             return hyva.createBooleanObject('open')
         }
-        (() => {
-            const initFn = () => Alpine.data('initStoreSwitcher', initStoreSwitcher);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
+        window.addEventListener('alpine:init', () => Alpine.data('initStoreSwitcher', initStoreSwitcher), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 <?php endif; ?>

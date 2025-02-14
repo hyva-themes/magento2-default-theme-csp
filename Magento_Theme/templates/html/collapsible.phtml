@@ -68,25 +68,22 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     </div>
 </div>
 <script>
-    (() => {
-        const initFn = () => Alpine.data(
-            'initAccountNavigation',
-            () => hyva.createBooleanObject('visible', false,
-                hyva.createBooleanObject('isMobile', false, {
-                    checkIsMobileResolution() {
-                        const mobileElement = this.$refs.AccountNavigationMobileToggleIcon;
-                        (
-                            mobileElement
-                                ? getComputedStyle(mobileElement).display !== 'none'
-                                : window.matchMedia('(max-width: 767px)').matches // Fallback to `md` breakpoint
-                        ) && this.setIsMobileTrue()
-                    },
-                    rotateIfVisible() {return {'rotate-180': this.visible()}},
-                    hiddenIfOpen() {return {'hidden': this.visible()}}
-                })
-            )
-        );
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    function initAccountNavigation() {
+        return hyva.createBooleanObject('visible', false,
+            hyva.createBooleanObject('isMobile', false, {
+                checkIsMobileResolution() {
+                    const mobileElement = this.$refs.AccountNavigationMobileToggleIcon;
+                    (
+                        mobileElement
+                            ? getComputedStyle(mobileElement).display !== 'none'
+                            : window.matchMedia('(max-width: 767px)').matches // Fallback to `md` breakpoint
+                    ) && this.setIsMobileTrue()
+                },
+                rotateIfVisible() {return {'rotate-180': this.visible()}},
+                hiddenIfOpen() {return {'hidden': this.visible()}}
+            })
+        )
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initAccountNavigation', initAccountNavigation), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

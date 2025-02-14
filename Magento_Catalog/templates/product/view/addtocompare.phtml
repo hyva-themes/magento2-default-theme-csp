@@ -69,13 +69,7 @@ if (!$product->getId() || !$compareViewModel->showOnProductPage()) {
             }
         };
     }
-    (() => {
-        const initFn = () => Alpine.data('initCompareOnProductView', initCompareOnProductView);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initCompareOnProductView', initCompareOnProductView), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <button x-data="initCompareOnProductView"

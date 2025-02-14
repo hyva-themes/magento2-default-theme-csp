@@ -43,11 +43,6 @@ use Magento\Framework\View\Element\Template;
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initPriceBox', initPriceBox);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initPriceBox', initPriceBox), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

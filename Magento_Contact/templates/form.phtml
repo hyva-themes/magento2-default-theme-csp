@@ -127,13 +127,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 }
             }
         }
-        (() => {
-            const initFn = () => Alpine.data('initContactForm', initContactForm);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
-
+        window.addEventListener('alpine:init', () => Alpine.data('initContactForm', initContactForm), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
     <div class="card lg:w-1/2 md:w-1/3">

@@ -8,11 +8,13 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Escaper $escaper */
 /** @var Template $block */
+/** @var HyvaCsp $hyvaCsp */
 
 $label = $block->getData('label') ?? __('My Wish List');
 $urlPath = $block->getData('path') ?? 'wishlist';
@@ -34,8 +36,8 @@ $urlPath = $block->getData('path') ?? 'wishlist';
 
 <script>
     "use strict";
-    (() => {
-        const initFn = () => Alpine.data('wishlistItemCount', () => ({
+    function wishlistItemCount() {
+        return {
             itemCount: 0,
             updateItemCount() {
                 this.itemCount = parseInt(this.$event.detail.data.wishlist.counter)
@@ -43,8 +45,9 @@ $urlPath = $block->getData('path') ?? 'wishlist';
             itemCountText() {
                 return `(${this.itemCount})`
             }
-        }));
-        window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+        }
+    }
+
+    window.addEventListener('alpine:init', () => Alpine.data('wishlistItemCount', wishlistItemCount), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

@@ -29,13 +29,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initSharedWishlist', initSharedWishlist);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
-
+    window.addEventListener('alpine:init', () => Alpine.data('initSharedWishlist', initSharedWishlist), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript(); ?>
 <div class="container">

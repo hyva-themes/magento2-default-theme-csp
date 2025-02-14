@@ -46,12 +46,7 @@ use Hyva\Theme\ViewModel\HyvaCsp;
             }
         };
     }
-    (() => {
-        const initFn = () => Alpine.data('initTaxSegment', initTaxSegment);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initTaxSegment', initTaxSegment), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div x-data="initTaxSegment">

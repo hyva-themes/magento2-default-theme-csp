@@ -250,13 +250,7 @@ $options = $block->decorateArray($block->getOptions());
                 }
             }
         }
-        (() => {
-            const initFn = () => Alpine.data('initOptions', initOptions);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
-
+        window.addEventListener('alpine:init', () => Alpine.data('initOptions', initOptions), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
     <h2 class="text-gray-900 text-xl title-font font-medium mb-4">

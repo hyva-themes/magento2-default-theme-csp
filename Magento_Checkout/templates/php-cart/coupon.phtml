@@ -60,12 +60,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             }
         }
     }
-    (() => {
-        const initFn = () => Alpine.data('initCouponForm', initCouponForm);
-        window.Alpine
-            ? initFn()
-            : window.addEventListener('alpine:init', initFn, {once: true})
-    })()
+    window.addEventListener('alpine:init', () => Alpine.data('initCouponForm', initCouponForm), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <div class="coupon-form pt-6"

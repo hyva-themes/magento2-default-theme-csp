@@ -27,12 +27,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                 <?= /* @noEscape */ $block->getJsonConfig() ?>
             );
         }
-        (() => {
-            const initFn = () => Alpine.data('initConfigurableDropdownOptions_<?= (int) $productId ?>', initConfigurableDropdownOptions_<?= (int) $productId ?>);
-            window.Alpine
-                ? initFn()
-                : window.addEventListener('alpine:init', initFn, {once: true})
-        })()
+        window.addEventListener('alpine:init', () => Alpine.data('initConfigurableDropdownOptions_<?= (int) $productId ?>', initConfigurableDropdownOptions_<?= (int) $productId ?>), {once: true})
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
 

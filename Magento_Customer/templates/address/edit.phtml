@@ -411,10 +411,7 @@ function initCustomerAddressEdit() {
     )
 }
 
-(() => {
-    const initFn = () => Alpine.data('initCustomerAddressEdit', initCustomerAddressEdit);
-    window.Alpine ? initFn() : window.addEventListener('alpine:init', initFn, {once: true})
-})()
+window.addEventListener('alpine:init', () => Alpine.data('initCustomerAddressEdit', initCustomerAddressEdit), {once: true})
 
 window.addEventListener('DOMContentLoaded', () => {
 

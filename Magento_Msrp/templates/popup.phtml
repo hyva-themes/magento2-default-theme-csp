@@ -136,15 +136,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     }
                 };
             }
-            (() => {
-                const initFn = () => {
-                    Alpine.data('initMsrpPopover', initMsrpPopover)
-                    Alpine.data('initMsrpPrice', initMsrpPrice)
-                };
-                window.Alpine
-                    ? initFn()
-                    : window.addEventListener('alpine:init', initFn, {once: true})
-            })()
+            window.addEventListener('alpine:init', () => {
+                Alpine.data('initMsrpPopover', initMsrpPopover);
+                Alpine.data('initMsrpPrice', initMsrpPrice);
+            }, {once: true})
         </script>
         <?php $hyvaCsp->registerInlineScript() ?>
     </div>
