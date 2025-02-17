@@ -5,29 +5,7 @@
  * This product is licensed per Magento install
  * See https://hyva.io/license
  */
-
-use Hyva\Theme\ViewModel\HyvaCsp;
-
-/** @var HyvaCsp $hyvaCsp */
-
-/**
- * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
- */
 ?>
-<script>
-    function initFixedProductTaxTotalSegment() {
-        return {
-            isFptSegment() {
-                return this.segment.code === 'weee_tax';
-            },
-            formatFptTotal() {
-                return hyva.formatPrice(this.segment.value);
-            }
-        };
-    }
-    window.addEventListener('alpine:init', () => Alpine.data('initFixedProductTaxTotalSegment', initFixedProductTaxTotalSegment), {once: true})
-</script>
-<?php $hyvaCsp->registerInlineScript() ?>
 <div x-data="initFixedProductTaxTotalSegment">
 <template x-if="isFptSegment">
     <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">

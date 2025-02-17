@@ -1,0 +1,51 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
+ */
+?>
+<script>
+    function initTaxSegment() {
+        return {
+            taxSummaryIsOpen: false,
+            isTaxSegmentVisible() {
+                return this.segment.code === 'tax' && (this.segment.value > 0 || window.checkoutConfig.isZeroTaxDisplayed);
+            },
+            isTaxSummaryVisible() {
+                return this.segment.value > 0 && window.checkoutConfig.isFullTaxSummaryDisplayed;
+            },
+            isTaxSummaryHidden() {
+                return ! this.isTaxSegmentVisible()
+            },
+            toggle() {
+                this.taxSummaryIsOpen = ! this.taxSummaryIsOpen;
+            },
+            summaryCssClasses() {
+                return {
+                    'rotate-180': this.taxSummaryIsOpen
+                };
+            },
+            formatTaxRateLabel() {
+                return `${this.taxRate.title} (${this.taxRate.percent}%)`;
+            },
+            formatTaxTotal() {
+                return hyva.formatPrice(this.segment.value);
+            },
+            formatTaxDetailAmount() {
+                return hyva.formatPrice(this.taxItem.amount);
+            }
+        };
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initTaxSegment', initTaxSegment), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

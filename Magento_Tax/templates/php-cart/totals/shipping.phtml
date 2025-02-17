@@ -5,41 +5,7 @@
  * This product is licensed per Magento install
  * See https://hyva.io/license
  */
-
-use Hyva\Theme\ViewModel\HyvaCsp;
-
-/** @var HyvaCsp $hyvaCsp */
-
-/**
- * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
- */
 ?>
-<script>
-    function initShippingTotalSegment() {
-        return {
-            isShippingSegmentAndDisplayBoth() {
-                return this.segment.code === 'shipping' && this.quoteData.is_virtual === 0 && !!this.shippingMethod && 'both' === window.checkoutConfig.reviewShippingDisplayMode;
-            },
-            isShippingSegmentAndDisplayExcl() {
-                return this.segment.code === 'shipping' && this.quoteData.is_virtual === 0 && !!this.shippingMethod && 'excluding' === window.checkoutConfig.reviewShippingDisplayMode;
-            },
-            isShippingSegmentAndDisplayIncl() {
-                return this.segment.code === 'shipping' && this.quoteData.is_virtual === 0 && !!this.shippingMethod && 'including' === window.checkoutConfig.reviewShippingDisplayMode;
-            },
-            formatShippingTotalValue() {
-                return hyva.formatPrice(this.segment.value);
-            },
-            formatShippingInclTax() {
-                return hyva.formatPrice(this.totalsData.shipping_incl_tax);
-            },
-            formatShippingAmount() {
-                return hyva.formatPrice(this.totalsData.shipping_amount);
-            }
-        };
-    }
-    window.addEventListener('alpine:init', () => Alpine.data('initShippingTotalSegment', initShippingTotalSegment), {once: true})
-</script>
-<?php $hyvaCsp->registerInlineScript() ?>
 <div x-data="initShippingTotalSegment">
 <!-- display shipping including and excluding tax -->
 <template x-if="isShippingSegmentAndDisplayBoth">

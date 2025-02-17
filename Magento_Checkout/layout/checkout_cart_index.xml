@@ -59,6 +59,12 @@
                                         <block name="shipping" template="Magento_Checkout::php-cart/totals/shipping.phtml"/>
                                         <block name="subtotal" template="Magento_Checkout::php-cart/totals/subtotal.phtml"/>
                                     </block>
+                                    <container name="checkout.cart.totals.scripts">
+                                        <block name="discount-total.js" template="Magento_Checkout::php-cart/totals/js/discount-js.phtml"/>
+                                        <block name="grand_total.js" template="Magento_Checkout::php-cart/totals/js/grand-total-js.phtml"/>
+                                        <block name="shipping.js" template="Magento_Checkout::php-cart/totals/js/shipping-js.phtml"/>
+                                        <block name="subtotal.js" template="Magento_Checkout::php-cart/totals/js/subtotal-js.phtml"/>
+                                    </container>
                                 </container>
 
                                 <block class="Magento\Checkout\Block\Cart" name="checkout.cart.methods.bottom" template="Magento_Checkout::php-cart/methods.phtml">

@@ -1,0 +1,31 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
+ */
+?>
+<script>
+    function initDiscountTotalSegment() {
+        return {
+            isDiscountSegment() {
+                return this.segment.code === 'discount';
+            },
+            formatDiscountAmount() {
+                return hyva.formatPrice(this.segment.value);
+            }
+        };
+    }
+
+    window.addEventListener('alpine:init', () => Alpine.data('initDiscountTotalSegment', initDiscountTotalSegment), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

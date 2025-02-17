@@ -5,29 +5,7 @@
  * This product is licensed per Magento install
  * See https://hyva.io/license
  */
-
-use Hyva\Theme\ViewModel\HyvaCsp;
-
-/** @var HyvaCsp $hyvaCsp */
-
-/**
- * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
- */
 ?>
-<script>
-    function initGrandTotalSegment() {
-        return {
-            isGrandTotal() {
-                return this.segment.code === 'grand_total';
-            },
-            formatGrandTotal() {
-                return hyva.formatPrice(this.segment.value);
-            }
-        };
-    }
-    window.addEventListener('alpine:init', () => Alpine.data('initGrandTotalSegment', initGrandTotalSegment), {once: true})
-</script>
-<?php $hyvaCsp->registerInlineScript() ?>
 <div x-data="initGrandTotalSegment">
 <template x-if="isGrandTotal">
     <div class="flex py-2 pt-6 my-2 mx-auto mb-12 text-2xl md:grid md:grid-cols-2 md:w-full">

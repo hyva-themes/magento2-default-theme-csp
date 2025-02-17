@@ -68,7 +68,6 @@ $isMinicart = ! $isCartPage;
                         script.setAttribute('data-partner-attribution-id', config.dataAttributes['data-partner-attribution-id']);
                         script.onload = () => resolve(window.paypal);
                         script.onerror = () => reject(new Error('<?= $escaper->escapeJs('PayPal SDK could not be loaded') ?>'));
-                        console.log('Adding paypal script tag');
                         document.body.appendChild(script);
                     });
                 }

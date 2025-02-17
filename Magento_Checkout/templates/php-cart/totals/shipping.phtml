@@ -5,29 +5,7 @@
  * This product is licensed per Magento install
  * See https://hyva.io/license
  */
-
-use Hyva\Theme\ViewModel\HyvaCsp;
-
-/** @var HyvaCsp $hyvaCsp */
-
-/**
- * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
- */
 ?>
-<script>
-    function initShippingTotalSegment() {
-        return {
-            isShippingTotal() {
-                return this.segment.code === 'shipping' && this.quoteData.is_virtual === 0 && !!this.shippingMethod;
-            },
-            formatShippingTotal() {
-                return hyva.formatPrice(this.segment.value);
-            }
-        };
-    }
-    window.addEventListener('alpine:init', () => Alpine.data('initShippingTotalSegment', initShippingTotalSegment), {once: true})
-</script>
-<?php $hyvaCsp->registerInlineScript() ?>
 <template x-if="isShippingTotal">
     <div class="flex pb-2 my-2 border-b text-md lg:text-sm md:grid md:grid-cols-2 md:w-full border-container">
         <div class="w-7/12 text-left md:w-auto"

@@ -13,5 +13,8 @@
         <referenceBlock name="checkout.cart.totals">
             <block name="weee" template="Magento_Weee::php-cart/totals/weee.phtml"/>
         </referenceBlock>
+        <referenceContainer name="checkout.cart.totals.scripts">
+            <block name="weee.js" template="Magento_Weee::php-cart/totals/js/weee-js.phtml"/>
+        </referenceContainer>
     </body>
 </page>

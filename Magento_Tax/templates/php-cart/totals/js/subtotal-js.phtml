@@ -1,0 +1,45 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+use Hyva\Theme\ViewModel\HyvaCsp;
+
+/** @var HyvaCsp $hyvaCsp */
+
+/**
+ * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
+ */
+?>
+<script>
+    function initSubtotalSegment() {
+        return {
+            isSubtotalSegmentAndDisplayBoth() {
+                return this.segment.code === 'subtotal' && 'both' === window.checkoutConfig.reviewTotalsDisplayMode;
+            },
+            isSubtotalSegmentAndDisplayExcl() {
+                return this.segment.code === 'subtotal' && 'excluding' === window.checkoutConfig.reviewTotalsDisplayMode
+            },
+            isSubtotalSegmentAndDisplayIncl() {
+                return this.segment.code === 'subtotal' && 'including' === window.checkoutConfig.reviewTotalsDisplayMode
+            },
+            formatTotalLabelExclTax() {
+                return `${this.segment.title} (${this.excludingTaxMessage}) `;
+            },
+            formatTotalLabelInclTax() {
+                return `${this.segment.title} (${this.includingTaxMessage}) `;
+            },
+            formatSubtotal() {
+                return hyva.formatPrice(this.totalsData.subtotal);
+            },
+            formatSubtotalInclTax() {
+                return hyva.formatPrice(this.totalsData.subtotal_incl_tax);
+            },
+        };
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('initSubtotalSegment', initSubtotalSegment), {once: true})
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

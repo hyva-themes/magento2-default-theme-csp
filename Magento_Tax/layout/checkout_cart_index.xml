@@ -22,5 +22,12 @@
             <block name="subtotal" template="Magento_Tax::php-cart/totals/subtotal.phtml"/>
             <block name="tax" template="Magento_Tax::php-cart/totals/tax.phtml"/>
         </referenceBlock>
+        <referenceContainer name="checkout.cart.totals.scripts">
+            <block name="discount.js" template="Magento_Tax::php-cart/totals/js/discount-js.phtml"/>
+            <block name="grand_total.js" template="Magento_Tax::php-cart/totals/js/grand-total-js.phtml"/>
+            <block name="shipping.js" template="Magento_Tax::php-cart/totals/js/shipping-js.phtml"/>
+            <block name="subtotal.js" template="Magento_Tax::php-cart/totals/js/subtotal-js.phtml"/>
+            <block name="tax.js" template="Magento_Tax::php-cart/totals/js/tax-js.phtml"/>
+        </referenceContainer>
     </body>
 </page>
