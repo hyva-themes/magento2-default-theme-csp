@@ -97,22 +97,26 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                             }
 
                             const formData = new FormData(form);
-                            formData.append('form_key', hyva.getFormKey());
 
-                            return window.fetch(postUrl, {
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                                    'X-Requested-With': 'XMLHttpRequest',
-                                },
-                                body: formData,
-                                method: 'POST',
-                                mode: 'cors',
-                                credentials: 'include'
-                            })
-                                .catch(console.error)
-                                .finally(() => {
-                                    window.dispatchEvent(new Event('reload-customer-section-data'));
-                                });
+                            return new Promise((resolve, reject) => {
+                                window.fetch(postUrl, {
+                                    headers: {
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                    },
+                                    body: formData,
+                                    method: 'POST',
+                                    mode: 'cors',
+                                    credentials: 'include'
+                                })
+                                    .catch(e => {
+                                        console.error(e);
+                                        reject();
+                                    })
+                                    .finally(() => {
+                                        window.dispatchEvent(new Event('reload-customer-section-data'));
+                                        setTimeout(resolve, 500);
+                                    });
+                            });
                         },
                         createOrder() {
                             const params = 'quote_id=' + cart.cartId +
