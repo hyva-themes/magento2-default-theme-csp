@@ -17,6 +17,7 @@ use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
 /*
  * This template renders the PayPal in-context shortcut button for the mini-cart and the cart.
  * For the mini-cart, the html is part of the cart.extra_actions private section data, and is injected via JS.
+ * The related JS can be found in Magento_Paypal::express/in-context/shortcut/button-js.phtml.
  */
 
 for ($candidate = $block, $isCartPage = false; $candidate && ! $isCartPage; $candidate = $candidate->getParentBlock()) {

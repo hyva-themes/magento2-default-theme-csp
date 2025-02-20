@@ -11,7 +11,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="before.body.end">
-            <block name="paypal-express-minicart-button-js" template="Magento_Paypal::express/in-context/shortcut/button-js.phtml"/>
+            <block name="paypal-express-button-js" template="Magento_Paypal::express/in-context/shortcut/button-js.phtml"/>
         </referenceContainer>
     </body>
 </page>
