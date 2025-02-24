@@ -172,7 +172,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                 <a
                     href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
                     class="w-auto btn btn-primary justify-center text-sm <?= $viewIsGrid ? 'mr-auto' : 'mr-auto md:mr-0' ?>"
-                    title="<?= $escaper->escapeHtmlAttr(__('Configure %1 on the product page')) ?>"
+                    title="<?= $escaper->escapeHtmlAttr(__('Configure %1 on the product page', $productName)) ?>"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Configure %1 on the product page', $productName)) ?>"
                 >
                     <?= $heroicons->pencilAltHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
