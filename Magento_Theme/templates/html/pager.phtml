@@ -9,6 +9,7 @@
 use Hyva\Theme\Model\LocaleFormatter;
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Theme\Block\Html\Pager;
 
@@ -16,6 +17,7 @@ use Magento\Theme\Block\Html\Pager;
 /** @var Escaper $escaper */
 /** @var LocaleFormatter $localeFormatter */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
@@ -220,7 +222,8 @@ $pagerItemBtnClass = $pagerItemClass
                 <select
                     id="limiter"
                     class="form-select"
-                    onchange="location.href = this.value"
+                    x-data="hyvaShowPerPage"
+                    x-on:change="change"
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Show items per page')) ?>"
                 >
                     <?php foreach ($block->getAvailableLimit() as $key => $limit): ?>
@@ -233,6 +236,18 @@ $pagerItemBtnClass = $pagerItemClass
                 </select>
             </label>
         </div>
+        <script>
+            function hyvaShowPerPage() {
+                return {
+                    change() {
+                        window.location = this.$el.value;
+                    }
+                }
+            }
+
+            window.addEventListener('alpine:init', () => Alpine.data('hyvaShowPerPage', hyvaShowPerPage), {once: true})
+        </script>
+        <?php $hyvaCsp->registerInlineScript() ?>
     <?php endif ?>
 
     <?php if ($block->getUseContainer()): ?>
