@@ -81,9 +81,13 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
              class="container fixed py-0 right-0 bottom-0 z-30 flex max-w-full bg-container-darker
                 border-t-2 border-container-darker"
         >
-            <button @click="showCookieBanner = false;" aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
-                    class="absolute right-0 top-0 p-4">
-                <?= $heroicons->xHtml(); ?>
+            <button
+                @click="showCookieBanner = false;"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+                title="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
+                class="absolute right-0 top-0 p-4"
+            >
+                <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => true]); ?>
             </button>
 
             <div class="p-2 pr-4">
@@ -94,9 +98,7 @@ if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
                 </p>
                 <p class="mb-1">
                     <span>
-                        <?= $escaper->escapeHtml(__( // phpcs:disable Generic.Files.LineLength.TooLong
-                            'To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.'
-                        )) // phpcs:enable ?>
+                        <?= $escaper->escapeHtml(__('To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.')) ?>
                     </span>
                 </p>
                 <p class="mb-4">

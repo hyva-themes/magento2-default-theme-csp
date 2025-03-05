@@ -24,8 +24,13 @@ if ($block->isLoggedIn()) {
 }
 ?>
 
-<a class="-mr-1 flex p-2 rounded-md text-white" <?= /* @noEscape */ $block->getLinkAttributes()
-?><?= /* @noEscape */ $dataPostParam ?>>
+<a
+    class="-mr-1 flex p-2 rounded-md text-white"
+    <?= /* @noEscape */ $block->getLinkAttributes() ?>
+    <?= /* @noEscape */ $dataPostParam ?>
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Close Session')) ?>"
+    title="<?= $escaper->escapeHtmlAttr(__('Close Session')) ?>"
+>
     <span class="hidden md:block"><?= $escaper->escapeHtml(__('Close Session')) ?></span>
-    <?= $heroicons->xHtml(); ?>
+    <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => true]); ?>
 </a>
