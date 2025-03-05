@@ -176,7 +176,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Configure %1 on the product page', $productName)) ?>"
                 >
                     <?= $heroicons->pencilAltHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
-                    <span class="ml-2 inline <?= $viewIsGrid ? 'md:ml-0 md:hidden lg:ml-2 lg:inline' : '' ?>">
+                    <span class="inline <?= $viewIsGrid ? 'md:hidden lg:inline' : '' ?>">
                         <?= $escaper->escapeHtml(__('Configure')) ?>
                     </span>
                 </a>
@@ -188,7 +188,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                     data-addto="cart"
                 >
                     <?= $heroicons->shoppingCartHtml('', 24, 24, ['aria-hidden' => 'true']) ?>
-                    <span class="ml-2 inline <?= $viewIsGrid ? 'md:ml-0 md:hidden lg:ml-2 lg:inline' : '' ?>">
+                    <span class="inline <?= $viewIsGrid ? 'md:hidden lg:inline' : '' ?>">
                         <?= $escaper->escapeHtml(__('Add to Cart')) ?>
                     </span>
                 </button>
