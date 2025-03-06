@@ -70,7 +70,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
     For more information, please refer to [issue #1083](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1083).
 
-    Many thanks to Irena Smidt (Customgento) for the suggestion!
+    Many thanks to Irina Smidt (Customgento) for the suggestion!
 
 - **Fix small font size in review form for A11Y**  
     For more information, please refer to [issue #1095](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1095).
