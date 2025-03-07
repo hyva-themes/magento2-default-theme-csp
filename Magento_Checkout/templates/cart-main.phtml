@@ -78,9 +78,10 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     );
                 }
             }).finally(() => {
-               window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
-                   isLoading: false
-               }}));
+                window.dispatchEvent(new CustomEvent('cart-is-loading', {
+                    detail: {isLoading: false}
+                }))
+            })
         }
     }( window.hyva = window.hyva || {} ));
 
