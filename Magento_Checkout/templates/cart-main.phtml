@@ -42,6 +42,9 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
             if (!form.action) {
                 return;
             }
+            window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
+                isLoading: true
+            }}));
             controller.abort();
             controller = new AbortController();
 
@@ -74,13 +77,17 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                         }], 10000
                     );
                 }
-            })
+            }).finally(() => {
+               window.dispatchEvent(new CustomEvent("cart-is-loading", { detail: {
+                   isLoading: false
+               }}));
         }
     }( window.hyva = window.hyva || {} ));
 
     function initCartMainForm() {
         return {
             cartIsEmpty: true,
+            isLoading: false,
             init() {
                 window.checkoutConfig = JSON.parse(this.$root.dataset.checkoutConfig);
                 window.customerData = window.checkoutConfig.customerData;
@@ -144,6 +151,9 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
                 }
             },
+            onCartIsLoading() {
+                this.isLoading = (this.$event.detail && this.$event.detail.isLoading) || false
+            },
             proceedToCheckout() {
                 this.$dispatch('toggle-authentication',
                     {url: this.$el.href});
@@ -157,6 +167,7 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
      class="cart-form clearfix"
      @private-content-loaded.window="checkCartShouldUpdate"
      @storage.window="onStorageChange"
+     @cart-is-loading.window="onCartIsLoading"
      data-checkout-config="<?= $escaper->escapeHtmlAttr($serializedCheckoutConfig) ?>"
 >
     <?php if ($block->getItemsCount()): ?>
@@ -164,4 +175,5 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
     <?php else: ?>
         <?= $block->getChildHtml('no-items') ?>
     <?php endif; ?>
+    <?= $block->getChildHtml('loading') ?>
 </div>
