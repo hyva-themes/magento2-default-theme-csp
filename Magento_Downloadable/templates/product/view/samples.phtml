@@ -34,8 +34,9 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             <div class="block w-full text-left text-gray-700 mb-2">
                 <a href="<?= $escaper->escapeHtml($block->getSampleUrl($sample)) ?>"
                    download
-                   class="item-link samples-item-link">
-                    <?= $heroicons->documentDownloadHtml(); ?>
+                   class="item-link samples-item-link"
+                >
+                    <?= $heroicons->documentDownloadHtml('', 24, 24, ['aria-hidden' => true]); ?>
                     <?= $escaper->escapeHtml($sample->getTitle()) ?>
                 </a>
             </div>
