@@ -9,7 +9,6 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\Store;
 use Hyva\Theme\ViewModel\StoreSwitcher;
@@ -23,9 +22,6 @@ use Magento\Store\ViewModel\SwitcherUrlProvider;
 /** @var Escaper $escaper */
 /** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
-
-/** @var HeroiconsSolid $heroiconsSolid */
-$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
 
 /** @var SwitcherUrlProvider $switcherUrlProvider */
 $switcherUrlProvider = $viewModels->require(SwitcherUrlProvider::class);
@@ -53,12 +49,11 @@ $currentStore = $storeSwitcherViewModel->getStore();
                         @click.outside="setOpenFalse"
                         @keydown.window.escape="setOpenFalse"
                         type="button"
-                        class="inline-flex justify-center w-full form-select px-4 py-2 bg-white focus:outline-none"
+                        class="form-select w-full pl-4"
                         aria-haspopup="true"
                         aria-expanded="true"
                 >
                     <?= $escaper->escapeHtml($group->getName()) ?>
-                    <?= $heroiconsSolid->chevronDownHtml("flex self-center h-5 w-5 -mr-1 ml-2", 25, 25) ?>
                 </button>
                 <?php endif; ?>
             <?php endforeach; ?>
