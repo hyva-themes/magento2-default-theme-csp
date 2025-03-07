@@ -55,6 +55,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                id="sender-name"
                                type="text"
                                class="form-input input-text"
+                               autocomplete="name"
                                required
                         />
                     </div>
@@ -71,6 +72,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                id="sender-email"
                                type="email"
                                class="form-input input-text"
+                               autocomplete="email"
                                required
                         />
                     </div>
@@ -86,6 +88,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                         <textarea name="sender[message]"
                                   class="form-input input-text mt-2 input input-light w-full h-48"
                                   id="sender-message"
+                                  autocomplete="off"
                                   required
                         ><?= $escaper->escapeHtml($block->getMessage()) ?></textarea>
                     </div>
@@ -116,6 +119,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                    class="form-input input-text"
                                                    :id="getRecipientFieldId"
                                                    :name="getRecipientFieldName"
+                                                   autocomplete="off"
                                                    required
                                                    :value="field.name"
                                                    @change="setName"
@@ -132,6 +136,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                    :name="getRecipientFieldEmail"
                                                    type="email"
                                                    class="form-input input-text"
+                                                   autocomplete="off"
                                                    required
                                                    :value="field.email"
                                                    @change="setEmail"
