@@ -264,7 +264,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                              data-slider-index="<?= (int) $sliderIndex ?>"
                              data-product-id="<?= $escaper->escapeHtmlAttr($product->getId()) ?>"
                              role="group"
-                             :aria-hidden="sliderItemAriaHidden"
+                             :inert="sliderItemAriaHidden"
                              aria-label="<?= $escaper->escapeHtmlAttr(__('Item %1', $sliderIndex++)) ?>"
                              :aria-describedby="sliderItemAriaDescribedById"
                         >
