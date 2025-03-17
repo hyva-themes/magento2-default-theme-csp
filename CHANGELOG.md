@@ -22,9 +22,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Fix PageBuilder slider renders empty slide if a lazy-loading background image is configured**
   For more information, please refer to the [default-theme issue #1145](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1145).
 
-- **Add missing css class to Clear shopping cart button**
-  For more information, please refer to [default-theme issue #1175](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1175).
-
 - **Fix missing data attribute for configurable dropdown swatch attributes**
   For more information, please refer to [issue #1](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/issues/1).
 
