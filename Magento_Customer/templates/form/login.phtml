@@ -71,7 +71,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         />
                     </div>
                 </div>
-                <div class="field password required" x-data="textualPassword">
+                <div class="field password required">
                     <label for="pass" class="label">
                         <span><?= $escaper->escapeHtml(__('Password')) ?></span>
                     </label>
@@ -80,7 +80,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             <span x-show="notVisible()">
                                 <?= $escaper->escapeHtml(__('Password hidden')) ?>
                             </span>
-                            <template x-if="visible()">
+                            <template x-if="visible">
                                 <span>
                                     <?= $escaper->escapeHtml(__('Password shown')) ?>
                                 </span>
@@ -97,7 +97,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         <button
                             type="button"
                             x-on:click="toggleVisible"
-                            :aria-pressed="visible()"
+                            :aria-pressed="visible"
                             :aria-label="ariaLabel"
                             class="px-4 py-3"
                         >
@@ -148,9 +148,22 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 hasCaptchaToken: 0,
                 displayErrorMessage: false,
                 errorMessages: [],
+                visible: false,
+                get showPassword() {
+                    return this.visible;
+                },
+                get passwordOrText() {
+                    return this.visible ? 'text' : 'password';
+                },
+                get ariaLabel() {
+                    return this.visible ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>';
+                },
+                toggleVisible() {
+                    this.visible = !this.visible;
+                },
                 setErrorMessages(messages) {
-                    this.errorMessages = [messages]
-                    this.displayErrorMessage = this.errorMessages.length
+                    this.errorMessages = [messages];
+                    this.displayErrorMessage = this.errorMessages.length;
                 },
                 submitForm() {
                     // do not rename $form, the variable is the expected name in the recaptcha output
@@ -160,16 +173,11 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     if (this.errors === 0) {
                         $form.submit();
                     }
-                },
+                }
             }
         }
-
         window.addEventListener('alpine:init', () => {
             Alpine.data('initCustomerLoginForm', initCustomerLoginForm);
-            Alpine.data('textualPassword', () => hyva.createBooleanObject('visible', false, {
-                passwordOrText() {return this.visible() ? 'text': 'password'},
-                ariaLabel() {return this.visible() ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'}
-            }));
         }, {once: true});
     </script>
     <?php $hyvaCsp->registerInlineScript() ?>
