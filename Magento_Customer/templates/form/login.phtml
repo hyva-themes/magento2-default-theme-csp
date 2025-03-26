@@ -77,12 +77,10 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     </label>
                     <div class="control flex items-center">
                         <div class="sr-only" aria-live="polite">
-                            <template x-if="notVisible">
-                                <span>
-                                    <?= $escaper->escapeHtml(__('Password hidden')) ?>
-                                </span>
-                            </template>
-                            <template x-if="visible">
+                            <span x-show="notVisible()">
+                                <?= $escaper->escapeHtml(__('Password hidden')) ?>
+                            </span>
+                            <template x-if="visible()">
                                 <span>
                                     <?= $escaper->escapeHtml(__('Password shown')) ?>
                                 </span>
@@ -99,15 +97,13 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         <button
                             type="button"
                             x-on:click="toggleVisible"
-                            :aria-pressed="visible"
+                            :aria-pressed="visible()"
                             :aria-label="ariaLabel"
                             class="px-4 py-3"
                         >
-                            <template x-if="notVisible">
-                                <?= $heroiconssolid->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
-                            </template>
-                            <template x-if="visible">
-                                <?= $heroiconssolid->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                            <?= $heroiconssolid->eyeHtml('w-5 h-5', 20, 20, ['x-show' => 'notVisible()', 'aria-hidden' => 'true']); ?>
+                            <template x-if="visible()">
+                                <?= $heroiconssolid->eyeOffHtml('w-5 h-5', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>
