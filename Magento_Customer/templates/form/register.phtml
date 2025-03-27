@@ -620,10 +620,10 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
         window.addEventListener('alpine:init', () => {
             Alpine.data('textOrPassword', () => hyva.createBooleanObject('visible', false, {
                 textOrPassword() {
-                    return this.visible() ? 'text' : 'password'
+                    return this.visible ? 'text' : 'password'
                 },
                 ariaLabel() {
-                    return this.visible() ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'
+                    return this.visible ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'
                 }
             }));
             Alpine.data('initCustomerCreateForm', initCustomerCreateForm);

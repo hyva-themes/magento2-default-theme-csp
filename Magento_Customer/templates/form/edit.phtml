@@ -249,26 +249,26 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
             hyva.formValidation(document.getElementById('form-validate')),
             hyva.createBooleanObject('showPasswordCurrent', false, {
                 showPasswordCurrentAriaLabel() {
-                    return this.getTogglePasswordVisibilityAriaLabel(this.showPasswordCurrent())
+                    return this.getTogglePasswordVisibilityAriaLabel(this.showPasswordCurrent)
                 },
                 showPasswordCurrentFieldType() {
-                    return this.getPasswordFieldType(this.showPasswordCurrent())
+                    return this.getPasswordFieldType(this.showPasswordCurrent)
                 },
             }),
             hyva.createBooleanObject('showPasswordNew', false, {
                 showPasswordNewAriaLabel() {
-                    return this.getTogglePasswordVisibilityAriaLabel(this.showPasswordNew())
+                    return this.getTogglePasswordVisibilityAriaLabel(this.showPasswordNew)
                 },
                 showPasswordNewFieldType() {
-                    return this.getPasswordFieldType(this.showPasswordNew())
+                    return this.getPasswordFieldType(this.showPasswordNew)
                 },
             }),
             hyva.createBooleanObject('showPasswordConfirm', false, {
                 showPasswordConfirmAriaLabel() {
-                    return this.getTogglePasswordVisibilityAriaLabel(this.showPasswordConfirm())
+                    return this.getTogglePasswordVisibilityAriaLabel(this.showPasswordConfirm)
                 },
                 showPasswordConfirmFieldType() {
-                    return this.getPasswordFieldType(this.showPasswordConfirm())
+                    return this.getPasswordFieldType(this.showPasswordConfirm)
                 },
             }),
             {

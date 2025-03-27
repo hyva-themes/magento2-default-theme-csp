@@ -171,8 +171,8 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         window.addEventListener('alpine:init', () => {
             Alpine.data('initCustomerLoginForm', initCustomerLoginForm);
             Alpine.data('textualPassword', () => hyva.createBooleanObject('visible', false, {
-                passwordOrText() {return this.visible() ? 'text': 'password'},
-                ariaLabel() {return this.visible() ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'}
+                passwordOrText() {return this.visible ? 'text': 'password'},
+                ariaLabel() {return this.visible ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'}
             }));
         }, {once: true});
     </script>

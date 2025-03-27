@@ -60,7 +60,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     function initCustomerMenu() {
         return hyva.createBooleanObject('open', false, {
             ariaExpanded() {
-                return this.open() ? 'true' : 'false';
+                return this.open ? 'true' : 'false';
             }
         })
     }

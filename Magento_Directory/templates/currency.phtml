@@ -84,7 +84,7 @@ $currencyViewModel = $viewModels->require(Currency::class);
         function initCurrencySwitcher() {
             return hyva.createBooleanObject('open', false, {
                 ariaExpanded() {
-                    return this.open() ? 'true' : 'false';
+                    return this.open ? 'true' : 'false';
                 },
                 switchCurrency() {
                     hyva.postForm(this.$el.dataset.currencyData)
