@@ -27,7 +27,7 @@
                  x-html="`${segment.title} ${excludingTaxMessage}` "
             ></div>
             <div class="w-5/12 text-right md:w-auto"
-                 x-text="hyva.formatPrice(totalsData.grand_total)"
+                 x-text="hyva.formatPrice(totalsData.grand_total - totalsData.tax_amount)"
             ></div>
         </div>
     </div>
