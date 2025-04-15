@@ -100,8 +100,9 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                 this.$nextTick(() => this.calcActive())
             },
             sliderItemClasses() {
+                const index = this.$el.dataset.index;
                 return {
-                    'js_dummy_slide flex-none w-full <?= $escaper->escapeJs($slideItemClasses) ?>' : pageFillers > <?= (int) $i ?>
+                    'js_dummy_slide flex-none w-full <?= $escaper->escapeJs($slideItemClasses) ?>' : pageFillers > index
                 }
             },
             isItemCountGtPageSize() {
@@ -158,7 +159,7 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                         </div>
                     <?php endforeach; ?>
                     <?php for ($i = 0; $i < $maxVisibleSlides; $i++): /* Add empty filler slides in case the number of items is not dividable by the pagesize */ ?>
-                    <div :class="sliderItemClasses"></div>
+                    <div :class="sliderItemClasses" data-index="<?= (int) $i ?>"></div>
                     <?php endfor; ?>
                 </div>
             </div>
