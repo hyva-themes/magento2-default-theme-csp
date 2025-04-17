@@ -40,9 +40,6 @@
                    template="Magento_Swatches::product/js/swatch-options.phtml"
                    ifconfig="catalog/frontend/show_swatches_in_product_list"
             />
-            <block name="product.info.options.swatch.layered"
-                   template="Magento_Swatches::product/js/layered-swatch.phtml"
-            />
         </referenceContainer>
 
     </body>
