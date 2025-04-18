@@ -28,7 +28,6 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 ?>
 <script>
     'use strict';
-<?php /** Initialize with empty data so depending code will not break, initialized in initCartMainForm().init() in this file */ ?>
     window.checkoutConfig = null;
     window.customerData = {};
     window.isCustomerLoggedIn = false;
@@ -102,43 +101,30 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
 
                 this.cartIsEmpty = window.checkoutConfig === false;
             },
-<?php /** triggered via event "private-content-loaded" */ ?>
             checkCartShouldUpdate() {
-                const cart = this.$event.detail.data.cart,
-                    cartIsEmptyState = window.checkoutConfig === false;
+                const cart = this.$event.detail.data.cart;
+                if (!cart) return;
 
-<?php /** if triggered without cart data ignore */ ?>
-                if (! cart) {
-                    return;
-                }
-
-<?php /** if the cart becomes empty after the last item is removed */ ?>
+                const cartIsEmptyState = window.checkoutConfig === false;
                 if (this.cartIsEmpty !== cartIsEmptyState) {
                     this.cartIsEmpty = cartIsEmptyState;
-
                     this.reloadCartContent();
                     return;
                 }
 
-<?php /** if the cart is empty all following should can be skipped */ ?>
-                if (this.cartIsEmpty) {
-                    return;
-                }
+                if (this.cartIsEmpty) return;
 
-<?php /** we should have items if the cart isn't empty */ ?>
-                if (! cart.items) {
+                if (!cart.items) {
                     this.reloadCartContent();
                     return;
                 }
 
-<?php /** checkoutConfig and cart are out of sync */ ?>
-                if (! window.checkoutConfig && cart.items.length) {
+                if (!window.checkoutConfig && cart.items.length) {
                     this.reloadCartContent();
                     return;
                 }
 
                 const roundUp = (number) => Math.round(number * 1000);
-
                 const decimalNumbersAreEqual = (number1, number2) => roundUp(number1) === roundUp(number2);
 
                 if (decimalNumbersAreEqual(
@@ -153,32 +139,24 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                     return;
                 }
 
-<?php /** checkoutConfig is out if sync with the cart data */ ?>
                 this.reloadCartContent();
             },
             reloadCartContent() {
-<?php /** We will not allow infinity loops */ ?>
-                if (cartIsReloading) {
-                    return;
-                }
+                if (cartIsReloading) return;
                 cartIsReloading = true;
 
                 window.fetch(window.location.href, {
                     method: "GET"
-                }).then((result) => result.text())
+                })
+                .then((result) => result.text())
                 .then((body) => {
                     hyva.setCookie('mage-cache-sessid', '', -1, true);
                     window.checkoutConfig = null;
-<?php /** Replace the mainContent and checkoutConfig should be loaded again and trigger this.checkCartShouldUpdate */ ?>
                     hyva.replaceDomElement('#maincontent', body)
 
                 })
                 .catch(() => {
-<?php /** Make sure we don't loop in reloading this page */ ?>
-                    if (window.location.search.indexOf('reload=1') > -1) {
-                        return;
-                    }
-
+                    if (window.location.search.indexOf('reload=1') > -1) return;
                     window.location = window.location + (window.location.search.length < 1 ? '?' : '&') + 'reload=1'
                 })
                 .finally(() => {
@@ -194,12 +172,11 @@ $serializedCheckoutConfig =  $block->getItemsCount() ? $checkoutConfigViewModel-
                 this.isLoading = (this.$event.detail && this.$event.detail.isLoading) || false
             },
             proceedToCheckout() {
-                this.$dispatch('toggle-authentication',
-                    {url: this.$el.href});
+                this.$dispatch('toggle-authentication', { url: this.$el.href });
             }
         }
     }
-    window.addEventListener('alpine:init', () => Alpine.data('initCartMainForm', initCartMainForm), {once: true})
+    window.addEventListener('alpine:init', () => Alpine.data('initCartMainForm', initCartMainForm), { once: true })
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <section x-data="initCartMainForm"
