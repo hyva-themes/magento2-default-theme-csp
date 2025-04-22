@@ -50,7 +50,7 @@ $product = $block->getProduct();
                     <?= $escaper->escapeHtml(__('Summary')) ?>
                 </div>
                 <div>
-                    <ul class="bundle items">
+                    <ul role="list" class="bundle items">
                         <template x-for="option in selectedOptions">
                         <li class="mb-2" x-show="option.products.length">
                             <span class="text-base font-semibold" x-html="option.label"></span>

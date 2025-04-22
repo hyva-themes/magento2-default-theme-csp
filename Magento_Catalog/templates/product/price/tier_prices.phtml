@@ -13,7 +13,7 @@ $tierPrices = $tierPriceModel->getTierPriceList();
 $product = $block->getSaleableItem();
 ?>
 <?php if (count($tierPrices)): ?>
-    <ul class="<?= $escaper->escapeHtmlAttr((
+    <ul role="list" class="<?= $escaper->escapeHtmlAttr((
         $block->hasListClass() ? $block->getListClass() : 'prices-tier items'
     )) ?> mb-4">
         <?php foreach ($tierPrices as $index => $price): ?>
