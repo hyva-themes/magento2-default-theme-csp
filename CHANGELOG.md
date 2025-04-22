@@ -7,7 +7,65 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.12...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.13...main
+
+## [1.3.13] - 2025-04-22
+
+[1.3.13]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.12...1.3.13
+
+### Added
+
+- **Storeinfo store name as alternative fallback solution for the Logo alt, if empty**
+    For more information, please refer to [issue #1125](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1125).
+
+### Changed
+
+- **Improve PDP info by avoiding empty wrappers in output of the HTML**
+    For more information, please refer to [issue #1058](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1058).
+
+- **Improve the theme rendering of empty tier-price-container for bundled products**
+    For more information, please refer to [issue #1068](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1068).
+
+- **Fix Cart Infinite loops**
+    For more information, please refer to [issue #1192](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1192).
+
+- **Fix Null Coalesce to Empty Array for GTM Supporting Changes**
+    For more information, please refer to [issue #1161](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1161).
+
+- **Fix var `category_page_category_image` width and height in Category image template**
+    For more information, please refer to [issue #1154](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1154).
+
+- **Fix Orders and Returns Select option style**
+    For more information, please refer to [issue #1146](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1146).
+
+    Thanks to Hitesh Koshti (Ontapgroup) for contributing.
+
+- **Hide PLP grid/list switcher on mobile view**
+    For more information, please refer to [issue #1142](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1142).
+
+    Thanks to Hitesh Koshti (Ontapgroup) for contributing.
+
+- **Fix aria labeling in breadcrumbs items**
+    For more information, please refer to [issue #1120](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1120).
+
+- **Fix missing list semantics**
+    For more information, please refer to [issue #1085](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1085).
+
+### Removed
+
+- **Cleanup form styles**
+    By dropping `input-light` with `form-input` for style consistency.
+    For more information, please refer to [issue #1166](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1166).
+
+- **Nested container's from the PDP titles**
+    For more information, please refer to [issue #1143](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1143).
+
+    Thanks to Hitesh Koshti (Ontapgroup) for contributing.
+
+- **Cleanup flex and flex related class from actions-toolbar**
+    For more information, please refer to [issue #1112](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1112).
+
+    Thanks to Chirag Matholiya (Ontapgroup) for contributing.
 
 ## [1.3.12 CSP] - 2025-03-17
 
