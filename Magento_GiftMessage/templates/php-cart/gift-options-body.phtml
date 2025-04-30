@@ -20,7 +20,7 @@ use Magento\Framework\View\Element\Template;
     <div x-show="showAdditionalOptions" class="w-full order-1" :class="inSlideOutClasses">
         <?= $block->getChildHtml('additional-options') ?>
     </div>
-    <template x-if="isGiftMsgEnabled">
+    <template x-if="getIsGiftMsgEnabled">
         <div x-show="formBlockVisibility" class="w-full order-2" :class="inSlideOutClasses">
             <?= $block->getChildHtml('gift-message') ?>
         </div>
