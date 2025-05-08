@@ -5,7 +5,7 @@ You may view and download the latest version of these conditions from [hyva.io/l
 By using any of our products and/or by purchasing a product from Hyvä Themes B.V. (“licensor”) you (“licensee”) agree to the following terms and conditions for the use of this product.
 
 ## Terms used in this license
-* **Product**: Purchased software, scripts, documentations etc. produced or provided by Hyvä Themes B.V. from Nuth, The Netherlands.
+* **Product**: Purchased software, scripts, documentations etc. produced or provided by Hyvä Themes B.V. from Heerlen, The Netherlands.
 * **License Agreement**: hereinafter also referred to as convention, agreement or conditions.
 * **End Product**: A (customized) implementation of the product, usually a public facing website customized with your design/content. Typically this means a **single** Magento/Adobe Commerce **installation**, distributed over one or multiple web servers, including multiple store-views/domains.
 * **Customer Account**: your account at hyva.io, containing your license information.
