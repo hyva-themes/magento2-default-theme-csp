@@ -149,10 +149,10 @@ function initCompareSidebarClear() {
                             type="button"
                             @click.prevent="removeFromCompare(product.id)"
                             :aria-label="hyva.str('<?= $escaper->escapeJs(__('Remove product "%1" from the comparison')) ?>', product.name)"
-                            class="p-1 inline-flex shrink-0 items-center justify-center text-slate-600
+                            class="p-1 inline-flex shrink-0 items-center justify-center text-slate-400
                                    hover:text-slate-800 ml-auto"
                         >
-                            <?= $heroicons->xHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                            <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                         </button>
                     </li>
                 </template>
