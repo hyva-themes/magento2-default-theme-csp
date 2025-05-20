@@ -138,7 +138,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                         <div class="control flex items-center">
                             <?php $minimumPasswordLength = $block->getMinimumPasswordLength() ?>
                             <div class="sr-only" aria-live="polite">
-                                <template x-if="!visible">
+                                <template x-if="notVisible">
                                     <span>
                                         <?= $escaper->escapeHtml(__('Password hidden')) ?>
                                     </span>
@@ -169,7 +169,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                                 class="px-4 py-3"
                                 :aria-label="ariaLabel"
                             >
-                                <template x-if="!visible">
+                                <template x-if="notVisible">
                                     <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                                 </template>
                                 <template x-if="visible">
@@ -199,7 +199,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                     </label>
                     <div class="control flex items-center">
                         <div class="sr-only" aria-live="polite">
-                            <template x-if="!visible">
+                            <template x-if="notVisible">
                                 <span>
                                     <?= $escaper->escapeHtml(__('Confirm password hidden')) ?>
                                 </span>
@@ -229,7 +229,7 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                             class="px-4 py-3"
                             :aria-label="ariaLabel"
                         >
-                            <template x-if="!visible">
+                            <template x-if="notVisible">
                                 <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                             </template>
                             <template x-if="visible">

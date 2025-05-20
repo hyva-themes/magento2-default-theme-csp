@@ -77,7 +77,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     </label>
                     <div class="control flex items-center">
                         <div class="sr-only" aria-live="polite">
-                            <template x-if="!visible">
+                            <template x-if="notVisible">
                                 <span>
                                     <?= $escaper->escapeHtml(__('Password hidden')) ?>
                                 </span>
@@ -103,7 +103,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             :aria-label="ariaLabel"
                             class="px-4 py-3"
                         >
-                            <template x-if="!visible">
+                            <template x-if="notVisible">
                                 <?= $heroiconssolid->eyeHtml('w-5 h-5'); ?>
                             </template>
                             <template x-if="visible">

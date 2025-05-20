@@ -37,8 +37,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         "
         @click="toggleVisible"
         :aria-expanded="visible"
-        :aria-disabled="!isMobile"
-        :disabled="!isMobile"
+        :aria-disabled="notIsMobile"
+        :disabled="notIsMobile"
     >
         <span class="text-lg title">
             <?= $escaper->escapeHtml(__($block->getData('block_title'))) ?>
