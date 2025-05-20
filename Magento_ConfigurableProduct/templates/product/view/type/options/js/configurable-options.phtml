@@ -65,6 +65,9 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             ['!optionIsActive']() {
                 return ! this.optionIsActive();
             },
+            ['notOptionIsActive']() {
+                return ! this.optionIsActive();
+            },
             optionIsEnabled() {
                 <?php /* return true if a product with the option id === this.item.id is enabled */ ?>
                 const attributeId = this.getDataAttributeId(this.$el);

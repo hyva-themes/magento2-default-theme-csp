@@ -69,7 +69,7 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
                         <option
                             :value="item.id"
                             x-html="getAttributeOptionLabel"
-                            :disabled="!optionIsActive"
+                            :disabled="notOptionIsActive"
                             :selected="isSelected">
                         </option>
                         </template>
