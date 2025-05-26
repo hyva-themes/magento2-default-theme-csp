@@ -137,7 +137,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                         class="px-4 self-stretch"
                         :aria-label="showPasswordCurrentAriaLabel"
                     >
-                        <template x-if="!showPasswordCurrent">
+                        <template x-if="notShowPasswordCurrent">
                             <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                         </template>
 
@@ -174,7 +174,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                             class="px-4 self-stretch"
                             :aria-label="showPasswordNewAriaLabel"
                         >
-                            <template x-if="!showPasswordNew">
+                            <template x-if="notShowPasswordNew">
                                 <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                             </template>
                             <template x-if="showPasswordNew">
@@ -212,7 +212,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                             class="px-4 self-stretch"
                             :aria-label="showPasswordConfirmAriaLabel"
                         >
-                            <template x-if="!showPasswordConfirm">
+                            <template x-if="notShowPasswordConfirm">
                                 <?= $heroicons->eyeHtml('w-5 h-5'); ?>
                             </template>
                             <template x-if="showPasswordConfirm">

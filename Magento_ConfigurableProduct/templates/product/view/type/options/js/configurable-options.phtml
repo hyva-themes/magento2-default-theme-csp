@@ -62,7 +62,11 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                     option => option.id === this.item.id
                 )
             },
+            <?php /* @deprecated in favor of notOptionIsActive due to incompatibility with regular Alpine */ ?>
             ['!optionIsActive']() {
+                return ! this.optionIsActive();
+            },
+            ['notOptionIsActive']() {
                 return ! this.optionIsActive();
             },
             optionIsEnabled() {

@@ -47,7 +47,11 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
         return {
             inSlideOut: <?= $slideOutDrawer ? 'true' : 'false' ?>,
             formBlockVisibility: false,
+            <?php /* @deprecated in favor of notOptionIsActive due to incompatibility with regular Alpine */ ?>
             ['!formBlockVisibility']() {
+                return ! this.formBlockVisibility;
+            },
+            ['notFormBlockVisibility']() {
                 return ! this.formBlockVisibility;
             },
             resultBlockVisibility: false,
@@ -212,7 +216,10 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
             },
             showAdditionalOptions() {
                 return this.formBlockVisibility && this.hasActiveOptions;
-            }
+            },
+            getIsGiftMsgEnabled() {
+                return this.isGiftMsgEnabled;
+            },
         }
     }
 
@@ -304,7 +311,7 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
         >
             <?= $escaper->escapeHtml(__('Gift options')) ?>
             <?php if (!$slideOutDrawer): ?>
-                <span x-show="!formBlockVisibility" aria-hidden="true">
+                <span x-show="notFormBlockVisibility" aria-hidden="true">
                     <?= $heroicons->chevronDownHtml('inline-block', 16, 16) ?>
                 </span>
                 <span x-show="formBlockVisibility" aria-hidden="true">
@@ -319,7 +326,7 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
             aria-modal="true"
             @keydown.window.escape="closeDialog"
             class="fixed inset-y-0 right-0 z-30 flex max-w-full"
-            :aria-hidden="!formBlockVisibility"
+            :aria-hidden="notFormBlockVisibility"
         >
             <div class="backdrop"
                 x-show="formBlockVisibility"

@@ -137,7 +137,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
                 </template>
             </div>
 
-            <button class="p-2 w-full text-sm text-center rounded border border-gray-300 hover:bg-gray-100"
+            <button type="button" class="p-2 w-full text-sm text-center rounded border border-gray-300 hover:bg-gray-100"
                 x-text="labels.currentText"
                 @click.prevent="goToday"
             ></button>
@@ -244,7 +244,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
             dayButtonClasses() {
                 return {
                     'cursor-pointer hover:bg-gray-100 hover:text-black': this.canSelectDate(this.date),
-                    'bg-primary text-white': this.isToday(this.date),
+                    'bg-primary text-white': this.isSelected(this.date),
                     'text-gray-500': this.isInFuture(this.date)
                 }
             },
@@ -307,7 +307,17 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
             goToday() {
                 this.year = this.today.getFullYear();
                 this.month = this.today.getMonth();
+                this.value = this.dateFormatter.format(this.today);
                 this.recalcDaysGrid();
+            },
+
+            isSelected(date) {
+                if (!this.value) return false;
+
+                const d = new Date(this.year, this.month, date);
+                const selected = new Date(this.value);
+
+                return selected.toDateString() === d.toDateString();
             },
 
             isInFuture(date) {

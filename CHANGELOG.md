@@ -7,7 +7,82 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.13...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.14...main
+
+## [1.3.14 CSP] - 2025-05-26
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Replace property reference with function in Gift Message**
+    For more information, please refer to [merge request #20](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/20).
+
+- **In the module hyva.createBooleanObject() the name is no longer a method**
+    For more information, please refer to [issue #9](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/issues/9).
+
+### Removed
+
+- Nothign removed
+
+## [1.3.14] - 2025-05-26
+
+[1.3.14]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.13...1.3.14
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Mark selected value in calendar, fix today button to also mark day**
+  For more information, please refer to [issue #1178](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1178)
+
+  Many thanks to Kamil Kawecki (Alekseon) for the contribution!
+
+- **Fix missing type button to calendar button to stop preventing form submit on enter**
+  For more information, please refer to [issue #1179](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1179)
+
+  Many thanks to Kamil Kawecki (Alekseon) for the contribution!
+
+- **Set message index to remove from the value passed through setHideTimeOut in messages.phtml**
+  For more information, please refer to [issue #1195](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1195)
+
+  Many thanks to Callum Hardy (Absolute Design) for the contribution!
+
+- **Fix some incorrect DocBlocks in phtml files and remove some double newlines**
+  For more information, please refer to [merge request #1292](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1292)
+
+  Many thanks to Pieter Hoste (Baldwin) for the contribution!
+
+- **Fix pagination on account review page**
+  For more information, please refer to [merge request #1281](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1281)
+
+  Many thanks to Jeroen Alewijns (iO) for the contribution!
+
+- **Fix lazy background**
+  For more information, please refer to [issue #1147](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1147)
+
+  Many thanks to Ivan Martsii (Perspective) for the contribution!
+
+- **Fix the wishlist link display in dropdown after disabling the wishlist from the admin**
+  For more information, please refer to [issue #1162](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1162)
+
+  Many thanks to Chirag Matholiya (Evrin) for the contribution!
+
+- **Fix Paypal Express not working on product page when in-context checkout is enabled**
+  For more information, please refer to [issue #1099](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1099)
+
+  Many thanks to Dung La (JaJuMa) for the contribution!
+
+### Removed 
+
+- **Remove an unused variable in coupon.phtml**
+  For more information, please refer to [merge request #1272](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1272).
+
+  Many thanks to Thomas Hauschild (e3n) for the contribution!
 
 ## [1.3.13 CSP] - 2025-04-22
 
