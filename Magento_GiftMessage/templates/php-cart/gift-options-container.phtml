@@ -212,7 +212,10 @@ $slideOutDrawer = (bool) $block->getSlideOutDrawer();
             },
             showAdditionalOptions() {
                 return this.formBlockVisibility && this.hasActiveOptions;
-            }
+            },
+            getIsGiftMsgEnabled() {
+                return this.isGiftMsgEnabled;
+            },
         }
     }
 
