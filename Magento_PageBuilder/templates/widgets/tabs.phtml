@@ -46,17 +46,23 @@ use Magento\Framework\View\Element\Template;
 
     function hyvaPageBuilderWidgetsTabs() {
         return {
-            tab: this.dataset.tabId,
-
+            tab: "",
+            init() {
+                console.log(this.$el.dataset);
+                this.tab = this.$el.dataset.tabId || "";
+            },
             isActiveTab() {
                 return this.tab === this.$el.dataset.tabId;
             },
             setActiveTab() {
                 this.tab = this.$el.dataset.tabId
             },
+            showTab() {
+                return this.isActiveTab();
+            },
             getHeaderClasses() {
                 return {
-                    'active': this.this.isActiveTab.call(this)
+                    'active': this.isActiveTab()
                 };
             },
         }
