@@ -48,7 +48,6 @@ use Magento\Framework\View\Element\Template;
         return {
             tab: "",
             init() {
-                console.log(this.$el.dataset);
                 this.tab = this.$el.dataset.tabId || "";
             },
             isActiveTab() {
