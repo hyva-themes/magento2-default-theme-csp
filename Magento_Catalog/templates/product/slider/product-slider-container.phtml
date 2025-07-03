@@ -171,19 +171,22 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                 }
             },
             scrollToSlideButtonClasses() {
-                const index = this.$el.dataset.index;
+                const index = this.$el.dataset.index ? parseInt(this.$el.dataset.index) : 0;
                 return {
                     'hidden': (this.pageSize !== 1 && !!(index % this.pageSize))
                 };
             },
             scrollToSlideButtonAriaCurrent() {
-                return this.active === this.$el.dataset.index;
+                const currentIndex = this.$el.dataset.index ? parseInt(this.$el.dataset.index) : 0;
+                return this.active === currentIndex;
             },
             scrollToSlideButtonAriaLabel() {
                 return hyva.str('<?= $escaper->escapeJs(__('Display slide %1')) ?>', (this.$el.dataset.index / this.pageSize) + 1);
             },
             bulletClasses() {
-                const index = this.$el.closest('[data-index]').dataset.index;
+                const dataIndex = this.$el.closest('[data-index]').dataset.index;
+                const index = dataIndex ? parseInt(dataIndex) : 0;
+
                 return {
                     'bg-opacity-100': this.active === index,
                     'bg-opacity-25': this.active !== index,
