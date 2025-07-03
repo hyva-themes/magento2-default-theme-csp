@@ -40,7 +40,10 @@ $productType = $product->getTypeId();
     <?php } ?>
 
     <div class="flex flex-col sm:flex-row justify-between my-4">
-        <?= $block->getChildHtml("product.info.stockstatus") ?>
+        <div class="inline-flex flex-wrap items-center gap-x-6">
+            <?= $block->getChildHtml("product.info.stockstatus") ?>
+            <?= $block->getChildHtml("product.info.stockqty") ?>
+        </div>
         <?= $block->getChildHtml("alert.urls") ?>
     </div>
 
