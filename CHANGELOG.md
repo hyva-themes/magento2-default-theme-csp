@@ -7,7 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.14...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.15...main
+
+## [1.3.15 CSP] - 2025-07-03
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Fix: Page Builder Tabs will now work again in csp mode**  
+    For more information, please refer to [merge request #19](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/19).
+
+### Removed
+
+- Nothing removed
 
 ## [1.3.14 CSP] - 2025-05-26
 
@@ -25,7 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Removed
 
-- Nothign removed
+- Nothing removed
 
 ## [1.3.14] - 2025-05-26
 
