@@ -25,7 +25,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 $addressViewModel = $viewModels->require(AddressViewModel::class);
 ?>
 <div
-    class="field date <?= $block->isRequired() ? 'required' : '' ?>"
+    class="field field-reserved date <?= $block->isRequired() ? 'required' : '' ?>"
     x-data="initDatePicker()"
 >
     <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>" class="label">
