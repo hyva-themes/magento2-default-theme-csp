@@ -19,7 +19,8 @@ use Magento\Framework\View\Element\Template;
 
     (() => {
         document.querySelectorAll('[data-content-type="tab-item"]').forEach(tabItem => {
-            tabItem.setAttribute('x-show', `tab === '${tabItem.id}'`);
+            tabItem.setAttribute('data-tab-id', tabItem.id);
+            tabItem.setAttribute('x-show', 'showTab');
         });
 
         document.querySelectorAll('[data-content-type="tabs"]').forEach(tab => {
@@ -29,17 +30,42 @@ use Magento\Framework\View\Element\Template;
                 const tabLink = tabHeader.querySelector('a');
                 const tabId = tabLink.getAttribute('href').replace('#', '');
 
-                tabHeader.setAttribute(':class', `{ 'active': tab === '${tabId}' }`);
-                tabLink.setAttribute('x-on:click.prevent', `tab = '${tabId}';
-                 const nextTick = $nextTick(() => $dispatch('page-builder-tab-activate', {tab: document.getElementById('${tabId}'), nextTick}))`
-                );
+                tabHeader.setAttribute('data-tab-id', tabId);
+                tabHeader.setAttribute(':class', 'getHeaderClasses');
+
+                tabLink.setAttribute('data-tab-id', tabId);
+                tabLink.setAttribute('x-on:click.prevent', 'setActiveTab');
 
                 if (index === defaultActiveTab) {
-                    tab.setAttribute('x-data', `{ tab: '${tabId}' }`);
+                    tab.setAttribute('data-tab-id', tabId);
+                    tab.setAttribute('x-data', 'hyvaPageBuilderWidgetsTabs');
                 }
             });
         });
     })();
+
+    function hyvaPageBuilderWidgetsTabs() {
+        return {
+            tab: "",
+            init() {
+                this.tab = this.$el.dataset.tabId || "";
+            },
+            isActiveTab() {
+                return this.tab === this.$el.dataset.tabId;
+            },
+            setActiveTab() {
+                this.tab = this.$el.dataset.tabId
+            },
+            showTab() {
+                return this.isActiveTab();
+            },
+            getHeaderClasses() {
+                return {
+                    'active': this.isActiveTab()
+                };
+            },
+        }
+    }
+    window.addEventListener('alpine:init', () => Alpine.data('hyvaPageBuilderWidgetsTabs', hyvaPageBuilderWidgetsTabs), {once: true});
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-
