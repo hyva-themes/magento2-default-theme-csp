@@ -11,6 +11,7 @@ declare(strict_types=1);
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HeroiconsSolid;
+use Hyva\Theme\ViewModel\BlockJsDependencies;
 use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\ProductListItem;
 use Hyva\Theme\ViewModel\ProductPage;
@@ -75,6 +76,9 @@ $imageCustomAttributes = $product->getData('image_custom_attributes')
     ?? [];
 $productName = $catalogOutputHelper->productAttribute($product, $product->getName(), 'name');
 
+// Ensure the required JS is rendered on the page
+$viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($block, 'Magento_Catalog::product/list/js/price-box.phtml');
+
 ?>
 
 <?php if ($product->isSaleable()): ?>
@@ -100,7 +104,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
     <?php endforeach; ?>
 <?php else: ?>
 <div class="item product product-item card card-interactive flex flex-col w-full <?= $viewIsGrid ? '' : 'md:flex-row' ?>"
-     <?php foreach ($block->getData('product_data_attributes') ?? [] as $attribute => $include): ?>
+     <?php foreach ($block->getData('product_data_attributes')  ?? [] as $attribute => $include): ?>
          <?php if ($include): ?>
              <?php /** Append data-* attributes based on layout XML arguments */ ?>
              <?= $escaper->escapeHtml(sprintf('data-%s', $attribute)); ?>="<?= $escaper->escapeHtmlAttr($product->getData($attribute)); ?>"
@@ -121,12 +125,10 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
             ->toHtml(); ?>
     </a>
     <div class="product-info flex flex-col grow <?= $viewIsGrid ? '' : 'md:pl-5 md:w-4/6' ?>">
-        <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
+        <div class="mt-2 mb-1 items-center justify-center font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <a
                 class="product-item-link"
                 href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
-                data-product-id="<?= $escaper->escapeHtmlAttr($product->getId()) ?>"
-                :id="sliderItemAriaDescribedById"
             >
                 <?= /* @noEscape */ $productName ?>
             </a>
@@ -143,7 +145,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
         <?php endif; ?>
 
         <?php if ($showDescription): ?>
-        <div class="mt-2 mb-1 items-center justify-center text-primary text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
+        <div class="mt-2 mb-1 items-center justify-center text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <?= /* @noEscape */ $productViewModel->getShortDescriptionForProduct($product) ?>
         </div>
         <?php endif; ?>
@@ -206,7 +208,7 @@ $productName = $catalogOutputHelper->productAttribute($product, $product->getNam
                         class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-yellow-500"
                         data-addto="compare"
                 >
-                    <?= $heroicons->scaleHtml("w-5 h-5", 25, 25, ['aria-hidden' => 'true']) ?>
+                    <?= $heroicons->scaleHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                 </button>
                 <?php endif; ?>
                 <?php if ($addToBlock = $block->getChildBlock('addto')): ?>

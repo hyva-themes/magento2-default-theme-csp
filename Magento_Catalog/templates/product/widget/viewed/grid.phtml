@@ -83,7 +83,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
                                     </a>
                                 <?php endif; ?>
                                 <?php if (in_array("name", $widgetAttributesToShow)): ?>
-                                    <p class="flex items-center justify-center px-1 pt-3 text-primary">
+                                    <p class="flex items-center justify-center px-1 pt-3">
                                         <a class="truncate product-item-link" :href="getProductUrl">
                                             <span x-html="product.name"></span>
                                         </a>
@@ -125,7 +125,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
                                                             hover:text-yellow-500"
                                                             data-addto="compare"
                                                     >
-                                                    <?= $heroicons->scaleHtml("w-5 h-5") ?>
+                                                    <?= $heroicons->scaleHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                                                 </button>
                                                 <?php endif; ?>
                                             <?php endif; ?>
@@ -139,7 +139,7 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
                                                     text-gray-500 bg-gray-200 border-0 rounded-full hover:text-red-600"
                                                     data-addto="wishlist"
                                                 >
-                                                    <?= $heroicons->heartHtml("w-5 h-5", 25, 25) ?>
+                                                    <?= $heroicons->heartHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                                                 </button>
                                             <?php endif; ?>
                                         <?php endif; ?>

@@ -59,7 +59,7 @@ $mergedCells = ($cartItemOutputViewModel->isItemPriceDisplayBoth() ? 2 : 1)
     <?= $block->getBlockHtml('formkey') ?>
     <div class="cart table-wrapper<?= $mergedCells == 2 ? ' detailed' : '' ?>">
         <?php if ($block->getPagerHtml()): ?>
-            <div class="cart-products-toolbar cart-products-toolbar-top toolbar">
+            <div class="cart-products-toolbar cart-products-toolbar-top toolbar mb-4">
                 <?= $block->getPagerHtml() ?>
             </div>
         <?php endif ?>
@@ -90,7 +90,7 @@ $mergedCells = ($cartItemOutputViewModel->isItemPriceDisplayBoth() ? 2 : 1)
             <?php endforeach ?>
         </table>
         <?php if ($block->getPagerHtml()): ?>
-            <div class="cart-products-toolbar cart-products-toolbar-bottom toolbar">
+            <div class="cart-products-toolbar cart-products-toolbar-bottom toolbar mt-8">
                 <?= $block->getPagerHtml() ?>
             </div>
         <?php endif ?>

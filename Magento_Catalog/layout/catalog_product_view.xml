@@ -101,6 +101,8 @@
 
                         <block name="product.info.stockstatus"  template="Magento_Catalog::product/view/stock-status.phtml"/>
 
+                        <container name="product.info.stockqty"/>
+
                         <block class="Magento\Catalog\Block\Product\Price"
                                name="product.info.price"
                                template="Magento_Catalog::product/view/price.phtml"

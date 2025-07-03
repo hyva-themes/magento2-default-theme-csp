@@ -48,7 +48,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             <?= $block->getBlockHtml('formkey') ?>
             <fieldset class="fieldset login">
                 <legend class="mb-3">
-                    <h2 class="text-xl font-medium title-font text-primary">
+                    <h2 class="text-xl font-medium title-font">
                         <?= $escaper->escapeHtml(__('Login')) ?>
                     </h2>
                 </legend>
@@ -61,7 +61,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     </label>
                     <div class="control">
                         <input name="login[username]"
-                               class="form-input"
+                               class="form-input w-full"
                                required
                                value="<?= $escaper->escapeHtmlAttr($block->getUsername()) ?>"
                                autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'username' ?>"
@@ -89,7 +89,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             </template>
                         </div>
                         <input name="login[password]"
-                            class="form-input"
+                            class="form-input w-full"
                             required
                             :type="passwordOrText"
                             autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'current-password' ?>"
@@ -104,10 +104,10 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             class="px-4 py-3"
                         >
                             <template x-if="notVisible">
-                                <?= $heroiconssolid->eyeHtml('w-5 h-5'); ?>
+                                <?= $heroiconssolid->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="visible">
-                                <?= $heroiconssolid->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroiconssolid->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>

@@ -31,26 +31,29 @@ $swatchData = $block->getSwatchData();
      x-data="initLayeredSwatch"
 >
     <div class="swatch-attribute-options clearfix">
-        <?php foreach ($swatchData['options'] as $option => $label):
+        <?php foreach ($swatchData['options'] as $option => $label): ?>
+            <?php
             // check required if attribute property "is_filterable" is set to "Filterable (no results)"
-            if (!isset($swatchData['swatches'][$option])):
+            if (!isset($swatchData['swatches'][$option])) {
                 continue;
-            endif; ?>
-            <?php $isImageSwatch = (int) $swatchData['swatches'][$option]['type'] === Swatch::SWATCH_TYPE_VISUAL_IMAGE; ?>
-            <a href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
-               aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
-               class="swatch-option-link-layered swatch-option cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker"
-               :class="getSwatchTypeClasses"
-               data-swatch-type="<?= $escaper->escapeHtmlAttr((string) $swatchData['swatches'][$option]['type']) ?>"
-               data-swatch-value="<?= $escaper->escapeHtmlAttr((string) $swatchData['swatches'][$option]['value']) ?>"
-               data-swatch-image="<?= $isImageSwatch ? $escaper->escapeHtmlAttr($block->getSwatchPath('swatch_image', $swatchData['swatches'][$option]['value'])) : '' ?>"
-               data-swatch-option="<?= $escaper->escapeHtmlAttr($option) ?>"
-               <?php if ((int) $swatchData['swatches'][$option]['type'] !== Swatch::SWATCH_TYPE_TEXTUAL): ?>
-                   :style="getNonTextSwatchBackgroundStyle"
+            }
+
+            $swatchType = (string) $swatchData['swatches'][$option]['type'];
+            $swatchValue = (string) $swatchData['swatches'][$option]['value'];
+            $isVisualSwatch = in_array((int) $swatchType, [Swatch::SWATCH_TYPE_VISUAL_COLOR, Swatch::SWATCH_TYPE_VISUAL_IMAGE], true);
+            ?>
+            <a
+                href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Filter %1 %2', $swatchData['attribute_label'], $label['label'])) ?>"
+                class="swatch-option-link-layered swatch-option cursor-pointer bg-container-lighter shadow-sm relative select-none border-container-darker <?= $isVisualSwatch ? 'w-6 h-6' : '' ?>"
+                <?php if ($isVisualSwatch): ?>
+                    style="<?= $swatchType === '2'
+                        ? 'background: #fff url(' . $escaper->escapeUrl($block->getSwatchPath('swatch_image', $swatchValue)) . ') center no-repeat'
+                        : 'background-color: ' . (/* @noEscape */ $swatchType === '1' ? $swatchValue : '') ?>;"
                 <?php endif; ?>
                 <?php if ($configurableViewModel->getShowSwatchTooltip()): ?>
-                    <?php if ((int) $swatchData['swatches'][$option]['type'] !== Swatch::SWATCH_TYPE_TEXTUAL): ?>
-                        <?php $swatchThumbPath = $isImageSwatch ? $block->getSwatchPath('swatch_thumb', $swatchData['swatches'][$option]['value']) : ''; ?>
+                    <?php if ((int) $swatchType !== Swatch::SWATCH_TYPE_TEXTUAL): ?>
+                        <?php $swatchThumbPath = $swatchType === "2" ? $block->getSwatchPath('swatch_thumb', $swatchValue) : ''; ?>
                     <?php endif; ?>
                     data-swatch-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
                     data-swatch-thumb="<?= $escaper->escapeHtmlAttr($swatchThumbPath ?? '') ?>"
@@ -58,8 +61,8 @@ $swatchData = $block->getSwatchData();
                     @mouseleave.self="onMouseLeave"
                 <?php endif; ?>
             >
-                <?php if ((string)$swatchData['swatches'][$option]['type'] === "0"): ?>
-                    <?= $escaper->escapeHtml($swatchData['swatches'][$option]['value'] ?: $label['label']) ?>
+                <?php if ($swatchType === "0"): ?>
+                    <?= $escaper->escapeHtml($swatchValue ?: $label['label']) ?>
                 <?php endif; ?>
             </a>
         <?php endforeach; ?>
