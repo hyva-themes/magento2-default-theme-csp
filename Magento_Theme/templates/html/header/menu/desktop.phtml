@@ -34,7 +34,6 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 >
     <!-- desktop -->
     <div x-ref="nav-desktop"
-         @load.window="setActiveMenu($root)"
          class="hidden lg:block lg:px-8">
         <nav
             class="relative"
@@ -105,6 +104,9 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
     const initMenuDesktop<?= $escaper->escapeHtml($uniqueId) ?> = () => {
         return {
             hoverPanelActiveId: null,
+            init() {
+                this.setActiveMenu(this.$root);
+            },
             setActiveMenu(menuNode) {
                 Array.from(menuNode.querySelectorAll('a')).filter(link => {
                     return link.href === window.location.href.split('?')[0];
