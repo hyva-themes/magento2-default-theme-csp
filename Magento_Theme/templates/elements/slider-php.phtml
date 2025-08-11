@@ -102,11 +102,6 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
             isItemCountGtPageSize() {
                 return this.itemCount > this.pageSize;
             },
-            buttonClasses() {
-                return {
-                    'opacity-25 pointer-events-none' : active === 0
-                };
-            },
             bulletClasses() {
                 const index = this.$el.dataset.index;
                 return {
@@ -114,7 +109,23 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                     'bg-opacity-25': this.active !== index,
                     'hidden': (this.pageSize !== 1 && !!(index % this.pageSize))
                 };
-            }
+            },
+            isPreviousSlideButtonDisabled() {
+                return this.active === 0;
+            },
+            previousSlideButtonClasses() {
+                return {
+                    'opacity-25 pointer-events-none': this.isPreviousSlideButtonDisabled()
+                }
+            },
+            isNextSlideButtonDisabled() {
+                return this.active >= this.itemCount - this.pageSize;
+            },
+            nextSlideButtonClasses() {
+                return {
+                    'opacity-25 pointer-events-none': this.isNextSlideButtonDisabled()
+                }
+            },
             showDummySlide() {
                 return this.pageFillers > this.$el.dataset.dummySlideNumber;
             },
@@ -169,12 +180,14 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
             <div style="min-height: 76px">
             <template x-if="isItemCountGtPageSize">
                 <div class="flex items-center justify-center py-4">
-                    <button
-                        aria-label="<?= $escaper->escapeHtml(__('Previous')) ?>"
-                        tabindex="-1"
-                        class="mr-4 text-black rounded-full outline-none focus:outline-none flex-none"
-                        :class="buttonClasses"
-                        @click="scrollPrevious">
+                                        <button
+                        type="button"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Previous slide')) ?>"
+                        :disabled="isPreviousSlideButtonDisabled"
+                        class="text-black flex-none p-3"
+                        :class="previousSlideButtonClasses"
+                        @click="scrollPrevious"
+                    >
                         <?= $heroicons->chevronLeftHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                     </button>
                     <div class="flex flex-wrap w-full md:w-auto justify-center">
@@ -187,11 +200,12 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                     <?php endfor; ?>
                     </div>
                     <button
-                        aria-label="<?= $escaper->escapeHtml(__('Next')) ?>"
-                        tabindex="-1"
-                        class="ml-4 text-black rounded-full outline-none focus:outline-none flex-none"
-                        :class="{ 'opacity-25 pointer-events-none' : active >= itemCount-pageSize }"
-                        @click="scrollNext">
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Next slide')) ?>"
+                        :disabled="isNextSlideButtonDisabled"
+                        class="text-black flex-none p-3"
+                        :class="nextSlideButtonClasses"
+                        @click="scrollNext"
+                    >
                         <?= $heroicons->chevronRightHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                     </button>
                 </div>
