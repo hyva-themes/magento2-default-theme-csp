@@ -99,12 +99,6 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                 this.calcPageSize();
                 this.$nextTick(() => this.calcActive())
             },
-            sliderItemClasses() {
-                const index = this.$el.dataset.index;
-                return {
-                    'js_dummy_slide flex-none w-full <?= $escaper->escapeJs($slideItemClasses) ?>' : pageFillers > index
-                }
-            },
             isItemCountGtPageSize() {
                 return this.itemCount > this.pageSize;
             },
@@ -121,6 +115,9 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                     'hidden': (this.pageSize !== 1 && !!(index % this.pageSize))
                 };
             }
+            showDummySlide() {
+                return this.pageFillers > this.$el.dataset.dummySlideNumber;
+            },
         }
     }
     window.addEventListener('alpine:init', () => Alpine.data('initSliderComponent', initSliderComponent), {once: true})
@@ -159,7 +156,13 @@ $slideItemClasses = $block->getData('maybe_purged_tailwind_slide_item_classes') 
                         </div>
                     <?php endforeach; ?>
                     <?php for ($i = 0; $i < $maxVisibleSlides; $i++): /* Add empty filler slides in case the number of items is not dividable by the pagesize */ ?>
-                    <div :class="sliderItemClasses" data-index="<?= (int) $i ?>"></div>
+                        <div
+                            class="js_dummy_slide w-full shrink-0 <?= $escaper->escapeHtmlAttr($slideItemClasses) ?>"
+                            aria-hidden="true"
+                            data-dummy-slide-number="<?= (int)$i; ?>"
+                            x-show="showDummySlide"
+                            x-cloak
+                        ></div>
                     <?php endfor; ?>
                 </div>
             </div>
