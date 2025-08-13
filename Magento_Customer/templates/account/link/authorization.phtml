@@ -19,11 +19,29 @@ use Magento\Customer\Block\Account\AuthorizationLink;
 <?php if ($block->isLoggedIn()): ?>
     <?php $dataPostParam = $block->getPostParams(); ?>
     <li class="nav item">
-        <a <?= /* @noEscape */ $block->getLinkAttributes() ?>
-            @click.prevent='hyva.postForm(<?= /* @noEscape */ $dataPostParam ?>)'
+        <a
+            <?= /* @noEscape */ $block->getLinkAttributes() ?>
+            data-post-data='<?= /** noEscape */ $dataPostParam ?>'
+            x-data="initAccountLogoutHandler"
+            @click.prevent="accountLogout"
         >
             <?= $escaper->escapeHtml($block->getLabel()) ?>
         </a>
+
+        <script>
+            function initAccountLogoutHandler() {
+                return {
+                    accountLogout() {
+                        const data = JSON.parse(this.$el.dataset.postData);
+                        hyva.postForm(data);
+                    },
+                }
+            }
+
+            window.addEventListener('alpine:init', () => {
+                Alpine.data('initAccountLogoutHandler', initAccountLogoutHandler);
+            }, { once: true } );
+        </script><?php $hyvaCsp->registerInlineScript(); ?>
     </li>
 <?php else: ?>
     <li class="nav item">
