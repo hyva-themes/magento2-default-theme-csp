@@ -6,12 +6,17 @@
  * See https://hyva.io/license
  */
 
-/**
- * @var \Magento\Customer\Block\Account\AuthorizationLink $block
- * @var \Magento\Framework\Escaper $escaper
- */
+declare(strict_types=1);
 
-if ($block->isLoggedIn()): ?>
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Customer\Block\Account\AuthorizationLink;
+
+/** @var Escaper $escaper */
+/** @var AuthorizationLink $block */
+/** @var HyvaCsp $hyvaCsp */
+?>
+<?php if ($block->isLoggedIn()): ?>
     <?php $dataPostParam = $block->getPostParams(); ?>
     <li class="nav item">
         <a <?= /* @noEscape */ $block->getLinkAttributes() ?>
