@@ -7,7 +7,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.15...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.16...main
+
+## [1.3.16 CSP] - 2025-08-19
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Fix CSP Compatibility Tweaks**  
+  The previous release introduced several new CSP compatibility issues and revealed additional related problems.
+  This merge request addresses and resolves all identified CSP issues.
+
+  For more information, please refer to [merge request #29](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/29).
+
+- **Fix CSP issues on `authorization.phtml` for customer logout**  
+  For more information, please refer to [issue #12](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/issues/12).
+
+### Removed
+
+- Nothing removed
 
 ## [1.3.15 CSP] - 2025-07-03
 
@@ -18,7 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - **Fix: Page Builder Tabs will now work again in csp mode**  
-    For more information, please refer to [merge request #19](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/19).
+  For more information, please refer to [merge request #19](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/19).
 
 ### Removed
 
