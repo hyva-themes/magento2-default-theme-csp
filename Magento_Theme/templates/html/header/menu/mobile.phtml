@@ -31,7 +31,6 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 ?>
 <nav
     x-data="initMenuMobile"
-    @load.window="setActiveMenu"
     @keydown.window.escape="closeMenu"
     class="z-20 order-2 sm:order-1 lg:order-2 navigation lg:hidden w-12 h-12"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation')) ?>"
@@ -183,13 +182,14 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 
     const initMenuMobile = () => {
         return {
-            mobilePanelActiveId: null,
-
             open: false,
+            mobilePanelActiveId: null,
+            init() {
+                this.setActiveMenu(this.$root);
+            },
             closed() {
                 return !this.open
             },
-
             triggerButtonClass() {
                 return {
                     'overflow-x-hidden overflow-y-auto fixed top-0 left-0 w-full': this.open
@@ -230,14 +230,10 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                     'hidden': !this.mobilePanelActiveIdMatchesIndex()
                 }
             },
-
             mobilePanelActiveIdMatchesIndex() {
                 return this.mobilePanelActiveId === this.$el.dataset.index
             },
-
-            setActiveMenu() {
-                const menuNode = this.$root
-
+            setActiveMenu(menuNode) {
                 Array.from(menuNode.querySelectorAll('a')).filter(link => {
                     return link.href === window.location.href.split('?')[0]
                 }).map(item => {

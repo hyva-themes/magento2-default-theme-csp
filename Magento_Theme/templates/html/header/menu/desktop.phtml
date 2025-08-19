@@ -34,7 +34,6 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 >
     <!-- desktop -->
     <div x-ref="nav-desktop"
-         @load.window="setActiveMenu"
          class="hidden lg:block lg:px-8">
         <nav
             class="relative"
@@ -106,7 +105,9 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
     const initMenuDesktop = () => {
         return {
             hoverPanelActiveId: null,
-
+            init() {
+                this.setActiveMenu(this.$root);
+            },
             hoverPanelIsIndex() {
                 return this.hoverPanelActiveId === this.$el.dataset.index
             },
@@ -128,10 +129,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                     'block': this.hoverPanelIsIndex()
                 }
             },
-
-            setActiveMenu() {
-                const menuNode = this.$root
-
+            setActiveMenu(menuNode) {
                 Array.from(menuNode.querySelectorAll('a')).filter(link => {
                     return link.href === window.location.href.split('?')[0]
                 }).map(item => {

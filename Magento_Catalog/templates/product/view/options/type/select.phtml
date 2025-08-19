@@ -29,7 +29,7 @@ $customOptionsViewModel = $viewModels->require(CustomOption::class);
     data-option-id="<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
 >
     <label class="label text-gray-700 text-left w-full sm:w-1/2"
-           for="select_<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+           for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
     >
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>

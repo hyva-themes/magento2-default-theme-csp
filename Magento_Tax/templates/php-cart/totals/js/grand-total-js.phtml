@@ -7,8 +7,13 @@
  */
 
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\MagentoMetadata;
 
 /** @var HyvaCsp $hyvaCsp */
+
+/** @var ViewModelRegistry $viewModels */
+$magento = $viewModels->require(MagentoMetadata::class);
 
 /**
  * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
@@ -27,7 +32,12 @@ use Hyva\Theme\ViewModel\HyvaCsp;
                 return hyva.formatPrice(this.segment.value);
             },
             formatGrandTotalExclTax() {
+                <?php /* All Mage-OS releases with a version < 2.4.6 match Magento code >= 2.4.6 */ ?>
+                <?php if ($magento->versionCompare('<', '2.4.6') && $magento->getDistributionName() === 'Magento'): ?>
                 return hyva.formatPrice(this.totalsData.grand_total);
+                <?php else: ?>
+                return hyva.formatPrice(totalsData.grand_total - totalsData.tax_amount);
+                <?php endif; ?>
             }
         }
     }

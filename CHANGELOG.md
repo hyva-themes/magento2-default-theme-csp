@@ -32,9 +32,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Nothing removed
 
-## [1.3.15 CSP] - 2025-07-03
+## [1.3.16] - 2025-08-19
 
-[1.3.15 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.14...1.3.15
+[1.3.16]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.15...1.3.16
 
 ### Added
 
@@ -42,8 +42,57 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 
-- **Fix: Page Builder Tabs will now work again in csp mode**  
-  For more information, please refer to [merge request #19](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/19).
+- **Fix Grand Total Calculation with Excluding Tax in Cart Page**  
+  This issue affects Magento versions later than 2.4.6; in earlier versions, the calculation was correct.
+
+  For more information, please refer to [issue #716](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/716)
+
+  Many thanks to Thomas Klein (ATI4 Group) for the contribution!
+
+- **Fix missing `rel="noopener"` to external links for security**  
+  For more information, please refer to [issue #1222](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1222)
+
+- **Pagebuilder Row now only applies the container styles, if the layout is set to full width**  
+  For more information, please refer to [issue #1219](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1219)
+
+- **Fix Pagebuilder applying border width to all angles instead of one**  
+  For more information, please refer to [issue #1218](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1218)
+
+- **Fix Currency switcher**  
+  For more information, please refer to [issue #1200](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1200)
+
+- **Fix inconsistent currency switcher styles, compared to the Store and Language switchers**  
+  For more information, please refer to [issue #1220](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1220)
+
+- **Improved accessible name for clear all button in compare sidebar**  
+  For more information, please refer to [issue #1186](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1186)
+
+- **Fix JS error in configurable-options, if MSI is disabled**  
+  For more information, please refer to [issue #1138](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1138)
+
+- **Fix xml layout syntax for `sales_order_printcreditmemo.xml` and `sales_order_printcreditmemo.xml`**  
+  For more information, please refer to [issue #1184](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1184)
+
+- **Fix invalid aria attribute on Cancel gift message**  
+  For more information, please refer to [issue #1176](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1176)
+
+- **Fix Qty field wraping in grouped products, with long product names**  
+  For more information, please refer to [issue #1214](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1214)
+
+- **Fix race condition in javascript for setting the active menu item**  
+  This issue primarily affects Safari, but can also impact other browsers. With this fix, all browsers will now handle this scenario correctly.
+
+  For more information, please refer to [issue #1322](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1322)
+
+- **Fix Correct `for` attribute in `<label>` for customizable options**  
+  For more information, please refer to [issue #1132](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1132)
+
+  Many thanks to Valeriia Prokhina (Perspective Magento Team) for the contribution!
+
+- **Fix CLS in customer login page**  
+  For more information, please refer to [CSP issue #16](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/issues/16)
+
+  Many thanks to Christoph Hendreich (In Session) for the contribution!
 
 ### Removed
 
@@ -53,7 +102,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [1.3.15]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.14...1.3.15
 
-## Added
+### Added
 
 - **Add title and change icon to be aria-hidden**  
   For more information, please refer to [issue #1197](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1197)
@@ -79,7 +128,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   Many thanks to Oleksii Rozhnenko (Perspective Magento Team) for the contribution!
 
-## Changed
+### Changed
 
 - **Fix typo in breadcrumbs.phtml**  
   For more information, please refer to [merge request #1292](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1292)
@@ -109,7 +158,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Improve Layered Navigation Visual swatch render**  
   For more information, please refer to [issue #813](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/813)
 
-## Removed
+### Removed
 
 - **Removed unused commented getCompany from account dashboard info template**  
   For more information, please refer to [issue #1204](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1204)
