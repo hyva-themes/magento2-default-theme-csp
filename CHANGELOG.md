@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.3.16 CSP] - 2025-08-19
 
+[1.3.16 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.15...1.3.16
+
 ### Added
 
 - Nothing added
@@ -31,6 +33,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Nothing removed
 
 ## [1.3.15 CSP] - 2025-07-03
+
+[1.3.15 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.14...1.3.15
 
 ### Added
 
