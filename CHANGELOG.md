@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   For more information, please refer to [issue #716](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/716)
 
+  Many thanks to Thomas Klein (ATI4 Group) for the contribution!
+
 - **Fix missing `rel="noopener"` to external links for security**  
   For more information, please refer to [issue #1222](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1222)
 
