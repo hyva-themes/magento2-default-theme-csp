@@ -250,10 +250,12 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
                     this.activeProductsPriceData[this.finalPriceKey].amount < this.activeProductsPriceData[this.regularPriceKey].amount;
             },
             formatOldPriceWithOptions() {
-                return hyva.formatPrice(this.$el.dataset.oldPrice + this.getCustomOptionPrice());
+                const price = parseFloat(this.$el.dataset.oldPrice);
+                return hyva.formatPrice(price + this.getCustomOptionPrice());
             },
             formatOldPriceExclWithOptions() {
-                return hyva.formatPrice(this.$el.dataset.oldPriceExcl + this.getCustomOptionBasePrice())
+                const price = parseFloat(this.$el.dataset.oldPriceExcl);
+                return hyva.formatPrice(price + this.getCustomOptionBasePrice())
             },
             formatOldPriceInclWithSelection() {
                 return hyva.formatPrice(this.activeProductsPriceData[this.regularPriceKey].amount + this.getCustomOptionPrice());
