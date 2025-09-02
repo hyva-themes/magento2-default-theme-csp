@@ -7,7 +7,32 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.16...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.17...main
+
+## [1.3.17 CSP] - 2025-09-02
+
+[1.3.17 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.16...1.3.17
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Wrong old price calculation on the product detail page**  
+  This fixes an older but very critical issue for the price rending in the CSP theme, where the calculation did not work, do one price value was being rendered as a string.
+
+  For more information, please refer to [issue #17](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/issues/17).
+
+### Removed
+
+- Nothing removed
+
+## [1.3.17] - 2025-09-02
+
+[1.3.17]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.16...1.3.17
+
+_This release updates the Theme Module dependencies. No functional changes are included._
 
 ## [1.3.16 CSP] - 2025-08-19
 
