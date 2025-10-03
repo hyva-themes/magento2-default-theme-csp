@@ -74,13 +74,7 @@ $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-vid
                     return;
                 }
 
-                slider.addEventListener('glider-loaded', () => {
-                    slider.querySelectorAll('.jarallax').forEach(videoSlide => {
-                        videoSlide.jarallax && videoSlide.jarallax.onScroll();
-                    });
-                });
-
-                slider.addEventListener('glider-animated', () => {
+                slider.addEventListener('slideChange', () => {
                     slider.querySelectorAll('.jarallax').forEach(videoSlide => {
                         videoSlide.jarallax && videoSlide.jarallax.onScroll();
                     });

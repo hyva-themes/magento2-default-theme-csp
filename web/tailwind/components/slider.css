@@ -1,13 +1,40 @@
-.snap {
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
+@layer components {
+    .snap-slider {
+        --snap-cols: 1;
+        --snap-gap: theme("gap.4");
+        --snap-size: calc(
+            (100% - var(--snap-gap) * (var(--snap-cols) - 1)) / var(--snap-cols)
+        );
+        container-type: inline-size;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: var(--snap-size);
+        gap: var(--snap-gap);
+        padding-block: theme("spacing.6");
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
 
-    &::-webkit-scrollbar {
-        display: none;
+        @media (prefers-reduced-motion: no-preference) {
+            scroll-behavior: smooth;
+        }
+
+        & > * {
+            scroll-snap-align: start;
+        }
     }
 
-    & > div {
-        scroll-snap-align: start;
+    .snap-pager {
+        @apply flex flex-wrap justify-center gap-2 py-2 min-h-11;
+    }
+
+    .snap-marker {
+        @apply shrink-0 w-3 h-3 m-2 rounded-full bg-slate-400 cursor-pointer;
+        transition: width 150ms, background-color 150ms;
+
+        &[aria-current="true"] {
+            @apply w-6 bg-slate-700;
+        }
     }
 }

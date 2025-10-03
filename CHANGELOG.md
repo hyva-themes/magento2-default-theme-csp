@@ -9,6 +9,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...main
 
+### Added
+
+- Nothing added
+
+### Changed
+
+- Replaced GliderJs in PageBuilder Sliders with Hyvä Snap Slider
+- Replaced Custom Js in Product Slider with Hyvä Snap Slider
+  - This removes the need for the `product-slider-container.phtml`, instead uses the `product-slider.phtml` directly for rendering 
+
+### Removed
+
+- Nothing removed
+
 ## [1.3.17] - 2025-09-02
 
 [1.3.17]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.16...1.3.17
