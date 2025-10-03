@@ -20,9 +20,7 @@ $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-vid
 <script>
     (() => {
         const initParallaxImage = (element) => {
-            if (!window.jarallax) {
-                return;
-            }
+            if (!window.jarallax)  eturn;
 
             element.classList.add('jarallax');
             element.dataset.jarallax = '';
@@ -38,10 +36,7 @@ $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-vid
         };
 
         const initVideoBackground = (element) => {
-            if (!window.jarallax) {
-                return;
-            }
-
+            if (!window.jarallax) return;
             let slider = null;
 
             if (element.classList.contains('pagebuilder-slide-wrapper')) {
@@ -68,9 +63,7 @@ $jarallaxVideoUrl = $block->getViewFileUrl('Magento_PageBuilder::js/jarallax-vid
             });
 
             if (slider) {
-                if (slider.dataset.afterChangeIsSet) {
-                    return;
-                }
+                if (slider.dataset.afterChangeIsSet) return;
 
                 slider.addEventListener('slideChange', () => {
                     slider.querySelectorAll('.jarallax').forEach(videoSlide => {
