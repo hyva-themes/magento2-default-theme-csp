@@ -35,33 +35,35 @@ $productListItemViewModel = $viewModels->require(ProductListItem::class);
 /** @var Store $storeViewModel */
 $storeViewModel = $viewModels->require(Store::class);
 
-$sliderName = $block->getData('slider_name') ?: str_replace(['.', '/', '\\'], '_', $block->getNameInLayout());
-$title = $block->getData('title') ?: '';
-$headingTag = $block->getData('heading_tag') ?: 'h3';
-$cssClasses = $block->getData('css_classes') ?: 'product-slider my-8';
-$headingCssClasses = $block->getData('heading_css_classes') ?: 'text-2xl font-medium';
-$columnCount = $block->getData('column_count') ?: 4;
+$sliderName = $block->getSliderName() ?: str_replace(['.', '/', '\\'], '_', $block->getNameInLayout());
+$title = $block->getTitle() ?: '';
+$headingTag = $block->getHeadingTag() ?: 'h3';
+$cssClasses = $block->getCssClasses() ?: 'product-slider my-8';
+$headingCssClasses = $block->getHeadingCssClasses() ?: 'text-2xl font-medium';
+$columnCount = $block->getColumnCount() ?: 4;
 $sliderClasses = implode(' ', array_filter([
     'snap-slider',
     $columnCount > 1 ? 'md:[--snap-cols:2]' : '',
     $columnCount > 2 ? 'lg:[--snap-cols:3]' : '',
     $columnCount > 3 ? 'xl:[--snap-cols:4]' : '',
+    $columnCount > 4 ? '2xl:[--snap-cols:5]' : '',
+    $block->getSliderCssClasses()
 ]));
 
-$showHeading = $block->getData('show_heading') ?? true;
-$showPager = $block->getData('show_pager') ?? true;
-$hideDetails = $block->getData('hide_details') ?? false;
-$hideRatingSummary = $block->getData('hide_rating_summary') ?? false;
+$showHeading = $block->getShowHeading() ?? true;
+$showPager = $block->getShowPager() ?? true;
+$hideDetails = $block->getHideDetails() ?? false;
+$hideRatingSummary = $block->getHideRatingSummary() ?? false;
 
 // Filter Options
-$pageSize = $block->getData('page_size') ?: 8;
-$skusFilter = $block->getData('product_skus') ? explode(',', $block->getData('product_skus')) : [];
-$additionalFilters = (array) $block->getData('additional_filters');
+$pageSize = $block->getPageSize() ?: 8;
+$skusFilter = $block->getProductSkus() ? explode(',', $block->getProductSkus()) : [];
+$additionalFilters = $block->getAdditionalFilters() ?: [];
 
-$sortAttribute = $block->getData('sort_attribute') ?: '';
-$sortDirection = $block->getData('sort_direction') ?: 'ASC';
+$sortAttribute = $block->getSortAttribute() ?: '';
+$sortDirection = $block->getSortDirection() ?: 'ASC';
 
-$type = $block->getData('type');
+$type = $block->getType();
 // In case $type is not set on the block, it will default the block class name, which is not what we need in this template.
 $type = is_string($type) && strpos($type, '\\') === false  ? $type : 'generic';
 
@@ -69,20 +71,20 @@ if ($hideRatingSummary) {
     $productListViewModel->excludeReviewSummary();
 }
 
-if ($categoryIds = $block->getData('category_ids')) {
+if ($categoryIds = $block->getCategoryIds()) {
     $productListViewModel->addFilter('category_id', $categoryIds, 'in');
 }
 
-if ($isAnchorCategory = $block->getData('include_child_category_products')) {
+if ($isAnchorCategory = $block->getIncludeChildCategoryProducts()) {
     // Only has an effect if a single category ID filter is set, and that category is an anchor category
     $productListViewModel->includeChildCategoryProducts();
 }
 
-if ($priceFrom = $block->getData('price_from')) {
+if ($priceFrom = $block->getPriceFrom()) {
     $productListViewModel->addFilter('price', $priceFrom, 'gteq');
 }
 
-if ($priceTo = $block->getData('price_to')) {
+if ($priceTo = $block->getPriceTo()) {
     $productListViewModel->addFilter('price', $priceTo, 'lteq');
 }
 
@@ -90,8 +92,14 @@ if ($skusFilter) {
     $productListViewModel->addFilter('sku', array_map('trim', $skusFilter), 'in');
 }
 
-foreach ($additionalFilters as $filter) {
-    $productListViewModel->addFilter($filter['field'], $filter['value'], $filter['conditionType'] ?? 'eq');
+if (is_string($additionalFilters)) {
+    $additionalFilters = json_decode($additionalFilters, true);
+}
+
+if (is_array($additionalFilters)) {
+    foreach ($additionalFilters as $filter) {
+        $productListViewModel->addFilter($filter['field'], $filter['value'], $filter['conditionType'] ?? 'eq');
+    }
 }
 
 $productListViewModel->setPageSize($pageSize);
