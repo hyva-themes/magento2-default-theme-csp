@@ -6,18 +6,20 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Date;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\Locale;
 use Magento\Customer\Block\Widget\Dob;
 use Magento\Customer\ViewModel\Address as AddressViewModel;
 use Magento\Framework\Escaper;
-use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\Date;
-use Hyva\Theme\ViewModel\Locale;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 /** @var Escaper $escaper */
 /** @var Dob $block */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var Date $date */
 $date = $viewModels->require(Date::class);
@@ -33,7 +35,7 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
 
 <div
     class="field field-reserved date <?= $block->isRequired() ? 'required' : '' ?>"
-    x-data="initDatePicker()"
+    x-data="initDatePicker"
 >
     <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>_picker" class="label">
         <span><?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?></span>
@@ -46,14 +48,15 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
             class="form-input <?= $escaper->escapeHtmlAttr($validationClass) ?: '' ?>"
             placeholder="<?= $escaper->escapeHtml($block->getDateFormat()) ?>"
             autocomplete="off"
-            x-model="valuePicker"
-            :min="getMinMaxDate(120)"
-            :max="getMinMaxDate()"
+            :value="valuePicker"
+            @change="setValuePicker"
+            :min="getMinDate"
+            :max="getMaxDate"
         >
         <input
             type="hidden"
             name="<?= $escaper->escapeHtmlAttr($block->getFieldName('dob')) ?>"
-            x-model="value"
+            :value="value"
             <?php if ($block->isRequired()): ?>
                 required
             <?php endif; ?>
@@ -71,7 +74,10 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
                 this.valuePicker = this.value && this.dateToInputDate(new Date(this.initValuePicker));
                 this.$watch('valuePicker', value => this.value = this.convertDateToLocale(value));
             },
-            getMinMaxDate(subtractYears = 0) {
+            setValuePicker() {
+                this.valuePicker = this.$event.target.value;
+            },
+            getDateOnYear(subtractYears = 0) {
                 const today = new Date();
                 const utcDate = new Date(Date.UTC(
                     today.getUTCFullYear() - subtractYears,
@@ -79,6 +85,12 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
                     today.getDate()
                 ));
                 return this.dateToInputDate(utcDate);
+            },
+            getMinDate() {
+                return getDateOnYear(120);
+            },
+            getMaxDate() {
+                return getDateOnYear();
             },
             dateToInputDate(date) {
                 const year = date.getFullYear().toString().padStart(4, '0');
@@ -96,4 +108,9 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
             }
         }
     }
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initDatePicker', initDatePicker);
+    }, { once: true })
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
