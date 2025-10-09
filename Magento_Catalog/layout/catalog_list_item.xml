@@ -11,7 +11,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
 
-        <block class="Magento\Catalog\Block\Product\AbstractProduct" name="product_list_item"
+        <block class="Magento\Catalog\Block\Product\View" name="product_list_item"
                template="Magento_Catalog::product/list/item.phtml">
             <arguments>
                 <argument name="hyva_js_block_dependencies" xsi:type="array">
