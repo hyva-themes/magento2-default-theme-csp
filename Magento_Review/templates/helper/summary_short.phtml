@@ -25,21 +25,8 @@ $uniqueId = $productId . uniqid();
 ?>
 <?php if ($block->isReviewEnabled()): ?>
     <div
-        x-data="initRating<?= /* @noEscape */ $uniqueId ?>()"
-        x-defer="intersect"
-        @keyup.enter="scrollToRatings()"
-        @click="scrollToRatings()"
         class="rating-summary flex"
-        :class="{'cursor-pointer' : reviewsSection}"
-        <?php if (!$rating): ?>
-            title="<?= $escaper->escapeHtmlAttr(__('Be the first to review this product')) ?>"
-        <?php endif; ?>
-        :tabindex="reviewsSection ? '0' : '-1'"
-        :aria-label="reviewsSection
-            ? '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars. Click to go to reviews.', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
-            : '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
-        "
-        :role="reviewsSection ? 'button' : 'img'"
+        aria-label="<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>"
     >
         <?php if ($rating): ?>
             <?php $i = 0; ?>
@@ -130,35 +117,4 @@ $uniqueId = $productId . uniqid();
             <?php endwhile; ?>
         <?php endif; ?>
     </div>
-
-    <script>
-        'use strict';
-
-        function initRating<?= /* @noEscape */ $uniqueId ?>() {
-            return {
-                reviewsSection: document.getElementById('customer-review-list')
-                    || document.getElementById('customer-reviews')
-                    || document.getElementById('review-form'),
-                scrollToRatings() {
-                    let scrollTimeout = null
-
-                    if (!this.reviewsSection) {
-                        return
-                    }
-
-                    addEventListener('scroll', () => {
-                        clearTimeout(scrollTimeout);
-
-                        scrollTimeout = setTimeout(() => {
-                            if (this.reviewsSection) {
-                                this.reviewsSection.focus()
-                            }
-                        }, 50);
-                    }, { once: true });
-
-                    this.reviewsSection.scrollIntoView({behavior: 'smooth'})
-                }
-            }
-        }
-    </script>
 <?php endif; ?>
