@@ -38,6 +38,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Fixed the toggle action for the minicart panel**  
   For more information, please refer to [issue #918](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/918)
 
+- **Fixed Bad A11Y link in empty cart**  
+  For more information, please refer to [issue #911](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/911)
+
 ### Removed
 
 - **Removed the scroll to review function summary short**  
