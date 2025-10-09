@@ -22,12 +22,12 @@ use Magento\Framework\Escaper;
                 <?= $escaper->escapeHtml(__('Summary')) ?>
             </h2>
         </div>
+        <?= $block->getChildHtml('cart.discount') ?>
         <?= $block->getChildHtml('cart.summary') ?>
     </div>
     <div class="lg:flex-1">
         <?= $block->getChildHtml('form_before') ?>
         <?= $block->getChildHtml('cart-items') ?>
         <?= $block->getChildHtml('checkout_cart_widget') ?>
-        <?= $block->getChildHtml('cart.discount') ?>
     </div>
 </div>
