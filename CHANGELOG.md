@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Improve way to handle call to null, edge case for Hyva CMS**  
   For more information, please refer to [merge request #1347](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1347)
 
+- **Replace deprecated AbstractProduct class in product item**  
+  For more information, please refer to [merge request #781](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/781)
+
+  Many thanks to Andrzej Wiaderny (Hatimeria) for the contribution!
+
 ### Removed
 
 - **Removed the scroll to review function summary short**  
