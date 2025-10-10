@@ -20,6 +20,7 @@
 @import url(components/transitions.css);
 @import url(components/typography.css);
 @import url(components/page-builder.css);
+@import url(components/print.css);
 
 /* purgecss end ignore */
 

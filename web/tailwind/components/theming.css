@@ -7,7 +7,7 @@ body {
 }
 
 .card {
-    @apply p-4 rounded-sm bg-container-lighter shadow;
+    @apply p-4 rounded-sm bg-container-lighter shadow print:border;
 }
 
 .card-interactive {

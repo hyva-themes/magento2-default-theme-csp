@@ -33,25 +33,15 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
             cart: {},
             isCartOpen: false,
             getData(data) {
-                if (data.cart) { this.cart = data.cart }
+                this.cart = data.cart ?? {};
             },
             isCartEmpty() {
-                return !this.cart.summary_count
+                return !this.cart.summary_count;
             },
             toggleCart(event) {
-                if (event.detail && event.detail.isOpen !== undefined) {
-                    this.isCartOpen = event.detail.isOpen
-                    if (!this.isCartOpen && this.$refs && this.$refs.cartButton) {
-                        this.$refs.cartButton.focus()
-                    }
-                } else {
-                    <?php
-                    /*
-                     * The toggle-cart event was previously dispatched without parameter to open the drawer (not toggle).
-                     * Keeping this in here for backwards compatibility.
-                     */
-                    ?>
-                    this.isCartOpen = true
+                this.isCartOpen = event.detail?.isOpen ?? true;
+                if (!this.isCartOpen && this.$refs?.cartButton) {
+                    this.$refs.cartButton.focus();
                 }
             }
         }
@@ -148,7 +138,8 @@ $showMiniCart = $storeConfig->getStoreConfig(SidebarCart::XML_PATH_CHECKOUT_SIDE
                     }`"
                 <?php if ($showMiniCart): ?>
                     @click.prevent="() => {
-                        $dispatch('toggle-cart', { isOpen: true })
+                        isCartOpen = !isCartOpen;
+                        $dispatch('toggle-cart', { isOpen: isCartOpen })
                     }"
                     @toggle-cart.window="toggleCart($event)"
                     :aria-expanded="isCartOpen"

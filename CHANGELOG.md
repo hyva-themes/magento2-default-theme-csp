@@ -11,17 +11,54 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
-- Nothing added
+- **Add checkout.cart.totals.scripts container to cart**  
+  For more information, please refer to [issue #1209](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1209)
 
 ### Changed
 
-- Replaced GliderJs in PageBuilder Sliders with Hyvä Snap Slider
-- Replaced Custom Js in Product Slider with Hyvä Snap Slider
-  - This removes the need for the `product-slider-container.phtml`, instead uses the `product-slider.phtml` directly for rendering 
+- **Simplify cart data handling and improve toggle logic**  
+  For more information, please refer to [merge request #1226](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1226)
+
+  Many thanks to Thomas Hauschild (e3n) for the contribution!
+
+- **Improve way to handle call to null, edge case for Hyva CMS**  
+  For more information, please refer to [merge request #1347](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1347)
+
+- **Replace deprecated AbstractProduct class in product item**  
+  For more information, please refer to [merge request #781](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/781)
+
+  Many thanks to Andrzej Wiaderny (Hatimeria) for the contribution!
+
+- **Recaptcha badge is hidden the wrong way**  
+  For more information, please refer to [issue #1211](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1211)
+
+- **Update browser-sync to v3.0.3**  
+  For more information, please refer to [merge request #1188](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1188)
+
+- **Fixed the toggle action for the minicart panel**  
+  For more information, please refer to [issue #918](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/918)
+
+- **Fixed Bad A11Y link in empty cart**  
+  For more information, please refer to [issue #911](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/911)
+
+- **Respect show out of stock setting for dropdown options**  
+  For more information, please refer to [issue #1224](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1224)
+
+  Many thanks to Simon Sprankel (Customgento) for the contribution!
+
+- **Replaced Custom Js in Product Slider with Hyvä Snap Slider**  
+  For more information, please refer to [issue #1227](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1227)
+
+- **Replaced GliderJs in PageBuilder Sliders with Hyvä Snap Slider**  
+- For more information, please refer to [issue #1227](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1227)
+
 
 ### Removed
 
-- Nothing removed
+- **Removed the scroll to review function summary short**  
+  For more information, please refer to [issue #814](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/814)
+
+  Many thanks to Ivan Tarkovych (Perspective Magento Team) for the contribution!
 
 ## [1.3.17] - 2025-09-02
 
