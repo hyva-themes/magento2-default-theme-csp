@@ -1,0 +1,14 @@
+.price-container.price-tier_price {
+    display: flex;
+    gap: --spacing(1);
+
+    & > .price-including-tax + .price-excluding-tax {
+        &::before {
+            content: "(" attr(data-label) ": ";
+        }
+
+        &::after {
+            content: ")";
+        }
+    }
+}

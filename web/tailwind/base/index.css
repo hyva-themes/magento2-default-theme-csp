@@ -1,0 +1,26 @@
+@import "./preflight.css";
+@import "./print.css";
+
+@layer base {
+    @view-transition {
+        navigation: auto;
+    }
+
+    :root {
+        scrollbar-color: var(--scrollthumb-color, var(--color-primary))
+            var(--scrolltrack-color, transparent);
+        accent-color: var(--color-primary);
+        caret-color: var(--color-primary);
+        interpolate-size: allow-keywords;
+    }
+
+    body {
+        background: var(--color-bg);
+        color: var(--color-text);
+    }
+}
+
+/* For AlpineJS */
+[x-cloak] {
+    display: none !important;
+}

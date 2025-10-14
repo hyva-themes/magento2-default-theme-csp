@@ -1,0 +1,18 @@
+@layer base {
+    :where(form label) {
+        @apply mb-2 block;
+        color: var(--color-text-secondary);
+    }
+
+    :where(form legend) {
+        @apply text-xl mb-3;
+
+        & + br {
+            @apply hidden;
+        }
+    }
+
+    :where(fieldset ~ fieldset) {
+        @apply mt-8;
+    }
+}

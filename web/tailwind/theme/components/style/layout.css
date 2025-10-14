@@ -1,9 +1,0 @@
-/* For backwards compatibility */
-
-.flex-columns-wrapper {
-    @apply flex flex-col;
-
-    @screen md {
-        @apply flex-row;
-    }
-}

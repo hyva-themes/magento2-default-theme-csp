@@ -1,0 +1,30 @@
+.product-item {
+    --price-font-size: 1.25em;
+
+    .price-box.price-final_price {
+        @apply flex flex-col;
+
+        > .old-price {
+            @apply order-first;
+        }
+    }
+}
+
+.product-info-main {
+    --price-font-size: clamp(var(--text-xl), 2vw, var(--text-3xl));
+
+    & .old-price {
+        --price-font-size: var(--text-sm);
+    }
+
+    .product-grouped-options {
+        --price-font-size: var(--text-lg);
+    }
+}
+
+.wishlist-widget .price-box {
+    & .price-label,
+    & .old-price {
+        @apply sr-only;
+    }
+}

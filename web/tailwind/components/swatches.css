@@ -1,4 +1,8 @@
 @layer components {
+    .form-swatch {
+        /* TODO: create HTML swatches */
+    }
+
     .swatch-attribute-options {
         @apply flex flex-row flex-wrap;
     }

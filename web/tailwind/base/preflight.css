@@ -1,0 +1,61 @@
+/* Extend the Tailwind preflight with a few improvements of our own */
+
+@layer base {
+    :where(:focus-visible) {
+        outline: var(--outline-size, 2px) solid var(--color-primary);
+        outline-offset: var(--outline-offset, 2px);
+    }
+
+    :where(:active:focus-visible) {
+        outline-offset: 0;
+        transition: var(
+            --outline-transition,
+            outline-offset 150ms cubic-bezier(0.25, 0, 0.4, 1)
+        );
+    }
+
+    :target {
+        scroll-margin-block: var(--anchor-offset, 6ex);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        :has(:target) {
+            scroll-behavior: smooth;
+        }
+    }
+
+    html {
+        block-size: 100%;
+        scrollbar-gutter: stable;
+    }
+
+    body {
+        min-block-size: 100%;
+    }
+
+    /* Prevent touch delay on touch devices */
+    :where(
+            :any-link,
+            button,
+            input,
+            label[for],
+            select,
+            summary,
+            textarea,
+            [tabindex]:not([tabindex^="-"])
+        ) {
+        touch-action: manipulation;
+    }
+
+    /* Set a default cursor for interactive elements */
+    :where(
+            :any-link,
+            button,
+            label[for],
+            label:has(input:is([type="radio"], [type="checkbox"]):enabled),
+            select:has(option:enabled),
+            summary
+        ) {
+        cursor: pointer;
+    }
+}

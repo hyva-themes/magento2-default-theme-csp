@@ -1,14 +1,58 @@
-/**
- * different styles can be found at https://tailwindcss-forms.vercel.app/
- **/
-.form-input,
-.form-email,
-.form-select,
-.form-multiselect,
-.form-textarea {
-    @apply border border-gray-300 rounded-md shadow-sm min-h-a11y;
+@plugin "@tailwindcss/forms";
 
-    &:focus {
-        @apply border-primary-lighter ring ring-primary ring-opacity-50;
+@layer utilities {
+    :is(
+        .form-input,
+        .form-email,
+        .form-select,
+        .form-multiselect,
+        .form-textarea
+    ) {
+        @apply border-gray-300 rounded-md;
+
+        &:focus {
+            @apply border-primary ring-primary;
+        }
+    }
+}
+
+@layer components {
+    .field {
+        @apply mt-1;
+
+        /* Reserve space for single line form validation messages */
+        &.field-reserved {
+            --reserved-space: --spacing(7);
+            margin-block-end: var(--reserved-space);
+
+            ul {
+                @apply text-sm;
+
+                &:last-of-type {
+                    margin-block-end: calc(var(--reserved-space) * -1);
+                }
+            }
+        }
+
+        &.choice {
+            @apply flex items-center;
+
+            label {
+                @apply mb-0;
+            }
+
+            input {
+                @apply mr-4;
+            }
+        }
+
+        &.field-error .messages {
+            @apply text-red-600;
+            max-width: fit-content;
+        }
+
+        &.required > label {
+            @apply after:relative after:-top-1 after:text-red-600 after:icon-asterisk after:text-xs;
+        }
     }
 }

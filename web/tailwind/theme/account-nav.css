@@ -1,0 +1,19 @@
+@layer components {
+    .account-nav li {
+        & a,
+        & strong {
+            @apply flex justify-between py-1;
+            color: var(--color-text-secondary);
+        }
+
+        & a:hover {
+            @apply underline;
+            color: var(--color-text);
+        }
+
+        & strong {
+            @apply underline font-normal;
+            color: var(--color-text);
+        }
+    }
+}

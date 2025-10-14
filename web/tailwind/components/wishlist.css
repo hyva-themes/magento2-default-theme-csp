@@ -1,6 +1,0 @@
-.wishlist-widget .price-box {
-    & .price-label,
-    & .old-price {
-        @apply sr-only;
-    }
-}

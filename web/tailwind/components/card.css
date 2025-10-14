@@ -1,0 +1,11 @@
+@layer components {
+    .card {
+        @apply p-4 rounded-sm bg-white border border-gray-200 transition duration-200 ease-in-out;
+    }
+
+    .card-interactive {
+        &:hover {
+            @apply shadow-lg border-transparent print:border-gray-200;
+        }
+    }
+}

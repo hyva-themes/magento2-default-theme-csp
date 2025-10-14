@@ -1,7 +1,7 @@
 @layer components {
     .snap-track {
         --snap-cols: 1;
-        --snap-gap: theme(spacing.4);
+        --snap-gap: --spacing(4);
         --snap-size: calc(
             (100% - var(--snap-gap) * (var(--snap-cols) - 1)) / var(--snap-cols)
         );
@@ -10,7 +10,7 @@
         grid-auto-flow: column;
         grid-auto-columns: var(--snap-size);
         gap: var(--snap-gap);
-        padding-block: theme(spacing.6);
+        padding-block: --spacing(6);
         overflow-x: auto;
         overscroll-behavior-x: contain;
         scroll-snap-type: x mandatory;
@@ -30,17 +30,17 @@
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        gap: theme(spacing.3);
-        min-block-size: theme(spacing.11);
-        padding-block: theme(spacing.2);
+        gap: --spacing(3);
+        min-block-size: --spacing(11);
+        padding-block: --spacing(2);
     }
 
     .snap-marker {
         flex-shrink: 0;
-        block-size: theme(spacing.4);
-        inline-size: theme(spacing.4);
+        block-size: --spacing(4);
+        inline-size: --spacing(4);
         border-width: 1px;
-        border-color: theme(colors.slate.600);
+        border-color: var(--color-slate-600);
         border-radius: 1rem;
         transition-duration: 300ms;
         transition-property: border-color, background-color;
@@ -51,9 +51,9 @@
         }
 
         &[aria-current="true"] {
-            inline-size: theme(spacing.7);
+            inline-size: --spacing(7);
             border-color: #0000;
-            background-color: theme(colors.primary.DEFAULT);
+            background-color: var(--color-primary);
         }
     }
 }
