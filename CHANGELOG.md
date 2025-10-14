@@ -72,6 +72,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Add support for the native HTML input date in the DOB Widget**  
   For more information, please refer to [merge request #1152](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1152)
 
+- **Fixed missing fieldset in forgetpassword form**  
+  For more information, please refer to [issue #1225](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1225)
+
 ### Removed
 
 - **Removed the scroll to review function summary short**  
