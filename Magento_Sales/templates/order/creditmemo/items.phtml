@@ -25,7 +25,7 @@ $order = $block->getOrder();
         <?= $escaper->escapeHtml(__('Refund #')) ?>
         <?= $escaper->escapeHtml($creditmemo->getIncrementId()) ?>
         <a href="<?= $escaper->escapeUrl($block->getPrintCreditmemoUrl($creditmemo)) ?>"
-           class="text-primary inline-block ml-2 pl-2 border-l text-sm font-normal"
+           class="inline-block ml-2 pl-2 border-l text-sm font-normal"
             target="_blank"
             rel="noopener">
             <?= $heroicons->printerHtml('inline-block', 20, 20); ?>
@@ -38,7 +38,7 @@ $order = $block->getOrder();
     <?= $block->getCommentsHtml($creditmemo) ?>
 
     <div class="order-items creditmemo">
-        <div class="hidden lg:grid grid-cols-7 text-sm text-secondary ">
+        <div class="hidden lg:grid grid-cols-7 text-sm">
             <div class="p-2 col-span-2"><?= $escaper->escapeHtml(__('Product Name')) ?></div>
             <div class="p-2"><?= $escaper->escapeHtml(__('Price')) ?></div>
             <div class="p-2"><?= $escaper->escapeHtml(__('Qty')) ?></div>

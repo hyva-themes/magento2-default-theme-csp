@@ -14,9 +14,12 @@ use Magento\Theme\Block\Html\Title;
 /** @var Escaper $escaper */
 /** @var Title $block */
 
+$headingTag = $block->getData('heading_tag') ?: 'h1';
 $textSizeCssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : ' text-3xl';
 $titleContainerClasses = $block->getData('maybe_purged_tailwind_section_classes')
     ?? 'container flex flex-col md:flex-row flex-wrap my-6 font-bold lg:mt-8';
+$isAriaHidden = $block->getData('aria_hidden') !== null ? (bool) $block->getData('aria_hidden') : false;
+
 $titleHtml = '';
 if (trim((string)$block->getPageHeading())) {
     $titleHtml = '<span class="base" data-ui-id="page-title-wrapper" '
@@ -28,10 +31,13 @@ if (trim((string)$block->getPageHeading())) {
 ?>
 <?php if ($titleHtml): ?>
 <div class="<?= $escaper->escapeHtmlAttr($titleContainerClasses . $textSizeCssClass) ?>">
-    <h1 class="text-gray-900 page-title title-font"
-        <?php if ($block->getId()): ?> id="<?= $escaper->escapeHtmlAttr($block->getId()) ?>" <?php endif; ?>>
+    <<?= /* @noEscape */ $headingTag ?>
+        class="text-gray-900 page-title title-font"
+        <?php if ($block->getId()): ?>id="<?= $escaper->escapeHtmlAttr($block->getId()) ?>"<?php endif; ?>
+        <?php if ($isAriaHidden): ?>aria-hidden="true"<?php endif; ?>
+    >
         <?= /* @noEscape */ $titleHtml ?>
-    </h1>
+    </<?= /* @noEscape */ $headingTag ?>>
     <?= $block->getChildHtml() ?>
 </div>
 <?php endif; ?>

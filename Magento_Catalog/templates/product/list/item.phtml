@@ -16,7 +16,7 @@ use Hyva\Theme\ViewModel\ProductCompare;
 use Hyva\Theme\ViewModel\ProductListItem;
 use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\Wishlist;
-use Magento\Catalog\Block\Product\AbstractProduct;
+use Magento\Catalog\Block\Product\View;
 use Magento\Catalog\Helper\Output as CatalogOutputHelper;
 use Magento\Catalog\ViewModel\Product\OptionsData as ProductOptionsData;
 use Magento\Framework\Escaper;
@@ -26,7 +26,7 @@ use Magento\Framework\Escaper;
 // phpcs:disable Generic.Files.LineLength.TooLong
 // phpcs:disable Generic.WhiteSpace.ScopeIndent
 
-/** @var AbstractProduct $block */
+/** @var View $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
@@ -96,7 +96,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
     <?php endforeach; ?>
 >
     <?= /** @noEscape */ $block->getBlockHtml('formkey') ?>
-    <input type="hidden" name="product" value="<?= (int)$productId ?>"/>
+    <input type="hidden" name="product" value="<?= (int)$productId ?>">
     <?php foreach ($options as $optionItem): ?>
     <input type="hidden"
            name="<?= $escaper->escapeHtml($optionItem['name']) ?>"
@@ -113,23 +113,25 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
 >
 <?php endif; ?>
     <?php /* Product Image */ ?>
-    <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
-        title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
-        class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:shrink-0' ?>"
-        tabindex="-1"
-    >
-        <?= $block->getImage($product, $imageDisplayArea)
-            ->setTemplate('Magento_Catalog::product/list/image.phtml')
-            ->setData('custom_attributes', $imageCustomAttributes)
-            ->setProductId($productId)
-            ->toHtml(); ?>
-    </a>
+    <?php if ($blockImage = $block->getImage($product, $imageDisplayArea)): ?>
+        <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
+            title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
+            class="product photo product-item-photo block mx-auto mb-3 <?= $viewIsGrid ? '' : 'md:w-2/6 md:mb-0 md:shrink-0' ?>"
+            tabindex="-1"
+        >
+            <?= $blockImage
+                ->setTemplate('Magento_Catalog::product/list/image.phtml')
+                ->setData('custom_attributes', $imageCustomAttributes)
+                ->setProductId($productId)
+                ->toHtml();
+            ?>
+        </a>
+    <?php endif; ?>
     <div class="product-info flex flex-col grow <?= $viewIsGrid ? '' : 'md:pl-5 md:w-4/6' ?>">
-        <div class="mt-2 mb-1 items-center justify-center text-primary font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
+        <div class="mt-2 mb-1 items-center justify-center font-semibold text-lg text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <a
                 class="product-item-link"
                 href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>"
-                :id="`slide-desc-<?= $escaper->escapeHtmlAttr($product->getId()) ?>-${$id('slider-id')}`"
             >
                 <?= /* @noEscape */ $productName ?>
             </a>
@@ -146,7 +148,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
         <?php endif; ?>
 
         <?php if ($showDescription): ?>
-        <div class="mt-2 mb-1 items-center justify-center text-primary text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
+        <div class="mt-2 mb-1 items-center justify-center text-center <?= $viewIsGrid ? '' : 'md:text-left' ?>">
             <?= /* @noEscape */ $productViewModel->getShortDescriptionForProduct($product) ?>
         </div>
         <?php endif; ?>
@@ -200,8 +202,8 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
             </div>
             <?php endif; ?>
             <div class="flex flex-wrap gap-2">
-                <?php if ($showAddToWishlist): ?>
-                    <?= $block->getChildBlock('wishlist')->setData('product', $product)->toHtml() ?>
+                <?php if ($showAddToWishlist && $blockWishlist = $block->getChildBlock('wishlist')): ?>
+                    <?= $blockWishlist->setData('product', $product)->toHtml() ?>
                 <?php endif; ?>
                 <?php if ($showAddToCompare): ?>
                 <button x-data="initCompareOnProductList()"
@@ -212,7 +214,7 @@ $viewModels->require(BlockJsDependencies::class)->setBlockTemplateDependency($bl
                         class="rounded-full w-9 h-9 bg-gray-200 p-0 border-0 inline-flex shrink-0 items-center justify-center text-gray-500 hover:text-yellow-500"
                         data-addto="compare"
                 >
-                    <?= $heroicons->scaleHtml("w-5 h-5", 25, 25, ['aria-hidden' => 'true']) ?>
+                    <?= $heroicons->scaleHtml('', 20, 20, ['aria-hidden' => 'true']) ?>
                 </button>
                 <?php endif; ?>
                 <?php if ($addToBlock = $block->getChildBlock('addto')): ?>

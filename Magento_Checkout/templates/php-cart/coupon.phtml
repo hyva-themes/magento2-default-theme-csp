@@ -58,7 +58,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         <div class="text-left">
             <button
                 @click="toggleShowCoupon()"
-                class="inline-block cursor-pointer text-primary-lighter select-none whitespace-nowrap"
+                class="inline-block cursor-pointer select-none whitespace-nowrap"
                 id="discount-form-toggle"
                 :aria-expanded="showCouponForm"
                 type="button"
@@ -113,7 +113,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                                     <?php else: ?>
                                         required
                                     <?php endif; ?>
-                            />
+                            >
                         </div>
 
                         <div>
@@ -125,7 +125,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             </div>
                             <?php else: ?>
                                 <div class="primary">
-                                    <input type="hidden" name="remove" id="remove-coupon" value="1"/>
+                                    <input type="hidden" name="remove" id="remove-coupon" value="1">
                                     <button type="submit" class="btn btn-primary"
                                             value="<?= $escaper->escapeHtmlAttr(__('Cancel Coupon')) ?>">
                                         <?= $escaper->escapeHtml(__('Cancel Coupon')) ?>
@@ -135,7 +135,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                         </div>
                     </div>
                     <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) : '' ?>
-                    <?php if ($recaptcha && $legalNoticeHtml = $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE)): ?>
+                    <?php if ($recaptcha && $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE)): ?>
                         <?= $recaptcha->getLegalNoticeHtml(ReCaptcha::RECAPTCHA_FORM_ID_COUPON_CODE) ?>
                     <?php endif; ?>
                 </div>

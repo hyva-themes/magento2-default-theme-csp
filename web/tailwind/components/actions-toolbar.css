@@ -1,0 +1,9 @@
+@layer components {
+    .actions-toolbar {
+        @apply mt-6 border-t border-gray-300 pt-4 flex justify-between flex-row-reverse items-center;
+
+        & a.back {
+            @apply underline;
+        }
+    }
+}

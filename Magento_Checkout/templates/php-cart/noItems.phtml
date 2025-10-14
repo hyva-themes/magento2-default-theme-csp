@@ -16,14 +16,13 @@ use Magento\Framework\Escaper;
 ?>
 <div class="cart-empty">
     <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
-    <p><?= $escaper->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
-    <p><?= $escaper->escapeHtml(
-        __(
-            'Click <a href="%1">here</a> to continue shopping.',
-            $escaper->escapeUrl($block->getContinueShoppingUrl())
-        ),
-        ['a']
-    ) ?>
-    </p>
+    <div class="prose">
+        <p><?= $escaper->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
+        <p>
+            <a href="<?= $escaper->escapeUrl($block->getContinueShoppingUrl()) ?>">
+                <?= $escaper->escapeHtml(__('Click here to continue shopping.')) ?>
+            </a>
+        </p>
+    </div>
     <?= $block->getChildHtml('shopping.cart.table.after') ?>
 </div>

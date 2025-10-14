@@ -349,7 +349,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
     <h3 class="title" id="block-shipping-title">
         <button
             @click="toggleEstimateShipping"
-            class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none text-primary-lighter"
+            class="flex justify-between w-full font-semibold whitespace-nowrap cursor-pointer select-none"
             id="shipping-estimate-toggle"
             type="button"
             :aria-expanded="showEstimateShipping"
@@ -364,9 +364,8 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    class="w-6 h-6"
-                    width="25"
-                    height="25"
+                    width="24"
+                    height="24"
                     aria-hidden="true"
                 >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -443,7 +442,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                                    name="region"
                                    @change.debounce="setRegion($event.target.value)"
                                    :value="cartData.address && cartData.address.region"
-                            />
+                            >
                         </label>
                     </template>
                 </div>
@@ -458,7 +457,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                                name="postcode"
                                @input.debounce.1000ms="setPostcode($event.target.value)"
                                :value="cartData.address && cartData.address.postcode"
-                        />
+                        >
                     </label>
                 </div>
 
@@ -478,7 +477,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
                                                :id="'shipping_method_' + rate.method_code"
                                                :value="rate.carrier_code + '_' + rate.method_code"
                                                x-model="shippingMethod"
-                                               @change="updateShippingMethod()"/>
+                                               @change="updateShippingMethod()">
                                         <span x-text="rate.method_title" class="break-words shrink hyphens-auto"></span>
                                         <div class="flex flex-col justify-end ml-auto">
                                             <?php if ($totalsOutput->displayCartShippingInclTax() || $totalsOutput->displayCartShippingBoth()): ?>

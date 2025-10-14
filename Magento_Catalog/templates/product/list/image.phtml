@@ -17,18 +17,18 @@ use Magento\Framework\Escaper;
 $hasLoadingAttribute = ($block->getCustomAttributes() ?: [])['loading'] ?? false;
 
 ?>
-<img class="hover:shadow-sm object-contain <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
-     x-data=""
-     @update-gallery-<?= (int)$block->getProductId() ?>.window="$root.src = $event.detail"
-    <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
-        <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
-    <?php endforeach; ?>
+<img
     src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
-    <?php if (! $hasLoadingAttribute): ?>
-    loading="lazy"
-    <?php endif; ?>
     width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
     height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
     alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"
-    title="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"
-/>
+    class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
+    <?php if (!$hasLoadingAttribute): ?>
+        loading="lazy"
+    <?php endif; ?>
+    x-data=""
+    @update-gallery-<?= (int)$block->getProductId() ?>.window="$root.src = $event.detail"
+    <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+        <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
+    <?php endforeach; ?>
+>

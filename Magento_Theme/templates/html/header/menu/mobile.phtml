@@ -31,8 +31,7 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
 ?>
 <nav
     x-data="initMenuMobile<?= $escaper->escapeHtml($uniqueId) ?>()"
-    @load.window="setActiveMenu($root)"
-    @keydown.window.escape="closeMenu()"
+    x-bind="eventListeners"
     class="navigation lg:hidden w-12 h-12"
     aria-label="<?= $escaper->escapeHtmlAttr(__('Site navigation')) ?>"
     role="navigation"
@@ -189,6 +188,9 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
         return {
             mobilePanelActiveId: null,
             open: false,
+            init() {
+                this.setActiveMenu(this.$root);
+            },
             setActiveMenu(menuNode) {
                 Array.from(menuNode.querySelectorAll('a')).filter(link => {
                     return link.href === window.location.href.split('?')[0];
@@ -226,6 +228,16 @@ $block->setData('cache_tags', $viewModelNavigation->getIdentities());
                     hyva.trapFocus(this.$refs['mobileMenuNavLinks'])
                     menuNodeRef.querySelector('a').focus()
                 })
+            },
+            eventListeners: {
+                ['@keydown.window.escape']() {
+                    this.closeMenu();
+                },
+                ['@pageshow.window'](event) {
+                    if (event.persisted) {
+                        this.closeMenu();
+                    };
+                }
             }
         }
     }

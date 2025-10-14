@@ -53,11 +53,12 @@ $galleryOptionVideoLoop = $storeConfig->getStoreConfig('catalog/product_video/vi
 $productName = $block->getProduct()->getName();
 ?>
 
-<div id="gallery"
-     x-data="initGallery()"
-     x-bind="eventListeners"
-     class="w-full pt-6 md:pt-0 md:h-auto md:row-start-1 md:row-span-2 md:col-start-1"
-    >
+<div
+    id="gallery"
+    class="pt-6 md:pt-0"
+    x-data="initGallery()"
+    x-bind="eventListeners"
+>
     <div
         :class="{'w-full h-full fixed top-0 left-0 bg-white z-50 flex': fullscreen}"
         :role="fullscreen ? 'dialog' : false"
@@ -90,7 +91,7 @@ $productName = $block->getProduct()->getName();
                     width="<?= /* @noEscape */ $mediumWidth ?>"
                     height="<?= /* @noEscape */ $mediumHeight ?>"
                     itemprop="image"
-                />
+                >
                 <template x-for="(image, index) in images" :key="index">
                     <img
                         :alt="image.caption || '<?= $escaper->escapeJs($productName) ?>'"
@@ -103,7 +104,7 @@ $productName = $block->getProduct()->getName();
                         :src="fullscreen ? image.full : image.img"
                         x-transition.opacity.duration.500ms
                         x-show="active === index"
-                    />
+                    >
                 </template>
                 <button
                     type="button"
@@ -186,7 +187,7 @@ $productName = $block->getProduct()->getName();
                                     :title="image.caption || '<?= $escaper->escapeJs(__("%1 thumbnail", $productName)) ?>'"
                                     width="<?= /* @noEscape */ $smallWidth ?>"
                                     height="<?= /* @noEscape */ $smallHeight ?>"
-                                />
+                                >
                                 <span
                                     class="absolute inset-0 grid place-items-center"
                                     x-show="image.type === 'video'"

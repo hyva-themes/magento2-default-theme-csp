@@ -25,28 +25,18 @@ $uniqueId = $productId . uniqid();
 ?>
 <?php if ($block->isReviewEnabled()): ?>
     <div
-        x-data="initRating<?= /* @noEscape */ $uniqueId ?>()"
-        x-defer="intersect"
-        @keyup.enter="scrollToRatings()"
-        @click="scrollToRatings()"
         class="rating-summary flex"
-        :class="{'cursor-pointer' : reviewsSection}"
-        <?php if (!$rating): ?>
-            title="<?= $escaper->escapeHtmlAttr(__('Be the first to review this product')) ?>"
-        <?php endif; ?>
-        :tabindex="reviewsSection ? '0' : '-1'"
-        :aria-label="reviewsSection
-            ? '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars. Click to go to reviews.', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
-            : '<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>'
-        "
-        :role="reviewsSection ? 'button' : 'img'"
+        aria-label="<?= $escaper->escapeJs(__('%1 rating. %2 out of %3 stars', $productName, $starsFilled + $starFragment, $ratingSteps))?>"
     >
         <?php if ($rating): ?>
             <?php $i = 0; ?>
             <?php while ($i < $starsFilled): ?>
                 <svg
-                    xmlns="http://www.w3.org/2000/svg" class="fill-current w-6 h-6" viewBox="3 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="3 0 20 20"
                     style="color: <?= /** @noEscape */ $yellowHex ?>"
+                    width="24"
+                    height="24"
                     fill="currentColor"
                     aria-hidden="true"
                 >
@@ -62,8 +52,9 @@ $uniqueId = $productId . uniqid();
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="3 0 20 20"
+                    width="24"
+                    height="24"
                     fill="currentColor"
-                    class="w-6 h-6"
                     aria-hidden="true"
                 >
                     <defs>
@@ -87,9 +78,10 @@ $uniqueId = $productId . uniqid();
                 <?php while ($i < $starsEmpty): ?>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="fill-current w-6 h-6"
                     style="color: <?= /** @noEscape */ $greyHex ?>"
                     viewBox="3 0 20 20"
+                    width="24"
+                    height="24"
                     fill="currentColor"
                     aria-hidden="true"
                 >
@@ -107,8 +99,10 @@ $uniqueId = $productId . uniqid();
             <?php while ($i < $ratingSteps): ?>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="fill-current text-gray-200 w-6 h-6"
+                    class="text-gray-200"
                     viewBox="3 0 20 20"
+                    width="24"
+                    height="24"
                     fill="currentColor"
                     aria-hidden="true"
                 >
@@ -123,35 +117,4 @@ $uniqueId = $productId . uniqid();
             <?php endwhile; ?>
         <?php endif; ?>
     </div>
-
-    <script>
-        'use strict';
-
-        function initRating<?= /* @noEscape */ $uniqueId ?>() {
-            return {
-                reviewsSection: document.getElementById('customer-review-list')
-                    || document.getElementById('customer-reviews')
-                    || document.getElementById('review-form'),
-                scrollToRatings() {
-                    let scrollTimeout = null
-
-                    if (!this.reviewsSection) {
-                        return
-                    }
-
-                    addEventListener('scroll', () => {
-                        clearTimeout(scrollTimeout);
-
-                        scrollTimeout = setTimeout(() => {
-                            if (this.reviewsSection) {
-                                this.reviewsSection.focus()
-                            }
-                        }, 50);
-                    }, { once: true });
-
-                    this.reviewsSection.scrollIntoView({behavior: 'smooth'})
-                }
-            }
-        }
-    </script>
 <?php endif; ?>

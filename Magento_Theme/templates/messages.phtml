@@ -62,7 +62,7 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
             },
             setHideTimeOut(messageIndex, hideAfter) {
                 setTimeout((messageIndex) => {
-                    this.removeMessage(messageIndex);
+                    this.messages[messageIndex] = undefined;
                 }, hideAfter, messageIndex);
             },
             eventListeners: {
@@ -81,6 +81,11 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
                 },
                 ['@clear-messages.window']() {
                     this.messages = [];
+                },
+                ['@pageshow.window'](event) {
+                    if (event.persisted) {
+                        this.messages = [];
+                    };
                 }
             },
             getMessageUiId() {
@@ -95,7 +100,6 @@ $defaultSuccessMessageTimeout = $storeConfig->getStoreConfig('hyva_theme_general
 <section id="messages"
          x-data="initMessages"
          x-bind="eventListeners"
-         aria-live="assertive"
          role="alert"
 >
     <template x-if="hasMessages">

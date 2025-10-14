@@ -7,22 +7,39 @@
  * See https://hyva.io/license
  */
 -->
-<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+    layout="1column"
+>
     <head>
-        <css src="css/print.css" media="print" rel="stylesheet" type="text/css"/>
+        <css src="css/print.css" media="print"/>
     </head>
     <body>
         <attribute name="class" value="page-print"/>
-        <attribute name="class" value="p-4"/>
-        <referenceContainer name="header.container" remove="true"/>
+
         <referenceBlock name="page.top" remove="true"/>
+        <referenceBlock name="global_notices" remove="true"/>
+        <referenceContainer name="header.container" remove="true"/>
         <referenceContainer name="div.sidebar.main" remove="true"/>
         <referenceContainer name="div.sidebar.additional" remove="true"/>
         <referenceContainer name="footer-container" remove="true"/>
-        <move element="logo" destination="main.content" before="-" />
         <referenceBlock name="copyright" remove="true"/>
+
+        <referenceContainer name="columns.top">
+            <container name="print.header" htmlTag="div" htmlClass="print-header mb-6"/>
+        </referenceContainer>
+
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\SalesLogoPathResolver</argument>
+            </arguments>
+        </referenceBlock>
+
+        <move element="logo" destination="print.header" before="-"/>
+
         <referenceContainer name="before.body.end">
-            <block class="Magento\Framework\View\Element\Template" name="sales.order.print.js" template="Magento_Theme::html/print.phtml" />
+            <block class="Magento\Framework\View\Element\Template" name="sales.order.print.js" template="Magento_Theme::html/print.phtml"/>
         </referenceContainer>
     </body>
 </page>

@@ -6,365 +6,111 @@
  * See https://hyva.io/license
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Date;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\Locale;
 use Magento\Customer\Block\Widget\Dob;
 use Magento\Customer\ViewModel\Address as AddressViewModel;
 use Magento\Framework\Escaper;
-use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 
 /** @var Escaper $escaper */
 /** @var Dob $block */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
-/** @var HeroIconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var Date $date */
+$date = $viewModels->require(Date::class);
+
+/** @var Locale $locale */
+$locale = $viewModels->require(Locale::class);
 
 /** @var AddressViewModel $addressViewModel */
 $addressViewModel = $viewModels->require(AddressViewModel::class);
+
+$validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
 ?>
+
 <div
-    class="field date <?= $block->isRequired() ? 'required' : '' ?>"
-    x-data="initDatePicker()"
+    class="field field-reserved date <?= $block->isRequired() ? 'required' : '' ?>"
+    x-data="initDatePicker"
 >
-    <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>" class="label">
+    <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>_picker" class="label">
         <span><?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?></span>
     </label>
-    <div class="inline-block relative control customer-dob">
-        <?php
-        $validationClass = $escaper->escapeHtmlAttr(
-            $addressViewModel->addressGetAttributeValidationClass('dob')
-        );
-        ?>
-
-        <input type="text"
-               name="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>"
-               id="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>"
-               title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('dob')) ?>"
-               <?php if ($block->isRequired()): ?>
-                   required
-               <?php endif; ?>
-               x-model="value"
-               @click="showDatepicker = !showDatepicker"
-               @keydown="onInputKeydown($event)"
-               @paste="$event.preventDefault()"
-               autocomplete="off"
-               class="form-input <?= $validationClass ?: '' ?>"
+    <div class="control">
+        <input
+            type="date"
+            id="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>_picker"
+            name="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>_picker"
+            class="form-input <?= $escaper->escapeHtmlAttr($validationClass) ?: '' ?>"
+            placeholder="<?= $escaper->escapeHtml($block->getDateFormat()) ?>"
+            autocomplete="off"
+            :value="valuePicker"
+            @change="setValuePicker"
+            :min="getMinDate"
+            :max="getMaxDate"
         >
-
-        <div class="absolute top-0 right-0 z-10 py-2 px-3 text-gray-300"
-             @click="showDatepicker = true"
+        <input
+            type="hidden"
+            name="<?= $escaper->escapeHtmlAttr($block->getFieldName('dob')) ?>"
+            :value="value"
+            <?php if ($block->isRequired()): ?>
+                required
+            <?php endif; ?>
         >
-            <?= /** @noEscape */ $heroicons->calendarHtml('w-6 h-6', 25, 25); ?>
-        </div>
-
-        <div
-            class="absolute left-0 top-full p-3 mt-12 bg-white rounded-lg shadow calendar-window"
-            style="width: 21rem"
-            x-cloak
-            x-transition x-show="showDatepicker"
-            @click.outside="showDatepicker = false"
-            @keydown="onCalendarKeydown($event)"
-        >
-
-            <div class="flex justify-between items-center mb-2">
-                <div>
-                    <select name="datepicker_month"
-                        x-model="month"
-                        class="text-sm rounded border-gray-300"
-                        @change="goToMonth(month)"
-                    >
-                        <template x-for="(monthName, index) in labels.monthNames">
-                            <option :value="index" x-text="monthName"></option>
-                        </template>
-                    </select>
-                    <select name="datepicker_year"
-                        x-model="year"
-                        class="text-sm rounded border-gray-300"
-                        @change="recalcDaysGrid()"
-                    >
-                        <template x-for="option in yearRange">
-                            <option :value="option" x-text="option"></option>
-                        </template>
-                    </select>
-                </div>
-                <div>
-                    <button
-                        type="button"
-                        class="inline-flex p-1 rounded transition-colors cursor-pointer hover:bg-gray-100"
-                        :class="{'cursor-not-allowed opacity-25': isFirstMonth()}"
-                        :disabled="isFirstMonth()"
-                        :title="labels.prevText"
-                        @click="goToMonth(month - 1)">
-                        <?= /** @noEscape */ $heroicons->chevronLeftHtml('w-6 h-6', 25, 25); ?>
-                        <span class="sr-only" x-text="labels.prevText"></span>
-                    </button>
-                    <button
-                        type="button"
-                        class="inline-flex p-1 rounded transition-colors cursor-pointer hover:bg-gray-100"
-                        :class="{'cursor-not-allowed opacity-25': isLastMonth() }"
-                        :disabled="isLastMonth()"
-                        :title="labels.nextText"
-                        @click="goToMonth(month + 1)">
-                        <?= /** @noEscape */ $heroicons->chevronRightHtml('w-6 h-6', 25, 25); ?>
-                        <span class="sr-only" x-text="labels.nextText"></span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-7 -mx-1">
-                <template x-for="(day, index) in labels.dayNamesShort" :key="index">
-                    <div class="p-1">
-                        <div x-text="day"
-                             class="text-gray-800 font-medium text-center text-xs h-6 flex items-center
-                                justify-center"
-                        ></div>
-                    </div>
-                </template>
-                <template x-for="(date, dateIndex) in dayNumbers" :key="dateIndex">
-                    <button type="button" class="p-1"
-                        :style="getDayStyle(date)"
-                            @click="if (canSelectDate(date)) { setDate(date) }"
-                    >
-                        <div
-                            x-text="date"
-                            class="text-center text-sm rounded-full transition-colors
-                                flex items-center justify-center h-8"
-                            :class="{
-                                'cursor-pointer hover:bg-gray-100 hover:text-black': canSelectDate(date),
-                                'bg-primary text-white': isToday(date),
-                                'text-gray-500': isInFuture(date)
-                            }"
-                        ></div>
-                    </button>
-                </template>
-            </div>
-
-            <button class="p-2 w-full text-sm text-center rounded border border-gray-300 hover:bg-gray-100"
-                x-text="labels.currentText"
-                @click.prevent="goToday()"
-            ></button>
-        </div>
     </div>
 </div>
 <script>
     function initDatePicker() {
-        const format = '<?= $escaper->escapeHtml($block->getDateFormat()) ?>';
-        const firstDayOfWeek = '<?= $escaper->escapeHtml($block->getFirstDay()) ?>';
-        const labelsConfig = <?= /* @noEscape */ $block->getTranslatedCalendarConfigJson() ?>;
-
         return {
-            showDatepicker: false,
-            value: '<?= $escaper->escapeHtml($block->getValue()) ?>',
-            month: '',
-            year: '',
-            today: new Date(),
-            dayNumbers: [],
-            yearRange: [],
-            labels: labelsConfig,
-            dateFormatter: DateFormatter(format),
-            calendarWindow: null,
-
+            value: '<?= $escaper->escapeJs($block->getValue()) ?>',
+            initValuePicker: '<?= $escaper->escapeJs($date->getDateYMD($block->getValue())) ?>',
+            valuePicker: null,
+            locale: '<?= $escaper->escapeJs($locale->getLocale()) ?>',
             init() {
+                this.valuePicker = this.value && this.dateToInputDate(new Date(this.initValuePicker));
+                this.$watch('valuePicker', value => this.value = this.convertDateToLocale(value));
+            },
+            setValuePicker() {
+                this.valuePicker = this.$event.target.value;
+            },
+            getDateOnYear(subtractYears = 0) {
                 const today = new Date();
-                this.initYearsRange();
-                this.correctWeeks();
-
-                this.$nextTick(() => {
-                    this.month = today.getMonth();
-                    this.year = today.getFullYear();
-                    this.recalcDaysGrid();
-                    this.calendarWindow = this.$root.querySelector('.calendar-window');
-                });
+                const utcDate = new Date(Date.UTC(
+                    today.getUTCFullYear() - subtractYears,
+                    today.getMonth(),
+                    today.getDate()
+                ));
+                return this.dateToInputDate(utcDate);
             },
-
-            initYearsRange() {
-                const today = new Date();
-                const thisYear = today.getFullYear();
-                const minimalYear = thisYear - 120;
-                const range = [];
-
-                for (let year = thisYear; year >= minimalYear; year--) {
-                    range.unshift(year);
+            getMinDate() {
+                return getDateOnYear(120);
+            },
+            getMaxDate() {
+                return getDateOnYear();
+            },
+            dateToInputDate(date) {
+                const year = date.getFullYear().toString().padStart(4, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const day = date.getDate().toString().padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            },
+            convertDateToLocale(value) {
+                if (isNaN(new Date(value))) {
+                    return '';
                 }
-
-                this.yearRange = range;
-            },
-
-            correctWeeks() {
-                if (firstDayOfWeek > 0) {
-                    this.labels.dayNames = [
-                        ...this.labels.dayNames.slice(firstDayOfWeek),
-                        ...this.labels.dayNames.slice(0, firstDayOfWeek)
-                    ];
-                    this.labels.dayNamesShort = [
-                        ...this.labels.dayNamesShort.slice(firstDayOfWeek),
-                        ...this.labels.dayNamesShort.slice(0, firstDayOfWeek)
-                    ];
-                }
-            },
-
-            isToday(date) {
-                const today = new Date();
-                const d = new Date(this.year, this.month, date);
-
-                return today.toDateString() === d.toDateString();
-            },
-
-            setDate(date) {
-                const selectedDate = new Date(this.year, this.month, date);
-                this.value = this.dateFormatter.format(selectedDate);
-                this.showDatepicker = false;
-            },
-
-            recalcDaysGrid() {
-                const daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
-                const dayNumbers = [];
-
-                for (let i = 1; i <= daysInMonth; i++) {
-                    dayNumbers.push(i);
-                }
-
-                this.dayNumbers = dayNumbers;
-            },
-
-            getDayStyle(day) {
-                const firstDayInWeek = this.correctDayOfWeek(new Date(this.year, this.month).getDay());
-
-                if (day.toString() === "1") {
-                    return `grid-column-start: ${firstDayInWeek + 1}`;
-                }
-
-                return '';
-            },
-
-            correctDayOfWeek(day) {
-                let corrected = day - firstDayOfWeek;
-
-                if (corrected < 0) {
-                    corrected += 7;
-                }
-
-                return corrected;
-            },
-
-            goToMonth(month) {
-                const date = new Date(this.year, this.month);
-
-                date.setMonth(month);
-                this.month = date.getMonth();
-                this.year = date.getFullYear();
-                this.recalcDaysGrid();
-            },
-
-            goToday() {
-                this.year = this.today.getFullYear();
-                this.month = this.today.getMonth();
-                this.recalcDaysGrid();
-            },
-
-            isInFuture(date) {
-                const today = new Date();
-
-                return this.year === today.getFullYear() &&
-                    this.month === today.getMonth() &&
-                    date > today.getDate()
-            },
-
-            isFirstMonth() {
-                return this.year === this.yearRange[0] && this.month === 0;
-            },
-
-            isLastMonth() {
-                return this.year === this.yearRange[this.yearRange.length - 1] &&
-                    this.month === this.today.getMonth()
-            },
-
-            canSelectDate(date) {
-                return !this.isToday(date) && !this.isInFuture(date)
-            },
-
-            onInputKeydown(evt) {
-                const keyCode = evt.code;
-
-                if (keyCode === "Escape") {
-                    this.showDatepicker = false;
-                }
-
-                if (keyCode === "Tab") {
-                    return;
-                }
-
-                if (keyCode === "Enter") {
-                    evt.preventDefault();
-                    this.showDatepicker = true;
-                    hyva.trapFocus(this.calendarWindow);
-                }
-
-                if (keyCode !== "Enter") {
-                    evt.preventDefault();
-                }
-            },
-            onCalendarKeydown(evt) {
-                const keyCode = evt.code;
-
-                if (keyCode === "Escape") {
-                    hyva.releaseFocus(this.calendarWindow);
-                    this.showDatepicker = false;
-                }
+                const date = new Date(value);
+                const formattedDate = new Intl.DateTimeFormat(this.locale).format(date);
+                return formattedDate;
             }
         }
     }
 
-    function DateFormatter(template) {
-        return {
-            template: template,
-            map: {
-                'd' : { day: 'numeric' },
-                'dd': { day: '2-digit' },
-                'D' : { weekday: 'short' },
-                'DD': { weekday: 'long' },
-                'E' : { weekday: 'short' },
-                'EE' : { weekday: 'short' },
-                'EEE' : { weekday: 'short' },
-                'EEEE': { weekday: 'long' },
-                'M': { month: '2-digit' },
-                'MM': { month: '2-digit' },
-                'MMM' : { month: 'short' },
-                'MMMM': { month: 'long' },
-                'm' : { month : 'numeric'},
-                'mm': { month: '2-digit' },
-                'y': { year: 'numeric' },
-                'Y': { year: 'numeric' },
-                'yy': { year: 'numeric' },
-                'yyyy': { year: 'numeric' }
-            },
-            format(date) {
-                const parsedFormat = template.match(new RegExp(/([mM]+)|([dD]+)|([yY]+)/g));
-
-                const options = parsedFormat.reduce((accumulator, match) => {
-                    if (this.map[match]) {
-                        return {
-                            ...accumulator,
-                            ...this.map[match]
-                        }
-                    }
-
-                    return accumulator;
-                }, {})
-
-                const dateData = Intl.DateTimeFormat('en-US', options).formatToParts(date);
-
-                return parsedFormat.reduce((result, valueTemplate) => {
-                    const dateItem = dateData.find(item => item.type === Object.keys(this.map[valueTemplate])[0]);
-
-                    if (dateItem) {
-                        return result.replace(valueTemplate, dateItem.value);
-                    }
-                    return result;
-                }, this.template);
-            }
-        }
-    }
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initDatePicker', initDatePicker);
+    }, { once: true })
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>

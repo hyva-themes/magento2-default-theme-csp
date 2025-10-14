@@ -1,27 +1,29 @@
-/* purgecss start ignore */
-@import "tailwindcss/base";
-@import "tailwindcss/components";
+@import "tailwindcss" source(none);
+@source "../../**/*.phtml";
+@source "../../**/*.xml";
 
-@import url(components/category-page.css);
-@import url(components/product-prices.css);
-@import url(components/cart.css);
-@import url(components/customer.css);
-@import url(components/forms.css);
-@import url(components/messages.css);
-@import url(components/product-list.css);
-@import url(components/product-page.css);
-@import url(components/wishlist.css);
-@import url(components/modal.css);
-@import url(components/slider.css);
-@import url(components/structure.css);
-@import url(components/swatches.css);
-@import url(components/button.css);
-@import url(components/theming.css);
-@import url(components/transitions.css);
-@import url(components/typography.css);
-@import url(components/page-builder.css);
+/* Custom styles */
+@import "./base";
+@import "./components";
+@import "./theme";
+@import "./utilities";
 
-/* purgecss end ignore */
+/* Import generated styles for Hyvä Compatible Modules and Design Tokens */
+@import "./generated/hyva-source.css";
+@import "./generated/hyva-tokens.css";
 
-@import "tailwindcss/utilities";
-@import "theme.css";
+@theme {
+    --color-bg: var(--color-slate-50);
+    --color-text: var(--color-slate-950);
+    --color-text-secondary: var(--color-slate-600);
+    --color-surface: var(--color-white);
+
+    /* @deprecated Will be removed in favor for named variables, in the future */
+    --color-container-lighter: #f5f5f5;
+    --color-container: #e7e7e7;
+    --color-container-darker: #b6b6b6;
+
+    --bg-container-lighter: #fff;
+    --bg-container: #fafafa;
+    --bg-container-darker: #f5f5f5;
+}

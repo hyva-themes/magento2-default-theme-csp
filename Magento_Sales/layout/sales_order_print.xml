@@ -7,18 +7,17 @@
  * See https://hyva.io/license
  */
 -->
-<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd"
+    layout="1column"
+>
     <update handle="sales_order_view"/>
     <update handle="print"/>
     <body>
+        <referenceBlock name="page.main.title" remove="true"/>
         <referenceBlock name="sales.order.buttons" remove="true"/>
         <referenceBlock name="sales.order.info.links" remove="true"/>
-        <referenceBlock name="logo">
-            <arguments>
-                <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\SalesLogoPathResolver</argument>
-            </arguments>
-        </referenceBlock>
         <referenceBlock name="sales_order_item_pager" remove="true"/>
     </body>
 </page>

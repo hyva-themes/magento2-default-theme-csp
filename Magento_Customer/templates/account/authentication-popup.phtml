@@ -121,6 +121,22 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                         window.location.href = this.checkoutUrl;
                     }
                 });
+            },
+            eventListeners: {
+                ['@private-content-loaded.window']() {
+                    this.onPrivateContentLoaded();
+                },
+                ['@toggle-authentication.window']() {
+                    this.redirectIfAuthenticated();
+                },
+                ['@keydown.window.escape']() {
+                    this.close();
+                },
+                ['@pageshow.window'](event) {
+                    if (event.persisted) {
+                        this.close();
+                    };
+                }
             }
         }
     }
@@ -128,11 +144,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
     window.addEventListener('alpine:init', () => Alpine.data('initAuthentication', initAuthentication), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-<section id="authentication-popup"
-         x-data="initAuthentication"
-         @private-content-loaded.window="onPrivateContentLoaded"
-         @toggle-authentication.window="redirectIfAuthenticated"
-         @keydown.window.escape="close"
+<section
+    id="authentication-popup"
+    x-data="initAuthentication"
+    x-bind="eventListeners"
 >
     <div
         class="backdrop"
@@ -179,7 +194,7 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
                     class="p-2 text-gray-300 transition duration-150 ease-in-out hover:text-black"
                 >
-                    <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => true]); ?>
+                    <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                 </button>
             </div>
             <template x-if="open">
@@ -240,10 +255,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                                     </div>
                                 </div>
 
-                                <input name="context" type="hidden" value="checkout" />
+                                <input name="context" type="hidden" value="checkout">
                                 <div class="actions-toolbar pt-6 pb-2">
                                     <button type="submit"<?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
-                                            class="inline-flex btn btn-primary disabled:opacity-75"
+                                            class="inline-flex btn btn-primary"
                                     >
                                         <?= $escaper->escapeHtml(__('Sign In')) ?>
                                     </button>

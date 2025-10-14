@@ -14,12 +14,14 @@
     <body>
         <attribute name="itemtype" value="https://schema.org/Product"/>
         <attribute name="itemscope" value="itemscope"/>
+
         <referenceBlock name="page.main.title">
             <arguments>
-                <argument name="css_class" xsi:type="string">mt-0 product text-3xl font-semibold text-center md:px-0 md:mt-10 md:mb-3</argument>
+                <argument name="css_class" xsi:type="string">product text-3xl font-semibold text-center md:sr-only</argument>
                 <argument name="add_base_attribute" xsi:type="string">itemprop="name"</argument>
             </arguments>
         </referenceBlock>
+
         <referenceBlock name="root">
             <arguments>
                 <argument name="add_attribute" xsi:type="string">itemscope itemtype="https://schema.org/Product"
@@ -76,6 +78,14 @@
                             </argument>
                         </arguments>
 
+                        <block class="Magento\Theme\Block\Html\Title" name="product.info.title" template="Magento_Theme::html/title.phtml">
+                            <arguments>
+                                <argument name="maybe_purged_tailwind_section_classes" xsi:type="string">hidden mb-5 mt-8 font-bold md:flex md:flex-row md:flex-wrap</argument>
+                                <argument name="heading_tag" xsi:type="string">div</argument>
+                                <argument name="aria_hidden" xsi:type="boolean">true</argument>
+                            </arguments>
+                        </block>
+
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.review"
                                template="Magento_Catalog::product/view/review.phtml" ifconfig="catalog/review/active"/>
 
@@ -100,6 +110,8 @@
                         </container>
 
                         <block name="product.info.stockstatus"  template="Magento_Catalog::product/view/stock-status.phtml"/>
+
+                        <container name="product.info.stockqty"/>
 
                         <block class="Magento\Catalog\Block\Product\Price"
                                name="product.info.price"
@@ -211,7 +223,6 @@
         </referenceContainer>
 
         <move element="alert.urls" destination="product.info" as="alert.urls"/>
-        <move element="page.main.title" destination="product.detail.page" as="product.title" />
 
         <referenceContainer name="before.body.end">
             <block name="recently_viewed_products.register_view"

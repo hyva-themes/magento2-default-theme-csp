@@ -46,11 +46,11 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             <?= $block->getBlockHtml('formkey') ?>
             <fieldset class="fieldset login">
                 <legend class="mb-3">
-                    <h2 class="text-xl font-medium title-font text-primary">
+                    <h2 class="text-xl font-medium title-font">
                         <?= $escaper->escapeHtml(__('Login')) ?>
                     </h2>
                 </legend>
-                <p class="text-secondary-darker mb-8">
+                <p class="mb-8">
                     <?= $escaper->escapeHtml(__('If you have an account, sign in with your email address.')) ?>
                 </p>
                 <div class="field email required">
@@ -59,14 +59,14 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     </label>
                     <div class="control">
                         <input name="login[username]"
-                               class="form-input"
+                               class="form-input w-full"
                                required
                                value="<?= $escaper->escapeHtmlAttr($block->getUsername()) ?>"
                                autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'username' ?>"
                                id="email"
                                type="email"
                                title="<?= $escaper->escapeHtmlAttr(__('Email')) ?>"
-                        />
+                        >
                     </div>
                 </div>
                 <div class="field password required">
@@ -75,11 +75,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     </label>
                     <div class="control flex items-center">
                         <div class="sr-only" aria-live="polite">
-                            <template x-if="!showPassword">
-                                <span>
-                                    <?= $escaper->escapeHtml(__('Password hidden')) ?>
-                                </span>
-                            </template>
+                            <span x-show="!showPassword">
+                                <?= $escaper->escapeHtml(__('Password hidden')) ?>
+                            </span>
                             <template x-if="showPassword">
                                 <span>
                                     <?= $escaper->escapeHtml(__('Password shown')) ?>
@@ -87,13 +85,13 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             </template>
                         </div>
                         <input name="login[password]"
-                            class="form-input"
+                            class="form-input w-full"
                             required
                             :type="showPassword ? 'text' : 'password'"
                             autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'current-password' ?>"
                             id="pass"
                             title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
-                        />
+                        >
                         <button
                             type="button"
                             x-on:click="showPassword = !showPassword"
@@ -101,11 +99,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             class="px-4 py-3"
                             :aria-label="showPassword ? '<?= $escaper->escapeJs(__('Hide Password')) ?>' : '<?= $escaper->escapeJs(__('Show Password')) ?>'"
                         >
-                            <template x-if="!showPassword">
-                                <?= $heroiconssolid->eyeHtml('w-5 h-5'); ?>
-                            </template>
+                            <?= $heroiconssolid->eyeHtml('', 20, 20, ['x-show' => '!showPassword', 'aria-hidden' => 'true']); ?>
                             <template x-if="showPassword">
-                                <?= $heroiconssolid->eyeOffHtml('w-5 h-5'); ?>
+                                <?= $heroiconssolid->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>
@@ -114,12 +110,12 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 <?= $recaptcha ? $recaptcha->getInputHtml(ReCaptcha::RECAPTCHA_FORM_ID_CUSTOMER_LOGIN) : '' ?>
                 <?= $block->getChildHtml('form_additional_info') ?>
                 <div class="actions-toolbar pt-6 pb-2">
-                        <button type="submit" class="btn btn-primary disabled:opacity-75" name="send"
+                        <button type="submit" class="btn btn-primary" name="send"
                             <?php if ($loginButtonViewModel->disabled()): ?> disabled data-recaptcha-btn<?php endif; ?>
                         >
                             <span><?= $escaper->escapeHtml(__('Sign In')) ?></span>
                         </button>
-                        <a class="underline text-secondary" href="<?= $escaper->escapeUrl(
+                        <a class="underline" href="<?= $escaper->escapeUrl(
                             $block->getForgotPasswordUrl()
                         ) ?>"><span><?= $escaper->escapeHtml(__('Forgot Your Password?')) ?></span>
                         </a>
