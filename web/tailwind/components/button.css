@@ -47,8 +47,8 @@
 
     &:is(:disabled, [aria-disabled="true"]) {
         border-color: var(--btn-disabled-stroke, var(--color-gray-200));
-        background-color: var(--btn-disabled-bg, var(--color-white));
-        color: var(--btn-disabled-color, var(--color-gray-600));
+        background-color: var(--btn-disabled-bg, var(--color-gray-50));
+        color: var(--btn-disabled-color, var(--color-gray-500));
         cursor: not-allowed;
     }
 }
