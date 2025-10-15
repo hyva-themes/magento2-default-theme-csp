@@ -87,10 +87,10 @@ $validationClass = $addressViewModel->addressGetAttributeValidationClass('dob');
                 return this.dateToInputDate(utcDate);
             },
             getMinDate() {
-                return getDateOnYear(120);
+                return this.getDateOnYear(120);
             },
             getMaxDate() {
-                return getDateOnYear();
+                return this.getDateOnYear();
             },
             dateToInputDate(date) {
                 const year = date.getFullYear().toString().padStart(4, '0');
