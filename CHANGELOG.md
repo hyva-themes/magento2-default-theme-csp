@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   Many thanks to Andrei Pavlikov (Perspective Magento Team) for the contribution!
 
+- **Add AlpineJs based HTML Dialog to the Header Mobile Menu and Minicart**
+  For more information, please refer to [merge request #1358](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1358)
+
 ### Changed
 
 - **Simplify cart data handling and improve toggle logic**  
@@ -64,6 +67,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   For more information, please refer to [merge request #1263](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1263)
 
 - **Improve header layout and customization**  
+  This reworks the header layout removing most of the CSS order logic for native browser order fixing many UX/A11Y issues and making the header easier to customize.
+
   For more information, please refer to [issue #1010](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1010)
 
 - **Update TailwindCSS to v4**  

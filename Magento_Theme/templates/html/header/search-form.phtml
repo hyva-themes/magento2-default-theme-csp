@@ -137,7 +137,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
                 <template x-for="suggestion in suggestions">
                     <button
                         type="button"
-                        class="flex justify-between p-2 bg-container-lighter even:bg-container border border-container hover:bg-container-darker"
+                        class="flex justify-between p-2 bg-white even:bg-gray-50 border border-gray-300 hover:bg-gray-100"
                         @click="search(suggestion.title)"
                         @keydown.enter="search(suggestion.title)"
                         @keydown.arrow-up.prevent="focusElement($event.target.previousElementSibling) || $refs.searchInput.focus()"
