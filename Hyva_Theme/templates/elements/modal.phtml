@@ -1,0 +1,59 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2020-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
+
+$modalBtnLabel = $block->getModalBtnLabel() ?: 'Open Modal';
+$closeOnBackdrop = $block->getCloseOnBackdrop() ?? true;
+?>
+
+<div x-data="hyvaModal">
+    <button @click="open" class="btn">
+        <?= $escaper->escapeHtml(__($modalBtnLabel)); ?>
+    </button>
+    <dialog
+        class="modal"
+        x-show="isOpen"
+        x-transition
+        x-htmldialog="close"
+        <?php if ($closeOnBackdrop): ?>
+            closeby="any"
+        <?php endif; ?>
+    >
+        <?= $block->getChildHtml() ?>
+    </dialog>
+</div>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('hyvaModal', () => ({
+            isOpen: false,
+            open() {
+                this.isOpen = true;
+            },
+            close() {
+                this.isOpen = false;
+            },
+        }));
+    });
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
