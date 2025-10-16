@@ -69,7 +69,7 @@
         max-block-size: calc(100% - 2rem);
         max-inline-size: calc(100% - 2rem);
         background-color: var(--color-surface, canvas);
-        color: var(--color-text, canvastext);
+        color: var(--color-fg, canvastext);
         border-radius: 1rem;
         margin: auto;
         padding: 1.5rem;

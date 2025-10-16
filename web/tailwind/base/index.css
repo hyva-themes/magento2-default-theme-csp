@@ -16,7 +16,7 @@
 
     body {
         background: var(--color-bg);
-        color: var(--color-text);
+        color: var(--color-fg);
     }
 }
 

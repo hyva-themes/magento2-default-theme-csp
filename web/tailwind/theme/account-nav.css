@@ -3,17 +3,17 @@
         & a,
         & strong {
             @apply flex justify-between py-1;
-            color: var(--color-text-secondary);
+            color: var(--color-fg-secondary);
         }
 
         & a:hover {
             @apply underline;
-            color: var(--color-text);
+            color: var(--color-fg);
         }
 
         & strong {
             @apply underline font-normal;
-            color: var(--color-text);
+            color: var(--color-fg);
         }
     }
 }
