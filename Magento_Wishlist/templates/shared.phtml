@@ -25,7 +25,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                 hyva.postForm(JSON.parse(this.$el.dataset.itemAddToCartUrl));
             },
             addAllSharedToCart() {
-                hyva.postForm(<?= /* @noEscape */ $block->getSharedAddAllToCartUrl() ?>);
+                hyva.postForm(JSON.parse(this.$el.dataset.sharedAddAllToCartUrl));
             }
         }
     }
@@ -116,6 +116,7 @@ use Magento\Wishlist\Block\Share\Wishlist;
                         <button type="button"
                                 title="<?= $escaper->escapeHtmlAttr(__('Add All to Cart')) ?>"
                                 @click.prevent="addAllSharedToCart"
+                                data-shared-add-all-to-cart-url="<?= $escaper->escapeHtmlAttr($block->getSharedAddAllToCartUrl()) ?>"
                                 class="action tocart primary">
                             <span><?= $escaper->escapeHtml(__('Add All to Cart')) ?></span>
                         </button>

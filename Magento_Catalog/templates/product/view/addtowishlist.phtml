@@ -50,7 +50,7 @@ $uniqueId = '_' . uniqid();
             addToWishlist() {
                 const productId = this.$el.dataset.productId;
                 const postParams = <?php if ($updateParams): ?>
-                    <?= /* @noEscape */ $updateParams ?>
+                    JSON.parse(this.$el.dataset.updateParams)
                 <?php else: ?>
                 {
                     action: BASE_URL + "wishlist/index/add/",
@@ -138,6 +138,7 @@ $uniqueId = '_' . uniqid();
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
 <button x-data="initWishlist<?= /** @noEscape */ $uniqueId ?>"
+        data-update-params="<?= $escaper->escapeHtmlAttr($updateParams) ?>"
         x-defer="intersect"
         data-product-id="<?= (int) $product->getId() ?>"
         @click.prevent="addToWishlist"

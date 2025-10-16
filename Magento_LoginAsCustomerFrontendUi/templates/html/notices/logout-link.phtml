@@ -27,9 +27,10 @@ if ($block->isLoggedIn()) {
 ?>
 <script>
     function initCloseLoginAsCustomerSession() {
+        const postParams = JSON.parse(this.$el.dataset.postParams);
         return {
             closeSession() {
-                hyva.postForm(<?= /** @noEscape */ $block->getPostParams() ?>);
+                hyva.postForm(postParams);
             }
         }
     }
@@ -37,6 +38,7 @@ if ($block->isLoggedIn()) {
 </script>
 <?php $hyvaCsp->registerInlineScript(); ?>
 <a x-data="initCloseLoginAsCustomerSession"
+    data-post-params="<?= $escaper->escapeHtmlAttr($block->getPostParams()) ?>"
     class="-mr-1 flex p-2 rounded-md text-white"
     <?= /* @noEscape */ $block->getLinkAttributes() ?>
     <?= /* @noEscape */ $dataPostParam ?>
