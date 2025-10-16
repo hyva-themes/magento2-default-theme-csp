@@ -16,6 +16,16 @@
                 </arguments>
             </block>
         </referenceBlock>
+
+        <referenceBlock name="header-content">
+            <block
+                name="header.content.wishlist"
+                template="Magento_Wishlist::header/wishlist.phtml"
+                as="wishlist"
+                ifconfig="wishlist/general/active"
+            />
+        </referenceBlock>
+
         <referenceContainer name="sidebar.additional">
             <block class="Magento\Wishlist\Block\Customer\Sidebar" name="wishlist_sidebar" as="wishlist" template="Magento_Wishlist::sidebar.phtml" ifconfig="wishlist/general/show_in_sidebar"/>
         </referenceContainer>

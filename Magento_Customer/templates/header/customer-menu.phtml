@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Customer\Block\Account\Customer;
 use Magento\Framework\Escaper;
 
@@ -17,8 +17,8 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 
 <div
@@ -30,13 +30,13 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     <button
         type="button"
         id="customer-menu"
-        class="block rounded p-1 hover:bg-primary/10 outline-offset-2"
+        class="btn bg-transparent border-transparent p-1"
         @click="open = !open"
         :aria-expanded="open ? 'true' : 'false'"
         aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
         aria-haspopup="true"
     >
-        <?= $heroicons->userHtml('md:h-6 md:w-6', 28, 28, ['aria-hidden' => 'true']); ?>
+        <?= $lucideIcons->userHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
     </button>
     <nav
         class="
