@@ -306,7 +306,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
             @click="closeCartDrawer"
             aria-label="<?= $escaper->escapeHtmlAttr(__('Close minicart')) ?>"
         >
-            <?= $lucideIcons->xHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+            <?= $lucideIcons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
         </button>
     </div>
 
@@ -315,9 +315,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
     <template x-if="cartIsEmpty">
         <div class="grow grid place-items-center">
             <div class="text-center">
-                <div class="max-w-full max-h-full aspect-square w-44 h-44 inline-flex items-center justify-center">
-                    <?= $lucideIcons->shoppingBasketHtml('', 120, 120, ['aria-hidden' => 'true']); ?>
-                </div>
+                <?= $lucideIcons->shoppingBasketHtml('inline-block text-fg/30 max-w-full h-auto', 120, 120, ['aria-hidden' => 'true']); ?>
                 <p class="mt-10 text-xl">
                     <strong><?= $escaper->escapeHtml(__('Cart is empty')) ?></strong>
                 </p>
