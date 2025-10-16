@@ -7,6 +7,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\Navigation;
 use Magento\Framework\View\Element\Template;
@@ -15,6 +16,7 @@ use Magento\Framework\Escaper;
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var LucideIcons $lucideIcons */
 $lucideIcons = $viewModels->require(LucideIcons::class);
@@ -140,8 +142,8 @@ $itemClasses = (string) $block->getItemClasses() ?: "flex items-center gap-2 py-
     </dialog>
 </div>
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('initMobileMenu', () => ({
+    const initMobileMenu = () => {
+        return {
             isOpen: false,
             isSubMenuOpen: false,
             isOverflowing: false,
@@ -171,9 +173,11 @@ $itemClasses = (string) $block->getItemClasses() ?: "flex items-center gap-2 py-
                     };
                 }
             }
-        }));
+        }
+    };
 
-        Alpine.data('initMobileSubMenu', () => ({
+    const initMobileSubMenu = () => {
+        return {
             isOpen: false,
             open() {
                 this.isOpen = true;
@@ -201,7 +205,12 @@ $itemClasses = (string) $block->getItemClasses() ?: "flex items-center gap-2 py-
                     item.toggleAttribute('inert', this.isOpen);
                 }
             }
-        }));
-    });
+        }
+    }
+
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('initMobileMenu', initMobileMenu);
+        Alpine.data('initMobileSubMenu', initMobileSubMenu);
+    }, { once: true });
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
