@@ -27,9 +27,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 
 <?php if ($block->displayNoscriptNotice()): ?>
     <noscript>
-        <section class="message global noscript border-b-2 border-blue-500 bg-blue-50 shadow-none m-0 px-0 rounded-none font-normal">
+        <section
+            class="message global noscript border-b-2 border-blue-500 bg-blue-50 shadow-none m-0 px-0 rounded-none font-normal"
+            aria-labelledby="messageGlobalNoScriptMessage"
+        >
             <div class="container text-center">
-                <p>
+                <p id="messageGlobalNoScriptMessage">
                     <strong><?= $escaper->escapeHtml(__('JavaScript seems to be disabled in your browser.')) ?></strong>
                     <span>
                         <?= $escaper->escapeHtml(
@@ -48,9 +51,10 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         hidden
         style="display: none"
         class="message global local_storage border-b-2 border-blue-500 bg-blue-50 shadow-none m-0 px-0 rounded-none font-normal"
+        aria-labelledby="messageGlobalLocalStorageMessage"
     >
         <div class="container text-center">
-            <p>
+            <p id="messageGlobalLocalStorageMessage">
                 <strong><?= $escaper->escapeHtml(__('Local Storage seems to be disabled in your browser.')) ?></strong>
                 <?= $escaper->escapeHtml(
                     __('For the best experience on our site, be sure to turn on Local Storage in your browser.')
@@ -71,9 +75,12 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
 <?php endif; ?>
 
 <?php if ($block->displayDemoNotice()): ?>
-    <section class="message global demo border-b-2 border-red-500 bg-red-50 shadow-none m-0 px-0 rounded-none font-normal">
+    <section
+        class="message global demo border-b-2 border-red-500 bg-red-50 shadow-none m-0 px-0 rounded-none font-normal"
+        aria-labelledby="messageGlobalDemo"
+    >
         <div class="container text-center font-bold">
-            <p><?= $escaper->escapeHtml(__('This is a demo store. No orders will be fulfilled.')) ?></p>
+            <p id="messageGlobalDemo"><?= $escaper->escapeHtml(__('This is a demo store. No orders will be fulfilled.')) ?></p>
         </div>
     </section>
 <?php endif; ?>
