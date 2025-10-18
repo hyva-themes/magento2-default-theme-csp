@@ -6,8 +6,8 @@
     <body>
         <referenceContainer name="head.additional">
             <block
-                name="view-transition.product.gallery"
-                template="Magento_Catalog::page/js/view-transition-product-gallery.phtml"
+                name="view-transition.gallery"
+                template="Magento_Catalog::page/js/view-transition-between-gallery.phtml"
             />
         </referenceContainer>
 
