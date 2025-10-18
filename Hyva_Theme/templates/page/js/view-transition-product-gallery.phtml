@@ -1,0 +1,50 @@
+<?php
+/**
+ * Hyvä Themes - https://hyva.io
+ * Copyright © Hyvä Themes 2022-present. All rights reserved.
+ * This product is licensed per Magento install
+ * See https://hyva.io/license
+ */
+
+declare(strict_types=1);
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var HyvaCsp $hyvaCsp */
+/** @var ViewModelRegistry $viewModels */
+?>
+
+<script>
+    const setTransitionNameBetweenGallery = async (url, promise) => {
+        if (window.matchMedia('(prefers-reduced-motion)').matches) return;
+
+        const productGallery = document.getElementById('gallery-main');
+        const productListItem = document.querySelector(`.product-item-photo[href="${url}"]`);
+        const targetElement = productListItem || productGallery;
+
+        if (targetElement) {
+            targetElement.style.viewTransitionName = 'view-transition-to-gallery';
+            await promise;
+            targetElement.style.viewTransitionName = '';
+        }
+    };
+
+    window.addEventListener('pageswap', async (e) => {
+        if (!e.viewTransition) return;
+        const targetUrl = new URL(e.activation.entry.url);
+        setTransitionNameBetweenGallery(targetUrl.href, e.viewTransition.finished);
+    });
+
+    window.addEventListener('pagereveal', async (e) => {
+        if (!e.viewTransition || (window.navigation && !window.navigation.activation.from)) return;
+        const fromUrl = new URL(window.navigation.activation.from.url);
+        // const entryURL = new URL(navigation.activation.entry.url);
+        setTransitionNameBetweenGallery(fromUrl.href, e.viewTransition.ready);
+    });
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
