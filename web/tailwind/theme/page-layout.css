@@ -17,41 +17,43 @@
     :is([class*="page-layout-2columns-"], .page-layout-3columns) {
         --sidebar-width: 240px;
         --main-width: minmax(0px, 1fr);
-        --page-layout: "sidebar-main column-main" auto
-            "sidebar-additional column-main" minmax(0, 1fr) /
-            var(--sidebar-width) var(--main-width);
+        --page-layout: var(--sidebar-width) var(--main-width);
 
         .columns {
-            grid-template: var(--page-layout);
+            grid-template-columns: var(--page-layout);
+            grid-template-rows: auto 1fr;
 
             & > .column.main {
-                grid-area: column-main;
-            }
-
-            & > .sidebar-main {
-                grid-area: sidebar-main;
-            }
-
-            & > .sidebar-additional {
-                grid-area: sidebar-additional;
+                grid-row: span 2;
             }
         }
     }
 
     .page-layout-2columns-right {
-        --page-layout: "column-main sidebar-main" auto
-            "column-main sidebar-additional" minmax(0, 1fr) /
-            var(--sidebar-width) var(--main-width);
+        --page-layout: var(--main-width) var(--sidebar-width);
+
+        .columns {
+            grid-template-columns: var(--page-layout);
+            grid-template-rows: auto 1fr;
+
+            & > .column.main {
+                order: -1;
+            }
+        }
     }
 }
 
 @variant lg {
-    [class*="page-layout-2columns-"] {
+    [class*="page-layout-2columns-"],
+    .page-layout-3columns {
         --sidebar-width: 320px;
     }
+}
 
+@variant xl {
     .page-layout-3columns {
-        --page-layout: "sidebar-main column-main sidebar-additional" /
-            var(--sidebar-width) var(--main-width) var(--sidebar-width);
+        --sidebar-width: 240px;
+        --page-layout: var(--sidebar-width) var(--main-width)
+            var(--sidebar-width);
     }
 }
