@@ -110,10 +110,10 @@ $maxSalesQtyLength = ($maxSalesQty ? strlen((string) $maxSalesQty) : 4)
                     <?php foreach ($options as $option): ?>
                         <?php $formatedOptionValue = $block->getFormatedOptionValue($option) ?>
                         <div class="table-row">
-                            <dt class="table-cell font-normal min-w-16 pe-2 pb-2">
+                            <dt class="table-cell font-normal min-w-16 pe-2 pb-1 text-fg-secondary">
                                 <?= $escaper->escapeHtml($option['label']) ?>
                             </dt>
-                            <dd class="table-cell font-bold pb-2">
+                            <dd class="table-cell font-bold pb-1">
                                 <?php if (isset($formatedOptionValue['full_view'])): ?>
                                     <?= $escaper->escapeHtml($formatedOptionValue['full_view']) ?>
                                 <?php else: ?>
