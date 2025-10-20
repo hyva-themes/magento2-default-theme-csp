@@ -8,19 +8,21 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Checkout\Block\Cart\Coupon;
-use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Magento\Framework\Escaper;
 
 /** @var Coupon $block */
 /** @var Escaper $escaper */
-/** @var ReCaptcha $recaptcha */
 /** @var ViewModelRegistry $viewModels */
+/** @var ReCaptcha $recaptcha */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
+
+$showIcon = $block->getShowIcon() ?? true;
 
 // We should use strlen function because coupon code could be "0", converted to bool will lead to false
 $hasCouponCode = (bool) strlen($block->getCouponCode() ?: "");
@@ -67,11 +69,15 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         @click.prevent="toggleShowCoupon"
         class="list-none flex justify-between items-center gap-2 py-2 font-semibold"
     >
-        <span><?= $escaper->escapeHtml(__('Apply Discount Code')) ?></span>
-        <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
+        <span class="inline-flex items-center gap-2">
+            <?= $lucideIcons->sparklesHtml('text-primary', 20, 20, ['aria-hidden' => 'true']); ?>
+            <span><?= $escaper->escapeHtml(__('Apply Discount Code')) ?></span>
+        </span>
+        <?= $lucideIcons->chevronDownHtml('transform group-open:rotate-180', 20, 20, ['aria-hidden' => 'true']); ?>
     </summary>
     <form
         id="discount-coupon-form"
+        class="mt-2 mb-4"
         action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
         method="post"
         @submit.prevent="submitForm()"
@@ -99,12 +105,12 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 >
             </div>
             <?php if (!$hasCouponCode): ?>
-                <button type="submit" class="btn btn-primary w-full" value="<?= $escaper->escapeHtmlAttr(__('Apply Discount')) ?>">
+                <button type="submit" class="btn btn-secondary w-full" value="<?= $escaper->escapeHtmlAttr(__('Apply Discount')) ?>">
                     <?= $escaper->escapeHtml(__('Apply Discount')) ?>
                 </button>
             <?php else: ?>
                 <input type="hidden" name="remove" id="remove-coupon" value="1">
-                <button type="submit" class="btn btn-primary w-full" value="<?= $escaper->escapeHtmlAttr(__('Cancel Coupon')) ?>">
+                <button type="submit" class="btn btn-secondary w-full" value="<?= $escaper->escapeHtmlAttr(__('Cancel Coupon')) ?>">
                     <?= $escaper->escapeHtml(__('Cancel Coupon')) ?>
                 </button>
             <?php endif; ?>

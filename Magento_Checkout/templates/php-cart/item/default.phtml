@@ -20,12 +20,12 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
+/** @var ProductStockItem $stockItemViewModel */
+$stockItemViewModel = $viewModels->require(ProductStockItem::class);
+
 $item = $block->getItem();
 $product = $item->getProduct();
 $isVisibleProduct = $product->isVisibleInSiteVisibility();
-
-/** @var ProductStockItem $stockItemViewModel */
-$stockItemViewModel = $viewModels->require(ProductStockItem::class);
 
 $minSalesQty = $stockItemViewModel->getMinSaleQty($product);
 $maxSalesQty = $stockItemViewModel->getMaxSaleQty($product);

@@ -17,10 +17,7 @@ use Magento\Framework\Escaper;
 
 <div class="flex flex-col lg:flex-row-reverse lg:items-start gap-8">
     <div class="card lg:w-80 2xl:w-96 lg:sticky lg:top-4">
-        <h2 class="text-xl font-bold">
-            <?= $escaper->escapeHtml(__('Summary')) ?>
-        </h2>
-        <?= $block->getChildHtml('cart.discount') ?>
+        <h2 class="text-lg font-bold"><?= $escaper->escapeHtml(__('Summary')) ?></h2>
         <?= $block->getChildHtml('cart.summary') ?>
     </div>
     <div class="lg:flex-1">
