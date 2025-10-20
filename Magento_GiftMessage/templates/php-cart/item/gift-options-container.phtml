@@ -45,7 +45,7 @@ if (!$isItemLevelGiftOptionsEnabled && !$isItemLevelGiftWrappingEnabled) {
     <button
         type="button"
         class="btn p-2"
-        aria-label="<?= $escaper->escapeHtml(__('Gift options')) ?>"
+        aria-label="<?= $escaper->escapeHtml(__('Add Gift Options for Individual Items')) ?>"
         @click="openDialog"
     >
         <span class="relative">
@@ -67,7 +67,7 @@ if (!$isItemLevelGiftOptionsEnabled && !$isItemLevelGiftWrappingEnabled) {
         x-htmldialog="closeDialog"
     >
         <p class="text-xl mb-4">
-            <strong><?= $escaper->escapeHtml('Item Gift Options') ?></strong>:
+            <strong><?= $escaper->escapeHtml(__('Add Gift Options')) ?></strong>:
             <span><?= $escaper->escapeHtml($block->getItem()->getName()) ?></span>
         </p>
         <?= $block->getChildHtml('gift-options-body') ?>

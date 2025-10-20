@@ -226,7 +226,7 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
     <button
         type="button"
         class="btn"
-        aria-label="<?= $escaper->escapeHtml(__('Gift options')) ?>"
+        aria-label="<?= $escaper->escapeHtml(__('Add Gift Options for the Entire Order')) ?>"
         @click="openDialog"
     >
         <span class="relative">
@@ -249,7 +249,7 @@ if (! $isOrderLevelGiftOptionsEnabled && ! $isOrderLevelGiftWrappingEnabled) {
         x-htmldialog="closeDialog"
     >
         <p class="text-xl mb-4">
-            <strong><?= $escaper->escapeHtml('Order Gift Options') ?></strong>
+            <strong><?= $escaper->escapeHtml(__('Add Gift Options for the Entire Order')) ?></strong>
         </p>
         <?= $block->getChildHtml('gift-options-body') ?>
     </dialog>
