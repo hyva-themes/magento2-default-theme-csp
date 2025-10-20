@@ -17,8 +17,8 @@
 
         <referenceBlock name="page.main.title">
             <arguments>
-                <argument name="css_class" xsi:type="string">product text-3xl font-semibold text-center md:sr-only</argument>
-                <argument name="add_base_attribute" xsi:type="string">itemprop="name"</argument>
+                <argument name="css_classes" xsi:type="string">text-3xl font-semibold text-center md:sr-only</argument>
+                <argument name="add_base_attribute" xsi:type="string">itemprop=name</argument>
             </arguments>
         </referenceBlock>
 
@@ -80,9 +80,9 @@
 
                         <block class="Magento\Theme\Block\Html\Title" name="product.info.title" template="Magento_Theme::html/title.phtml">
                             <arguments>
-                                <argument name="maybe_purged_tailwind_section_classes" xsi:type="string">hidden mb-5 mt-8 font-bold md:flex md:flex-row md:flex-wrap</argument>
+                                <argument name="wrapper_css_classes" xsi:type="string">hidden mb-5 md:block</argument>
                                 <argument name="heading_tag" xsi:type="string">div</argument>
-                                <argument name="aria_hidden" xsi:type="boolean">true</argument>
+                                <argument name="add_base_attribute" xsi:type="string">aria-hidden=true</argument>
                             </arguments>
                         </block>
 
