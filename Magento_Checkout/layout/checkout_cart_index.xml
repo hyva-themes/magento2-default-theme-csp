@@ -93,12 +93,16 @@
             </block>
 
 
-            <block name="crosssell" class="Magento\Catalog\Block\Product\View"
-                   template="Magento_Catalog::product/slider/product-slider.phtml">
+            <block
+                name="crosssell"
+                class="Magento\Catalog\Block\Product\View"
+                template="Magento_Catalog::product/slider/product-slider.phtml"
+            >
                 <arguments>
                     <argument name="type" xsi:type="string">crosssell</argument>
                     <argument name="title" xsi:type="string" translate="true">You might also like:</argument>
                     <argument name="hide_rating_summary" xsi:type="boolean">true</argument>
+                    <argument name="column_count" xsi:type="number">4</argument>
                 </arguments>
             </block>
         </referenceContainer>
