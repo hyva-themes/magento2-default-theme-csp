@@ -15,20 +15,23 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 ?>
 
-<section class="pb-6 md:py-6 text-gray-700 body-font grid grid-cols-1 gap-5 items-start md:grid-cols-[42%_minmax(0px,1fr)] lg:grid-cols-2 lg:gap-x-10 ">
+<section
+    class="pb-6 md:py-6 grid grid-cols-1 gap-4 md:items-start md:grid-cols-[42%_minmax(0px,1fr)] lg:grid-cols-2 lg:gap-x-10"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Product Info')) ?>"
+>
     <?= $block->getChildHtml('product.media') ?>
     <?= $block->getChildHtml('product.info') ?>
 </section>
 
-<section>
-    <?= $block->getChildHtml('product_options_wrapper_bottom') ?>
-</section>
+<?= $block->getChildHtml('product_options_wrapper_bottom') ?>
 
 <?= $block->getChildHtml('product.info.details'); ?>
 
-<section>
-    <?= $block->getChildHtml('related') ?>
-    <?= $block->getChildHtml('upsell') ?>
+<?= $block->getChildHtml('related') ?>
+
+<?= $block->getChildHtml('upsell') ?>
+
+<section aria-label="<?= $escaper->escapeHtmlAttr(__('Product Reviews')) ?>">
     <?= $block->getChildHtml('review_list') ?>
     <?= $block->getChildHtml('review_form') ?>
 </section>

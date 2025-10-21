@@ -8,28 +8,28 @@
 
 declare(strict_types=1);
 
-/** @var Term $block */
-/** @var Escaper $escaper */
-
 use Magento\Framework\Escaper;
 use Magento\Search\Block\Term;
+
+/** @var Term $block */
+/** @var Escaper $escaper */
 ?>
 <?php if (count($block->getTerms()) > 0): ?>
-    <ul role="list" class="flex flex-wrap -mx-2 md:-mx-4 items-baseline">
+    <ul
+        role="list"
+        class="prose my-6 flex flex-wrap items-start"
+        style="font-size: clamp(1.5em, 4vw, 3.5em); line-height: 1.2; gap: 0.875em 1em"
+    >
         <?php foreach ($block->getTerms() as $term): ?>
-            <li class="m-2 md:mx-4"
-                style="font-size: <?= /** @noEscape */ ($term->getRatio()*70+75) ?>%"
-            >
-                <a href="<?= $escaper->escapeUrl($block->getSearchUrl($term)) ?>"
-                   class="hover:underline"
-                >
+            <li style="font-size: <?= $escaper->escapeHtmlAttr($term->getRatio()*70+75) ?>%">
+                <a href="<?= $escaper->escapeUrl($block->getSearchUrl($term)) ?>">
                     <?= $escaper->escapeHtml($term->getQueryText()) ?>
                 </a>
             </li>
         <?php endforeach; ?>
     </ul>
 <?php else: ?>
-    <div>
+    <p class="my-6">
         <?= $escaper->escapeHtml(__('There are no search terms available.')) ?>
-    </div>
+    </p>
 <?php endif; ?>

@@ -249,9 +249,9 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
     <div x-show="!activeProductsPriceData && !isPriceHidden()">
         <div class="price-container">
             <?php if ($finalPrice < $regularPrice): ?>
-                <div class="old-price mr-2 flex">
+                <div class="old-price">
                     <span id="product-price-<?= (int)$product->getId() ?>"
-                          class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
+                          class="price-wrapper">
                         <span class="price" x-html="hyva.formatPrice(<?= (float)$regularPrice ?> + getCustomOptionPrice())">
                             <?= /** @noEscape */ $productViewModel->format($regularPrice) ?>
                         </span>
@@ -259,7 +259,7 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
                 </div>
                 <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
                 <div class="old-price-excl-tax">
-                    <span class="font-regular line-through text-gray-900">
+                    <span>
                         <span><?= $escaper->escapeHtml(__('Excl. Tax')) ?>:</span>
                         <span class="price" x-html="hyva.formatPrice(<?= (float)$regularPriceExclTax ?> + getCustomOptionBasePrice())">
                             <?= /** @noEscape */ $productViewModel->format($regularPriceExclTax) ?>
@@ -269,14 +269,14 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
                 <?php endif; ?>
             <?php endif; ?>
 
-            <div class="final-price inline-block" itemprop="offers" itemscope="" itemtype="https://schema.org/Offer">
-                    <span class="price-label block">
-                        <?= ($product->canConfigure() && is_int($product->getPrice())) ?
-                            $escaper->escapeHtml(__('As low as')) . ':' :
-                            '&nbsp;' ?>
-                    </span>
+            <div class="final-price" itemprop="offers" itemscope="" itemtype="https://schema.org/Offer">
+                <span class="price-label">
+                    <?= ($product->canConfigure() && is_int($product->getPrice()))
+                        ? $escaper->escapeHtml(__('As low as')) . ':'
+                        : '' ?>
+                </span>
                 <span id="product-price-<?= (int)$product->getId() ?>"
-                      class="price-wrapper title-font font-medium text-2xl text-gray-900">
+                      class="price-wrapper">
                     <span class="price" x-html="getFormattedFinalPrice()">
                         <?= /** @noEscape */ $productViewModel->format($finalPrice) ?>
                     </span>
@@ -287,7 +287,7 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
             </div>
             <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
                 <div class="final-price-excl-tax">
-                    <span class="font-regular text-gray-900">
+                    <span>
                         <span><?= $escaper->escapeHtml(__('Excl. Tax')) ?>:</span>
                         <span class="price" x-html="getFormattedBasePrice()">
                             <?= /** @noEscape */ $productViewModel->format($finalPriceExclTax) ?>
@@ -303,29 +303,29 @@ if ($msrpPrice = iterator_to_array($product->getPriceInfo()->getPrices())[MsrpPr
     ">
         <div class="old-price flex mr-2">
             <span id="product-price-<?= (int)$product->getId() ?>"
-                  class="price-wrapper title-font font-regular text-xl line-through text-gray-900">
+                  class="price-wrapper">
                 <span class="price" x-html="hyva.formatPrice(activeProductsPriceData[regularPriceKey].amount + getCustomOptionPrice())"></span>
             </span>
         </div>
     </template>
     <template x-if="activeProductsPriceData">
-        <div class="final-price inline-block">
+        <div class="final-price">
             <?php if ($product->canConfigure() && is_int($product->getPrice())): ?>
-                <span class="price-label block" :class="{ 'invisible' : !showRegularPriceLabel }">
+                <span class="price-label" x-show="showRegularPriceLabel">
                     <?= $escaper->escapeHtml(__('As low as')) ?>:
                 </span>
             <?php endif; ?>
             <span id="product-price-<?= (int)$product->getId() ?>"
-                  class="price-wrapper title-font font-medium text-2xl text-gray-900">
+                  class="price-wrapper">
                 <span class="price" x-html="getFormattedFinalPrice()"></span>
             </span>
         </div>
     </template>
     <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
     <template x-if="activeProductsPriceData">
-        <div class="price-excl-tax inline-block">
+        <div class="price-excl-tax">
             <span><?= $escaper->escapeHtml(__('Excl. Tax')) ?>:</span>
-            <span class="font-regular text-gray-900">
+            <span>
                 <span class="price" x-html="getFormattedBasePrice()"></span>
             </span>
         </div>

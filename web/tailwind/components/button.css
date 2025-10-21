@@ -12,7 +12,7 @@
     --btn-bg: var(--color-slate-100);
     --btn-hover-bg: var(--color-slate-200);
     --btn-active-bg: var(--color-slate-200);
-    --btn-color: var(--color-text);
+    --btn-color: var(--color-fg);
 }
 
 @utility btn {
@@ -70,11 +70,11 @@
 @utility btn-secondary {
     --btn-stroke: var(--color-primary-lighter);
     --btn-bg: var(--color-on-primary);
-    --btn-color: currentcolor;
+    --btn-color: var(--color-primary-darker);
 
-    --btn-hover-stroke: var(--color-primary);
+    --btn-hover-stroke: var(--color-primary-lighter);
     --btn-hover-bg: var(--color-on-primary);
-    --btn-hover-color: var(--color-primary);
+    --btn-hover-color: var(--color-primary-lighter);
 
     --btn-active-stroke: #0000;
     --btn-active-bg: var(--color-primary-darker);
@@ -87,9 +87,4 @@
 
 .btn-size-sm {
     @apply px-2 py-2 text-sm;
-}
-
-/* @deprecated */
-.action.primary {
-    @apply btn btn-primary;
 }

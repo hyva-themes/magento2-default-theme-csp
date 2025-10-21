@@ -67,16 +67,16 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
         }
     }
 </script>
-<div class="my-12" x-data="initGroupedOptions()">
+<div class="product-grouped-options" x-data="initGroupedOptions()">
 <?php if ($hasAssociatedProducts): ?>
-    <h2 class="text-gray-900 text-xl title-font font-medium mb-2">
+    <h2 class="text-xl font-medium mb-2">
         <?= $escaper->escapeHtml(__('Grouped product items')) ?>
     </h2>
-    <div class="hidden sm:flex py-2 border-t border-gray-300 items-center justify-between gap-2">
-        <div class="text-gray-500 font-semibold text-left">
+    <div class="hidden sm:flex py-2 items-center justify-between gap-2">
+        <div class="text-fg-secondary font-semibold">
             <?= $escaper->escapeHtml(__('Product Name')) ?>
         </div>
-        <div class="text-gray-500 font-semibold text-left w-20">
+        <div class="text-fg-secondary font-semibold w-20">
             <?= $escaper->escapeHtml(__('Qty')) ?>
         </div>
     </div>
@@ -90,11 +90,8 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
                  <?php endif; ?>
              <?php endforeach; ?>
         >
-            <label
-                class="text-gray-700 text-left"
-                for="super_group[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
-            >
-                <span class="product-item-name font-semibold">
+            <label for="super_group[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]" class="text-fg">
+                <span class="product-item-name">
                     <?= $escaper->escapeHtml($item->getName()) ?>
                 </span>
                 <?php if ($block->getCanShowProductPrice($product)): ?>
@@ -103,7 +100,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
                     <?php endif; ?>
                 <?php endif; ?>
             </label>
-            <div class="label text-gray-900 text-left sm:text-right w-full sm:w-20">
+            <div class="text-left sm:text-right w-full sm:w-20">
                 <?php if ($product->isSaleable()): ?>
 
                     <?php if ($item->isSaleable()): ?>
@@ -114,7 +111,7 @@ $hasAssociatedProducts = count($associatedProducts) > 0;
                                    id="super_group[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
                                    value="<?= $escaper->escapeHtmlAttr($item->getQty() * 1) ?>"
                                    title="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>"
-                                   class="qty form-input px-2 py-2 w-20 text-center"
+                                   class="form-input qty w-full"
                                    :class=" { 'border-red-500 focus:border-red-500 focus:ring-red-500': !isValid }"
                                    @input.debounce="validateForm()"
                             >

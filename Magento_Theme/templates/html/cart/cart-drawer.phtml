@@ -326,7 +326,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
     <template x-if="itemsCount">
         <ul class="grow flex flex-col overflow-y-auto overscroll-y-contain mask-overflow mask-dir-y">
             <template x-for="item in cartItems">
-                <li class="flex gap-4 md:gap-6 items-start py-7 border-b border-slate-200">
+                <li class="flex gap-4 md:gap-6 items-start py-4 px-1 border-b border-slate-200">
                     <template x-if="productIsVisibleInSite">
                         <a
                             class="block shrink-0 max-w-[25%]"

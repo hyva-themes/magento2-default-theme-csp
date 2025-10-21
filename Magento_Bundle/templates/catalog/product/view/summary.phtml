@@ -17,21 +17,18 @@ use Magento\Framework\Escaper;
 $product = $block->getProduct();
 ?>
 <?php if ($product->isSaleable() && $block->hasOptions()): ?>
-<div id="bundleSummary"
-     class="w-full block-bundle-summary card md:w-1/2 lg:w-1/3">
-    <div class="mb-2 title">
-        <h2 class="w-full text-2xl leading-relaxed text-left text-gray-900 border-b title-font font-base
-                   border-gray-300">
+<div id="bundleSummary" class="block-bundle-summary w-full md:w-1/2 lg:w-1/3">
+    <hgroup class="mb-4">
+        <h2 class="text-xl font-bold">
             <?= $escaper->escapeHtml(__('Your Customization')) ?>
         </h2>
-    </div>
+        <p class="product-name text-fg-secondary">
+            <?= $escaper->escapeHtml($product->getName()) ?>
+        </p>
+    </hgroup>
     <div class="content">
         <div class="bundle-info mb-2">
             <div class="product-details">
-                <p class="text-lg font-semibold product-name">
-                    <?= $escaper->escapeHtml($product->getName()) ?>
-                </p>
-
                 <?= $block->getChildHtml('product.info.form') ?>
             </div>
 
@@ -43,23 +40,22 @@ $product = $block->getProduct();
         </div>
         <div x-data="initBundleSummary()"
              x-bind="eventListeners"
-             class="bundle-summary"
+             class="bundle-summary card"
         >
             <div x-show="selectedOptions.length">
-                <div class="mb-2 w-full text-xl leading-relaxed text-left text-gray-900 border-b subtitle title-font
-                            font-base border-gray-300">
-                    <?= $escaper->escapeHtml(__('Summary')) ?>
-                </div>
+                <p class="mb-2 text-lg">
+                    <strong><?= $escaper->escapeHtml(__('Summary')) ?></strong>
+                </p>
                 <div>
                     <ul role="list" class="bundle items">
                         <template x-for="option in selectedOptions">
-                        <li class="mb-2" x-show="option.products.length">
-                            <span class="text-base font-semibold" x-html="option.label"></span>
-                            <template x-for="product in option.products">
-                                <div><span x-html="product.qty"></span> x <span x-html="product.name"></span></div>
-                            </template>
-                        </li>
-                    </template>
+                            <li class="mb-2" x-show="option.products.length">
+                                <span class="text-base font-semibold" x-html="option.label"></span>
+                                <template x-for="product in option.products">
+                                    <div><span x-html="product.qty"></span> x <span x-html="product.name"></span></div>
+                                </template>
+                            </li>
+                        </template>
                     </ul>
                 </div>
             </div>

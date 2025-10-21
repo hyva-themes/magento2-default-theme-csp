@@ -1,6 +1,6 @@
 @utility container {
     margin-inline: auto;
-    padding-inline: --spacing(8);
+    padding-inline: --spacing(6);
 }
 
 @layer components {

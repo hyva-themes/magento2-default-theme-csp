@@ -60,13 +60,14 @@ $showWishlist = $block->getShowWishlist() !== null ? (bool) $block->getShowWishl
             },
             toggleSearch() {
                 this.searchOpen = !this.searchOpen;
+                this.$dispatch('search-open');
             },
             searchClose() {
                 this.searchOpen = false;
+                this.$refs.searchButton.focus();
             },
             searchEscape() {
-                this.searchOpen = false;
-                this.$refs.searchButton.focus();
+                this.searchClose();
             }
         }
     }

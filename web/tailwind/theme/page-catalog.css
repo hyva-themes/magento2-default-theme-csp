@@ -1,24 +1,23 @@
 .product-item {
     --price-font-size: 1.25em;
 
-    .price-box.price-final_price {
-        @apply flex flex-col;
-
-        > .old-price {
-            @apply order-first;
-        }
+    .price-from,
+    .price-to {
+        --price-font-size: 1em;
     }
 }
 
 .product-info-main {
-    --price-font-size: clamp(var(--text-xl), 2vw, var(--text-3xl));
+    --price-font-size: clamp(1.5em, 2.5vw, 2.5em);
 
     & .old-price {
-        --price-font-size: var(--text-sm);
+        --price-font-size: 1em;
     }
 
-    .product-grouped-options {
-        --price-font-size: var(--text-lg);
+    .product-grouped-options,
+    .price-from,
+    .price-to {
+        --price-font-size: 1.5em;
     }
 }
 
@@ -27,4 +26,9 @@
     & .old-price {
         @apply sr-only;
     }
+}
+
+.product-image-container {
+    display: block;
+    margin-inline: auto;
 }

@@ -15,29 +15,23 @@ use Magento\Theme\Block\Html\Title;
 /** @var Title $block */
 
 $headingTag = $block->getData('heading_tag') ?: 'h1';
-$textSizeCssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : ' text-3xl';
-$titleContainerClasses = $block->getData('maybe_purged_tailwind_section_classes')
-    ?? 'container flex flex-col md:flex-row flex-wrap my-6 font-bold lg:mt-8';
-$isAriaHidden = $block->getData('aria_hidden') !== null ? (bool) $block->getData('aria_hidden') : false;
+$cssClasses = $block->getCssClasses() ?? $block->getCssClass() ?? 'text-3xl font-bold mb-6';
+$wrapperCssClasses = $block->getWrapperCssClasses()
+    ?? $block->getData('maybe_purged_tailwind_section_classes')
+    ?? 'container flex flex-col md:flex-row flex-wrap';
+$baseAttribute = $block->getAddBaseAttribute();
 
-$titleHtml = '';
-if (trim((string)$block->getPageHeading())) {
-    $titleHtml = '<span class="base" data-ui-id="page-title-wrapper" '
-        . $block->getAddBaseAttribute()
-        . '>'
-        . $escaper->escapeHtml($block->getPageHeading())
-        . '</span>';
-}
+$titleHtml = trim((string)$block->getPageHeading()) ?: '';
 ?>
 <?php if ($titleHtml): ?>
-<div class="<?= $escaper->escapeHtmlAttr($titleContainerClasses . $textSizeCssClass) ?>">
-    <<?= /* @noEscape */ $headingTag ?>
-        class="text-gray-900 page-title title-font"
-        <?php if ($block->getId()): ?>id="<?= $escaper->escapeHtmlAttr($block->getId()) ?>"<?php endif; ?>
-        <?php if ($isAriaHidden): ?>aria-hidden="true"<?php endif; ?>
-    >
-        <?= /* @noEscape */ $titleHtml ?>
-    </<?= /* @noEscape */ $headingTag ?>>
-    <?= $block->getChildHtml() ?>
-</div>
+    <div class="<?= $escaper->escapeHtmlAttr($wrapperCssClasses) ?>">
+        <<?= $escaper->escapeHtmlAttr($headingTag) ?>
+            class="page-title <?= $escaper->escapeHtmlAttr($cssClasses); ?>"
+            <?= $escaper->escapeHtmlAttr($baseAttribute, false); ?>
+            data-ui-id="page-title-wrapper"
+        >
+            <?= $escaper->escapeHtml($titleHtml) ?>
+        </<?= $escaper->escapeHtmlAttr($headingTag) ?>>
+        <?= $block->getChildHtml() ?>
+    </div>
 <?php endif; ?>

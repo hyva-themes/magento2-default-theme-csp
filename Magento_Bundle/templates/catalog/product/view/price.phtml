@@ -184,7 +184,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
 >
     <div class="final-price flex">
         <span id="product-price-<?= (int)$product->getId() ?>"
-              class="price-wrapper title-font font-medium text-2xl text-gray-900"
+              class="price-wrapper"
               aria-live="assertive"
               aria-atomic="true"
         >
@@ -199,7 +199,7 @@ $displayTax = $productPriceViewModel->displayPriceIncludingTax();
     </div>
     <?php if ($productPriceViewModel->displayPriceInclAndExclTax()): ?>
         <div class="final-price-excl-tax">
-            <span class="font-regular text-gray-900">
+            <span>
                 <span><?= $escaper->escapeHtml(__('Excl. Tax')) ?>:</span>
                 <span class="price" x-html="getFormattedBasePrice()">
                     <?= /** @noEscape */ $productViewModel->format($finalPriceExclTax) ?>

@@ -26,13 +26,13 @@ $crumbsCount = 1;
 $currentPageUrl = $block->getUrl('', ['_current' => true, '_use_rewrite' => true]);
 ?>
 
-<nav class="breadcrumbs bg-white text-slate-900 shadow-sm" aria-label="Breadcrumb">
+<nav class="breadcrumbs bg-surface shadow-sm" aria-label="Breadcrumb">
     <div class="container">
         <ol class="items list-reset py-4 rounded flex flex-wrap text-grey text-sm">
             <?php foreach ($crumbs as $crumbName => $crumbInfo): ?>
                 <li class="item flex <?= $escaper->escapeHtmlAttr($crumbName) ?>">
                 <?php if (!$crumbInfo['first']): ?>
-                    <span aria-hidden="true" class="separator text-slate-600 px-2">/</span>
+                    <span aria-hidden="true" class="separator text-fg-secondary px-2">/</span>
                 <?php endif; ?>
                 <?php if ($crumbInfo['link']): ?>
                     <a
@@ -44,7 +44,7 @@ $currentPageUrl = $block->getUrl('', ['_current' => true, '_use_rewrite' => true
                 <?php elseif ($crumbInfo['last']): ?>
                     <a
                         href="<?= $escaper->escapeUrl($block->getUrl('', ['_current' => true, '_use_rewrite' => true])) ?>"
-                        class="text-slate-600"
+                        class="text-fg-secondary"
                         aria-current="page"
                     ><?= $escaper->escapeHtml($crumbInfo['label']) ?></a>
                 <?php else: ?>

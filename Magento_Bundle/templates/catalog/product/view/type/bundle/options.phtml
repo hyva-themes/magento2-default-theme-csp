@@ -42,7 +42,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
 }
 ?>
 <?php if ($product->isSaleable()): ?>
-    <div class="card flex w-full md:w-1/2 lg:w-2/3">
+    <div class="w-full md:w-1/2 lg:w-2/3">
         <?php if (count($options)): ?>
             <script>
                 function initBundleOptions() {
@@ -227,11 +227,11 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                         $dispatch('set-selected-options', {});
                     })"
                  x-defer="intersect"
-                 class="w-full">
+            >
 
                 <fieldset class="fieldset fieldset-bundle-options min-w-48 mb-8" form="product_addtocart_form">
-                    <legend id="customizeTitle" class="legend">
-                        <h2 class="text-gray-900 text-2xl title-font font-base text-center md:text-left w-full">
+                    <legend id="customizeTitle" class="mb-4">
+                        <h2 class="text-xl font-bold">
                             <?= $escaper->escapeHtml(__('Customize %1', $product->getName())) ?>
                         </h2>
                     </legend>
@@ -241,19 +241,33 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                         if (!$option->getSelections()) {
                             continue;
                         } ?>
-                        <div class="my-2 pt-4 pb-2 w-full border-t border-gray-300">
-                            <label
-                                id="option-label-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
-                                class="label text-lg font-semibold"
-                            >
-                                <?= $escaper->escapeHtml($option->getTitle()) ?>
-                            </label>
-                            <div class="control mt-2">
-                                <div class="nested options-list">
-                                    <?= $block->getOptionHtml($option); ?>
+
+                        <?php if ($option->getType() === "radio" || count($option->getSelections()) === 1): ?>
+                            <fieldset class="mt-0 mb-4 pb-4 border-b border-gray-300 last:border-b-0 last:pb-0">
+                                <legend class="block mt-0 mb-2 font-bold">
+                                    <?= $escaper->escapeHtml($option->getTitle()) ?>
+                                </legend>
+                                <div class="control">
+                                    <div class="nested options-list">
+                                        <?= $block->getOptionHtml($option); ?>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        <?php else: ?>
+                            <div class="mt-0 mb-4 pb-4 border-b border-gray-300 last:border-b-0 last:pb-0">
+                                <label
+                                    id="option-label-<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
+                                    class="block mt-0 mb-2 font-bold"
+                                >
+                                    <?= $escaper->escapeHtml($option->getTitle()) ?>
+                                </label>
+                                <div class="control">
+                                    <div class="nested options-list">
+                                        <?= $block->getOptionHtml($option); ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </fieldset>
                 <?= $block->getChildHtml('product_info_bundle_options_bottom') ?>

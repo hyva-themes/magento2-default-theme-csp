@@ -35,23 +35,23 @@ $skipLinkedDataJsonSchema = $block->getData('skip_ld_json_schema');
 $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() : null;
 
 ?>
-<nav class="breadcrumbs bg-white text-slate-900 shadow-sm" aria-label="Breadcrumb">
+<nav class="breadcrumbs bg-surface shadow-sm" aria-label="Breadcrumb">
     <div class="container">
         <ol
             x-data="initBreadcrumbsProduct()"
             class="items list-reset -mx-3 py-4 rounded flex flex-nowrap text-grey text-sm overflow-x-auto relative"
         >
             <li
-                class="shrink-0 sticky inset-y-0 left-0 w-3 bg-gradient-to-r from-white"
+                class="shrink-0 sticky inset-y-0 left-0 w-3 bg-gradient-to-r from-surface"
                 aria-hidden="true"
             >&ZeroWidthSpace;</li>
             <template x-for="item in breadcrumbs">
                 <li class="item inline-flex whitespace-nowrap">
                     <template x-if="item.name !== 'home'">
-                        <span aria-hidden="true" class="separator text-slate-600 px-2">/</span>
+                        <span aria-hidden="true" class="separator text-fg-secondary px-2">/</span>
                     </template>
                     <template x-if="item.name === 'product'">
-                        <a :href="item.link" class="text-slate-600" aria-current="page" x-text="item.label"></a>
+                        <a :href="item.link" class="text-fg-secondary" aria-current="page" x-text="item.label"></a>
                     </template>
                     <template x-if="item.name !== 'product'">
                         <a :href="item.link" :aria-label="item.title" x-text="item.label"></a>
@@ -59,7 +59,7 @@ $product = $currentProductViewModel->exists() ? $currentProductViewModel->get() 
                 </li>
             </template>
             <li
-                class="shrink-0 sticky inset-y-0 right-0 w-3 bg-gradient-to-l from-white"
+                class="shrink-0 sticky inset-y-0 right-0 w-3 bg-gradient-to-l from-surface"
                 aria-hidden="true"
             >&ZeroWidthSpace;</li>
         </ol>

@@ -10,6 +10,8 @@ use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 ?>
-<div class="product-options-bottom container flex flex-col md:flex-row flex-no-wrap gap-4">
-    <?= $block->getChildHtml('', true) ?>
-</div>
+<?php if ($block->getChildHtml()): ?>
+    <div class="product-options-bottom flex flex-col md:flex-row gap-4 md:gap-8 pb-8">
+        <?= $block->getChildHtml() ?>
+    </div>
+<?php endif; ?>

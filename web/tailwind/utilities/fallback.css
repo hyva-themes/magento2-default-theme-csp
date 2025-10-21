@@ -28,3 +28,10 @@
         display: none;
     }
 }
+
+/* Preserve the backdrop for older modals */
+@utility backdrop {
+    position: fixed;
+    inset: 0;
+    background-color: var(--backdrop, hsl(0 0 0 / 20%));
+}

@@ -9,7 +9,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Magento\Search\Helper\Data as SearchHelper;
@@ -23,8 +23,8 @@ use Magento\Search\ViewModel\ConfigProvider as SearchConfig;
 /** @var SearchHelper $helper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var SearchHelper $helper */
 $helper = $this->helper(SearchHelper::class);
@@ -110,7 +110,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
                 value="<?= /** @noEscape */ $helper->getEscapedQueryText() ?>"
                 placeholder="<?= $escaper->escapeHtmlAttr(__('Search entire store here...')) ?>"
                 maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
-                class="w-full text-lg lg:text-xl text-grey-800 focus:border-transparent focus:outline-none rounded-l"
+                class="form-input w-full rounded-e-none"
                 @search-open.window.debounce.10="$el.focus(); $el.select()"
                 <?php if ($searchConfig->isSuggestionsAllowed()): ?>
                     @focus.once="suggest"
@@ -120,11 +120,11 @@ $searchConfig = $viewModels->require(SearchConfig::class);
             >
             <button
                 type="submit"
-                class="action search btn btn-primary rounded-l-none rounded-r shrink-0 p-3 shadow-none"
+                class="btn btn-primary p-2.5 rounded-s-none shrink-0 outline-offset-0"
                 title="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
             >
-                <?= $heroicons->searchHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                <?= $lucideIcons->searchHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
             </button>
         </form>
     </search>

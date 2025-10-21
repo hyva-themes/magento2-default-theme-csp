@@ -1,19 +1,12 @@
 .price-box {
-    @apply leading-normal;
-
     & .price {
         font-size: var(--price-font-size, var(--text-base));
         font-weight: var(--price-font-weight, bolder);
     }
 
-    & .price-wrapper,
-    & .price-container {
-        @apply inline-block;
-    }
-
     & .old-price,
     & .special-price {
-        @apply block;
+        display: block;
 
         & .price-label {
             @apply sr-only;
@@ -25,15 +18,14 @@
         --price-font-weight: normal;
 
         .price {
-            @apply line-through;
+            text-decoration: line-through;
         }
     }
 
     & .price-excluding-tax {
-        @apply block;
+        display: block;
 
         &::after {
-            @apply text-primary-lighter;
             content: " " attr(data-label);
             font-size: var(--price-font-size-label, 0.875rem);
             font-weight: var(--price-font-weight, normal);
@@ -41,32 +33,10 @@
     }
 
     & .price-tax-label {
-        @apply text-primary-lighter;
         font-size: var(--price-font-size-label, 0.875rem);
     }
 }
 
 .price-including-tax + .price-excluding-tax {
     --price-font-size: 1rem;
-}
-
-.price-from,
-.price-to {
-    @apply block;
-    --price-font-size: 1.25em;
-
-    .old-price {
-        @apply inline-block;
-    }
-}
-
-.price-from {
-    margin-inline-end: 1ch;
-}
-
-.compare-list {
-    & .price-from,
-    & .price-to {
-        --price-font-size: 1em;
-    }
 }

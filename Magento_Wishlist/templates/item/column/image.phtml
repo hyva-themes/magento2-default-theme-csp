@@ -17,8 +17,11 @@ use Magento\Wishlist\Model\Item;
 $item = $block->getItem();
 $product = $item->getProduct();
 ?>
-<a class="product-item-photo hover:shadow-sm flex mb-2" tabindex="-1"
-   href="<?= $escaper->escapeUrl($block->getProductUrl($item)) ?>"
-   title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>">
+<a
+    class="product-item-photo block mb-3"
+    tabindex="-1"
+    href="<?= $escaper->escapeUrl($block->getProductUrl($item)) ?>"
+    title="<?= $escaper->escapeHtmlAttr($product->getName()) ?>"
+>
     <?= $block->getImage($block->getProductForThumbnail($item), 'wishlist_thumbnail')->toHtml() ?>
 </a>
