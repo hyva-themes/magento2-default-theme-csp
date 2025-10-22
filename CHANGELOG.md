@@ -7,7 +7,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.18...main
+
+## [1.3.18] - 2025-?-?
+
+[1.3.18]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...1.3.18
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Mark forgotpassword page as uncacheable to fix an issue with Varnish and ESI**  
+  For more information, please refer to [issue #1228](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1228)
+
+  Many thanks to Pieter Hoste (Baldwin) for the contribution!
+
+- **Fix duplicate deferral of swatch components**  
+  For more information, please refer to [issue #1046](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1046)
+
+### Removed
+
+- Nothing removed
 
 ## [1.3.17] - 2025-09-02
 
