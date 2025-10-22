@@ -7,7 +7,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit;
 use Magento\Wishlist\Model\Item;
@@ -16,8 +16,8 @@ use Magento\Wishlist\Model\Item;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var Item $item */
 $item = $block->getItem();
@@ -35,11 +35,11 @@ $editProductUrl = $configureUrl . (count($urlHash) > 1 ? '#' . $urlHash[1] : '')
 ?>
 
 <?php if ($product->isVisibleInSiteVisibility()): ?>
-    <a class="action edit btn btn-secondary inline-flex mr-2 p-2"
-       href="<?= $escaper->escapeUrl($editProductUrl) ?>"
-       title="<?= $escaper->escapeHtmlAttr(__('Edit %1', $product->getName())) ?>"
+    <a
+        class="btn p-2"
+        href="<?= $escaper->escapeUrl($editProductUrl) ?>"
     >
-        <?= $heroicons->pencilHtml('', 20, 20, ["aria-hidden" => "true"]); ?>
+        <?= $lucideIcons->pencilHtml('', 20, 20, ["aria-hidden" => "true"]); ?>
         <span class="sr-only">
             <?= $escaper->escapeHtml(__('Edit %1', $product->getName())) ?>
         </span>

@@ -18,54 +18,48 @@ use Magento\Wishlist\ViewModel\AllowedQuantity;
 
 /** @var Item $item */
 $item = $block->getItem();
+$itemId = $item->getId();
 $product = $item->getProduct();
+
 /** @var AllowedQuantity $viewModel */
 $viewModel = $viewModels->require(AllowedQuantity::class);
 $allowedQty = $viewModel->setItem($item)->getMinMaxQty();
 ?>
+
 <?php foreach ($block->getChildNames() as $childName): ?>
     <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
 <?php endforeach;?>
-<div class="box-tocart">
-    <fieldset class="fieldset">
+
+<fieldset class="box-tocart mt-4 pt-4 border-t border-gray-300 mb-2 <?= ($item->canHaveQty() && $product->isVisibleInSiteVisibility()) ? ' flex flex-wrap gap-2' : '' ?>">
     <?php if ($item->canHaveQty() && $product->isVisibleInSiteVisibility()): ?>
-        <div class="field qty">
-            <label class="label"
-                   for="qty[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]">
-                <span>
-                    <?= $escaper->escapeHtml(__('Qty')) ?>
-                </span>
-            </label>
-            <div class="control">
-                <input type="number"
-                       x-ref="product-qty-<?= $escaper->escapeHtmlAttr($item->getId()) ?>"
-                       data-role="qty"
-                       id="qty[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
-                       class="form-input qty"
-                       name="qty[<?= $escaper->escapeHtmlAttr($item->getId()) ?>]"
-                       value="<?= /* @noEscape */ $block->getAddToCartQty($item) * 1 ?>"
-                    <?= $product->isSaleable() ? '' : 'disabled' ?>
-                >
-            </div>
-        </div>
+        <label class="my-0">
+            <span class="sr-only"><?= $escaper->escapeHtml(__('Qty')) ?></span>
+            <input
+                type="number"
+                name="qty[<?= $escaper->escapeHtmlAttr($itemId) ?>]"
+                class="form-input qty"
+                value="<?= /* @noEscape */ $block->getAddToCartQty($item) * 1 ?>"
+                data-role="qty"
+                x-ref="product-qty-<?= $escaper->escapeHtmlAttr($itemId) ?>"
+                <?= $product->isSaleable() ? '' : 'disabled' ?>
+            >
+        </label>
     <?php endif; ?>
     <?php if ($product->isSaleable()): ?>
-    <div class="product-item-actions">
-        <div class="actions-primary">
-            <button type="button"
-                    data-role="tocart"
-                    data-item-id="<?= $escaper->escapeHtmlAttr($item->getId()) ?>"
-                    data-add-to-cart-params="<?= $escaper->escapeHtmlAttr($block->getItemAddToCartParams($item)) ?>"
-                    @click.prevent='addToCart'
-                    title="<?= $escaper->escapeHtmlAttr(__('Add %1 to Cart', $product->getName())) ?>"
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart %1', $product->getName())) ?>"
-                    class="action tocart primary btn btn-primary mt-2"
-                    data-addto="cart"
+        <div class="product-item-actions">
+            <button
+                type="button"
+                data-role="tocart"
+                data-item-id="<?= $escaper->escapeHtmlAttr($item->getId()) ?>"
+                data-add-to-cart-params="<?= $escaper->escapeHtmlAttr($block->getItemAddToCartParams($item)) ?>"
+                @click.prevent='addToCart'
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Add to Cart %1', $product->getName())) ?>"
+                class="btn btn-primary"
+                data-addto="cart"
             >
-                <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
+                <?= $escaper->escapeHtml(__('Add to Cart')) ?>
             </button>
         </div>
-    </div>
     <?php else: ?>
         <?php if ($product->getIsSalable()): ?>
             <p class="available stock" title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
@@ -77,5 +71,4 @@ $allowedQty = $viewModel->setItem($item)->getMinMaxQty();
             </p>
         <?php endif; ?>
     <?php endif; ?>
-    </fieldset>
-</div>
+</fieldset>

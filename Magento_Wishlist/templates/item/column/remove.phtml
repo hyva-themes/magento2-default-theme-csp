@@ -7,7 +7,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Remove;
 use Magento\Framework\Escaper;
 use Magento\Wishlist\Model\Item;
@@ -16,21 +16,22 @@ use Magento\Wishlist\Model\Item;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var Item $item */
 $item = $block->getItem();
 $product = $item->getProduct();
 ?>
 
-<a href="#"
-   data-role="remove"
-   data-remove-item-params="<?= $escaper->escapeHtmlAttr($block->getItemRemoveParams($block->getItem())) ?>"
-   @click.prevent="removeItem"
-   title="<?= $escaper->escapeHtmlAttr(__('Remove Item')) ?>"
-   class="btn-remove action delete btn btn-secondary inline-flex p-2">
-    <?= $heroicons->trashHtml('', 20, 20); ?>
+<button
+    type="button"
+    data-role="remove"
+    data-remove-item-params="<?= $escaper->escapeHtmlAttr($block->getItemRemoveParams($block->getItem())) ?>"
+    @click.prevent="removeItem"
+    class="btn p-2"
+>
+    <?= $lucideIcons->trashHtml('', 20, 20); ?>
     <span class="sr-only">
         <?= $escaper->escapeHtml(__('Remove item %1', $product->getName())) ?>
     </span>
