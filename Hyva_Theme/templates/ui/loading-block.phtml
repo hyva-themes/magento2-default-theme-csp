@@ -22,7 +22,7 @@ $hyvaicons = $viewModels->require(SvgIcons::class);
 ?>
 <template x-if="isLoading">
     <div class="z-10 absolute w-full h-full flex items-center justify-center bg-white/60">
-        <?= $hyvaicons->renderHtml('loader', 'animate-spin', 20, 20, ['aria-hidden' => 'true']); ?>
+        <?= $hyvaicons->renderHtml('loader', '', 20, 20, ['aria-hidden' => 'true']); ?>
     </div>
 </template>
 

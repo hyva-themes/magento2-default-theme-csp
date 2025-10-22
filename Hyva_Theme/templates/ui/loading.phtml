@@ -27,7 +27,7 @@ $hyvaicons = $viewModels->require(SvgIcons::class);
     x-transition.opacity.duration.200ms
 >
     <div class="flex items-center">
-        <?= $hyvaicons->renderHtml('loader', 'animate-spin', 54, 54, ['aria-hidden' => 'true']); ?>
+        <?= $hyvaicons->renderHtml('loader', '', 54, 54, ['aria-hidden' => 'true']); ?>
         <div class="ml-10 text-xl">
             <?= $escaper->escapeHtml(__('Loading...')) ?>
         </div>
