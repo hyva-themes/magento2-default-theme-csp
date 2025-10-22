@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\LucideIcons;
-use Hyva\Theme\ViewModel\Cart\TotalsOutput;
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\Cart\TotalsOutput;
 use Magento\Checkout\Block\Cart\Shipping;
 use Magento\Framework\Escaper;
 
@@ -19,6 +19,7 @@ use Magento\Framework\Escaper;
 /** @var Shipping $block */
 /** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var LucideIcons $lucideIcons */
 $lucideIcons = $viewModels->require(LucideIcons::class);
@@ -400,8 +401,13 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
             }
         }
     }
-    window.addEventListener('alpine:init', () => Alpine.data('initShippingEstimation', initShippingEstimation), {once: true})
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initShippingEstimation', initShippingEstimation)
+    }, { once: true });
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
 <details
     id="block-shipping"
     class="estimate-shipping-form group"
