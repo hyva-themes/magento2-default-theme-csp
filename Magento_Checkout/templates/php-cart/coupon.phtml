@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\LucideIcons;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Checkout\Block\Cart\Coupon;
 use Magento\Framework\Escaper;
@@ -17,6 +18,7 @@ use Magento\Framework\Escaper;
 /** @var Coupon $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 /** @var ReCaptcha $recaptcha */
 
 /** @var LucideIcons $lucideIcons */
@@ -59,7 +61,13 @@ $recaptcha = $block->getData('viewModelRecaptcha');
             }
         };
     };
+
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initCouponForm', initCouponForm)
+    }, { once: true });
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
+
 <details
     class="coupon-form group"
     x-data="initCouponForm()"
