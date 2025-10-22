@@ -42,6 +42,9 @@ Same as default theme
 - **Fix duplicate deferral of swatch components**  
   For more information, please refer to [issue #1046](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1046)
 
+- **Fix the display of the minimum order amount message on the cart page**  
+  For more information, please refer to [issue #824](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/824)
+
 ### Removed
 
 - Nothing removed
