@@ -46,7 +46,7 @@ if ($option): ?>
                value=""
                checked
                @change="updateCustomOptionValue"
-        />
+        >
         <label class="label text-left"
                for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>">
             <span>
@@ -103,7 +103,7 @@ if ($option): ?>
                    data-option-id="<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    @change="updateCustomOptionValue"
-            />
+            >
             <label class="label text-left"
                    for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    x-html="updateOptionPrice"

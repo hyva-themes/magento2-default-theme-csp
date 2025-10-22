@@ -116,7 +116,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
                x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"
                @change="updateCustomOptionValue"
-        />
+        >
         <input type="hidden" name="<?= /* @noEscape */ $fieldNameAction ?>"
                id="<?= /* @noEscape */ $fileName ?>-hidden"
                class="product-custom-option hidden-form-file"
@@ -124,7 +124,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
                value="<?= /* @noEscape */ $fieldValueAction ?>"
                @image-removed="onImageRemoved"
-        />
+        >
         <?php if ($option->getFileExtension()): ?>
             <p class="my-2 text-sm">
                 <?= $escaper->escapeHtml(__('Compatible file extensions to upload')) ?>:

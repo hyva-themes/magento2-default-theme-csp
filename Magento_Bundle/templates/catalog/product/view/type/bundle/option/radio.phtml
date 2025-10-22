@@ -40,7 +40,7 @@ $activeSelectOptions = [];
            checked
            data-option-id="<?= (int)$optionId ?>"
            data-selection-id="<?= (int)$selections[0]->getSelectionId() ?>"
-    />
+    >
     <?php if ((int)$selections[0]->getSelectionId()) {
         array_push($activeSelectOptions, (int)$selections[0]->getSelectionId());
     } ?>
@@ -56,7 +56,7 @@ $activeSelectOptions = [];
                    value=""
                    @change="onChangeSelection"
                    data-option-to-set="<?= (int)$optionId ?>"
-            />
+            >
             <label
                 class="label text-sm"
                 for="bundle-option-<?= (int)$optionId ?>"
@@ -89,7 +89,7 @@ $activeSelectOptions = [];
                        data-option-id="<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
                        data-option-to-set="<?= (int)$optionId ?>"
                        @change="onChangeSelection"
-                />
+                >
                 <label
                     class="label text-sm"
                     for="bundle-option-<?= $escaper->escapeHtmlAttr($optionSelectionId) ?>"
@@ -125,7 +125,7 @@ $activeSelectOptions = [];
         @change="setQtyValue"
         <?php if (!$canChangeQty): ?> disabled <?php endif; ?>
         :disabled="getQtyDisabled"
-    />
+    >
 </div>
 
 <?php

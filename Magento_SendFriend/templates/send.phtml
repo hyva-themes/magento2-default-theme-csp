@@ -57,7 +57,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                class="form-input"
                                autocomplete="name"
                                required
-                        />
+                        >
                     </div>
                 </div>
 
@@ -74,7 +74,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                class="form-input"
                                autocomplete="email"
                                required
-                        />
+                        >
                     </div>
                 </div>
 
@@ -96,14 +96,14 @@ $recipients = $formData->getRecipientData() ?? '[]';
             </fieldset>
 
             <div x-data="rowHandler">
-                <input name="recipient_data" :value="getRecipientsAsJson" type="hidden"/>
+                <input name="recipient_data" :value="getRecipientsAsJson" type="hidden">
                 <fieldset class="fieldset recipients">
                     <legend class="legend">
                     <span x-text="getRecipientsLabel">
                         <?= $escaper->escapeHtml(__('Invitee')) ?>
                     </span>
                     </legend>
-                    <br/>
+                    <br>
                     <div id="recipients-options">
                         <fieldset class="fieldset">
                             <template x-for="(field, index) in fields" :key="index">
@@ -123,7 +123,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                    required
                                                    :value="field.name"
                                                    @change="setName"
-                                            />
+                                            >
                                         </div>
                                     </div>
                                     <div class="field email required inline-block">
@@ -141,7 +141,7 @@ $recipients = $formData->getRecipientData() ?? '[]';
                                                    :value="field.email"
                                                    @change="setEmail"
                                                    validate
-                                            />
+                                            >
                                         </div>
                                     </div>
                                     </div>

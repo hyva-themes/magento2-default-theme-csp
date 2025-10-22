@@ -74,7 +74,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                    data-price-type="<?= $escaper->escapeHtmlAttr($option->getPriceType()) ?>"
                    x-ref="option-<?= $escaper->escapeHtmlAttr($optionId) ?>"
                    @input="updateCustomOptionValue"
-            />
+            >
         <?php elseif ($option->getType() == ProductCustomOptionInterface::OPTION_TYPE_AREA): ?>
             <textarea id="options_<?= $escaper->escapeHtmlAttr($optionId) ?>_text"
                       class="product-custom-option form-textarea"

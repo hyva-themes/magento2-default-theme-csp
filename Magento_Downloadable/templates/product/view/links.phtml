@@ -131,7 +131,7 @@ $configuredLinks          = $configuredValues->getLinks() ?? [];
                                value="<?= $escaper->escapeHtmlAttr($link->getId()) ?>"
                                @change="linkSelectionChange"
                                :checked="isSelected"
-                        />
+                        >
                         <label class="inline-block" for="links_<?= $escaper->escapeHtmlAttr($link->getId()) ?>">
                     <?php endif; ?>
                         <span><?= $escaper->escapeHtml($link->getTitle()) ?></span>

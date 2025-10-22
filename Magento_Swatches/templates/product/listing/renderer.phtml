@@ -56,7 +56,6 @@ $swatchItemBlock->setData('product_id', $productId);
                     init() {
                         configurableOptionsComponentInit.call(this);
                         this.findAllowedAttributeOptions();
-                        this.initShowSwatchesIntersect();
                     },
                     changeOption(optionId, value, skipUpdateGallery) {
                         if (value === '') {
@@ -203,18 +202,16 @@ $swatchItemBlock->setData('product_id', $productId);
              data-attribute-id="<?= (int) $attributeId ?>"
         >
             <div class="w-full overflow-x-hidden swatch-attribute-options min-h-14">
-                <template x-if="showSwatches">
-                    <div class="flex flex-nowrap w-full overflow-auto snap items-center py-1"
-                        id="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
-                        role="radiogroup"
-                        x-bind="scrollEvents"
-                        aria-label="<?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>"
-                    >
-                        <template x-for="(item, index) in getAllAttributeOptions" :key="item.id">
-                            <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
-                        </template>
-                    </div>
-                </template>
+                <div class="flex flex-nowrap w-full overflow-auto snap items-center py-1"
+                    id="attribute-label-<?= $escaper->escapeHtmlAttr($productId . '-' . $attributeId) ?>"
+                    role="radiogroup"
+                    x-bind="scrollEvents"
+                    aria-label="<?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>"
+                >
+                    <template x-for="(item, index) in getAllAttributeOptions" :key="item.id">
+                        <?= /* @noEscape */ $swatchItemBlock->setData('attribute_id', $attributeId)->toHtml(); ?>
+                    </template>
+                </div>
             </div>
         </div>
         <?php endforeach; ?>

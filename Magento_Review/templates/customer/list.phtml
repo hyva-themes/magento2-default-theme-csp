@@ -111,7 +111,8 @@ $ratingSteps = 5;
             <template x-for="review in listReviews">
                 <div class="flex my-6 card">
                     <div class="w-32">
-                        <img :src="reviewProductImageUrl" :alt="reviewProductImageLabel"/></div>
+                        <img :src="reviewProductImageUrl" :alt="reviewProductImageLabel">
+                    </div>
                     <div class="pl-6">
                         <p class="text-lg font-medium">
                             <a :href="reviewProductUrl" x-text="reviewProductName"></a>

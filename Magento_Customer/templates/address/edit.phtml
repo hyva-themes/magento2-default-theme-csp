@@ -92,7 +92,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                id="street_1"
                                class="form-input w-full"
                                @input.debounce="onChange"
-                        />
+                        >
                     </div>
                 </div>
 
@@ -108,7 +108,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                                    id="street_<?= /* @noEscape */ $i + 1 ?>"
                                    class="form-input w-full"
                                    @input.debounce="onChange"
-                            />
+                            >
                         </div>
                     </div>
                 <?php endfor; ?>
@@ -237,7 +237,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                            aria-label="<?= /* @noEscape */ $regionLabel ?>"
                            :required="isRegionInputRequired"
                            @input.debounce="onChange"
-                    />
+                    >
                 </div>
             </div>
         </div>
@@ -261,7 +261,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                 </label>
             </div>
         <?php else: ?>
-            <input type="hidden" name="default_billing" value="1"/>
+            <input type="hidden" name="default_billing" value="1">
         <?php endif; ?>
 
         <?php if (! $block->isDefaultShipping() && $block->canSetAsDefaultShipping()): ?>
