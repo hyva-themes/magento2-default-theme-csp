@@ -29,6 +29,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
 <div
     class="field field-reserved date <?= $block->isRequired() ? 'required' : '' ?>"
     x-data="initDatePicker"
+    data-translated-calendar-config="<?= $escaper->escapeHtmlAttr($block->getTranslatedCalendarConfigJson()) ?>"
 >
     <label for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>" class="label">
         <span><?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?></span>
@@ -148,7 +149,7 @@ $addressViewModel = $viewModels->require(AddressViewModel::class);
     function initDatePicker() {
         const format = '<?= $escaper->escapeHtml($block->getDateFormat()) ?>';
         const firstDayOfWeek = '<?= $escaper->escapeHtml($block->getFirstDay()) ?>';
-        const labelsConfig = <?= /* @noEscape */ $block->getTranslatedCalendarConfigJson() ?>;
+        const labelsConfig = JSON.parse(this.$el.dataset.translatedCalendarConfig);
 
         return hyva.createBooleanObject('showDatepicker', false, {
             value: '<?= $escaper->escapeHtml($block->getValue()) ?>',
