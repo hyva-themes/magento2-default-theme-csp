@@ -128,7 +128,8 @@ window.addEventListener('alpine:init', () => {
 
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-<section>
+
+<div>
     <button
         type="button"
         x-data="initPrint"
@@ -293,9 +294,9 @@ window.addEventListener('alpine:init', () => {
             </tbody>
         </table>
     </div>
-</section>
+</div>
 <?php else: ?>
-<section>
-    <div class="container"><?= $escaper->escapeHtml(__('You have no items to compare.')) ?></div>
-</section>
+<div>
+    <p><?= $escaper->escapeHtml(__('You have no items to compare.')) ?></p>
+</div>
 <?php endif; ?>
