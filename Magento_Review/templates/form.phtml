@@ -358,9 +358,7 @@ mutation createProductReviewMutation(
                             this.clickedRatingId = this.$el.dataset.rating || 0;
                         },
                         ratingClass() {
-                            return this.$el.closest('[data-rating]').dataset.rating <= this.clickedRatingId
-                                    ? 'text-yellow-400'
-                                    : 'text-gray-400';
+                            return this.$el.closest('[data-rating]').dataset.rating <= this.clickedRatingId ? 'fill-current' : '';
 
                         }
                     };
@@ -373,9 +371,7 @@ mutation createProductReviewMutation(
                             this.clickedRatingId = this.$el.dataset.iterator || 0;
                         },
                         classesForRatingOption() {
-                            return this.$el.dataset.iterator <= this.clickedRatingId
-                                ? 'text-yellow-400'
-                                : 'text-gray-400'
+                            return this.$el.dataset.iterator <= this.clickedRatingId ? 'fill-current' : ''
                         }
                     }
                 }
