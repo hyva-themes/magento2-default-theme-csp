@@ -2,22 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.4.0-beta...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.4.0-beta2...main
 
-## [1.4.0-beta CSP] - 2025-10-23
+## [1.4.0-beta2 CSP] - 2025-11-03
 
-[1.4.0-beta CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.18-beta...1.4.0-beta
+[1.4.0-beta2 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.18...1.4.0-beta2
 
 Same as default theme
 
-## [1.4.0-beta] - 2025-10-23
+## [1.4.0-beta2] - 2025-11-03
 
-[1.4.0-beta]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.18-beta...1.4.0-beta
+[1.4.0-beta2]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.18...1.4.0-beta2
 
 ### Added
 
@@ -39,6 +38,9 @@ Same as default theme
   For more information, please refer to [merge request #1360](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1360)
 
 ### Changed
+
+- **Remove requirement for reset-theme, replaced by base-layout-reset**  
+  For more information, please refer to [issue #1215](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1215)
 
 - **Simplify cart data handling and improve toggle logic**  
   For more information, please refer to [merge request #1226](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1226)
@@ -101,6 +103,11 @@ Same as default theme
 
   Many thanks to Maxim Ganses (PHPro) for the contribution!
 
+- **Make if statement syntax consistent in product details template**  
+  For more information, please refer to [issue #1236](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1236)
+
+  Many thanks to Lars de Weert (Made by Mouses) for the contribution!
+
 ### Removed
 
 - **Removed the scroll to review function summary short**  
@@ -108,15 +115,15 @@ Same as default theme
 
   Many thanks to Ivan Tarkovych (Perspective Magento Team) for the contribution!
 
-## [1.3.18-beta CSP] - 2025-10-23
+## [1.3.18 CSP] - 2025-11-03
 
-[1.3.18-beta CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.17...1.3.18-beta
+[1.3.18 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.17...1.3.18
 
 Same as default theme
 
-## [1.3.18-beta] - 2025-10-23
+## [1.3.18] - 2025-11-03
 
-[1.3.18-beta]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...1.3.18-beta
+[1.3.18]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...1.3.18
 
 ### Added
 
@@ -129,9 +136,6 @@ Same as default theme
 
 - **Cleanup Redundant box-sizing styles in Pagebuilder output**  
   For more information, please refer to [issue #1221](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1221)
-
-- **Remove requirement for reset-theme**  
-  For more information, please refer to [issue #1215](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1215)
 
 - **Mark forgotpassword page as uncacheable to fix an issue with Varnish and ESI**  
   For more information, please refer to [issue #1228](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1228)

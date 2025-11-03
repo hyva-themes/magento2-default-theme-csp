@@ -50,7 +50,7 @@ body:where(:not([class*="-full-width"])) {
     background-attachment: scroll !important;
     flex-basis: 100%;
 
-    @screen md {
+    @variant md {
         flex-basis: auto;
     }
 }

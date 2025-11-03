@@ -33,15 +33,19 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
     function initCartDrawer() {
         return {
             open: false,
-            closed() {
-                return !this.open
-            },
             isLoading: false,
             cart: {},
             maxItemsToDisplay: <?= (int) $maxItemsToDisplay ?>,
             itemsCount: 0,
             showSku: <?= $miniCartOptionShowSku ? 'true' : 'false' ?>,
             autocompleteNumber: 100,
+            init() {
+                if (document.prerendering) {
+                    document.addEventListener("prerenderingchange", () => {
+                        this.reloadData()
+                    }, { once: true });
+                }
+            },
             showDetails() {
                 return this.item.options && this.item.options.length || this.showSku;
             },
@@ -163,54 +167,8 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
         }
     }
 
-    function initCartDrawerQtyBox() {
-        return {
-            initQty: 0,
-            itemQty: 0,
-            prevQty: 0,
-            minValue: 0,
-            init() {
-                this.setQtyDefaults();
-                this.$watch('item.qty', () => this.setQtyDefaults());
-                const inputField = this.$root.querySelector('[name="item_qty"]');
-                this.minValue = inputField ? inputField.min : 0;
-            },
-            updateQty() {
-                const submitEvent = new Event('submit', { cancelable: true });
-                this.$root.dispatchEvent(submitEvent);
-            },
-            updateQtyValue(event) {
-                this.itemQty = event.target.value;
-            },
-            updateQtyOnFocus() {
-                this.prevQty = this.itemQty;
-                this.itemQty = null;
-            },
-            updateQtyOnBlur() {
-                if (this.itemQty === null) {
-                    this.itemQty = this.prevQty
-                }
-            },
-            setQtyDefaults() {
-                this.initQty = this.item.qty;
-                this.itemQty = this.item.qty;
-                this.prevQty = this.item.qty;
-            },
-            decrement() {
-                this.itemQty <= this.minValue ? this.itemQty = this.minValue : this.itemQty--;
-            },
-            increment() {
-                this.itemQty++
-            },
-            qtyHasNewValue() {
-                return this.itemQty === this.initQty || this.itemQty === null;
-            }
-        }
-    }
-
     window.addEventListener('alpine:init', () => {
         Alpine.data('initCartDrawer', initCartDrawer);
-        Alpine.data('initCartDrawerQtyBox', initCartDrawerQtyBox);
     }, { once: true })
 
     async function hyvaAjaxFormMinicart(

@@ -101,9 +101,9 @@ $tooltipBlockHtml = $block->getBlockHtml('product.swatch.tooltip');
                             </label>
                             <div class="w-full sm:ml-2 sm:w-1/2 text-left text-gray-900 product-option-values">
                                 <div
-                                        class="flex items-center -mx-4 space-x-4 swatch-attribute-options"
-                                        role="radiogroup"
-                                        aria-label="<?= $escaper->escapeHtmlAttr($productAttribute->getStoreLabel()) ?>"
+                                    class="flex items-center -mx-1 space-x-4 swatch-attribute-options"
+                                    role="radiogroup"
+                                    aria-label="<?= $escaper->escapeHtmlAttr($productAttribute->getStoreLabel()) ?>"
                                 >
                                     <template
                                         x-for="(item, index) in getAllAttributeOptions"
