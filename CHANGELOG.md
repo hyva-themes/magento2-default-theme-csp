@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.18-beta...main
 
-## [1.3.18-beta CPS] - 2025-10-23
+## [1.3.18-beta CSP] - 2025-10-23
 
 [1.3.18-beta CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.17...1.3.18-beta
 
