@@ -20,9 +20,6 @@
         "magento/module-graph-ql": "*",
         "magento/module-quote-graph-ql":"*"
     },
-    "suggest": {
-        "hyva-themes/magento2-review-graphql": "*"
-    },
     "type": "magento2-theme",
     "authors": [{
         "name": "Hyvä Themes B.V.",
