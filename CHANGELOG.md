@@ -25,9 +25,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - **Cleanup Redundant box-sizing styles in Pagebuilder output**  
   For more information, please refer to [issue #1221](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1221)
 
-- **Remove requirement for reset-theme**  
-  For more information, please refer to [issue #1215](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1215)
-
 - **Mark forgotpassword page as uncacheable to fix an issue with Varnish and ESI**  
   For more information, please refer to [issue #1228](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1228)
 
