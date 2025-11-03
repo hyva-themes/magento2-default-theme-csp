@@ -2,22 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.18-beta...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.18...main
 
-## [1.3.18-beta CSP] - 2025-10-23
+## [1.3.18 CSP] - 2025-10-23
 
-[1.3.18-beta CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.17...1.3.18-beta
+[1.3.18 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.17...1.3.18-beta
 
 Same as default theme
 
-## [1.3.18-beta] - 2025-10-23
+## [1.3.18] - 2025-11-03
 
-[1.3.18-beta]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...1.3.18-beta
+[1.3.18]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.17...1.3.18
 
 ### Added
 
@@ -30,9 +29,6 @@ Same as default theme
 
 - **Cleanup Redundant box-sizing styles in Pagebuilder output**  
   For more information, please refer to [issue #1221](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1221)
-
-- **Remove requirement for reset-theme**  
-  For more information, please refer to [issue #1215](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1215)
 
 - **Mark forgotpassword page as uncacheable to fix an issue with Varnish and ESI**  
   For more information, please refer to [issue #1228](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1228)
