@@ -95,6 +95,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
   Many thanks to Maxim Ganses (PHPro) for the contribution!
 
+- **Make if statement syntax consistent in product details template**  
+  For more information, please refer to [issue #1236](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1236)
+
+  Many thanks to Lars de Weert (Made by Mouses) for the contribution!
+
 ### Removed
 
 - **Removed the scroll to review function summary short**  
