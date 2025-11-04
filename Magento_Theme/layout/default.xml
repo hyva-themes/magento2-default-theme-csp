@@ -39,6 +39,11 @@
                 </arguments>
             </block>
             <block name="header-content" template="Magento_Theme::html/header.phtml">
+                <arguments>
+                    <argument name="show_compare" xsi:type="boolean">true</argument>
+                    <!-- <argument name="show_wishlist" xsi:type="boolean">true</argument> -->
+                </arguments>
+
                 <block class="Magento\Theme\Block\Html\Header\Logo" name="logo">
                     <arguments>
                         <argument name="logoPathResolver" xsi:type="object">Hyva\Theme\ViewModel\Logo\LogoPathResolver</argument>
@@ -47,8 +52,10 @@
                         <argument name="logo_height" xsi:type="number">64</argument>
                     </arguments>
                 </block>
+
                 <block name="header-search" template="Magento_Theme::html/header/search-form.phtml"/>
                 <block name="header-compare" as="compare" template="Magento_Theme::html/header/compare.phtml"/>
+                
                 <block name="cart-drawer" template="Magento_Theme::html/cart/cart-drawer.phtml" ifconfig="checkout/sidebar/display">
                     <block name="cart-drawer-loading" as="loading" template="Hyva_Theme::ui/loading.phtml"/>
                     <container name="extra_actions"/>

@@ -31,6 +31,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - **Add view-transitions to the theme as a stable feature**
   For more information, please refer to [merge request #1360](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1360)
 
+- **Add support for showing the Wishlist icon in the Page Header**  
+  For more information, please refer to [issue #1010](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1010)
+
 ### Changed
 
 - **Remove requirement for reset-theme, replaced by base-layout-reset**  
