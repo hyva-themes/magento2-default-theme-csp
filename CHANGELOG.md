@@ -42,8 +42,7 @@ Same as default theme
 
 ### Changed
 
-- **Remove requirement for reset-theme, replaced by base-layout-reset**  
-  For more information, please refer to [issue #1215](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1215)
+- **Switch license to OSL 3.0 and AFL 3.0**
 
 - **Simplify cart data handling and improve toggle logic**  
   For more information, please refer to [merge request #1226](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1226)
