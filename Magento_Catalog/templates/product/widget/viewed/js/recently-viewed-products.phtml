@@ -244,8 +244,23 @@ products(filter: { sku: { in: $skus } }) {
                     );
                 });
             },
+            productUrl() {
+                const baseUrl = '<?= $escaper->escapeUrl($block->getBaseUrl()) ?>';
+                return this.product?.url_key
+                    ? new URL(`${this.product?.url_key}${(this.product?.url_suffix || '')}`, baseUrl)
+                    : '#';
             },
+            productImgUrl() {
+                return this.product?.small_image?.url || '';
             },
+            productImgLabel() {
+                return this.product?.small_image?.label || '';
+            },
+            productPrice() {
+                return hyva.formatPrice(this.product?.price_range?.minimum_price?.final_price.value || 0);
+            },
+            productTaxPrice() {
+                return hyva.formatPrice(this.product?.price_range?.minimum_price?.base_price.value || 0);
             }
         }
     }
