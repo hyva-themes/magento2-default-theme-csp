@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\Currency;
 use Hyva\Theme\ViewModel\ProductPrice;
@@ -27,6 +28,7 @@ use Magento\Framework\View\Element\Template;
 /** @var Currency $viewModelCurrency */
 /** @var Image|null $productImage */
 /** @var StoreConfig $viewModelStoreConfig */
+/** @var HyvaCsp $hyvaCsp */
 
 $recentlyViewed       = $viewModels->require(RecentlyViewedProducts::class);
 $productPage          = $viewModels->require(ProductPage::class);
@@ -137,3 +139,4 @@ if (! $recentlyViewed->isRecentlyViewedProductsEnabled()) {
         addCurrentProductToRecentlyViewed()
     })()
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
