@@ -41,7 +41,9 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
             init() {
                 if (document.prerendering) {
                     document.addEventListener("prerenderingchange", () => {
-                        this.reloadData()
+                        window.dispatchEvent(
+                            new CustomEvent('reload-customer-section-data')
+                        );
                     }, { once: true });
                 }
             },
@@ -314,8 +316,7 @@ $miniCartOptionShowSku = $block->getShowSku() !== null ? (bool) $block->getShowS
                     <div class="grow space-y-4">
                         <div class="flex gap-2 justify-between items-center">
                             <p class="text-lg">
-                                <span x-html="item.qty"></span> x <span x-html="item.product_name"></span>
-                                <strong x-html="item.product_name"></strong>
+                                <span x-html="item.qty"></span> x <strong x-html="item.product_name"></strong>
                             </p>
                             <span x-html="item.product_price"></span>
                         </div>

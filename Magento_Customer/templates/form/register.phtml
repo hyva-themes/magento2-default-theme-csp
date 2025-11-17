@@ -276,6 +276,8 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                     </label>
                     <div class="control">
                         <input type="text" name="street[]"
+                               required
+                               @input.debounce="onChange"
                                value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getStreet(0)) ?>"
                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?>"
                                id="street_1"
@@ -286,18 +288,15 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                             <?php for ($i = 2, $n = $this->helper(Address::class)->getStreetLines(); $i <= $n; $i++): ?>
                                 <div class="field additional">
                                     <label class="label" for="street_<?= /* @noEscape */ $i ?>">
-                                        <span><?= $escaper->escapeHtml(__('Address')) ?></span>
+                                        <?= $escaper->escapeHtml(__('Street Address %1', $i)) ?>
                                     </label>
                                     <div class="control">
                                         <input type="text" name="street[]"
                                                value="<?= $escaper->escapeHtmlAttr($block
                                                    ->getFormData()
                                                    ->getStreet($i - 1)) ?>"
-                                               title="<?= $escaper
-                                                   ->escapeHtmlAttr(__('Street Address %1', $i)) ?>"
                                                id="street_<?= (int) $i ?>"
-                                               class="form-input <?= $escaper
-                                                   ->escapeHtmlAttr($streetValidationClass) ?>"
+                                               class="form-input <?= $escaper->escapeHtmlAttr($streetValidationClass) ?>"
                                         >
                                     </div>
                                 </div>
@@ -312,6 +311,8 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                     </label>
                     <div class="control">
                         <input type="text" name="city"
+                               required
+                               @input.debounce="onChange"
                                value="<?= $escaper->escapeHtmlAttr($block->getFormData()->getCity()) ?>"
                                title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('city') ?>"
                                class="form-input <?= $escaper->escapeHtmlAttr($this

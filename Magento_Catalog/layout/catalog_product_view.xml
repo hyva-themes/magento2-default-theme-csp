@@ -214,6 +214,7 @@
                    ifconfig="catalog/recently_products/show_on_pdp"
                    template="Magento_Catalog::product/widget/viewed/list.phtml">
                 <arguments>
+                    <argument name="title" xsi:type="string" translate="true">Recently Viewed Products</argument>
                     <argument name="show_buttons" xsi:type="string">add_to_cart,add_to_compare,add_to_wishlist</argument>
                     <argument name="show_attributes" xsi:type="string">name,image,price,learn_more</argument>
                 </arguments>

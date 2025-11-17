@@ -11,9 +11,36 @@ Compatible with Magento 2.4.4-p9 and higher.
 This is a CSP compatible version of `hyva-themes/magento2-default-theme`.
  
 ## Installation
-Please refer to https://docs.hyva.io for instructions.  
 
-CSP specific information can be found in the docs at https://docs.hyva.io/hyva-themes/writing-code/csp/index.html
+You need a valid Hyvä packagist.com key.
+
+Get a free key by registering an account at [www.hyva.io](https://www.hyva.io) and creating one from your account dashboard.
+
+You will receive instruction like the following after creating your packagist.com key:
+
+```
+# this command adds your key to your projects auth.json file
+# replace yourLicenseAuthentificationKey with your own key
+composer config --auth http-basic.hyva-themes.repo.packagist.com token yourLicenseAuthentificationKey
+# replace yourProjectName with your project name
+composer config repositories.private-packagist composer https://hyva-themes.repo.packagist.com/yourProjectName/
+```
+
+Run those commands, and then, install the theme and its dependencies with composer:
+
+```sh
+composer require hyva-themes/magento2-default-theme
+```
+Next, run the Magento setup command:
+
+```sh
+bin/magento setup:upgrade
+```
+Navigate to the `Content > Design > Configuration` admin section and activate the hyva/default theme.
+
+Please see the [Getting Started](https://docs.hyva.io/hyva-themes/getting-started/index.html#getting-started) documentation for further information.
+
+CSP specific information can be found in the docs at https://docs.hyva.io/hyva-themes/writing-code/csp/index.html.
 
 ## License
 

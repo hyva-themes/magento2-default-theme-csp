@@ -3,6 +3,7 @@
  * Version : 1.12.5
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
+ * License : MIT
  */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache

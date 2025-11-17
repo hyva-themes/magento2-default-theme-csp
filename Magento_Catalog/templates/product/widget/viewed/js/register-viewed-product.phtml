@@ -8,7 +8,6 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\ProductPage;
 use Hyva\Theme\ViewModel\Currency;
 use Hyva\Theme\ViewModel\ProductPrice;
@@ -22,7 +21,6 @@ use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
-/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 /** @var RecentlyViewedProducts $recentlyViewed */
 /** @var ProductPage $productPage */
@@ -49,10 +47,8 @@ if (! $recentlyViewed->isRecentlyViewedProductsEnabled()) {
 ?>
 
 <script>
-    'use strict';
     (function () {
-
-        const useGraphQL = <?= /** @noEscape */ $recentlyViewed->isFetchRecentlyViewedEnabled() ? 'true' : 'false' ?>;
+        const useGraphQL = <?= $escaper->escapeJs($recentlyViewed->isFetchRecentlyViewedEnabled() ? 'true' : 'false') ?>;
 
         <?php /* This method returns the data structure to store in local storage if GraphQL is NOT queried. */ ?>
         <?php /* It is declared in global scope to allow overriding should additional attributes be required. */ ?>
@@ -141,4 +137,3 @@ if (! $recentlyViewed->isRecentlyViewedProductsEnabled()) {
         addCurrentProductToRecentlyViewed()
     })()
 </script>
-<?php $hyvaCsp->registerInlineScript() ?>

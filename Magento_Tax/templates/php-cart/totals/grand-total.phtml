@@ -4,6 +4,16 @@
  * Copyright © Hyvä Themes. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\MagentoMetadata;
+
+/** @var ViewModelRegistry $viewModels */
+$magento = $viewModels->require(MagentoMetadata::class);
+
+/**
+ * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
+ */
 ?>
 <!-- display subtotal excluding tax -->
 <div x-data="initGrandTotalSegment">
