@@ -59,7 +59,7 @@ You have the choice which of the two licenses to use.
   Included libraries from Nick Piscitelli (https://github.com/NickPiscitelli/) are distributed under the MIT license.   
 * **License Texts:**
   The full text of the AFL 3.0 license can be found in `LICENSE_AFL.txt` and online at [http://opensource.org/licenses/afl-3.0.php](http://opensource.org/licenses/afl-3.0.php).  
-  The full text of the MIT license can be found online at [https://opensource.org/license/MIT](https://opensource.org/license/MIT).  
+  The full text of the MIT license can be found online at [https://opensource.org/license/MIT](https://opensource.org/license/MIT).
 
 ## Changelog
 Please see [The Changelog](CHANGELOG.md).

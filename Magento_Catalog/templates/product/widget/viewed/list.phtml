@@ -67,16 +67,16 @@ $jsTemplate = 'Magento_Catalog::product/widget/viewed/js/recently-viewed-product
     x-defer="intersect"
     :style="minHeight"
 >
-    <template x-if="products && products.length">
+    <template x-if="hasProducts">
         <section
             id="<?= $escaper->escapeHtmlAttr($sliderName) ?>"
             class="snap-slider <?= $escaper->escapeHtmlAttr($cssClasses) ?>"
             aria-label="<?= $escaper->escapeHtmlAttr($ariaLabel); ?>"
             data-slider-type="<?= $escaper->escapeHtmlAttr($type) ?>"
             <?php if ($showPager): ?>
-                x-snap-slider.auto-pager.group-pager
+            x-snap-slider.auto-pager.group-pager
             <?php else: ?>
-                x-snap-slider
+            x-snap-slider
             <?php endif; ?>
         >
             <a

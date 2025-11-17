@@ -99,7 +99,6 @@ products(filter: { sku: { in: $skus } }) {
             init() {
                 this.$watch('products', products => {
                     this.hasProducts = products.length > 0;
-                    console.log(this.products, this.hasProducts);
                 });
 
                 this.getProducts();
@@ -125,7 +124,6 @@ products(filter: { sku: { in: $skus } }) {
             },
             fetchProducts(itemsToShow) {
                 const skusToFetch = itemsToShow.map(product => product.sku);
-                console.log('gql', skusToFetch);
 
                 <?php /* It is not possible to query prices incl and excl tax from the GraphQL api */ ?>
                 <?php /* If display incl + excl is required, ensure catalog/recently_products/synchronize_with_backend is set to No */ ?>
@@ -260,6 +258,9 @@ products(filter: { sku: { in: $skus } }) {
             },
             productTaxPrice() {
                 return hyva.formatPrice(this.product?.price_range?.minimum_price?.base_price.value || 0);
+            },
+            hasProducts() {
+                return this.products && this.products.length;
             }
         }
     }
