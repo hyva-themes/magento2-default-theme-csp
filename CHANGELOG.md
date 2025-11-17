@@ -6,7 +6,58 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.0...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.1...main
+
+## [1.4.1] - 2025-11-17
+
+[1.4.1]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.0...1.4.1
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Fix missing reloadData method in minicart component**  
+  The missing method caused an error when the `prerenderingchange` event was triggered.
+
+  For more information, please refer to [merge request #1386](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1386).
+
+- **Add correct hash-link when empty review stars**  
+  For more information, please refer to [merge request #1387](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1387).
+
+- **Use consistent address labels in Create Account and Edit Address forms**  
+  For more information, please refer to [issue #1241](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1241).
+
+- **Update Recently Viewed Products to new slider**  
+  The recently viewed products now also use the new CSS slider.
+
+  For more information, please refer to [merge request #1389](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1389).
+
+- **Fix A11Y for add-to button**  
+  The `title` and `aria-label` attributes should not be used together for A11Y on buttons.
+
+  For more information, please refer to [merge request #1390](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1390).
+
+- **Fix view transitions when navigating from PDP to PDP**  
+  For more information, please refer to [issue #1244](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1244).
+
+- **Fix closing tag for dialog element**  
+  For more information, please refer to [merge request #1390](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1390).
+
+  Many thanks to Stephanie Ehrling (ecoplan / avanta) for the contribution!
+
+- **Fix address fields layout and validation on register page**  
+  Previously, registering a new customer with address fields would throw a confusing delete error message if a required field was empty.  
+
+  For more information, please refer to [issue #1212](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1212).
+
+  Many thanks to Josip Ouzecky (Inchoo) for the contribution!
+
+### Removed
+
+- **Remove Extra product name in minicart for the 1.4**  
+   For more information, please refer to [merge request #1384](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1384).
 
 ## [1.4.0] - 2025-11-10
 
