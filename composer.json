@@ -1,47 +1,51 @@
 {
-    "name": "hyva-themes/magento2-default-theme-csp",
-    "description": "Default Hyvä Theme (CSP compatible)",
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "require": {
-        "php": ">=7.3.0",
-        "magento/framework": ">=102.0.0",
-        "hyva-themes/magento2-base-layout-reset": "^2.0.0",
-        "hyva-themes/magento2-theme-module": ">=1.4.1",
-        "hyva-themes/magento2-email-module": "*",
-        "hyva-themes/magento2-graphql-tokens": "*",
-        "hyva-themes/magento2-graphql-view-model": ">=1.0.1",
-        "hyva-themes/magento2-order-cancellation-webapi": "^1.0.0",
-        "magento/module-catalog-rule-graph-ql":"*",
-        "magento/module-customer-graph-ql": "*",
-        "magento/module-directory-graph-ql": "*",
-        "magento/module-graph-ql": "*",
-        "magento/module-quote-graph-ql":"*"
-    },
-    "type": "magento2-theme",
-    "authors": [{
-        "name": "Hyvä Themes B.V.",
-        "email": "info@hyva.io"
-    }],
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
-    "autoload": {
-        "files": [
-            "registration.php"
-        ]
-    },
-    "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
-        "magento/magento-coding-standard": "dev-master",
-        "phpro/grumphp": "dev-master"
-    },
-    "archive": {
-      "exclude": [".gitlab"]
+  "name": "hyva-themes/magento2-default-theme-csp",
+  "description": "Default Hyvä Theme (CSP compatible)",
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=7.3.0",
+    "magento/framework": ">=102.0.0",
+    "hyva-themes/magento2-base-layout-reset": "^2.0.1",
+    "hyva-themes/magento2-theme-module": ">=1.4.1",
+    "hyva-themes/magento2-email-module": "*",
+    "hyva-themes/magento2-graphql-tokens": "*",
+    "hyva-themes/magento2-graphql-view-model": ">=1.0.1",
+    "hyva-themes/magento2-order-cancellation-webapi": "^1.0.0",
+    "magento/module-catalog-rule-graph-ql": "*",
+    "magento/module-customer-graph-ql": "*",
+    "magento/module-directory-graph-ql": "*",
+    "magento/module-graph-ql": "*",
+    "magento/module-quote-graph-ql": "*"
+  },
+  "type": "magento2-theme",
+  "authors": [
+    {
+      "name": "Hyvä Themes B.V.",
+      "email": "info@hyva.io"
     }
+  ],
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ]
+  },
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
+    "magento/magento-coding-standard": "dev-master",
+    "phpro/grumphp": "dev-master"
+  },
+  "archive": {
+    "exclude": [
+      ".gitlab"
+    ]
+  }
   ],
   "license": [
     "OSL-3.0",
