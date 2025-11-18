@@ -46,24 +46,4 @@
             ".gitlab"
         ]
     }
-    ],
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
-    "autoload": {
-        "files": [
-            "registration.php"
-        ]
-    },
-    "require-dev": {
-        "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
-        "magento/magento-coding-standard": "dev-master",
-        "phpro/grumphp": "dev-master"
-    },
-    "archive": {
-        "exclude": [
-            ".gitlab"
-        ]
-    }
 }
