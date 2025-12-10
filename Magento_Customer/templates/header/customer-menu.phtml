@@ -25,15 +25,14 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
 <div
     class="relative inline-block"
     x-data="initCustomerMenu"
-    @keyup.escape="setOpenFalse"
-    @click.outside="setOpenFalse"
+    x-bind="eventListeners"
 >
     <button
         type="button"
         id="customer-menu"
         class="btn bg-transparent border-transparent p-1"
         @click="toggleOpen"
-        :aria-expanded="ariaExpanded"
+        :aria-expanded="open"
         aria-label="<?= $escaper->escapeHtmlAttr(__('My Account')) ?>"
         aria-haspopup="true"
     >
@@ -56,8 +55,18 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
 <script>
     function initCustomerMenu() {
         return hyva.createBooleanObject('open', false, {
-            ariaExpanded() {
-                return this.open() ? 'true' : 'false';
+            eventListeners: {
+                ['@pageshow.window'](event) {
+                    if (event.persisted) {
+                        this.setOpenFalse()
+                    }
+                },
+                ['@keyup.escape']() {
+                    this.setOpenFalse()
+                },
+                ['@click.outside']() {
+                    this.setOpenFalse()
+                }
             }
         })
     }

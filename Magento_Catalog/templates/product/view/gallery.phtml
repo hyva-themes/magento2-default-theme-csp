@@ -507,7 +507,8 @@ $productName = $block->getProduct()->getName();
 
                 hyva.trapFocus(this.$root);
             },
-            closeFullScreen(setFocusTo = this.$refs.galleryFullscreenBtn) {
+            closeFullScreen() {
+                const setFocusTo = this.$refs.galleryFullscreenBtn;
                 this.fullscreen = false;
                 hyva.releaseFocus(this.$root);
                 this.$nextTick(() => {
@@ -570,7 +571,7 @@ $productName = $block->getProduct()->getName();
                 return this.fullscreen ? '<?= $escaper->escapeJs(__('Gallery modal fullscreen')) ?>' : false;
             },
             firstImageClasses() {
-                return this.fullscreen ? 'invisible max-h-screen-75' : 'invisible';
+                return this.fullscreen ? 'invisible max-h-[75vh]' : 'invisible';
             },
             imageAlt() {
                 return this.image.caption || '<?= $escaper->escapeJs($productName) ?>';
@@ -580,7 +581,7 @@ $productName = $block->getProduct()->getName();
             },
             imageClasses() {
                 return {
-                    'max-h-screen-75': this.fullscreen
+                    'max-h-[75vh]': this.fullscreen
                 }
             },
             imageLoading() {
