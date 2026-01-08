@@ -6,7 +6,32 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.20...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.21...1.3.x-main
+
+## [1.3.21 CSP] - 2026-01-08
+
+[1.3.21 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.20...1.3.21
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Display Taxes on the cart page**
+
+  Many thanks to Pavlo Besedovskyi (Findcanary) for the contribution!  
+
+- **Changed licensing to be dual licensed under OSL and AFL**
+
+- **Replaced hyva-themes/magento2-reset-theme dependency with hyva-themes/magento2-base-layout-reset**
+
+  This change improves the TTFB for requests hitting a cold layout cache.  
+  It also provides consistency between the 1.4 and the 1.3 version of Hyvä being released open source.
+
+### Removed
+
+- Nothing removed
 
 ## [1.3.20 CSP] - 2025-11-04
 
