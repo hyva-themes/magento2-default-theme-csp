@@ -24,7 +24,7 @@ use Hyva\Theme\ViewModel\HyvaCsp;
                 return this.segment.value > 0 && window.checkoutConfig.isFullTaxSummaryDisplayed;
             },
             isTaxSummaryHidden() {
-                return ! this.isTaxSegmentVisible()
+                return ! this.isTaxSummaryVisible()
             },
             toggle() {
                 this.taxSummaryIsOpen = ! this.taxSummaryIsOpen;
