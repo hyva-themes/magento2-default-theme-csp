@@ -6,7 +6,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.4.2...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.4.3...main
+
+## [1.4.3 CSP] - 2026-01-09
+
+[1.4.3 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.4.2...1.4.3
+
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Fix display of taxes on the cart page**
+  Many thanks to Pavlo Besedovskyi (Findcanary) for the contribution!
+
+- **Improve README.md**
+
+### Removed
+
+- Nothing removed
 
 ## [1.4.2 CSP] - 2025-12-10
 
@@ -35,7 +54,7 @@ Same as default theme
 
     Many thanks to Joshua van Gelder (Mooore) for the contribution!
 
--   **Fix missing setFocusTo in CPS version of Theme**  
+-   **Fix missing setFocusTo in CSP version of Theme**  
     For more information, please refer to [issue #1249](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1249).
 
 -   **Fix slider not defined error, when the pager is not enabled**  
@@ -412,7 +431,7 @@ _This release updates the Theme Module dependencies. No functional changes are i
 -   **Fix invalid aria attribute on Cancel gift message**  
     For more information, please refer to [issue #1176](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1176)
 
--   **Fix Qty field wraping in grouped products, with long product names**  
+-   **Fix Qty field wrapping in grouped products, with long product names**  
     For more information, please refer to [issue #1214](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1214)
 
 -   **Fix race condition in javascript for setting the active menu item**  
@@ -1348,7 +1367,7 @@ Same as the 1.3.5 default-theme release.
 -   **Upgrade tailwindcss version to 3.4.1**
 
     This change raises the minimum compatible node version to 16.  
-    There are no known backward compatibility breaks, due to [`postcss-preset-env`](https://preset-env.cssdb.org/) being added to the dependencies.  This ensures compatibility with older browsers using browserlist.
+    There are no known backward compatibility breaks, due to [`postcss-preset-env`](https://preset-env.cssdb.org/) being added to the dependencies.  This ensures compatibility with older browsers using browserslist.
     For details, please refer to [issue #889](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/889).
 
     Many thanks to Ruud van Zuidam (Siteation) for contributing to the update!
@@ -1812,7 +1831,7 @@ Same as the 1.3.5 default-theme release.
 
     Many thanks to Ivan Matsii (Perspective) for the contribution!
 
--   **Fix: keyboard navigation on desktop menu ESC focusses mini cart button**
+-   **Fix: keyboard navigation on desktop menu ESC focuses mini cart button**
 
     For more information, please refer to [issue #768](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/768).
 
@@ -4388,7 +4407,7 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
 
 -   **Hide zero product price if it is not salable**
 
-    Products that are not salable and have a price > zero still are displayed with the price. This does not matche the
+    Products that are not salable and have a price > zero still are displayed with the price. This does not match the
     behavior in Luma.
 
     More information can be found in the [issue #314](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/314)
@@ -4472,7 +4491,7 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
     Many small changes where made to make the code pass the Magento Coding Standards phpcs rules.
     Besides following the Magento Coding Standard, many small refactorings where made so the code complies with our own
     standards. All these changes should be backward compatible. The changes include:
-    - Removing underscore prefixs from PHP variables in templates
+    - Removing underscore prefixes from PHP variables in templates
     - Use `let` and `const` instead of `var` in JavaScript code
     - Remove usages of `$this = this` in JavaScript code
 
@@ -4572,7 +4591,7 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
     Previously the logo height and width set in the admin theme config where not applied.
     As long as there is no size configured on the theme, the previous dimensions set in layout XML are still used.
     Because the related view models where added to Magento only in version 2.4.3, they where copied into the Hyva_Theme
-    module to provide forward compatiblity for older Magento versions.
+    module to provide forward compatibility for older Magento versions.
 
     More details can be found in the [issue #221](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/221).
 
@@ -4628,7 +4647,7 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
 -   **Page columns layout refactored from flex to grids**
 
     For a more solid handling of `2columns-right` and `3columns`, the page layout was refactored to CSS grids.
-    This means all pages now have 'containered' content by default, since the `.columns` div now has the tailwind `container` class applied.
+    This means all pages now have 'contained' content by default, since the `.columns` div now has the tailwind `container` class applied.
 
     If you want to build custom pages that are full-width, you now need to define your own page-layout. This means when you're creating custom pages, you no longer need to add in containers on all blocks you add, making layouts more consistent.
 
@@ -4723,7 +4742,7 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
 
 -   **Bundled product qtyHelper method is now defined in parent component**
 
-    The `qtyHelper` methods that memorize bundle option quantities selected by vistitors is now no longer generated for all bundle option, but defined once in the `initBundleOptions` component.
+    The `qtyHelper` methods that memorize bundle option quantities selected by visitors is now no longer generated for all bundle option, but defined once in the `initBundleOptions` component.
 
     See commit [`7d452495`](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/commit/7d45249514b04aabc26868218df4e257ccb30abc)
 
@@ -4838,7 +4857,7 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
 
 -   **Email To Friend Button was added to PDP**
 
-    The EmailToFried/SendFriend button has been added to the Product Detail Page.
+    The EmailToFriend/SendFriend button has been added to the Product Detail Page.
 
     See commit [`a5211128 `](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/commit/a521112806aaf7c88fa4c94b3ff21901dcd4a58f)
 
@@ -4894,7 +4913,7 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
 -   **Additional product data on PDP is now rendered with a renderer**
 
     As in default Magento (Luma), additional data is now rendered with a renderer (`Magento_Catalog/templates/product/view/product-sections.phtml`) which allows you to change the display of these sections to a custom implementation.
-    This makes it a lot easier to implement a tabbed display or accordeon. It also enables you to render additional data from 3rd party modules using the standard Magento layout group:
+    This makes it a lot easier to implement a tabbed display or accordion. It also enables you to render additional data from 3rd party modules using the standard Magento layout group:
     ```xml
     <block class="Magento\Catalog\Block\Product\View\Attributes" template="Magento_Catalog::product/view/description.phtml" group="detailed_info"/>
     ```
@@ -4991,10 +5010,10 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
 
 -   **Select template for custom-options**
 
-    Custom options of the type `dropdown` and `multiple` are now rendered by a .pthml file, instead of using `\Magento\Catalog\Block\Product\View\Options\Type\Select\Multiple::_toHtml`
+    Custom options of the type `dropdown` and `multiple` are now rendered by a .phtml file, instead of using `\Magento\Catalog\Block\Product\View\Options\Type\Select\Multiple::_toHtml`
     A new viewModel and method were created for this: `\Hyva\Theme\ViewModel\CustomOption::getOptionHtml`
 
-    This viewModel renders `Magento_Catalog/templates/product/composte/fieldset/options/view/multiple.phtml` (new) or `Magento_Catalog/templates/product/composite/fieldset/options/view/checkable.phtml` (existing).
+    This viewModel renders `Magento_Catalog/templates/product/composite/fieldset/options/view/multiple.phtml` (new) or `Magento_Catalog/templates/product/composite/fieldset/options/view/checkable.phtml` (existing).
 
 -   **Custom options are added for Bundled products**
 
@@ -5096,7 +5115,7 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
     A bug was introduced in 1.1.1 that removed x-ref from bundle-option input fields, replacing then with   
     `document.querySelector(option[data-option-id="${optionId}-${selectionId}"]`
 
-    Two issues occured:
+    Two issues occurred:
     - not all inputs had the `data-option-id` attribute
     - not all inputs are of the type `option`
 
@@ -5384,9 +5403,9 @@ If you're upgrading from <1.1.8 please check the documentation page on upgrading
   
     Thanks to Rik Willems (RedKiwi) for contributing.
 
--   **The product slider now checks for `visiblity` and `status` of linked products**
+-   **The product slider now checks for `visibility` and `status` of linked products**
   
-    Upsells, Cross-sells and Related products are not filtered by graphql on storefront visiblity.
+    Upsells, Cross-sells and Related products are not filtered by graphql on storefront visibility.
     We therefore added the `visibility` and `status` attributes to the graphql result so that we can filter on them.
   
     See `Magento_Theme/templates/elements/slider.phtml`
