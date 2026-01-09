@@ -43,10 +43,16 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
             actions: {},
             alreadyLoaded: false,
             cartDataUpdated: false,
+            intersected: false,
             getData() {
                 const data = this.$event.detail.data;
                 if (data.cart) {
                     this.cart = data.cart;
+
+                    if (this.intersected && !this.alreadyLoaded) {
+                        this.alreadyLoaded = true;
+                        this.initializeButtons();
+                    }
                 }
             },
             initializePayPalScript() {
@@ -194,6 +200,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                 if (!form) {
                     return;
                 }
+                this.intersected = true;
                 if (this.cart && !this.alreadyLoaded) {
                     this.alreadyLoaded = true;
                     this.initializeButtons();
