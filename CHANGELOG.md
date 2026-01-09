@@ -21,6 +21,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - **Fix display of taxes on the cart page**
   Many thanks to Pavlo Besedovskyi (Findcanary) for the contribution!
 
+- **Fix remove wishlist button closing tag**
+
+- **Fix PayPal Buttons / PayLater initialization on intersect**
+  Fixed an issue where PayPal (PayLater or Express) buttons were not initialized when the cart data wasn't yet available.
+
+  Many thanks to Christoph Hendreich (In Session) for the contribution!
+
 - **Improve README.md**
 
 ### Removed
