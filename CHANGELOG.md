@@ -8,6 +8,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.21...1.3.x-main
 
+### Added
+
+- Nothing added
+
+### Changed
+
+- **Fix missing space in the the excl-tax price**  
+  For more information, please refer to [issue #1273](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1273)
+
+### Removed
+
+- Nothing removed
+
 ## [1.3.21 CSP] - 2026-01-08
 
 [1.3.21 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.20...1.3.21
