@@ -20,6 +20,9 @@ use Magento\Framework\Escaper;
 
 /** @var HeroiconsOutline $heroicons */
 $heroicons = $viewModels->require(HeroiconsOutline::class);
+
+$explanationMessage = $escaper->escapeHtml($block->getExplanationMessage(), ["br"]);
+$whatsThisMessage = $escaper->escapeHtml($block->getExplanationMessageWhatsThis(), ["br"]);
 ?>
 
 <?php if ($block->isEnabled()): ?>
@@ -36,7 +39,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
         @click.outside="closePopover"
         @msrp-popover.window="showPopover"
         @resize.window.debounce="closePopover"
-        @keydown.window.escape="closePopover"
+        @keydown.window.escape="closeOnEscape"
     >
         <div class="flex justify-between gap-2 mb-2">
             <strong id="map-popup-heading-price" class="font-bold" x-text="title"></strong>
@@ -44,7 +47,6 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                 type="button"
                 @click="closePopover"
                 aria-label="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
-                title="<?= $escaper->escapeHtmlAttr(__('Close panel')) ?>"
             >
                 <?= $heroicons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
             </button>
@@ -73,7 +75,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     open: false,
                     type: "price", // price or help
                     title: '',
-                    content: '<?= $escaper->escapeHtml($block->getExplanationMessage(), ["br"]) ?>',
+                    content: '<?= $escaper->escapeJs($explanationMessage) ?>',
                     isSaleable: false,
                     actualPrice: null,
                     msrpPrice: null,
@@ -105,6 +107,11 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                         if (event && event.target === this.anchor) return;
                         this.open = false;
                     },
+                    closeOnEscape() {
+                        if (!this.open) return;
+                        this.open = false;
+                        this.anchor?.focus();
+                    },
                     showPopover(event) {
                         const data = event.detail.msrpData;
                         if (!data) return;
@@ -119,8 +126,8 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                             ? ''
                             : data.productName;
                         this.content = this.type === 'help'
-                            ? '<?= $escaper->escapeHtml($block->getExplanationMessageWhatsThis(), ["br"]) ?>'
-                            : '<?= $escaper->escapeHtml($block->getExplanationMessage(), ["br"]) ?>';
+                            ? '<?= $escaper->escapeJs($whatsThisMessage) ?>'
+                            : '<?= $escaper->escapeJs($explanationMessage) ?>';
 
                         if (event.target) {
                             this.anchor = event.target;
@@ -132,18 +139,20 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     }
                 }
             }
+
             function initMsrpPrice() {
                 return {
                     onClick() {
                         const msrpData = JSON.parse(this.$el.dataset.msrpData);
-                        this.$dispatch('msrp-popover', {msrpData , target: this.$el});
+                        this.$dispatch('msrp-popover', { msrpData, target: this.$el });
                     }
                 };
             }
+
             window.addEventListener('alpine:init', () => {
                 Alpine.data('initMsrpPopover', initMsrpPopover);
                 Alpine.data('initMsrpPrice', initMsrpPrice);
-            }, {once: true})
+            }, { once: true })
         </script>
         <?php $hyvaCsp->registerInlineScript() ?>
     </div>
