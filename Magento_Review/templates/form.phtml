@@ -7,6 +7,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Review\Block\Form;
@@ -17,6 +18,7 @@ use Hyva\Theme\ViewModel\ReCaptcha;
 /** @var Escaper $escaper */
 /** @var Form $block */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var LucideIcons $lucideIcons */
 $lucideIcons = $viewModels->require(LucideIcons::class);
@@ -78,14 +80,15 @@ $starIconSize = $block->getData('rating_icon_size') ?: 24;
                                                 </div>
                                                 <div
                                                     class="rating-summary grow-0 has-[:focus-visible]:outline-2 outline-primary"
-                                                    x-data="{ clickedRatingId: 0 }"
+                                                    x-data="initReview"
                                                 >
                                                     <?php $options = $rating->getOptions(); ?>
                                                     <?php $iterator = 1;
                                                     foreach ($options as $option): ?>
                                                         <div
                                                             class="relative"
-                                                            @click="clickedRatingId = <?= (int)$iterator ?> || 0"
+                                                            data-rating="<?= (int)$iterator ?>"
+                                                            @click="setRating"
                                                         >
                                                             <label
                                                                 class="rating-<?= (int)$iterator ?> m-0 text-current"
@@ -93,7 +96,7 @@ $starIconSize = $block->getData('rating_icon_size') ?: 24;
                                                             >
                                                                 <?= $lucideIcons->starHtml('', $starIconSize, $starIconSize, [
                                                                     'aria-hidden' => 'true',
-                                                                    ':class' => (int)$iterator . "<= clickedRatingId ? 'fill-current' : ''"
+                                                                    ':class' => 'ratingClass'
                                                                 ]); ?>
                                                                 <input
                                                                     name="ratings[<?= $escaper->escapeHtmlAttr($rating->getId()) ?>]"
@@ -192,7 +195,23 @@ $starIconSize = $block->getData('rating_icon_size') ?: 24;
                     }
                 }
 
-                window.addEventListener('alpine:init', () => { Alpine.data('initReviewForm', initReviewForm) }, { once: true });
+                function initReview() {
+                    return {
+                        clickedRatingId: 0,
+                        setRating() {
+                            this.clickedRatingId = this.$el.dataset.rating || 0;
+                        },
+                        ratingClass() {
+                            return this.$el.closest('[data-rating]').dataset.rating <= this.clickedRatingId ? 'fill-current' : '';
+
+                        }
+                    };
+                }
+
+                window.addEventListener('alpine:init', () => {
+                    Alpine.data('initReviewForm', initReviewForm);
+                    Alpine.data('initReview', initReview);
+                }, { once: true });
             </script>
             <?php $hyvaCsp->registerInlineScript() ?>
         <?php else: ?>

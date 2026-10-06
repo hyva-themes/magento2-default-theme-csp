@@ -5,11 +5,15 @@
  * See COPYING.txt for license details.
  */
 
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /**
  * @var int $productId
@@ -22,10 +26,22 @@ $productId = $block->getProductId();
  */
 ?>
 
-<form action="<?= $escaper->escapeUrl($block->getUrl('productalert/unsubscribe/stock')) ?>"
-      method="post"
-      x-data=""
-      x-init="$root.submit()">
+<form
+    action="<?= $escaper->escapeUrl($block->getUrl('productalert/unsubscribe/stock')) ?>"
+    method="post"
+    x-data="initProductAlertEmail"
+>
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <input type="hidden" id="productId" name="product" value="<?= $escaper->escapeHtml($productId) ?>">
 </form>
+
+<script>
+window.addEventListener('alpine:init', () => {
+    Alpine.data('initProductAlertEmail', () => {
+        init() {
+            this.$root.submit();
+        }
+    })
+}, { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>

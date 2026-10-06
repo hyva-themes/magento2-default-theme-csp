@@ -16,7 +16,6 @@ use Magento\Framework\Escaper;
 
 /** @var Escaper $escaper */
 /** @var Shipping $block */
-/** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 /** @var HyvaCsp $hyvaCsp */
 
@@ -429,7 +428,7 @@ $totalsOutput = $viewModels->require(TotalsOutput::class);
         <?= $lucideIcons->chevronDownHtml('transform group-open:rotate-180', 20, 20, ['aria-hidden' => 'true']); ?>
     </summary>
     <div class="mb-4">
-        <form method="post" id="shipping-zip-form" @submit.prevent="fetchTotals()">
+        <form method="post" id="shipping-zip-form" @submit.prevent="fetchTotals">
             <fieldset class="fieldset estimate" aria-labelledby="block-shipping-title">
                 <p class="field note">
                     <?= $block->getQuote()->isVirtual() ?

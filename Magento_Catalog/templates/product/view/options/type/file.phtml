@@ -58,7 +58,7 @@ if ($productPriceViewModel->displayPriceInclAndExclTax()) {
                     this.updateCustomOptionValue()
                 },
                 showValidityMessage() {
-                    this.$el.setCustomValidity('<?= $escaper->escapeHtmlAttr(__("Please select a file.")) ?>')
+                    this.$el.setCustomValidity('<?= $escaper->escapeJs(__("Please select a file.")) ?>')
                 },
                 clearValidityMessage() {
                     this.$el.setCustomValidity('')

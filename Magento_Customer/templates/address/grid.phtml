@@ -69,7 +69,7 @@ $lucideIcons = $viewModels->require(LucideIcons::class);
                         <a class="action delete ml-2 inline-block text-sm underline"
                            title="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>"
                            @click.prevent="deleteAddressById"
-                           data-address-id="<?= $escaper->escapeJs($address->getId()) ?>"
+                           data-address-id="<?= $escaper->escapeHtmlAttr($address->getId()) ?>"
                            href="#">
                             <?= $lucideIcons->trashHtml('', 24, 24, ['aria-hidden' => true]); ?>
                         </a>

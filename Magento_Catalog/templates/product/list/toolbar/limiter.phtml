@@ -30,7 +30,6 @@ $availableLimitOptions = $block->getAvailableLimit();
                     aria-label="<?= $escaper->escapeHtmlAttr(__('Show items per page')) ?>"
                     class="form-select limiter-options"
                     @change="changeLimit"
-                    aria-label="<?= $escaper->escapeHtmlAttr(__('Show items per page')) ?>"
                 >
                 <?php foreach ($block->getAvailableLimit() as $key => $limit): ?>
                     <option value="<?= $escaper->escapeHtmlAttr($key) ?>"
