@@ -453,8 +453,6 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                 {
                     errors: 0,
                     hasCaptchaToken: 0,
-                    showPassword: false,
-                    showPasswordConfirm: false,
                     submitForm() {
                         this.validate()
                             .then(() => {
@@ -517,10 +515,8 @@ $isAutocompleteEnabled = $block->getConfig('customer/password/autocomplete_on_st
                         this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
 
                     },
-                    changeCountry(initialRegion) {
-                        const countrySelectElement = this.$event.target
-                        this.setCountry(countrySelectElement, initialRegion);
-
+                    changeCountry() {
+                        this.setCountry(this.$event.target);
                         this.validateCountryDependentFields();
                     },
                     validateCountryDependentFields() {

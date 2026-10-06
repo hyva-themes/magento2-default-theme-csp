@@ -5,14 +5,12 @@
  * See COPYING.txt for license details.
  */
 
-use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @var Template $block */
 /** @var Escaper $escaper */
-/** @var ViewModelRegistry $viewModels */
 /** @var HyvaCsp $hyvaCsp */
 
 /**
@@ -36,12 +34,12 @@ $productId = $block->getProductId();
 </form>
 
 <script>
-window.addEventListener('alpine:init', () => {
-    Alpine.data('initProductAlertEmail', () => {
-        init() {
-            this.$root.submit();
-        }
-    })
-}, { once: true })
+    window.addEventListener('alpine:init', () => {
+        Alpine.data('initProductAlertEmail', () => ({
+            init() {
+                this.$root.submit();
+            }
+        }))
+    }, { once: true })
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>

@@ -74,7 +74,7 @@ function initCompareOnCompareSidebar() {
             }
         },
         removeFromCompare() {
-            const productId = this.product.product_id;
+            const productId = this.product.id;
             const formKey = hyva.getFormKey();
             const postUrl = BASE_URL + 'catalog/product_compare/remove/';
             const confirmMessage = "<?= $escaper
