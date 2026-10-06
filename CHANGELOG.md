@@ -64,7 +64,7 @@ Same as default theme
 
     For more information, please refer to [issue #1216](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1216).
 
--   **Show multi-select bundle option values on separate lines in the cart and minicart**  
+-   **Show multi-select bundle option values on separate lines in the cart and mini cart**  
     For more information, please refer to [issue #1348](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1348).
 
     Many thanks to Valeriia Prokhina (Perspective) for the contribution!
@@ -157,7 +157,6 @@ Same as default theme
     For more information, please refer to [issue #1372](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1372).
 
 -   **Migrated all `x-html` usage to `x-html-safe`**  
-
     For more information, please refer to [merge request #1562](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1562).
 
 -   **Replaced the GraphQL calls in the default theme with PHP and Ajax to reduce the attack surface of a storefront**  
@@ -165,16 +164,21 @@ Same as default theme
 
     For more information, please refer to [merge request #1561](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1561).
 
--   **Replaced remaining the Heroicons with Lucide icons throughout the theme**  
-    Please refer to [merge request #1552](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1552).
+-   **Replaced the remaining Heroicons with Lucide icons throughout the theme**  
+    For more information, please refer to [merge request #1552](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1552).
 
--   **Template Hardening against XSS**  
+-   **Hardened templates against XSS**  
     For more information, please refer to [merge request #1548](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1548).
 
 -   **Fixed a cross-site scripting issue in the MSRP price and popup templates**  
     For more information, please refer to [merge request #1547](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1547).
 
     Many thanks to Jelle Janssens (Singto BV) for reporting this issue!
+
+-   **Made the MSRP templates CSP safe**  
+    The popup data is passed through a data attribute and read with `JSON.parse`, and the Alpine components are registered with `Alpine.data` instead of being declared in the `x-data` attribute. Child themes overriding `Magento_Msrp/templates/popup.phtml` or `Magento_Msrp/templates/product/price/msrp.phtml` need to update both templates together.
+
+    For more information, please refer to [merge request #1547](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1547).
 
 -   **Made the price group label on the product page translatable**  
     For more information, please refer to [issue #1369](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1369).
@@ -185,7 +189,7 @@ Same as default theme
 -   **Fixed repeat submissions of the forgot password form triggering the password reset rate limit**  
     For more information, please refer to [issue #1362](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1362).
 
--   **Fixed HTML entities such as apostrophes not being decoded in the minicart**  
+-   **Fixed HTML entities such as apostrophes not being decoded in the mini cart**  
     For more information, please refer to [issue #1358](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1358).
 
 -   **Fixed the "As low as" label showing on products whose child products all have the same price**  
@@ -197,10 +201,10 @@ Same as default theme
 -   **Fixed cart validation messages being replayed and no longer appearing once repeated**  
     For more information, please refer to [issue #1313](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1313).
 
--   **Fixes layout jump in form error message**  
+-   **Fixed the layout jump in the form error message**  
     For more information, please refer to [merge request #1557](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1557).
 
--   **Fixes missing `rel="nofollow"` on the layered navigation links**  
+-   **Fixed the missing `rel="nofollow"` on the layered navigation links**  
     For more information, please refer to [issue #1370](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1370).
 
     Many thanks to Kevin Ruscoe (Clear Design) for the contribution!
@@ -339,7 +343,6 @@ Same as default theme
 ### Changed
 
 -   **Fixed a cross-site scripting issue in the MSRP price and popup templates**  
-
     The product name and the MSRP explanation message are now escaped for the JavaScript context they are rendered into.
 
     For more information, please refer to [merge request #1549](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1549).
@@ -347,8 +350,7 @@ Same as default theme
     Many thanks to Jelle Janssens (Singto BV) for reporting this issue!
 
 -   **Made the MSRP templates CSP safe**  
-
-    The popup data is passed through a data attribute and read with `JSON.parse`, and the Alpine components are registered with `Alpine.data` instead of being declared in the `x-data` attribute. Child themes overriding `Magento_Msrp/templates/popup.phtml` or `Magento_Msrp/templates/product/price/msrp.phtml` need to be updated.
+    The popup data is passed through a data attribute and read with `JSON.parse`, and the Alpine components are registered with `Alpine.data` instead of being declared in the `x-data` attribute. Child themes overriding `Magento_Msrp/templates/popup.phtml` or `Magento_Msrp/templates/product/price/msrp.phtml` need to update both templates together.
 
     For more information, please refer to [merge request #1549](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1549).
 
