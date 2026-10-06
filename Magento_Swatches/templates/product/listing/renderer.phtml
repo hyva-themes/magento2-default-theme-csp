@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Product\Options as ProductOptions;
 use Hyva\Theme\ViewModel\SwatchRenderer;
 use Magento\Framework\Escaper;
 use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
@@ -29,6 +30,9 @@ $attributes = $block->decorateArray($block->getAllowAttributes());
 
 /** @var SwatchRenderer $swatchRendererViewModel */
 $swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
+
+/** @var ProductOptions $productOptionsViewModel */
+$productOptionsViewModel = $viewModels->require(ProductOptions::class);
 
 $layout = $block->getLayout();
 $swatchItemBlock = $layout->getBlock('product.swatch.item');
@@ -139,7 +143,7 @@ $swatchConfig = json_decode($jsonSwatchConfig, true);
                 continue;
             }
 
-            $productOptions = $attribute->getOptions();
+            $productOptions = $productOptionsViewModel->getEnabledAttributeOptions($block, $attribute);
             $attributeSwatchConfig = $swatchConfig[$attributeId] ?? [];
             ?>
             <fieldset class="mt-4">
@@ -147,7 +151,7 @@ $swatchConfig = json_decode($jsonSwatchConfig, true);
                     <?= $escaper->escapeHtml($productAttribute->getStoreLabel()) ?>
                 </legend>
                 <div class="flex flex-wrap gap-1">
-                    <?php foreach ($productOptions ?? [] as $option): ?>
+                    <?php foreach ($productOptions as $option): ?>
                         <?= /* @noEscape */ $swatchItemBlock
                             ->setData('option', $option)
                             ->setData('swatch_data', $attributeSwatchConfig[$option['value_index']] ?? null)

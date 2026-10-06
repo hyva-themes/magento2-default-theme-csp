@@ -262,6 +262,7 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
             },
             changeOption(attributeId, value) {
                 this.baseChangeOption(attributeId, value);
+                this.updateFormActionHash();
 
                 const candidates = this.findProductIdsForPartialSelection(this.selectedValues);
 
@@ -282,6 +283,14 @@ $currentProduct = $viewModels->require(CurrentProduct::class);
                         }
                     )
                 );
+            },
+            <?php /* The redirect after a failed add to cart keeps the hash, so preselectLocationHashItems() restores the selection */ ?>
+            updateFormActionHash() {
+                const form = this.$root.closest('form');
+                if (!form) return;
+                const url = new URL(form.getAttribute('action'), window.location.href);
+                url.hash = new URLSearchParams(Object.entries(this.selectedValues)).toString();
+                form.setAttribute('action', url.toString());
             },
             calculateIsMinimalPrice() {
                 return ! this.isFullSelection(this.selectedValues);

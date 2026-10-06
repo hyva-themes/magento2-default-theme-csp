@@ -8,7 +8,7 @@
 <div x-data="initFixedProductTaxTotalSegment">
 <template x-if="isFptSegment">
     <div :class="wrapperClass">
-        <div x-html="formatTotalLabel"></div>
+        <div x-html-safe="formatTotalLabel"></div>
         <div x-text="formatFptTotal" class="justify-self-end"></div>
     </div>
 </template>

@@ -8,8 +8,8 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
@@ -18,8 +18,8 @@ use Magento\Framework\View\Element\Template;
 /** @var HyvaCsp $hyvaCsp */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 $blockId = $block->getBlockId() ?: 'collapsible';
 $blockClass = $block->getBlockCss();
@@ -49,7 +49,7 @@ $isNav = $block->getIsNav() !== null ? $block->getIsNav() : false;
             class="px-1 py-1 border rounded border-gray-300 md:hidden"
             x-ref="AccountNavigationMobileToggleIcon"
         >
-            <?= $heroicons->chevronDownHtml(
+            <?= $lucideIcons->chevronDownHtml(
                 'transition-transform duration-300 ease-in-out transform group-aria-expanded:rotate-180',
                 24,
                 24,

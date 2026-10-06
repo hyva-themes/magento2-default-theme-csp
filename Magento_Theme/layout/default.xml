@@ -119,6 +119,8 @@
             <block class="Magento\Theme\Block\Html\Footer" name="absolute_footer" template="Magento_Theme::html/absolute_footer.phtml" />
         </referenceContainer>
 
-        <block name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml"/>
+        <block name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml">
+            <block name="view-transition.in-app-browser" template="Magento_Theme::page/js/view-transition-in-app-browser.phtml"/>
+        </block>
     </body>
 </page>

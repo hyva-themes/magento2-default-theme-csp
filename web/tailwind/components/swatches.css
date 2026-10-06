@@ -16,11 +16,15 @@
         line-height: 1.1;
         cursor: pointer;
 
+        img,
         > * {
-            grid-area: 1/1;
             border-radius: calc(
                 var(--swatch-radius, 0.5em) - var(--swatch-px, 6px)
             );
+        }
+
+        > * {
+            grid-area: 1/1;
         }
 
         &[data-swatch-type="visual"] {

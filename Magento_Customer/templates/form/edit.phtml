@@ -11,8 +11,8 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Hyva\Theme\ViewModel\StoreConfig;
 use Magento\Customer\Block\Form\Edit as CustomerEdit;
@@ -24,14 +24,14 @@ use Magento\Framework\Escaper;
 /** @var CustomerEdit $block */
 /** @var Escaper $escaper */
 /** @var ReCaptcha|null $recaptcha */
-/** @var HeroiconsSolid $heroicons */
 /** @var HyvaCsp $hyvaCsp */
+/** @var LucideIcons $lucideIcons */
 /** @var ViewModelRegistry $viewModels */
 
 // Do not replace this with $viewModels->require(ReCaptcha::class); that might break the dependency
 // on the Magento_ReCaptchaCustomer module
 $recaptcha = $block->getData('viewModelRecaptcha');
-$heroicons = $viewModels->require(HeroiconsSolid::class);
+$lucideIcons = $viewModels->require(LucideIcons::class);
 $minimumPasswordLength = $block->getMinimumPasswordLength();
 $passwordMinCharacterSets = $block->getRequiredCharacterClassesNumber();
 $storeConfig = $viewModels->require(StoreConfig::class);
@@ -144,11 +144,11 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                         :aria-label="showPasswordCurrentAriaLabel"
                     >
                         <template x-if="notShowPasswordCurrent">
-                            <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                            <?= $lucideIcons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                         </template>
 
                         <template x-if="showPasswordCurrent">
-                            <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                            <?= $lucideIcons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                         </template>
                     </button>
                 </div>
@@ -181,10 +181,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                             :aria-label="showPasswordNewAriaLabel"
                         >
                             <template x-if="notShowPasswordNew">
-                                <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                <?= $lucideIcons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPasswordNew">
-                                <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                <?= $lucideIcons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                         <div id="password-strength-meter-container" data-role="password-strength-meter" aria-live="polite">
@@ -219,10 +219,10 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
                             :aria-label="showPasswordConfirmAriaLabel"
                         >
                             <template x-if="notShowPasswordConfirm">
-                                <?= $heroicons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                <?= $lucideIcons->eyeHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                             <template x-if="showPasswordConfirm">
-                                <?= $heroicons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
+                                <?= $lucideIcons->eyeOffHtml('', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>
@@ -339,4 +339,3 @@ $isAutocompleteEnabled = $storeConfig->getStoreConfig('customer/password/autocom
     window.addEventListener('alpine:init', () => Alpine.data('initForm', initForm), {once: true})
 </script>
 <?php $hyvaCsp->registerInlineScript() ?>
-

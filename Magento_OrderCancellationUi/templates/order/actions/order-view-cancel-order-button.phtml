@@ -8,8 +8,8 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\Sales\OrderCancellation;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -21,8 +21,8 @@ use Magento\OrderCancellationUi\ViewModel\Config as OrderCancellationUiConfig;
 /** @var ViewModelRegistry $viewModels */
 /** @var HyvaCsp $hyvaCsp */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /** @var OrderCancellation $orderCancellation */
 $orderCancellation = $viewModels->require(OrderCancellation::class);
@@ -61,6 +61,6 @@ $reasons = $orderCancellationUiConfig->getCancellationReasons((int) $order->getI
     data-reasons="<?= $escaper->escapeHtmlAttr(json_encode(array_values($reasons))) ?>"
     @click="dispatchConfirmCancelOrder"
 >
-    <?= $heroicons->xCircleHtml('mr-1 inline-block', 24, 24, ['aria-hidden' => 'true']); ?>
+    <?= $lucideIcons->circleXHtml('mr-1 inline-block', 24, 24, ['aria-hidden' => 'true']); ?>
     <span><?= $escaper->escapeHtml(__('Cancel')) ?></span>
 </button>

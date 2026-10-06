@@ -7,13 +7,19 @@
 
 declare(strict_types=1);
 
+use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\Product\Options as ProductOptions;
 use Magento\ConfigurableProduct\Block\Product\View\Type\Configurable;
 use Magento\Framework\Escaper;
 
 /** @var Configurable $block */
 /** @var Escaper $escaper */
+/** @var ViewModelRegistry $viewModels */
 /** @var HyvaCsp $hyvaCsp */
+
+/** @var ProductOptions $productOptionsViewModel */
+$productOptionsViewModel = $viewModels->require(ProductOptions::class);
 
 $product = $block->getProduct();
 $productId = $product->getId();
@@ -45,7 +51,7 @@ $jsonConfig = $block->getJsonConfig();
         <?php foreach ($attributes as $attribute): ?>
             <?php
             $attributeId = $attribute->getAttributeId();
-            $productOptions = $attribute->getOptions();
+            $productOptions = $productOptionsViewModel->getEnabledAttributeOptions($block, $attribute);
             ?>
             <div role="group" class="mb-4">
                 <label
@@ -63,7 +69,7 @@ $jsonConfig = $block->getJsonConfig();
                     @change="reflectOption"
                 >
                     <option value=""><?= $escaper->escapeHtml(__('Choose an Option...')) ?></option>
-                    <?php foreach ($productOptions ?? [] as $option): ?>
+                    <?php foreach ($productOptions as $option): ?>
                         <option
                             value="<?= $escaper->escapeHtmlAttr($option['value_index']) ?>"
                             data-attribute-id="<?= $escaper->escapeHtmlAttr($attributeId) ?>"

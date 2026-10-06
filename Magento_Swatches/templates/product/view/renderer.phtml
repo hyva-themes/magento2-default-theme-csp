@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\Product\Options as ProductOptions;
 use Hyva\Theme\ViewModel\SwatchRenderer;
 use Magento\Framework\Escaper;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
@@ -24,6 +25,9 @@ $configurableViewModel = $viewModels->require(ConfigurableViewModel::class);
 
 /** @var SwatchRenderer $swatchRendererViewModel */
 $swatchRendererViewModel = $viewModels->require(SwatchRenderer::class);
+
+/** @var ProductOptions $productOptionsViewModel */
+$productOptionsViewModel = $viewModels->require(ProductOptions::class);
 
 $product = $block->getProduct();
 $productId = $product->getId();
@@ -80,7 +84,7 @@ $swatchConfig = json_decode($jsonSwatchConfig, true);
             <?php
             $attributeId = $attribute->getAttributeId();
             $productAttribute = $attribute->getProductAttribute();
-            $productOptions = $attribute->getOptions();
+            $productOptions = $productOptionsViewModel->getEnabledAttributeOptions($block, $attribute);
             $attributeSwatchConfig = $swatchConfig[$attributeId] ?? [];
             ?>
             <?php if ($swatchRendererViewModel->isSwatchAttribute($productAttribute)): ?>
@@ -94,7 +98,7 @@ $swatchConfig = json_decode($jsonSwatchConfig, true);
                         ></span>
                     </legend>
                     <div class="flex flex-wrap gap-2">
-                        <?php foreach ($productOptions ?? [] as $option): ?>
+                        <?php foreach ($productOptions as $option): ?>
                             <?= /* @noEscape */ $swatchItemBlock
                                 ->setData('option', $option)
                                 ->setData('swatch_data', $attributeSwatchConfig[$option['value_index']] ?? null)
@@ -120,7 +124,7 @@ $swatchConfig = json_decode($jsonSwatchConfig, true);
                         @change="reflectOption"
                     >
                         <option value=""><?= $escaper->escapeHtml(__('Choose an Option...')) ?></option>
-                        <?php foreach ($productOptions ?? [] as $option): ?>
+                        <?php foreach ($productOptions as $option): ?>
                             <option
                                 value="<?= $escaper->escapeHtmlAttr($option['value_index']) ?>"
                                 data-attribute-id="<?= $escaper->escapeHtmlAttr($attributeId) ?>"

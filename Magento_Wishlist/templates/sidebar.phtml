@@ -12,7 +12,7 @@ use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\Wishlist;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 
@@ -20,11 +20,10 @@ use Hyva\Theme\ViewModel\HeroiconsOutline;
 /** @var ViewModelRegistry $viewModels */
 /** @var Escaper $escaper */
 /** @var Template $block */
-/** @var HeroiconsOutline $heroiconsOutline */
+/** @var LucideIcons $lucideIcons */
 
 $wishlistViewModel = $viewModels->require(Wishlist::class);
-$heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
-
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 
 <?php if ($wishlistViewModel->isEnabled()): ?>
@@ -143,7 +142,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                                 <strong class="mr-2 text-sm leading-6 font-normal">
                                     <a :href="product.product_url" :title="product.product_name" x-text="product.product_name"></a>
                                 </strong>
-                                <div class="mr-2 text-sm leading-6 font-bold" x-html="product.product_price"></div>
+                                <div class="mr-2 text-sm leading-6 font-bold" x-html-safe="product.product_price"></div>
                                 <template x-if="product.product_is_saleable_and_visible">
                                     <div class="actions-primary my-2">
                                         <template x-if="hasNoRequiredOptions">
@@ -171,7 +170,7 @@ $heroiconsOutline = $viewModels->require(HeroiconsOutline::class);
                                     justify-center text-slate-400 hover:text-slate-800 ml-auto
                                 "
                             >
-                                <?= $heroiconsOutline->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+                                <?= $lucideIcons->xHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
                             </button>
                         </li>
                     </template>

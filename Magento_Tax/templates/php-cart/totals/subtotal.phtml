@@ -10,9 +10,9 @@
 <div x-data="initSubtotalSegment">
 <template x-if="isSubtotalSegmentAndDisplayBoth">
     <div :class="wrapperClass">
-        <div x-html="formatTotalLabelExclTax"></div>
+        <div x-html-safe="formatTotalLabelExclTax"></div>
         <div x-text="formatSubtotal" class="justify-self-end"></div>
-        <div x-html="formatTotalLabelInclTax"></div>
+        <div x-html-safe="formatTotalLabelInclTax"></div>
         <div x-text="formatSubtotalInclTax" class="justify-self-end"></div>
     </div>
 </template>
@@ -20,7 +20,7 @@
 <!-- display subtotal excluding tax -->
 <template x-if="isSubtotalSegmentAndDisplayExcl">
     <div :class="wrapperClass">
-        <div x-html="formatTotalLabel"></div>
+        <div x-html-safe="formatTotalLabel"></div>
         <div x-text="formatSubtotal" class="justify-self-end"></div>
     </div>
 </template>
@@ -28,7 +28,7 @@
 <!-- display subtotal including tax -->
 <template x-if="isSubtotalSegmentAndDisplayIncl">
     <div :class="wrapperClass">
-        <div x-html="formatTotalLabel"></div>
+        <div x-html-safe="formatTotalLabel"></div>
         <div :data-amount="totalsData.subtotal_incl_tax" x-text="formatSubtotalInclTax" class="justify-self-end"></div>
     </div>
 </template>

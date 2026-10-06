@@ -8,7 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Framework\Escaper;
 
@@ -16,8 +16,8 @@ use Magento\Framework\Escaper;
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 ?>
 <div class="toolbar-sorter sorter flex items-center order-1 col-span-3 sm:col-span-6
         md:col-span-3 lg:col-span-6 justify-end">
@@ -45,7 +45,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             class="action sorter-action sort-desc"
             @click.prevent="sortAscending"
         >
-            <?= $heroicons->sortAscendingHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+            <?= $lucideIcons->arrowUpNarrowWideHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
         </button>
     <?php else: ?>
         <button
@@ -54,7 +54,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
             class="action sorter-action sort-asc"
             @click.prevent="sortDescending"
         >
-            <?= $heroicons->sortDescendingHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
+            <?= $lucideIcons->arrowDownWideNarrowHtml('', 24, 24, ['aria-hidden' => 'true']); ?>
         </button>
     <?php endif; ?>
 </div>

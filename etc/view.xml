@@ -231,6 +231,17 @@
     <vars module="Magento_ConfigurableProduct">
         <var name="gallery_switch_strategy">append</var> <!-- 'append' or 'replace' -->
     </vars>
+    <vars module="Magento_PageBuilder">
+        <var name="breakpoints">
+            <var name="mobile">
+                <!-- Everything below the Tailwind md breakpoint -->
+                <var name="conditions">
+                    <var name="max-width">767px</var>
+                    <var name="min-width">0px</var>
+                </var>
+            </var>
+        </var>
+    </vars>
     <vars module="Js_Bundle">
         <var name="bundle_size">1MB</var>
     </vars>
