@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
 use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -15,6 +16,7 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
 
 /** @var LucideIcons $lucideIcons */
 $lucideIcons = $viewModels->require(LucideIcons::class);
@@ -104,4 +106,7 @@ $isNav = $block->getIsNav() !== null ? $block->getIsNav() : false;
             }
         }
     }
+
+    window.addEventListener('alpine:init', () => Alpine.data('initAccountNavigation', initAccountNavigation), {once: true})
 </script>
+<?php $hyvaCsp->registerInlineScript() ?>
