@@ -35,7 +35,7 @@ $magento = $viewModels->require(MagentoMetadata::class);
                 <?php if ($magento->versionCompare('<', '2.4.6') && $magento->getDistributionName() === 'Magento'): ?>
                 return hyva.formatPrice(this.totalsData.grand_total);
                 <?php else: ?>
-                return hyva.formatPrice(totalsData.grand_total - totalsData.tax_amount);
+                return hyva.formatPrice(this.totalsData.grand_total - this.totalsData.tax_amount);
                 <?php endif; ?>
             }
         }

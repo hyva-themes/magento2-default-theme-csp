@@ -25,6 +25,9 @@ use Magento\Wishlist\Block\Share\Wishlist;
             },
             addAllSharedToCart() {
                 hyva.postForm(JSON.parse(this.$el.dataset.sharedAddAllToCartUrl));
+            },
+            addItemToWishlist() {
+                hyva.postForm(JSON.parse(this.$el.dataset.params))
             }
         }
     }
