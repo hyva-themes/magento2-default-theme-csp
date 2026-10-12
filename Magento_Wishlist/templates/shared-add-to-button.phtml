@@ -26,7 +26,8 @@ if (! ($item = $block->getData('item'))) {
     id="wishlist-shared-item-<?= /* @noEscape */ $item->getId() ?>"
     type="button"
     class="action towishlist underline"
-    @click='hyva.postForm(<?= /* @noEscape */ $parentBlock->getAddToWishlistParams($item) ?>)'
+    @click="addItemToWishlist"
+    data-params="<?= $escaper->escapeHtmlAttr($parentBlock->getAddToWishlistParams($item)) ?>"
     data-addto="wishlist"
 >
     <span><?= $escaper->escapeHtml(__('Add to Wish List')) ?></span>
