@@ -188,7 +188,7 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
                         data-img-src="<?= $escaper->escapeUrl($img->getData('large_image_url')) ?>"
                         data-video-src="<?= $escaper->escapeUrl($img->getData('video_url')) ?>"
                         data-caption="<?= $escaper->escapeHtmlAttr($caption) ?>"
-                        @click="openLightbox"
+                        @click="openLightboxTarget"
                         tabindex="-1"
                     >
                         <img
@@ -229,7 +229,7 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
                         :data-video-src="image.videoUrl"
                         :data-media-type="image.type"
                         :data-caption="imgCaption"
-                        @click="openLightbox"
+                        @click="openLightboxTarget"
                     >
                         <img
                             :src="image.img"
@@ -541,6 +541,12 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
             openLightbox() {
                 const items = this.getLightboxItems();
                 const idx = items.findIndex(el => !el.closest('[inert]'));
+                if (idx === -1) return;
+                this.showLightbox(idx);
+            },
+            openLightboxTarget() {
+                const items = this.getLightboxItems();
+                const idx = items.findIndex(el => el === this.$event.currentTarget);
                 if (idx === -1) return;
                 this.showLightbox(idx);
             },
