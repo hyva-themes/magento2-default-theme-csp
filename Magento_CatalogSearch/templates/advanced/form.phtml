@@ -7,10 +7,18 @@
 
 declare(strict_types=1);
 
-/** @var \Magento\CatalogSearch\Block\Advanced\Form $block */
-/** @var \Magento\Framework\Escaper $escaper */
-/** @var \Hyva\Theme\Model\ViewModelRegistry $viewModels */
-/** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
+use Hyva\Theme\Model\ViewModelRegistry;
+use Hyva\Theme\ViewModel\HyvaCsp;
+use Magento\Framework\Escaper;
+use Magento\CatalogSearch\Block\Advanced\Form;
+use Magento\CatalogSearch\Helper\Data as CatalogSearchHelper;
+
+/** @var ViewModelRegistry $viewModels */
+/** @var HyvaCsp $hyvaCsp */
+/** @var Escaper $escaper */
+/** @var Form $block */
+
+/** @var CatalogSearchHelper $catalogSearchHelper */
 $catalogSearchHelper = $block->getData('catalogSearchHelper');
 
 $maxQueryLength = $catalogSearchHelper->getMaxQueryLength();
@@ -55,3 +63,26 @@ $maxQueryLength = $catalogSearchHelper->getMaxQueryLength();
   </div>
 </div>
 </form>
+
+<script>
+    function searchRangeField() {
+        return {
+            validateInput() {
+                const fromInput = this.$refs.from;
+                const fromTo = this.$refs.to;
+                const message = this.$el.dataset.validationMessage;
+                if (!fromInput || !fromTo) return;
+
+                fromInput.setCustomValidity('');
+                fromInput.validity.valid && fromInput.setCustomValidity(
+                    fromInput.value.length === 0 || (fromTo.value.length === 0 || fromInput.value <= fromTo.value)
+                        ? ''
+                        : message
+                )
+            }
+        }
+    }
+
+    window.addEventListener('alpine:init', () => Alpine.data('searchRangeField', searchRangeField), { once: true })
+</script>
+<?php $hyvaCsp->registerInlineScript() ?>
