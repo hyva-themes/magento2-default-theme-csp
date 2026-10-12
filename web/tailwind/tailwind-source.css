@@ -28,6 +28,7 @@
 /* Import generated styles for Hyvä Compatible Modules and Design Tokens */
 @import "./generated/hyva-source.css";
 @import "./generated/hyva-tokens.css";
+@import "./generated/hyva-fonts.css";
 
 @theme {
     --color-ink: var(--color-slate-950);

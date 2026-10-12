@@ -76,7 +76,7 @@ $productType = $product->getTypeId();
             </span>
         <?php endif; ?>
 
-        <div role="group" aria-label="<?= $escaper->escapeHtmlAttr('Price') ?>">
+        <div role="group" aria-label="<?= $escaper->escapeHtmlAttr(__('Price')) ?>">
             <?= $block->getChildHtml("product.info.price") ?>
         </div>
 

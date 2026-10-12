@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Currency;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\HyvaCsp;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -20,9 +19,6 @@ use Magento\Framework\View\Element\Template;
 /** @var Escaper $escaper */
 /** @var HyvaCsp $hyvaCsp   */
 /** @var ViewModelRegistry $viewModels */
-
-/** @var HeroiconsSolid $heroiconsSolid */
-$heroiconsSolid = $viewModels->require(HeroiconsSolid::class);
 
 /** @var Currency $currencyViewModel */
 $currencyViewModel = $viewModels->require(Currency::class);

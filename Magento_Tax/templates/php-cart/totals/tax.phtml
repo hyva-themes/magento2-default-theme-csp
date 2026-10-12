@@ -6,7 +6,7 @@
  */
 
 use Hyva\Theme\Model\ViewModelRegistry;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
@@ -14,8 +14,8 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var ViewModelRegistry $viewModels */
 
-/** @var HeroiconsOutline $heroicons */
-$heroicons = $viewModels->require(HeroiconsOutline::class);
+/** @var LucideIcons $lucideIcons */
+$lucideIcons = $viewModels->require(LucideIcons::class);
 
 /**
  * The AlpineJS scope of this file is the method `initCartTotals()` in Magento_Checkout::php-cart/totals.phtml
@@ -26,7 +26,7 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
     <div>
         <template x-if="isTaxSummaryHidden">
             <div :class="wrapperClass">
-                <div x-html="formatTotalLabel"></div>
+                <div x-html-safe="formatTotalLabel"></div>
                 <div x-text="formatTaxTotal" class="justify-self-end"></div>
             </div>
         </template>
@@ -37,14 +37,14 @@ $heroicons = $viewModels->require(HeroiconsOutline::class);
                     <span x-text="formatTotalLabel"></span>
                     <span class="inline-flex items-center gap-x-1 justify-self-end">
                         <span x-text="formatTaxTotal"></span>
-                        <?= $heroicons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
+                        <?= $lucideIcons->chevronDownHtml('transform group-open:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?>
                     </span>
                 </summary>
                 <template x-for="(taxItem, index) in segment.extension_attributes.tax_grandtotal_details" :key="index">
                     <div :class="wrapperClass">
                         <div>
                             <template x-for="(taxRate, index) in taxItem.rates">
-                                <div x-html="formatTaxRateLabel"></div>
+                                <div x-html-safe="formatTaxRateLabel"></div>
                             </template>
                         </div>
                         <div x-text="formatTaxDetailAmount" class="justify-self-end"></div>

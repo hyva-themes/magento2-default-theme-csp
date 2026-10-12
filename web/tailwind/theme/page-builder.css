@@ -40,12 +40,17 @@ body:where(:not([class*="-full-width"])) {
 /* Column Groups (both needed for pagebuider backwards compatibiliy) */
 [data-content-type="column-group"],
 [data-content-type="column-line"] {
-    @apply flex-wrap md:flex-nowrap;
+    flex-wrap: nowrap;
+
+    @variant md {
+        flex-wrap: nowrap;
+    }
 }
 
 /* Columns */
 [data-content-type="column"] {
-    @apply w-full max-w-full;
+    width: 100%;
+    max-width: 100%;
     background-attachment: scroll !important;
     flex-basis: 100%;
 
@@ -57,35 +62,67 @@ body:where(:not([class*="-full-width"])) {
 /* Tabs/Tab Item */
 [data-content-type="tabs"] {
     .tabs-navigation {
-        @apply block -mb-px p-0 shadow;
+        display: block;
+        margin-block-end: -1px;
+        padding: 0;
+        box-shadow: var(--shadow-sm);
 
         li.tab-header {
-            @apply bg-gray-100 border border-b-0 border-solid border-gray-300 rounded-bl-none rounded-br-none inline-block relative my-0 mr-0 -ml-px max-w-full break-words;
+            background-color: var(--color-gray-100);
+            border: 1px solid var(--color-gray-300);
+            border-bottom-width: 0;
+            border-end-start-radius: 0;
+            border-end-end-radius: 0;
+            display: inline-block;
+            position: relative;
+            margin-block: 0;
+            margin-inline-end: 0;
+            margin-inline-start: -1px;
+            max-width: 100%;
+            overflow-wrap: break-word;
 
             &:first-child {
-                @apply ml-0;
+                margin-inline-start: 0;
             }
 
             &.active {
-                @apply bg-white z-20;
+                background-color: var(--color-white);
+                z-index: 20;
                 border-bottom: 1px solid white;
             }
 
             a.tab-title {
-                @apply cursor-pointer block text-sm font-semibold relative align-middle whitespace-normal py-3 px-5;
+                cursor: pointer;
+                display: block;
+                font-size: var(--text-sm);
+                line-height: var(--text-sm--line-height);
+                font-weight: var(--font-weight-semibold);
+                position: relative;
+                vertical-align: middle;
+                white-space: normal;
+                padding-block: --spacing(3);
+                padding-inline: --spacing(5);
 
                 span {
-                    @apply font-semibold leading-5 text-black;
+                    font-weight: var(--font-weight-semibold);
+                    line-height: --spacing(5);
+                    color: var(--color-black);
                 }
             }
         }
     }
 
     .tabs-content {
-        @apply rounded-sm bg-container-lighter shadow border border-solid border-gray-300 relative overflow-hidden z-10;
+        border-radius: var(--radius-sm);
+        background-color: var(--color-bg);
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--color-gray-300);
+        position: relative;
+        overflow: hidden;
+        z-index: 10;
 
         [data-content-type="tab-item"] {
-            @apply p-8;
+            padding: --spacing(8);
             min-height: inherit;
             background-attachment: scroll !important;
         }
@@ -120,19 +157,23 @@ body:where(:not([class*="-full-width"])) {
     max-width: 100%;
 
     [data-content-type="button-item"] {
-        @apply max-w-full mr-2 mb-2;
+        max-width: 100%;
+        margin-inline-end: --spacing(2);
+        margin-block-end: --spacing(2);
 
         [data-element="link"],
         [data-element="empty_link"] {
-            @apply max-w-full break-words;
+            max-width: 100%;
+            overflow-wrap: break-word;
         }
 
         [data-element="empty_link"] {
-            @apply cursor-default;
+            cursor: default;
         }
 
         :is(a, button, div) {
-            @apply shadow-none inline-block;
+            box-shadow: none;
+            display: inline-block;
         }
     }
 }
@@ -165,11 +206,19 @@ body:where(:not([class*="-full-width"])) {
     }
 
     .pagebuilder-mobile-hidden {
-        @apply hidden md:inline-block;
+        display: none;
+
+        @variant md {
+            display: inline-block;
+        }
     }
 
     .pagebuilder-mobile-only {
-        @apply inline-block md:hidden;
+        display: inline-block;
+
+        @variant md {
+            display: none;
+        }
     }
 
     figcaption {
@@ -242,7 +291,10 @@ body:where(:not([class*="-full-width"])) {
             position: relative;
 
             &:not(.pagebuilder-poster-overlay) {
-                @apply max-w-none md:max-w-xl;
+                max-width: none;
+                @variant md {
+                    max-width: var(--container-xl);
+                }
             }
         }
 
@@ -256,7 +308,11 @@ body:where(:not([class*="-full-width"])) {
         }
 
         .pagebuilder-banner-button {
-            @apply transition-opacity duration-500 ease-in-out max-w-full m-0 mt-5 inline-block;
+            transition: opacity 500ms ease-in-out;
+            max-width: 100%;
+            margin: 0;
+            margin-block-start: --spacing(5);
+            display: inline-block;
             overflow-wrap: break-word;
             text-align: inherit;
         }

@@ -34,19 +34,10 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         return {
             errors: 0,
             hasCaptchaToken: 0,
-            showCouponForm: 0,
-            hideCouponForm() {
-                return ! this.showCouponForm;
-            },
-            formData: {
-                coupon_code: '',
-                remove: '0'
-            },
+            showCouponForm: <?= $hasCouponCode ? 1 : 0 ?>,
             init(){
                 const browserStorageShowCouponForm = hyva.getBrowserStorage().getItem('hyva.showCouponForm');
                 this.showCouponForm = browserStorageShowCouponForm === 'true' ? true : false;
-                this.formData.coupon_code = this.$root.dataset.couponCode;
-                this.formData.remove = this.$root.dataset.couponCode ? '1' : '0';
             },
             toggleShowCoupon() {
                 this.showCouponForm = !this.showCouponForm;
@@ -54,9 +45,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                 hyva.getBrowserStorage().setItem('hyva.showCouponForm', this.showCouponForm);
 
                 this.$nextTick(() => this.$refs.couponInput.select());
-            },
-            onInput() {
-                this.formData.coupon_code = this.$event.target.value;
             },
             submitForm() {
                 const $form = document.querySelector('#discount-coupon-form');
@@ -79,7 +67,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
     class="coupon-form group"
     x-data="initCouponForm"
     :open="showCouponForm"
-    data-coupon-code="<?= $escaper->escapeHtmlAttr($block->getCouponCode()) ?>"
 >
     <summary
         @click.prevent="toggleShowCoupon"
@@ -110,7 +97,6 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     name="coupon_code"
                     class="form-input w-full"
                     value="<?= $escaper->escapeHtmlAttr($block->getCouponCode()) ?>"
-                    @input="onInput"
                     x-ref="couponInput"
                     placeholder="<?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>"
                     <?php if ($hasCouponCode): ?>
@@ -137,4 +123,3 @@ $recaptcha = $block->getData('viewModelRecaptcha');
         </div>
     </form>
 </details>
-

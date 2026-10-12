@@ -155,13 +155,13 @@ $itemRenderer->setData('hide_details', $hideDetails);
         <div class="flex gap-2">
             <button
                 class="btn btn-secondary p-2 invisible"
-                aria-label="Previous Slide"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Previous slide')) ?>"
                 data-prev
                 disabled
             ><?= $lucideIcons->arrowLeftHtml('rtl:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>
             <button
                 class="btn btn-secondary p-2 invisible"
-                aria-label="Next Slide"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Next slide')) ?>"
                 data-next
                 disabled
             ><?= $lucideIcons->arrowRightHtml('rtl:rotate-180', 18, 18, ['aria-hidden' => 'true']); ?></button>

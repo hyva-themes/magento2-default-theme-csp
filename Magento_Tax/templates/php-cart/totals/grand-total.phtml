@@ -25,7 +25,7 @@ $magento = $viewModels->require(MagentoMetadata::class);
         </div>
 
         <div :class="wrapperClass" class="text-base">
-            <div x-html="formatTotalLabelExclTax"></div>
+            <div x-html-safe="formatTotalLabelExclTax"></div>
             <div x-text="formatGrandTotalExclTax" class="justify-self-end"
             ></div>
         </div>

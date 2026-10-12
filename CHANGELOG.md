@@ -6,7 +6,224 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
-[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.5.2...main
+[Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.5.3...main
+
+## [1.5.3 CSP] - 2026-10-12
+
+[1.5.3 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.5.2...1.5.3
+
+Same as default theme, with the following CSP specific changes.
+
+### Changed
+
+-   **Fixed the advanced search range validation to be CSP safe**  
+    For more information, please refer to [merge request #97](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/97).
+
+-   **Fixed the shared wishlist "Add to Wish List" button to be CSP safe**  
+    For more information, please refer to [merge request #97](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/97).
+
+-   **Fixed missing `this` in the cart grand total excluding tax**  
+    For more information, please refer to [merge request #97](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/97).
+
+## [1.5.3] - 2026-10-12
+
+[1.5.3]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.5.2...1.5.3
+
+### Added
+
+-   **Same item order on the cart page and in the mini cart**  
+    Both follow the new "Show Newest Items First" setting under "Hyvä Themes > General > Cart", which defaults to Yes.
+    Previously the mini cart showed the newest items first and the cart page the oldest first.
+
+    For more information, please refer to [issue #1373](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1373).
+
+-   **Support for the Hyvä Font API**  
+    The `generate` script now runs `npx hyva-fonts`, which requires `@hyva-themes/hyva-modules` v1.5. Fonts configured in
+    `hyva.config.json` are written to `generated/hyva-fonts.css` and between the `hyva-fonts` markers in
+    `Magento_Theme/layout/default_head_blocks.xml`.
+
+    For more information, please refer to [merge request #1559](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1559)
+    and the [Font API documentation](https://docs.hyva.io/hyva-themes/working-with-tailwindcss/using-hyva-modules/fonts.html).
+
+### Changed
+
+-   **Fixed the missing Offer price for MSRP products with a hidden price**  
+    The structured data now includes the actual price, the "What's this?" link is shown again when the price is only
+    shown in the cart, and Escape closes the MSRP popover.
+
+    For more information, please refer to [issue #1382](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1382).
+
+-   **Fixed accessibility issues from the WCAG 2.2 audit**  
+    Accessible names for navigation landmarks, the mobile menu, the store and language switchers and the items per page
+    select, autocomplete on the registration name fields, and no empty store name heading on the contact page.
+
+    For more information, please refer to [issue #1354](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1354).
+
+-   **Fixed the quantity field showing the old quantity when editing a cart item**  
+    For more information, please refer to [issue #1338](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1338).
+
+-   **Fixed blank pages when navigating in the Facebook and Instagram in-app browser on Android**  
+    Cross-document view transitions are disabled in these browsers, since they never complete them.
+
+    For more information, please refer to [issue #1342](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1342).
+
+-   **Fixed the configurable option selection being lost after a failed add to cart**  
+    For more information, please refer to [issue #776](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/776).
+
+-   **Set the Page Builder mobile breakpoint to below Tailwind md**  
+    Mobile background images now switch at the same width with and without lazy loading.
+
+    For more information, please refer to [issue #1216](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1216).
+
+-   **Show multi-select bundle option values on separate lines in the cart and mini cart**  
+    For more information, please refer to [issue #1348](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1348).
+
+    Many thanks to Valeriia Prokhina (Perspective) for the contribution!
+
+-   **Fixed configurable options without enabled child products being rendered as disabled**  
+    Since 1.5.1 an option whose child products are all disabled, or not assigned to the website, rendered greyed out
+    instead of being omitted.
+
+    For more information, please refer to [issue #1360](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1360).
+
+-   **Fixed the reCAPTCHA v2 invisible legal notice and badge gap**  
+    v2 invisible forms now show the legal notice like v3, and the hidden inline badge no longer leaves an empty gap.
+
+    For more information, please refer to [issue #1156](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1156).
+
+-   **Only load the reCAPTCHA script when interacting with a form that uses reCAPTCHA**  
+    Previously the Google script was loaded on the first input in any form, such as the search or newsletter form.
+
+    For more information, please refer to [issue #736](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/736).
+
+-   **Fixed a parse error in heredoc templates with HTML minification enabled**  
+    The Braintree stored PayPal account and the order cancellation modal templates no longer pass a heredoc directly
+    into a method call, which the Magento minifier does not preserve. The PayPal payer email is now escaped as well.
+
+    For more information, please refer to [issue #1379](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1379).
+
+-   **Fixed the header search staying invalid after submitting a too short query**  
+    For more information, please refer to [issue #1375](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1375).
+
+-   **Fixed simple product images being hidden in the PDP gallery when they are also used by the configurable parent**  
+    With the `replace` gallery switch strategy, images shared between the parent and the selected simple product were
+    filtered out, so only the images unique to the simple product were shown.
+
+    For more information, please refer to [issue #1363](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1363).
+
+-   **Fixed identical storefront messages being shown more than once**  
+    For more information, please refer to [issue #1371](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1371).
+
+    Many thanks to Valeriia Prokhina (Perspective) for the contribution!
+
+-   **Fixed the applied coupon code disappearing after a cart Ajax update**  
+    For more information, please refer to [issue #1343](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1343).
+
+    Many thanks to Rodwell Kajau (Web Vision) for the contribution!
+
+-   **Fixed the order view items pager ignoring the items per page**  
+    For more information, please refer to [issue #1303](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1303).
+
+    Many thanks to Ivan Martsii (Perspective) for the contribution!
+
+-   **Fixed the gallery not scrolling to the active thumbnail when opened from the additional images trigger**  
+    For more information, please refer to [issue #1350](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1350).
+
+-   **Fixed the product gallery view transition leaving a stale transition name and failing on URLs with quotes**  
+    For more information, please refer to [issue #1361](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1361).
+
+-   **Fixed the product gallery max size with the horizontal thumbnail layout**  
+    For more information, please refer to [merge request #1567](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1567).
+
+-   **Fixed the missing auto pager on the generic slider**  
+    For more information, please refer to [merge request #1525](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1525).
+
+-   **Fixed the border radius on swatch images**  
+    For more information, please refer to [merge request #1527](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1527).
+
+-   **Open the active filters in the layered navigation by default**  
+    For more information, please refer to [merge request #1556](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1556).
+
+-   **Updated the password reset button phrase**  
+    For more information, please refer to [issue #1356](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1356).
+
+-   **Improved the bundle option UX and accessibility**  
+    Includes the bundle option price rendering, RTL safe spacing and the form label font size.  
+    For more information, please refer to [merge request #1560](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1560).
+
+-   **Fixed the missing tax label for bundle radio and checkbox options**  
+    For more information, please refer to [issue #969](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/969).
+
+-   **Reworked the messages CSS component to modern CSS**  
+    For more information, please refer to [issue #1376](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1376).
+
+    Many thanks to Koen Brouwers (Webdesign Tilburg) for the contribution!
+
+-   **Replaced most `@apply` rules with plain CSS and logical properties**  
+    For more information, please refer to [issue #1380](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1380).
+
+    Many thanks to Koen Brouwers (Webdesign Tilburg) for the contribution!
+
+-   **Replaced the border dividers on the product attributes and cart form with a CSS solution to reduce the HTML size**  
+    For more information, please refer to [issue #1372](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1372).
+
+-   **Migrated all `x-html` usage to `x-html-safe`**  
+    For more information, please refer to [merge request #1562](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1562).
+
+-   **Replaced the GraphQL calls in the default theme with PHP and Ajax to reduce the attack surface of a storefront**  
+    The product review form, the customer product review list and the recently viewed products widget no longer use GraphQL, so the theme no longer requires `hyva-themes/magento2-graphql-view-model`, `hyva-themes/magento2-graphql-tokens` and the five `magento/module-*-graph-ql` packages. Both Hyvä packages keep working, so a module that uses the `GraphqlViewModel` view model, or the `signin_token` of the `customer` section, should add the package it comes from to its own `require`.
+
+    For more information, please refer to [merge request #1561](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1561).
+
+-   **Replaced the remaining Heroicons with Lucide icons throughout the theme**  
+    For more information, please refer to [merge request #1552](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1552).
+
+-   **Hardened templates against XSS**  
+    For more information, please refer to [merge request #1548](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1548).
+
+-   **Fixed a cross-site scripting issue in the MSRP price and popup templates**  
+    For more information, please refer to [merge request #1547](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1547).
+
+    Many thanks to Jelle Janssens (Singto BV) for reporting this issue!
+
+-   **Made the MSRP templates CSP safe**  
+    The popup data is passed through a data attribute and read with `JSON.parse`, and the Alpine components are registered with `Alpine.data` instead of being declared in the `x-data` attribute. Child themes overriding `Magento_Msrp/templates/popup.phtml` or `Magento_Msrp/templates/product/price/msrp.phtml` need to update both templates together.
+
+    For more information, please refer to [merge request #1547](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1547).
+
+-   **Made the price group label on the product page translatable**  
+    For more information, please refer to [issue #1369](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1369).
+
+-   **Made the previous and next slide labels in the slider templates translatable**  
+    For more information, please refer to [issue #1368](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1368).
+
+-   **Fixed repeat submissions of the forgot password form triggering the password reset rate limit**  
+    For more information, please refer to [issue #1362](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1362).
+
+-   **Fixed HTML entities such as apostrophes not being decoded in the mini cart**  
+    For more information, please refer to [issue #1358](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1358).
+
+-   **Fixed the "As low as" label showing on products whose child products all have the same price**  
+    For more information, please refer to [issue #1346](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1346).
+
+-   **Fixed the same message being shown twice when it arrives through both the cookie and a dispatch**  
+    For more information, please refer to [issue #1353](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1353).
+
+-   **Fixed cart validation messages being replayed and no longer appearing once repeated**  
+    For more information, please refer to [issue #1313](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1313).
+
+-   **Fixed the layout jump in the form error message**  
+    For more information, please refer to [merge request #1557](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1557).
+
+-   **Fixed the missing `rel="nofollow"` on the layered navigation links**  
+    For more information, please refer to [issue #1370](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1370).
+
+    Many thanks to Kevin Ruscoe (Clear Design) for the contribution!
+
+### Removed
+
+-   **Removed the incorrect `BaseImage $block` annotation from the grouped product template**  
+    For more information, please refer to [issue #1367](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1367).
 
 ## [1.5.2 CSP] - 2026-07-10
 
@@ -119,6 +336,38 @@ Same as default theme
 ### Removed
 
 -   Nothing Removed
+
+## [1.4.11 CSP] - 2026-10-12
+
+[1.4.11 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.4.10...1.4.11
+
+Same as default theme
+
+## [1.4.11] - 2026-10-12
+
+[1.4.11]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.4.10...1.4.11
+
+### Added
+
+-   Nothing added
+
+### Changed
+
+-   **Fixed a cross-site scripting issue in the MSRP price and popup templates**  
+    The product name and the MSRP explanation message are now escaped for the JavaScript context they are rendered into.
+
+    For more information, please refer to [merge request #1549](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1549).
+
+    Many thanks to Jelle Janssens (Singto BV) for reporting this issue!
+
+-   **Made the MSRP templates CSP safe**  
+    The popup data is passed through a data attribute and read with `JSON.parse`, and the Alpine components are registered with `Alpine.data` instead of being declared in the `x-data` attribute. Child themes overriding `Magento_Msrp/templates/popup.phtml` or `Magento_Msrp/templates/product/price/msrp.phtml` need to update both templates together.
+
+    For more information, please refer to [merge request #1549](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1549).
+
+### Removed
+
+-   Nothing removed
 
 ## [1.4.10 CSP] - 2026-07-10
 
@@ -714,6 +963,34 @@ Same as default theme
 
 -   **Removed dependency on the reset-theme**
     For more information, please refer to the [upgrade docs](./upgrading-to-1-4-0.md).
+
+## [1.3.23 CSP] - 2026-10-12
+
+[1.3.23 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.3.22...1.3.23
+
+Same as default theme
+
+## [1.3.23] - 2026-10-12
+
+[1.3.23]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/compare/1.3.22...1.3.23
+
+### Added
+
+-   Nothing added
+
+### Changed
+
+-   **Fixed a cross-site scripting issue in the MSRP price and popup templates**  
+
+    The product name and the MSRP explanation message are now escaped for the JavaScript context they are rendered into.
+
+    For more information, please refer to [merge request #1550](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1550).
+
+    Many thanks to Jelle Janssens (Singto BV) for reporting this issue!
+
+### Removed
+
+-   Nothing removed
 
 ## [1.3.22 CSP] - 2026-03-16
 

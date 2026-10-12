@@ -61,7 +61,7 @@ $productViewModel = $viewModels->require(ProductPage::class);
                 <?php else: ?>
                     hyva.formatPrice(this.tierPrice.price);
                 <?php endif; ?>
-                return '<?= $escaper->escapeHtml(__('Buy %1 for %2 each and', '%1', '%2')) ?>'
+                return '<?= $escaper->escapeJs(__('Buy %1 for %2 each and', '%1', '%2')) ?>'
                     .replace('%1', this.tierPrice.qty)
                     .replace('%2', price)
 

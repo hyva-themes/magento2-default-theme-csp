@@ -183,7 +183,7 @@ $isV2Recaptcha = in_array($customerLoginRecaptchaType, ['recaptcha', 'invisible'
                 <template x-for="(message, index) in errorMessages" :key="index">
                     <div>
                         <template x-if="message">
-                            <span x-html="message"></span>
+                            <span x-html-safe="message"></span>
                         </template>
                     </div>
                 </template>

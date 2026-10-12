@@ -55,7 +55,7 @@ $htmlInputTypes = [
     <label
         class="mb-1 text-base font-normal"
         for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
-        x-html="updateOptionPrice"
+        x-html-safe="updateOptionPrice"
     >
         <span><?= $escaper->escapeHtml($option->getTitle()) ?></span>
         <?php if ($option->getIsRequire()): ?>

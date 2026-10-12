@@ -106,7 +106,7 @@ if ($option): ?>
             >
             <label class="label text-left"
                    for="options_<?= $escaper->escapeHtmlAttr($optionId) ?>"
-                   x-html="updateOptionPrice"
+                   x-html-safe="updateOptionPrice"
             >
                 <span><?= $escaper->escapeHtml($value->getTitle()) ?></span>
                 <span><?= /* @noEscape */ $block->formatPrice($value) ?></span>

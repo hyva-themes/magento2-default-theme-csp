@@ -9,9 +9,8 @@ declare(strict_types=1);
 
 use Hyva\Theme\Model\ViewModelRegistry;
 use Hyva\Theme\ViewModel\Customer\LoginButton;
-use Hyva\Theme\ViewModel\HeroiconsOutline;
-use Hyva\Theme\ViewModel\HeroiconsSolid;
 use Hyva\Theme\ViewModel\HyvaCsp;
+use Hyva\Theme\ViewModel\LucideIcons;
 use Hyva\Theme\ViewModel\ReCaptcha;
 use Magento\Customer\Block\Form\Login;
 use Magento\Customer\Model\Account\Redirect;
@@ -23,11 +22,9 @@ use Magento\Framework\Escaper;
 /** @var LoginButton $loginButtonViewModel */
 /** @var ViewModelRegistry $viewModels */
 /** @var ReCaptcha $recaptcha */
-/** @var HeroiconsOutline $heroiconsoutline */
-/** @var HeroiconsSolid $heroiconssolid */
+/** @var LucideIcons $lucideIcons */
 
-$heroiconsoutline = $viewModels->require(HeroiconsOutline::class);
-$heroiconssolid = $viewModels->require(HeroiconsSolid::class);
+$lucideIcons = $viewModels->require(LucideIcons::class);
 $loginButtonViewModel = $viewModels->require(LoginButton::class);
 
 // Disabling autocomplete on form fields is not recommended,
@@ -38,7 +35,7 @@ $loginButtonViewModel = $viewModels->require(LoginButton::class);
 $recaptcha = $block->getData('viewModelRecaptcha');
 ?>
 <div class="card">
-    <div aria-labelledby="block-customer-login-heading">
+    <div>
         <form class="form form-login"
               action="<?= $escaper->escapeUrl($block->getPostActionUrl()) ?>"
               method="post"
@@ -90,6 +87,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             class="form-input w-full"
                             required
                             :type="passwordOrText"
+                            type="password"
                             autocomplete="<?= $block->isAutocompleteDisabled() ? 'off' : 'current-password' ?>"
                             id="pass"
                             title="<?= $escaper->escapeHtmlAttr(__('Password')) ?>"
@@ -101,9 +99,9 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             :aria-label="ariaLabel"
                             class="px-4 py-3"
                         >
-                            <?= $heroiconssolid->eyeHtml('w-5 h-5', 20, 20, ['x-show' => 'notVisible', 'aria-hidden' => 'true']); ?>
+                            <?= $lucideIcons->eyeHtml('w-5 h-5', 20, 20, ['x-show' => 'notVisible', 'aria-hidden' => 'true']); ?>
                             <template x-if="visible">
-                                <?= $heroiconssolid->eyeOffHtml('w-5 h-5', 20, 20, ['aria-hidden' => 'true']); ?>
+                                <?= $lucideIcons->eyeOffHtml('w-5 h-5', 20, 20, ['aria-hidden' => 'true']); ?>
                             </template>
                         </button>
                     </div>
@@ -126,10 +124,10 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                     <template x-if="displayErrorMessage">
                         <p class="text-red flex items-center">
                             <span class="inline-block w-8 h-8 mr-3">
-                                <?= $heroiconsoutline->exclamationCircleHtml('', 24, 24, ['aria-hidden' => true]); ?>
+                                <?= $lucideIcons->circleAlertHtml('', 24, 24, ['aria-hidden' => true]); ?>
                             </span>
                             <template x-for="errorMessage in errorMessages">
-                                <span x-html="errorMessage"></span>
+                                <span x-html-safe="errorMessage"></span>
                             </template>
                         </p>
                     </template>
@@ -164,7 +162,7 @@ $recaptcha = $block->getData('viewModelRecaptcha');
                             window.location.href
                         )
                     }
-                    
+
                     if (this.errors === 0) {
                         $form.submit();
                     }

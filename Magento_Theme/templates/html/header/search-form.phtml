@@ -42,8 +42,6 @@ $searchConfig = $viewModels->require(SearchConfig::class);
             suggest() {
                 const search = this.$refs.searchInput;
                 if (search.value.length >= this.minSearchLength) {
-                    search.setCustomValidity('');
-                    search.reportValidity();
                     this.fetchSuggestions(search.value);
                 } else {
                     this.suggestions = [];
@@ -73,6 +71,9 @@ $searchConfig = $viewModels->require(SearchConfig::class);
                     search.value = term;
                     this.$refs.form.submit();
                 }
+            },
+            clearValidity() {
+                this.$refs.searchInput.setCustomValidity('');
             },
             searchSuggestion() {
                 this.search(this.suggestion.title)
@@ -118,6 +119,7 @@ $searchConfig = $viewModels->require(SearchConfig::class);
                     maxlength="<?= $escaper->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
                     class="form-input grow"
                     @search-open.window.debounce.10="focusAfterOpen"
+                    @input="clearValidity"
                     <?php if ($searchConfig->isSuggestionsAllowed()): ?>
                         @focus.once="suggest"
                         @input.debounce.300="suggest"

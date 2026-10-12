@@ -75,6 +75,7 @@ $cssClasses = implode(' ', array_filter([
 ]));
 $cssVars = implode('; ', [
     "--gallery-ratio:{$mediumWidth}/{$mediumHeight}",
+    "max-inline-size:{$mediumWidth}px",
     "--thumb-ratio:{$smallWidth}/{$smallHeight}",
 ]);
 $btnCssClasses = 'btn btn-secondary border-transparent p-1 rounded-full shadow-sm pointer-events-auto';
@@ -187,7 +188,7 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
                         data-img-src="<?= $escaper->escapeUrl($img->getData('large_image_url')) ?>"
                         data-video-src="<?= $escaper->escapeUrl($img->getData('video_url')) ?>"
                         data-caption="<?= $escaper->escapeHtmlAttr($caption) ?>"
-                        @click="openLightbox"
+                        @click="openLightboxTarget"
                         tabindex="-1"
                     >
                         <img
@@ -228,7 +229,7 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
                         :data-video-src="image.videoUrl"
                         :data-media-type="image.type"
                         :data-caption="imgCaption"
-                        @click="openLightbox"
+                        @click="openLightboxTarget"
                     >
                         <img
                             :src="image.img"
@@ -433,11 +434,13 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
                 this.$watch('newImages', () => this.updateActiveItem());
             },
             updateGallery(images = []) {
-                const existing = new Set(this.initImages.map(i => i.img));
-                this.newImages = images.filter(img => !existing.has(img.img));
                 this.sliderItems = {};
                 if (this.replaceOnReceive) {
-                    this.showInitImages = !this.newImages.length;
+                    this.newImages = images;
+                    this.showInitImages = !images.length;
+                } else {
+                    const existing = new Set(this.initImages.map(i => i.img));
+                    this.newImages = images.filter(img => !existing.has(img.img));
                 }
                 const visibleInitCount = this.showInitImages ? this.initImages.length : 0;
                 this.maxImageCount = visibleInitCount + this.newImages.length - this.maxDisplay;
@@ -445,14 +448,20 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
                 this.overflowSrc = (overflowIdx >= 0 && this.newImages[overflowIdx]?.img) || this.initOverflowSrc;
             },
             updateActiveItem() {
-                const track = this.$root.querySelector('[data-track]');
-                if (!track) return;
                 const slide = this.newImages.length > 0
                     ? document.getElementById('gallery-slide-dyn-0')
-                    : track.firstElementChild;
-                if (!slide) return;
+                    : this.$root.querySelector('[data-track]')?.firstElementChild;
+                this.scrollToActiveItem(slide);
+            },
+            scrollToActiveItem(target) {
+                if (!target) return;
+
+                const items = this.getLightboxItems();
+                const track = this.$root.querySelector('[data-track]');
+                if (!track) return;
+
                 const trackRect = track.getBoundingClientRect();
-                const slideRect = slide.getBoundingClientRect();
+                const slideRect = target.getBoundingClientRect();
                 track.scrollTo({
                     left: slideRect.left - trackRect.left + track.scrollLeft,
                     top: slideRect.top - trackRect.top + track.scrollTop,
@@ -535,7 +544,16 @@ $captionCssClasses = 'absolute bottom-2 text-sm py-1 px-2 rounded bg-gray-200/60
                 if (idx === -1) return;
                 this.showLightbox(idx);
             },
+            openLightboxTarget() {
+                const items = this.getLightboxItems();
+                const idx = items.findIndex(el => el === this.$event.currentTarget);
+                if (idx === -1) return;
+                this.showLightbox(idx);
+            },
             openOverflowLightbox() {
+                const items = this.getLightboxItems();
+                const target = items[this.maxDisplay];
+                this.scrollToActiveItem(target);
                 this.showLightbox(this.maxDisplay);
             },
             navigateLightbox(dir) {

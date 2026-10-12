@@ -85,7 +85,7 @@ $uniqueId = '_' . uniqid();
                         typeof window.dispatchMessages !== "undefined" && window.dispatchMessages(
                             [{
                                 type: "warning",
-                                text: "<?= $escaper->escapeHtml(__('Could not add item to wishlist.')) ?>"
+                                text: "<?= $escaper->escapeJs(__('Could not add item to wishlist.')) ?>"
                             }], 5000
                         );
                     }
@@ -97,7 +97,7 @@ $uniqueId = '_' . uniqid();
                         [{
                             type: (response.success) ? "success" : "error",
                             text: (response.success)
-                                ? "<?= $escaper->escapeHtml(
+                                ? "<?= $escaper->escapeJs(
                                     __("%1 has been added to your Wish List.", __("Product"))
                                 ) ?>"
                                 : response.error_message
