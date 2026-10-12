@@ -12,7 +12,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [1.5.3 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.5.2...1.5.3
 
-Same as default theme
+Same as default theme, with the following CSP specific changes.
+
+### Changed
+
+-   **Fixed the advanced search range validation to be CSP safe**  
+    For more information, please refer to [merge request #97](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/97).
+
+-   **Fixed the shared wishlist "Add to Wish List" button to be CSP safe**  
+    For more information, please refer to [merge request #97](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/97).
+
+-   **Fixed missing `this` in the cart grand total excluding tax**  
+    For more information, please refer to [merge request #97](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/merge_requests/97).
 
 ## [1.5.3] - 2026-10-12
 
