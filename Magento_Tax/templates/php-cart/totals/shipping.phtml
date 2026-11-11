@@ -14,7 +14,7 @@
 <template x-if="isShippingSegmentAndDisplayBoth">
     <div :class="wrapperClass">
         <div x-text="formatTotalLabelExclTax"></div>
-        <div :data-amount="formatShippingAmount" class="justify-self-end"></div>
+        <div x-text="formatShippingAmount" class="justify-self-end"></div>
         <div x-text="formatTotalLabelInclTax"></div>
         <div x-text="formatShippingInclTax" class="justify-self-end"></div>
     </div>
