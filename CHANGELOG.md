@@ -8,6 +8,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 [Unreleased]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.5.3...main
 
+### Changed
+
+-   **Fixed the empty "Shipping Excl. Tax" amount in the cart totals**  
+    For more information, please refer to [issue #38](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/issues/38).
+
+    Many thanks to Alexandru-Manuel Carabus for the contribution!
+
+-   **Removed a stray ">" after the "Shipping Incl. Tax" amount in the cart totals**  
+    For more information, please refer to [issue #39](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/issues/39).
+
+    Many thanks to Alexandru-Manuel Carabus for the contribution!
+
 ## [1.5.3 CSP] - 2026-10-12
 
 [1.5.3 CSP]: https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/compare/1.5.2...1.5.3
