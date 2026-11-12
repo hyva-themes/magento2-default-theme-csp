@@ -25,7 +25,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
 
 ?>
 <div x-data="initPayPalInContext"
-     class="min-h-a11y w-full"
+     class="min-h-11 w-full"
      x-intersect="checkAndInitializeButtons"
      @private-content-loaded.window="getData"
      data-client-config="<?= $escaper->escapeHtmlAttr($clientConfig) ?>"

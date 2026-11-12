@@ -35,7 +35,7 @@ $renderTargetElementId = sprintf('paypalInContextRenderTarget%d', $isMinicart)
      data-client-config="<?= $escaper->escapeHtmlAttr($clientConfig) ?>"
      data-is-mini-cart="<?= (int) $isMinicart ?>"
      id="<?= $escaper->escapeHtmlAttr($renderTargetElementId) ?>"
-     class="paypal checkout paypal-logo min-h-a11y cart-extra-actions-container isolate"
+     class="paypal checkout paypal-logo min-h-11 cart-extra-actions-container isolate"
     <?php if ($isMinicart): ?>
      x-init="initMiniCartButtons"
      x-intersect="checkAndInitializeButtons"
