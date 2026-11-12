@@ -14,6 +14,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 Same as default theme, with the following CSP specific changes.
 
+### Added
+
+-   Nothing Added
+
 ### Changed
 
 -   **Fixed the empty "Shipping Excl. Tax" amount in the cart totals**  
@@ -25,6 +29,10 @@ Same as default theme, with the following CSP specific changes.
     For more information, please refer to [issue #39](https://gitlab.hyva.io/hyva-themes/magento2-default-theme-csp/-/issues/39).
 
     Many thanks to Alexandru-Manuel Carabus for the contribution!
+
+### Removed
+
+-   Nothing Removed
 
 ## [1.5.4] - 2026-11-12
 
