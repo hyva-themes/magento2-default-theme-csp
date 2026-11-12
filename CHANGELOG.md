@@ -105,6 +105,9 @@ Same as default theme, with the following CSP specific changes.
 -   **Fixed the missing margin on the Page Builder divider**  
     For more information, please refer to [merge request #1597](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/merge_requests/1597).
 
+-   **Fixed layout shift of the PayPal buttons**  
+    The undefined `min-h-a11y` class is replaced with `min-h-11`, so the buttons reserve their height before loading.
+
 ### Removed
 
 -   Nothing Removed
