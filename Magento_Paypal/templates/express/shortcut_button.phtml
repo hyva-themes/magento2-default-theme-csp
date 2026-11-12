@@ -25,7 +25,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
 
 ?>
 <div x-data="initPayPalInContext"
-     class="min-h-a11y"
+     class="min-h-11 w-full"
      x-intersect="checkAndInitializeButtons"
      @private-content-loaded.window="getData"
      data-client-config="<?= $escaper->escapeHtmlAttr($clientConfig) ?>"
@@ -124,7 +124,7 @@ $clientConfig = json_encode($widgetData['Magento_Paypal/js/in-context/product-ex
                             });
                         },
                         createOrder() {
-                            const params = 'quote_id=' + cart.cartId +
+                            const params = 'quote_id=' +
                                 '&customer_id=' + (config.customerId || '') +
                                 '&form_key=' + hyva.getFormKey() +
                                 '&button=' + config.button;
