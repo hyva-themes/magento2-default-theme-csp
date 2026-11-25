@@ -204,7 +204,7 @@ $showOptionalRegions = $block->getConfig('general/region/display_all');
                 x-show="showRegionFieldLabel"
                 :class="regionFieldClasses"
             >
-                <label class="label" for="region_id">
+                <label class="label" :for="regionLabelFor">
                     <span><?= /* @noEscape */ $regionLabel ?></span>
                 </label>
                 <div class="control">
@@ -343,7 +343,9 @@ function initCustomerAddressEdit() {
 
                 const initialRegionId = Object.keys(this.availableRegions).filter(regionId => this.availableRegions[regionId].name === initialRegion)[0];
                 this.selectedRegion = initialRegionId || '0';
-                this.setRegionInputValue(initialRegionId && this.availableRegions[initialRegionId].name || '');
+                this.setRegionInputValue(this.showRegionField()
+                    ? initialRegionId && this.availableRegions[initialRegionId].name || ''
+                    : initialRegion || '');
 
             },
             changeCountry(event, initialRegion) {
@@ -380,6 +382,9 @@ function initCustomerAddressEdit() {
             },
             showRegionField() {
                 return this.hasAvailableRegions() && (this.isRegionRequired || this.showOptionalRegions);
+            },
+            regionLabelFor() {
+                return this.showRegionField() ? 'region_id' : 'region';
             },
             onRegionIdChange() {
                 this.selectedRegion = this.$el.value;
