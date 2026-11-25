@@ -37,6 +37,16 @@ Same as default theme
 
 ### Changed
 
+-   **Require Node.js 22 or newer for the Tailwind build**  
+    Node.js 20 has been end of life since April 2026.
+    The `.nvmrc` and the `engines` field of `web/tailwind/package.json` are updated.
+
+-   **Updated `@hyva-themes/hyva-modules` from v1.5.0 to v1.6.0**  
+    The `hyva-tokens` command reads the Design Tokens 2025.10 format, and token references to a camel case key point to
+    the generated kebab case variable. Version 1.6.0 requires Node.js 22.
+
+    For more information, please refer to the [hyva-modules changelog](https://github.com/hyva-themes/hyva-modules-tailwind-js/blob/main/CHANGELOG.md).
+
 -   **Fixed saved region not showing in the customer address text input**  
     For more information, please refer to [issue #1307](https://gitlab.hyva.io/hyva-themes/magento2-default-theme/-/issues/1307).
 
